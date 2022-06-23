@@ -21,12 +21,12 @@ npm install
 
 ## Debug Mode
 ```
-npm tauri:serve
+npm run tauri:serve
 ```
 
 ## Build the code (AppImage and deb)
 ```
-npm tauri:build
+npm run tauri:build
 ```
 
 
