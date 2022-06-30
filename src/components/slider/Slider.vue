@@ -1,14 +1,14 @@
 <template>
   <div id="sliderBox">
     <Label v-bind:title="title" />
-    <Range :current-field-value=fieldValue :min-value="sliderMinValue" :max-value="sliderMaxValue" @value-updated="sliderValueUpdated" />
-    <Input :current-text-value="textValue" :min-value="textMinValue" :max-value="textMaxValue" :textSuffix="textSuffix" @value-updated="inputValueUpdated"  />
+    <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()" @value-updated="sliderValueUpdated" />
+    <Input :current-text-value="textValue" :min-value="textMinValue" :max-value="textMaxValue" :textSuffix="textSuffix" :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated" />
   </div>
 </template>
 
 <script>
 /**
- * So, how this works, there are 7 props, but the only properties that are important are related
+ * So, how this works, there are 8 props, but the only properties that are important are related
  * to the 'slider' component as those will be the 'real' values sent to the GoXLR device. The
  * input boxes below them are an 'abstract' representation of the slider state (for example,
  * a percentage) which are all dynamically handled, calculated, and presented based on the general
@@ -44,6 +44,8 @@ export default {
     textMinValue: Number,
     textMaxValue: Number,
     textSuffix: String,
+
+    valueMap: Array,
   },
 
   methods: {
@@ -108,8 +110,32 @@ export default {
           return position;
         }
       }
-    }
+    },
 
+    getSliderMinValue() {
+      if (this.valueMap === undefined) {
+        return this.sliderMinValue;
+      }
+      return 0;
+    },
+
+    getSliderMaxValue() {
+      if (this.valueMap === undefined) {
+        return this.sliderMaxValue;
+      }
+      return this.valueMap.length - 1;
+    },
+
+    isEditable() {
+      return this.valueMap === undefined;
+    },
+
+    displayValue() {
+      if (this.valueMap === undefined) {
+        return undefined;
+      }
+      return this.valueMap[this.fieldValue];
+    }
   },
 
   computed: {

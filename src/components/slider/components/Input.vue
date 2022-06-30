@@ -1,6 +1,10 @@
 <template>
-  <div class="sliderInput">
-    <input type="number" v-on:input="update" v-on:blur="reset" v-model="localTextValue" :min="minValue" :max="maxValue" />
+  <div v-if="!editable" class="sliderInput">
+    <input type="text" v-on:blur="reset" :value="displayValue()" :min="minValue" :max="maxValue" :disabled="!editable" />
+    <div class="suffix"><span class="filler">{{ displayValue() }}</span><span v-html="getSuffix()"></span></div>
+  </div>
+  <div v-if="editable" class="sliderInput">
+    <input type="number" v-on:input="update" v-on:blur="reset" v-model="localTextValue" :min="minValue" :max="maxValue" :disabled="!editable" />
     <div class="suffix"><span class="filler">{{ localTextValue }}</span><span v-html="getSuffix()"></span></div>
   </div>
 </template>
@@ -8,6 +12,7 @@
 <script>
 export default {
   name: "TextInput",
+  emits: ["value-updated"],
 
   data() {
     return {
@@ -17,7 +22,9 @@ export default {
   },
 
   props: {
+    editable: Boolean,
     currentTextValue: Number,
+    overrideValue: String,
     minValue: { type: Number, default: 0 },
     maxValue: { type: Number, default: 100 },
     textSuffix: { type: String, default: "" }
@@ -56,7 +63,14 @@ export default {
 
     reset(e) {
       e.target.value = this.lastTextValue;
-    }
+    },
+
+    displayValue() {
+      if (this.overrideValue !== undefined) {
+        return this.overrideValue;
+      }
+      return this.localTextValue;
+    },
   },
 
   watch: {
@@ -100,7 +114,7 @@ export default {
   color: rgba(0,0,0,0);
 }
 
-.sliderInput input[type=number] {
+.sliderInput input[type=number], .sliderInput input[type=text] {
   font-family: LeagueMonoCondensed, sans-serif;
 
   background-color: #3b413f;
