@@ -13,7 +13,7 @@ use std::sync::Mutex;
 use anyhow::{Context, Result};
 use goxlr_ipc::{DeviceType, GoXLRCommand, Socket};
 use tokio::net::UnixStream;
-use crate::mappings::{get_channel_name, get_fader_name, get_mute_function_name};
+use crate::mappings::{get_channel_name, get_fader_name, get_input_name, get_mute_function_name, get_output_name};
 use crate::mixers::Mixer;
 
 
@@ -42,6 +42,7 @@ fn main() -> Result<()> {
           set_volume,
           set_fader_channel,
           set_fader_mute_function,
+          set_routing,
         ])
       .run(tauri::generate_context!())
       .expect("error while running tauri application");
@@ -103,6 +104,17 @@ fn set_fader_mute_function(serial: String, fader: u8, function: u8, client_state
 
     client_state.inner().runtime.block_on(
         client.command(serial.as_str(), GoXLRCommand::SetFaderMuteFunction(get_fader_name(fader), get_mute_function_name(function)))
+    );
+
+    Ok(true)
+}
+
+#[tauri::command]
+fn set_routing(serial: String, input: u8, output: u8, value: bool, client_state: tauri::State<'_, DaemonConnection>) -> Result<bool, String> {
+    let mut client = client_state.inner().client.lock().unwrap();
+
+    client_state.inner().runtime.block_on(
+        client.command(serial.as_str(), GoXLRCommand::SetRouter(get_input_name(input), get_output_name(output), value))
     );
 
     Ok(true)

@@ -1,4 +1,4 @@
-use goxlr_types::{ChannelName, FaderName, MuteFunction};
+use goxlr_types::{ChannelName, FaderName, InputDevice, MuteFunction, OutputDevice};
 
 // Primarily a group of mappings :)
 pub fn get_channel_name(id: u8) -> ChannelName  {
@@ -39,5 +39,32 @@ pub fn get_mute_function_name(id: u8) -> MuteFunction {
         4 => MuteFunction::ToLineOut,
 
         _ => MuteFunction::All
+    }
+}
+
+pub fn get_output_name(id: u8) -> OutputDevice {
+    match id {
+        0 => OutputDevice::Headphones,
+        1 => OutputDevice::BroadcastMix,
+        2 => OutputDevice::LineOut,
+        3 => OutputDevice::ChatMic,
+        4 => OutputDevice::Sampler,
+
+        _ => OutputDevice::Headphones,
+    }
+}
+
+pub fn get_input_name(id: u8) -> InputDevice {
+    match id {
+        0 => InputDevice::Microphone,
+        1 => InputDevice::Chat,
+        2 => InputDevice::Music,
+        3 => InputDevice::Game,
+        4 => InputDevice::Console,
+        5 => InputDevice::LineIn,
+        6 => InputDevice::System,
+        7 => InputDevice::Samples,
+
+        _ => InputDevice::Microphone,
     }
 }

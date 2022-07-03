@@ -15,15 +15,20 @@
 
       <tr v-for="output in outputs" :key="output">
         <th v-if="getIndexForOutput(output) === 0" class="rotated" :rowspan="outputs.length"><span>Outputs</span></th>
-        <th>{{output}}</th>
-        <Cell v-for="input in inputs" :key="input" :enabled="isEnabled(getIndexForOutput(output), getIndexForInput(input))" :output="getIndexForOutput(output)" :input="getIndexForInput(input)" @clicked="handleClick"/>
+        <th>{{ output }}</th>
+        <Cell v-for="input in inputs" :key="input"
+              :enabled="isEnabled(getIndexForOutput(output), getIndexForInput(input))"
+              :output="getIndexForOutput(output)" :input="getIndexForInput(input)" @clicked="handleClick"/>
       </tr>
 
-      <tr><td colspan="10" class="hidden" style="height: 10px"></td></tr>
+      <tr>
+        <td colspan="10" class="hidden" style="height: 10px"></td>
+      </tr>
       <tr>
         <!-- Sampler is a little weird, it's on a line by itself because reasons? -->
         <th colspan="2">Sampler</th>
-        <Cell v-for="input in inputs" :key="input" :enabled="isEnabled(4, getIndexForInput(input))" :output="4" :input="getIndexForInput(input)" @clicked="handleClick" />
+        <Cell v-for="input in inputs" :key="input" :enabled="isEnabled(4, getIndexForInput(input))" :output="4"
+              :input="getIndexForInput(input)" @clicked="handleClick"/>
       </tr>
     </table>
   </ContentBox>
@@ -33,6 +38,8 @@
 import ContentBox from "@/components/ContentBox";
 import Cell from "@/components/sections/routing/Cell";
 import {store} from "@/store";
+import {invoke} from "@tauri-apps/api";
+
 export default {
   name: "RoutingTable",
   components: {Cell, ContentBox},
@@ -64,11 +71,17 @@ export default {
   },
 
   methods: {
-    handleClick: function(output, input) {
+    handleClick: function (output, input) {
       this.state[output][input] = !this.state[output][input];
+      invoke("set_routing", {
+        serial: store.getActiveSerial(),
+        input: input,
+        output: output,
+        value: this.state[output][input]
+      })
     },
 
-    isEnabled: function(output, input) {
+    isEnabled: function (output, input) {
       if (store.hasActiveDevice()) {
         return store.getActiveDevice().router_table[input][output];
       }
