@@ -2,6 +2,29 @@
 
   <div id="main">
     <DeviceSelector :style="{display: !isDeviceSet() ? '' : 'none'}"/>
+    <Tabs :style="{display: isDeviceSet() ? '' : 'none'}" style="width: 35%">
+      <Tab name="Profiles" :selected="true">
+        <div class="contentPad">
+          <div class="section">
+            <Profiles />
+          </div>
+        </div>
+      </Tab>
+      <Tab name="Samples" :left_align="false">
+        <div class="contentPad">
+          <div class="section">
+
+          </div>
+        </div>
+      </Tab>
+      <Tab name="Presets" :left_align="false">
+        <div class="contentPad">
+          <div class="section">
+
+          </div>
+        </div>
+      </Tab>
+    </Tabs>
     <Tabs :style="{display: isDeviceSet() ? '' : 'none'}">
       <Tab name="Mic">
         <div class="contentPad">
@@ -39,12 +62,13 @@ import Tab from "@/components/tabs/Tab";
 import Routing from "@/components/sections/Routing";
 import Mic from "@/components/sections/Mic";
 import DeviceSelector from "@/components/sections/DeviceSelector";
+import Profiles from "@/components/profiles/Profiles";
 import {store} from "@/store";
 import {invoke} from "@tauri-apps/api";
 
 export default {
   name: 'GoXLR',
-  components: {DeviceSelector, Routing, Tab, Tabs, Mixer, Faders, Mic},
+  components: {DeviceSelector, Routing, Tab, Tabs, Mixer, Faders, Mic, Profiles},
 
   data() {
     return {
