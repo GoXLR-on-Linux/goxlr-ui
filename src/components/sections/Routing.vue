@@ -48,8 +48,6 @@ export default {
     return {
       inputs: ["Mic", "Chat", "Music", "Game", "Console", "Line In", "System", "Samples"],
       outputs: ["Headphones", "Broadcast Mix", "Line Out", "Chat Mic"],
-
-      state: [],
     }
   },
 
@@ -59,26 +57,19 @@ export default {
     }
   },
 
-  created() {
-    // Fortunately, the input map we have is relatively sane, so we should be able to..
-    //this.state = this.$device.routingMap;
-    for (let i = 0; i < this.inputs.length; i++) {
-      this.state[i] = [];
-      for (let j = 0; j < this.outputs.length; j++) {
-        this.state[i][j] = false;
-      }
-    }
-  },
-
   methods: {
     handleClick: function (output, input) {
-      this.state[output][input] = !this.state[output][input];
+      let new_state = !this.isEnabled(output, input);
       invoke("set_routing", {
         serial: store.getActiveSerial(),
         input: input,
         output: output,
-        value: this.state[output][input]
-      })
+        value: new_state
+      }).then(function(result) {
+        if (result) {
+          store.getActiveDevice().router_table[input][output] = new_state;
+        }
+      });
     },
 
     isEnabled: function (output, input) {
