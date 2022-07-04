@@ -2,7 +2,7 @@
 name = "goxlr-ui"
 version = "0.1.0-alpha1"
 description = "An application to control the GoXLR"
-authors = ["Craig McLure <craig@mclure.net>"]
+authors = ["Craig McLure <craig@mclure.net>", "Lars Mühlbauer <lm41@dismail.de>"]
 license = "MIT"
 repository = "https://github.com/GoXLR-on-Linux/goxlr-ui"
 default-run = "goxlr-ui"
