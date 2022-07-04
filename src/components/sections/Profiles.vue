@@ -27,14 +27,12 @@ export default {
   },
 
   created() {
-    console.log(this.dirContents)
     this.getPath()
     // eslint-disable-next-line no-unused-vars
     this.waitFor(_ => store.hasActiveDevice() === true).then(
         // eslint-disable-next-line no-unused-vars
         _ => this.activeProfile = store.getActiveDevice().profile_name
     );
-    console.log(this.dirContents)
   },
 
   methods: {

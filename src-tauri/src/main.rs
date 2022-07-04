@@ -44,6 +44,7 @@ fn main() -> Result<()> {
           set_fader_mute_function,
           set_routing,
           set_profile,
+          set_cough_behaviour,
         ])
       .run(tauri::generate_context!())
       .expect("error while running tauri application");
@@ -127,6 +128,17 @@ fn set_profile(serial: String, profile_name: String, client_state: tauri::State<
 
     client_state.inner().runtime.block_on(
         client.command(serial.as_str(), GoXLRCommand::LoadProfile(profile_name.to_string()))
+    );
+
+    Ok(true)
+}
+
+#[tauri::command]
+fn set_cough_behaviour(serial: String, cough_mute_function: u8, client_state: tauri::State<'_, DaemonConnection>) -> Result<bool, String> {
+    let mut client = client_state.inner().client.lock().unwrap();
+
+    client_state.inner().runtime.block_on(
+        client.command(serial.as_str(), GoXLRCommand::SetCoughMuteFunction(get_mute_function_name(cough_mute_function)))
     );
 
     Ok(true)

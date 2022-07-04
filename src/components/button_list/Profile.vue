@@ -26,8 +26,7 @@ export default {
 <style scoped>
 .button {
   box-sizing: border-box;
-  width: calc(100% - 16px);
-  margin: 8px;
+  width: 100%;
   background-color: transparent;
   padding: 8px;
   text-align: left;
@@ -37,6 +36,11 @@ export default {
 }
 
 .button:hover:not(.active) {
+  background-color: #49514e;
+  color: #fff;
+}
+
+.button:hover.active{
   background-color: #49514e;
   color: #fff;
 }

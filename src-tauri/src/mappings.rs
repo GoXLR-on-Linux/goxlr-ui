@@ -68,3 +68,15 @@ pub fn get_input_name(id: u8) -> InputDevice {
         _ => InputDevice::Microphone,
     }
 }
+
+pub fn get_cough_mute_behaviour_name(id: u8) -> MuteFunction {
+    match id {
+        0 => MuteFunction::All,
+        1 => MuteFunction::ToStream,
+        2 => MuteFunction::ToVoiceChat,
+        3 => MuteFunction::ToPhones,
+        4 => MuteFunction::ToLineOut,
+
+        _ => MuteFunction::All,
+    }
+}

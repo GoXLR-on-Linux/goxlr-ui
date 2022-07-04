@@ -200,3 +200,11 @@ export let MuteBehaviours = [
     "Mute to Phones",
     "Mute to Line Out"
 ]
+
+export let CoughMuteBehaviours = [
+    "Mute to All",
+    "Mute to Stream",
+    "Mute to Voice Chat",
+    "Mute to Phones",
+    "Mute to Line Out"
+]

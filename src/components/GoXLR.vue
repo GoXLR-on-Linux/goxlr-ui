@@ -2,22 +2,22 @@
 
   <div id="main">
     <DeviceSelector :style="{display: !isDeviceSet() ? '' : 'none'}"/>
-    <Tabs :style="{display: isDeviceSet() ? '' : 'none'}" style="width: 35%">
-      <Tab name="Profiles" :selected="true">
+    <Tabs :style="{display: isDeviceSet() ? '' : 'none'}" style="width: 35%; height: 400px">
+      <Tab name="Profiles" :selected="true" style="height: 320px">
         <div class="contentPad">
           <div class="section">
             <Profiles />
           </div>
         </div>
       </Tab>
-      <Tab name="Samples" :left_align="false">
+      <Tab name="Samples" :left_align="false" style="height: 320px">
         <div class="contentPad">
           <div class="section">
 
           </div>
         </div>
       </Tab>
-      <Tab name="Presets" :left_align="false">
+      <Tab name="Presets" :left_align="false" style="height: 320px">
         <div class="contentPad">
           <div class="section">
 
@@ -38,6 +38,13 @@
           <div class="section">
             <Faders/>
             <Mixer/>
+          </div>
+        </div>
+      </Tab>
+      <Tab name="Cough" :left_align="false">
+        <div class="contentPad">
+          <div class="section">
+            <Cough/>
           </div>
         </div>
       </Tab>
@@ -65,10 +72,11 @@ import DeviceSelector from "@/components/sections/DeviceSelector";
 import Profiles from "@/components/sections/Profiles";
 import {store} from "@/store";
 import {invoke} from "@tauri-apps/api";
+import Cough from "@/components/sections/Cough";
 
 export default {
   name: 'GoXLR',
-  components: {DeviceSelector, Routing, Tab, Tabs, Mixer, Faders, Mic, Profiles},
+  components: {Cough, DeviceSelector, Routing, Tab, Tabs, Mixer, Faders, Mic, Profiles},
 
   data() {
     return {
