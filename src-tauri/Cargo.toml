@@ -21,12 +21,13 @@ serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.0.0-rc.11", features = ["api-all"] }
 anyhow = "1.0"
 
-goxlr-types = { git = "https://github.com/GoXLR-on-Linux/GoXLR-Utility.git", package="goxlr-types", rev="79d8e86" }
-goxlr-ipc = { git = "https://github.com/GoXLR-on-Linux/GoXLR-Utility.git", package="goxlr-ipc", rev="79d8e86" }
+goxlr-types = { git = "https://github.com/GoXLR-on-Linux/GoXLR-Utility.git", package="goxlr-types" }
+goxlr-ipc = { git = "https://github.com/GoXLR-on-Linux/GoXLR-Utility.git", package="goxlr-ipc" }
 
 tokio = { version = "1.0", features = ["net"] }
 tokio-serde = { version = "0.8.0", features= ["json"] }
 enumset = { version= "1.0.8", features = ["serde"] }
+strum = "0.23.0"
 
 [features]
 # by default Tauri runs in production mode
