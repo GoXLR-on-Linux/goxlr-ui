@@ -1,7 +1,7 @@
 <template>
-  <ul>
+  <SelectorList>
     <Profile v-for="value in dirContents" :key="value.name" :text="value.name"></Profile>
-  </ul>
+  </SelectorList>
   <!--<SelectorList title="Profiles">
 
     <Button v-for="(value, index) in dirContents" :key=value.name :is-active=false :label=value.name :button-id="index.toString()" @button-pressed="console.log('Test')" />
