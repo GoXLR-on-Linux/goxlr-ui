@@ -12,6 +12,8 @@ use std::sync::Mutex;
 
 use anyhow::{Context, Result};
 use goxlr_ipc::{DeviceType, GoXLRCommand, Socket};
+use goxlr_types::{CompressorAttackTime, CompressorRatio, CompressorReleaseTime};
+use strum::IntoEnumIterator;
 use tokio::net::UnixStream;
 use crate::mappings::{get_channel_name, get_fader_name, get_input_name, get_mute_function_name, get_output_name};
 use crate::mixers::Mixer;
@@ -45,6 +47,13 @@ fn main() -> Result<()> {
           set_routing,
           set_profile,
           set_cough_behaviour,
+
+          // Compressor.
+          set_compressor_threshold,
+          set_compressor_ratio,
+          set_compressor_attack,
+          set_compressor_release,
+          set_compressor_makeup
         ])
       .run(tauri::generate_context!())
       .expect("error while running tauri application");
@@ -139,6 +148,70 @@ fn set_cough_behaviour(serial: String, cough_mute_function: u8, client_state: ta
 
     client_state.inner().runtime.block_on(
         client.command(serial.as_str(), GoXLRCommand::SetCoughMuteFunction(get_mute_function_name(cough_mute_function)))
+    );
+
+    Ok(true)
+}
+
+
+/* Compressor */
+#[tauri::command]
+fn set_compressor_threshold(serial: String, value: i8, client_state: tauri::State<'_, DaemonConnection>) -> Result<bool, String> {
+    let mut client = client_state.inner().client.lock().unwrap();
+
+    client_state.inner().runtime.block_on(
+        client.command(serial.as_str(), GoXLRCommand::SetCompressorThreshold(value))
+    );
+
+    Ok(true)
+}
+
+#[tauri::command]
+fn set_compressor_ratio(serial: String, value: u8, client_state: tauri::State<'_, DaemonConnection>) -> Result<bool, String> {
+    let mut client = client_state.inner().client.lock().unwrap();
+
+    if let Some(ratio) =  CompressorRatio::iter().nth(value.into()) {
+        client_state.inner().runtime.block_on(
+            client.command(serial.as_str(), GoXLRCommand::SetCompressorRatio(ratio))
+        );
+        return Ok(true);
+    }
+
+    Ok(false)
+}
+
+#[tauri::command]
+fn set_compressor_attack(serial: String, value: u8, client_state: tauri::State<'_, DaemonConnection>) -> Result<bool, String> {
+    let mut client = client_state.inner().client.lock().unwrap();
+
+    if let Some(attack) = CompressorAttackTime::iter().nth(value.into()) {
+        client_state.inner().runtime.block_on(
+            client.command(serial.as_str(), GoXLRCommand::SetCompressorAttack(attack))
+        );
+        return Ok(true);
+    }
+    Ok(false)
+}
+
+#[tauri::command]
+fn set_compressor_release(serial: String, value: u8, client_state: tauri::State<'_, DaemonConnection>) -> Result<bool, String> {
+    let mut client = client_state.inner().client.lock().unwrap();
+
+    if let Some(release) = CompressorReleaseTime::iter().nth(value.into()) {
+        client_state.inner().runtime.block_on(
+            client.command(serial.as_str(), GoXLRCommand::SetCompressorReleaseTime(release))
+        );
+        return Ok(true);
+    }
+    Ok(false)
+}
+
+#[tauri::command]
+fn set_compressor_makeup(serial: String, value: u8, client_state: tauri::State<'_, DaemonConnection>) -> Result<bool, String> {
+    let mut client = client_state.inner().client.lock().unwrap();
+
+    client_state.inner().runtime.block_on(
+        client.command(serial.as_str(), GoXLRCommand::SetCompressorMakeupGain(value))
     );
 
     Ok(true)

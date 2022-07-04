@@ -4,11 +4,11 @@
       <Slider title="Amount" :slider-min-value=0 :slider-max-value=100 :text-min-value=0 :text-max-value=100 text-suffix="" :slider-value=0 />
     </div>
     <div class="rowContent" :class="{ hidden: !isVisible }">
-      <Slider title="Threshold" :slider-min-value=-40 :slider-max-value=0 :text-min-value=-40 :text-max-value=0 text-suffix="dB" :slider-value=0 />
-      <Slider title="Ratio" :slider-min-value=1 :slider-max-value=64 :text-min-value=1 :text-max-value=64 text-suffix=":1" :value-map="ratioValues()" :slider-value=0 />
-      <Slider title="Attack" :slider-min-value=0 :slider-max-value=40 :text-min-value=0 :text-max-value=40 text-suffix="ms" :value-map="attackValues()" :slider-value=0 />
-      <Slider title="Release" :slider-min-value=0 :slider-max-value=3000 :text-min-value=0 :text-max-value=3000 text-suffix="ms" :value-map="releaseValues()" :slider-value=0 />
-      <Slider title="Make-up Gain" :slider-min-value=0 :slider-max-value=24 :text-min-value=0 :text-max-value=24 text-suffix="dB" :slider-value=0 />
+      <Slider title="Threshold" :id=0 :slider-min-value=-24 :slider-max-value=0 :text-min-value=-24 :text-max-value=0 text-suffix="dB" :slider-value="getThresholdValue()" @value-changed="setValue" />
+      <Slider title="Ratio" :id=1 :slider-min-value=1 :slider-max-value=64 :text-min-value=1 :text-max-value=64 text-suffix=":1" :value-map="ratioValueMap()" :slider-value="getRatioValue()" @value-changed="setValue" />
+      <Slider title="Attack" :id=2 :slider-min-value=0 :slider-max-value=40 :text-min-value=0 :text-max-value=40 text-suffix="ms" :value-map="attackValueMap()" :slider-value="getAttackValue()" @value-changed="setValue" />
+      <Slider title="Release" :id=3 :slider-min-value=0 :slider-max-value=3000 :text-min-value=0 :text-max-value=3000 text-suffix="ms" :value-map="releaseValueMap()" :slider-value="getReleaseValue()" @value-changed="setValue" />
+      <Slider title="Make-up Gain" :id=4 :slider-min-value=0 :slider-max-value=24 :text-min-value=0 :text-max-value=24 text-suffix="dB" :slider-value="getGainValue()" @value-changed="setValue" />
     </div>
   </ContentBox>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="isVisible" />
@@ -18,6 +18,8 @@
 import ExpandoBox from "../../util/ExpandoBox";
 import ContentBox from "../../ContentBox";
 import Slider from "../../slider/Slider";
+import {store} from "@/store";
+import {invoke} from "@tauri-apps/api/tauri";
 export default {
   name: "MicCompressor",
   components: {Slider, ContentBox, ExpandoBox},
@@ -29,20 +31,66 @@ export default {
   },
 
   methods: {
-    ratioValues() {
+    setValue(id, value) {
+      switch (id) {
+        case 0: this.commitValue("set_compressor_threshold", value); break;
+        case 1: this.commitValue("set_compressor_ratio", value); break;
+        case 2: this.commitValue("set_compressor_attack", value); break;
+        case 3: this.commitValue("set_compressor_release", value); break;
+        case 4: this.commitValue("set_compressor_makeup", value); break;
+      }
+    },
+
+    commitValue(name, value) {
+      invoke(name, {
+        serial: store.getActiveSerial(),
+        value: value
+      })
+    },
+
+    getThresholdValue() {
+      if (store.hasActiveDevice()) {
+        return store.getActiveDevice().mic_status.compressor.threshold;
+      }
+    },
+
+    ratioValueMap() {
       return ["1", "1.1", "1.2", "1.4", "1.6", "1.8", "2", "2.5", "3.2", "4", "5.6", "8", "16", "32", "64"];
     },
 
-    attackValues() {
+    getRatioValue() {
+      if (store.hasActiveDevice()) {
+        return store.getActiveDevice().mic_status.compressor.ratio;
+      }
+    },
+
+    attackValueMap() {
       return ["0.001", "2", "3", "4", "5", "6", "7", "8", "9", "10", "12",
         "14", "16", "18", "20", "23", "26", "30", "35", "40"];
     },
 
-    releaseValues() {
+    getAttackValue() {
+      if (store.hasActiveDevice()) {
+        return store.getActiveDevice().mic_status.compressor.attack;
+      }
+    },
+
+    releaseValueMap() {
       return ["0", "15", "25", "35", "45", "55", "65", "75", "85",
         "100", "115", "140", "170", "230", "340", "680", "1000", "1500", "2000", "3000"];
     },
 
+    getReleaseValue() {
+      if (store.hasActiveDevice()) {
+        return store.getActiveDevice().mic_status.compressor.release;
+      }
+    },
+
+    getGainValue() {
+      if (store.hasActiveDevice()) {
+        return store.getActiveDevice().mic_status.compressor.makeup_gain;
+      }
+    },
 
     hideExpanded() {
       return false;
