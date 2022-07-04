@@ -43,6 +43,7 @@ fn main() -> Result<()> {
           set_fader_channel,
           set_fader_mute_function,
           set_routing,
+          set_profile,
         ])
       .run(tauri::generate_context!())
       .expect("error while running tauri application");
@@ -115,6 +116,17 @@ fn set_routing(serial: String, input: u8, output: u8, value: bool, client_state:
 
     client_state.inner().runtime.block_on(
         client.command(serial.as_str(), GoXLRCommand::SetRouter(get_input_name(input), get_output_name(output), value))
+    );
+
+    Ok(true)
+}
+
+#[tauri::command]
+fn set_profile(serial: String, profile_name: String, client_state: tauri::State<'_, DaemonConnection>) -> Result<bool, String> {
+    let mut client = client_state.inner().client.lock().unwrap();
+
+    client_state.inner().runtime.block_on(
+        client.command(serial.as_str(), GoXLRCommand::LoadProfile(profile_name.to_string()))
     );
 
     Ok(true)

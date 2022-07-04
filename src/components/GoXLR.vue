@@ -62,7 +62,7 @@ import Tab from "@/components/tabs/Tab";
 import Routing from "@/components/sections/Routing";
 import Mic from "@/components/sections/Mic";
 import DeviceSelector from "@/components/sections/DeviceSelector";
-import Profiles from "@/components/profiles/Profiles";
+import Profiles from "@/components/sections/Profiles";
 import {store} from "@/store";
 import {invoke} from "@tauri-apps/api";
 
