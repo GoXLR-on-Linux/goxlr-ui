@@ -2,7 +2,7 @@
   <ContentBox title="Gate">
     <div class="rowContent" :class="{ hidden: isVisible }">
       <!--TODO("Add method to calculate amount.")-->
-      <Slider title="Amount" :id=0 :slider-min-value=0 :slider-max-value=100 :text-min-value=0 :text-max-value=100 text-suffix="" :slider-value=amount />
+      <Slider title="Amount" :id=0 :slider-min-value=0 :slider-max-value=100 :text-min-value=0 :text-max-value=100 text-suffix="" :slider-value=amount :value-map="getAmountValueMap()" @value-changed="setValue"/>
     </div>
     <div class="rowContent" :class="{ hidden: !isVisible }">
       <Slider title="Threshold" :id=1 :slider-min-value=-60 :slider-max-value=0 :text-min-value=-60 :text-max-value=0 text-suffix="dB" :slider-value=threshold @value-changed="setValue"/>
@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       isVisible: false,
-      amount: 30,
+      amount: 15,
       threshold: 0,
       attenuation: 10,
       attack: 10,
@@ -44,6 +44,7 @@ export default {
           this.attack = store.getActiveDevice().mic_status.noise_gate.attack
           this.release = store.getActiveDevice().mic_status.noise_gate.release
           this.attenuation = store.getActiveDevice().mic_status.noise_gate.attenuation
+          this.updateAmount(this.threshold)
         }
     );
   },
@@ -69,7 +70,14 @@ export default {
 
     setValue: function (id, value) {
       switch (id) {
-        case 1: this.commitValue("set_noise_gate_threshold", value); break
+        case 0: {
+          this.updateThreshold(value)
+          this.commitValue("set_noise_gate_threshold", this.threshold);
+        } break
+        case 1: {
+          this.commitValue("set_noise_gate_threshold", value);
+          this.updateAmount(value)
+        } break
         case 2: this.commitValue("set_noise_gate_attenuation", value); break
         case 3: this.commitValue("set_noise_gate_attack", value); break
         case 4: this.commitValue("set_noise_gate_release", value); break
@@ -87,7 +95,25 @@ export default {
       return ["10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "110", "120", "130", "140", "150", "160",
         "170", "180", "190", "200", "250", "300", "350", "400", "450", "500", "550", "600", "650", "700", "750", "800",
         "850", "900", "950", "1000", "1200", "1300", "1400", "1500", "1600", "1700", "1800", "1900", "2000"];
+    },
+
+    updateAmount: function (value){
+      let localAmount = 2 * Math.round(((value+60)*(5/3)) / 2);
+      this.amount = this.getAmountValueMap().indexOf(localAmount.toString());
+    },
+
+    updateThreshold: function (value) {
+      this.threshold = parseInt((((value * 2) / (5/3)) - 60).toFixed());
+    },
+
+    getAmountValueMap: function (){
+      return ["0", "2", "4", "6", "8", "10", "12", "14", "16", "18",
+        "20", "22", "24", "26", "28", "30", "32", "34", "36", "38",
+        "40", "42", "44", "46", "48", "50", "52", "54", "56", "58",
+        "60", "62", "64", "66", "68", "70", "72", "74", "76", "78",
+        "80", "82", "84", "86", "88", "90", "92", "94", "96", "98", "100"]
     }
+
   }
 }
 </script>
