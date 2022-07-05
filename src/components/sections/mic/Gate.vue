@@ -1,13 +1,14 @@
 <template>
   <ContentBox title="Gate">
     <div class="rowContent" :class="{ hidden: isVisible }">
-      <Slider title="Amount" :slider-min-value=0 :slider-max-value=100 :text-min-value=0 :text-max-value=100 text-suffix="" :slider-value=amount />
+      <!--TODO("Add method to calculate amount.")-->
+      <Slider title="Amount" :id=0 :slider-min-value=0 :slider-max-value=100 :text-min-value=0 :text-max-value=100 text-suffix="" :slider-value=amount />
     </div>
     <div class="rowContent" :class="{ hidden: !isVisible }">
-      <Slider title="Threshold" :slider-min-value=-60 :slider-max-value=0 :text-min-value=-60 :text-max-value=0 text-suffix="dB" :slider-value=threshold />
-      <Slider title="Attenuation" :slider-min-value=0 :slider-max-value=100 :text-min-value=0 :text-max-value=100 text-suffix="%" :slider-value=attenuation />
-      <Slider title="Attack" :slider-min-value=10 :slider-max-value=2000 :text-min-value=10 :text-max-value=2000 text-suffix="ms" :slider-value=attack />
-      <Slider title="Release" :slider-min-value=10 :slider-max-value=2000 :text-min-value=10 :text-max-value=2000 text-suffix="ms" :slider-value=release />
+      <Slider title="Threshold" :id=1 :slider-min-value=-60 :slider-max-value=0 :text-min-value=-60 :text-max-value=0 text-suffix="dB" :slider-value=threshold @value-changed="setValue"/>
+      <Slider title="Attenuation" :id=2 :slider-min-value=0 :slider-max-value=100 :text-min-value=0 :text-max-value=100 text-suffix="%"  :slider-value=attenuation @value-changed="setValue"/>
+      <Slider title="Attack" :id=3 :slider-min-value=10 :slider-max-value=2000 :text-min-value=10 :text-max-value=2000 text-suffix="ms" :value-map="getGateValueMap()" :slider-value=attack @value-changed="setValue"/>
+      <Slider title="Release" :id=4 :slider-min-value=10 :slider-max-value=2000 :text-min-value=10 :text-max-value=2000 text-suffix="ms" :value-map="getGateValueMap()" :slider-value=release @value-changed="setValue"/>
     </div>
   </ContentBox>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="isVisible" />
@@ -18,7 +19,8 @@ import ContentBox from "../../ContentBox";
 import ExpandoBox from "../../util/ExpandoBox";
 import Slider from "../../slider/Slider";
 import {store} from "@/store";
-import {getTimeByName} from "@/util/micMappings";
+import {invoke} from "@tauri-apps/api";
+
 export default {
   name: "MicGate",
   components: {Slider, ExpandoBox, ContentBox},
@@ -39,8 +41,8 @@ export default {
         // eslint-disable-next-line no-unused-vars
         _ => {
           this.threshold = store.getActiveDevice().mic_status.noise_gate.threshold
-          this.attack = getTimeByName(store.getActiveDevice().mic_status.noise_gate.attack)
-          this.release = getTimeByName(store.getActiveDevice().mic_status.noise_gate.release)
+          this.attack = store.getActiveDevice().mic_status.noise_gate.attack
+          this.release = store.getActiveDevice().mic_status.noise_gate.release
           this.attenuation = store.getActiveDevice().mic_status.noise_gate.attenuation
         }
     );
@@ -64,6 +66,28 @@ export default {
       }
       return new Promise(poll);
     },
+
+    setValue: function (id, value) {
+      switch (id) {
+        case 1: this.commitValue("set_noise_gate_threshold", value); break
+        case 2: this.commitValue("set_noise_gate_attenuation", value); break
+        case 3: this.commitValue("set_noise_gate_attack", value); break
+        case 4: this.commitValue("set_noise_gate_release", value); break
+      }
+    },
+
+    commitValue: function (name, value){
+      invoke(name,{
+        serial: store.getActiveSerial(),
+        value: value
+      })
+    },
+
+    getGateValueMap: function (){
+      return ["10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "110", "120", "130", "140", "150", "160",
+        "170", "180", "190", "200", "250", "300", "350", "400", "450", "500", "550", "600", "650", "700", "750", "800",
+        "850", "900", "950", "1000", "1200", "1300", "1400", "1500", "1600", "1700", "1800", "1900", "2000"];
+    }
   }
 }
 </script>

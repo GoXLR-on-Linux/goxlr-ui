@@ -12,7 +12,7 @@ use std::sync::Mutex;
 
 use anyhow::{Context, Result};
 use goxlr_ipc::{DeviceType, GoXLRCommand, Socket};
-use goxlr_types::{CompressorAttackTime, CompressorRatio, CompressorReleaseTime};
+use goxlr_types::{CompressorAttackTime, CompressorRatio, CompressorReleaseTime, GateTimes};
 use strum::IntoEnumIterator;
 use tokio::net::UnixStream;
 use crate::mappings::{get_channel_name, get_fader_name, get_input_name, get_mute_function_name, get_output_name};
@@ -53,7 +53,13 @@ fn main() -> Result<()> {
           set_compressor_ratio,
           set_compressor_attack,
           set_compressor_release,
-          set_compressor_makeup
+          set_compressor_makeup,
+
+          // Gate
+          set_noise_gate_threshold,
+          set_noise_gate_attenuation,
+          set_noise_gate_attack,
+          set_noise_gate_release,
         ])
       .run(tauri::generate_context!())
       .expect("error while running tauri application");
@@ -92,7 +98,7 @@ fn set_volume(serial: String, channel: u8, volume: u8, client_state: tauri::Stat
     let mut client = client_state.inner().client.lock().unwrap();
 
     client_state.inner().runtime.block_on(
-    client.command(serial.as_str(), GoXLRCommand::SetVolume(get_channel_name(channel), volume))
+        client.command(serial.as_str(), GoXLRCommand::SetVolume(get_channel_name(channel), volume))
     );
 
     Ok(true)
@@ -170,7 +176,7 @@ fn set_compressor_threshold(serial: String, value: i8, client_state: tauri::Stat
 fn set_compressor_ratio(serial: String, value: u8, client_state: tauri::State<'_, DaemonConnection>) -> Result<bool, String> {
     let mut client = client_state.inner().client.lock().unwrap();
 
-    if let Some(ratio) =  CompressorRatio::iter().nth(value.into()) {
+    if let Some(ratio) = CompressorRatio::iter().nth(value.into()) {
         client_state.inner().runtime.block_on(
             client.command(serial.as_str(), GoXLRCommand::SetCompressorRatio(ratio))
         );
@@ -215,4 +221,52 @@ fn set_compressor_makeup(serial: String, value: u8, client_state: tauri::State<'
     );
 
     Ok(true)
+}
+
+#[tauri::command]
+fn set_noise_gate_threshold(serial: String, value: i8, client_state: tauri::State<'_, DaemonConnection>) -> Result<bool, String> {
+    let mut client = client_state.inner().client.lock().unwrap();
+
+    client_state.inner().runtime.block_on(
+        client.command(serial.as_str(), GoXLRCommand::SetGateThreshold(value))
+    );
+
+    Ok(true)
+}
+
+#[tauri::command]
+fn set_noise_gate_attenuation(serial: String, value: u8, client_state: tauri::State<'_, DaemonConnection>) -> Result<bool, String> {
+    let mut client = client_state.inner().client.lock().unwrap();
+
+    client_state.inner().runtime.block_on(
+        client.command(serial.as_str(), GoXLRCommand::SetGateAttenuation(value))
+    );
+
+    Ok(true)
+}
+
+#[tauri::command]
+fn set_noise_gate_attack(serial: String, value: u8, client_state: tauri::State<'_, DaemonConnection>) -> Result<bool, String> {
+    let mut client = client_state.inner().client.lock().unwrap();
+
+    if let Some(attack) = GateTimes::iter().nth(value.into()) {
+        client_state.inner().runtime.block_on(
+            client.command(serial.as_str(), GoXLRCommand::SetGateAttack(attack))
+        );
+        return Ok(true);
+    }
+    Ok(false)
+}
+
+#[tauri::command]
+fn set_noise_gate_release(serial: String, value: u8, client_state: tauri::State<'_, DaemonConnection>) -> Result<bool, String> {
+    let mut client = client_state.inner().client.lock().unwrap();
+
+    if let Some(release) = GateTimes::iter().nth(value.into()) {
+        client_state.inner().runtime.block_on(
+            client.command(serial.as_str(), GoXLRCommand::SetGateRelease(release))
+        );
+        return Ok(true);
+    }
+    Ok(false)
 }

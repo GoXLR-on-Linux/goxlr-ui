@@ -1,6 +1,7 @@
 <template>
   <ContentBox title="Compressor">
     <div class="rowContent" :class="{ hidden: isVisible }">
+      <!--TODO("Add method to calculate amount.")-->
       <Slider title="Amount" :slider-min-value=0 :slider-max-value=100 :text-min-value=0 :text-max-value=100 text-suffix="" :slider-value=0 />
     </div>
     <div class="rowContent" :class="{ hidden: !isVisible }">
