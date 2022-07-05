@@ -1,7 +1,6 @@
 <template>
   <ContentBox title="Gate">
     <div class="rowContent" :class="{ hidden: isVisible }">
-      <!--TODO("Add method to calculate amount.")-->
       <Slider title="Amount" :id=0 :slider-min-value=0 :slider-max-value=100 :text-min-value=0 :text-max-value=100 text-suffix="" :slider-value=amount :value-map="getAmountValueMap()" @value-changed="setValue"/>
     </div>
     <div class="rowContent" :class="{ hidden: !isVisible }">
