@@ -9,10 +9,9 @@
 
 <script>
 import Profile from "@/components/button_list/Profile";
-import {dataDir, join} from "@tauri-apps/api/path";
-import {fs, invoke} from "@tauri-apps/api";
 import {store} from "@/store";
 import SelectorList from "@/components/button_list/SelectorList";
+import {url_base} from "@/main";
 
 export default {
   name: "ProFiles",
@@ -36,32 +35,20 @@ export default {
   },
 
   methods: {
-    async getPath() {
-      const dataDirPath = dataDir();
-      const path = join(await dataDirPath, "goxlr-utility", "profiles");
-      this.dirContents = [];
-      fs.readDir(await path).then(value => {
-        value.forEach(value1 => {
-          if (!value1.name.toString().includes(".goxlrProfile")) {
-            if (value1.name.toString().includes(".goxlr")){
-              this.dirContents.push(value1)
-            }
-          }
-        });
-      }).catch(error => {
-        console.log(error);
-      });
-
+    getPath() {
+      // TODO: Reimplement this without tauri..
     },
     handleButtonPress: function (label) {
       this.activeProfile = label;
-      //let rust know
-      invoke('set_profile', {
-        serial: store.getActiveSerial(),
-        profileName: this.activeProfile
-      })
-      this.getPath()
+
+      let serial = store.getActiveSerial();
+      let profile = this.activeProfile;
+
+      let url = `${url_base}/set-profile/${serial}/${profile}`
+      fetch(url, { method: 'POST' });
     },
+
+    // TODO: This method appears in multiple places, it should be abstracted..
     waitFor(conditionFunction) {
       const poll = resolve => {
         if (conditionFunction()) resolve();
@@ -70,7 +57,7 @@ export default {
             poll(resolve), 400);
       }
       return new Promise(poll);
-    }
+    },
   }
 }
 </script>

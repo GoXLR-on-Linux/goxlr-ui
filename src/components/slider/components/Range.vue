@@ -3,12 +3,14 @@
     <div class="rotation">
 
       <input id="slider" type="range" v-bind:style="getCurrentStyle" v-model="localFieldValue" v-bind:min="minValue"
-             v-bind:max="maxValue" v-on:input="update"/>
+             v-bind:max="maxValue" v-on:input="update" v-on:mousedown="stopUpdates" v-on:mouseup="resumeUpdates"/>
     </div>
   </div>
 </template>
 
 <script>
+import {store} from "@/store";
+
 export default {
   name: "RangeSelector",
 
@@ -25,6 +27,14 @@ export default {
   },
 
   methods: {
+    stopUpdates() {
+      store.pause();
+    },
+
+    resumeUpdates() {
+      store.resume();
+    },
+
     update(e) {
       // Value has changed, emit something upwards..
       this.$emit("value-updated", e.target.value)

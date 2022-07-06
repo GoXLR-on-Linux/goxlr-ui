@@ -38,7 +38,7 @@
 import ContentBox from "@/components/ContentBox";
 import Cell from "@/components/sections/routing/Cell";
 import {store} from "@/store";
-import {invoke} from "@tauri-apps/api";
+import {url_base} from "@/main";
 
 export default {
   name: "RoutingTable",
@@ -60,16 +60,13 @@ export default {
   methods: {
     handleClick: function (output, input) {
       let new_state = !this.isEnabled(output, input);
-      invoke("set_routing", {
-        serial: store.getActiveSerial(),
-        input: input,
-        output: output,
-        value: new_state
-      }).then(function(result) {
-        if (result) {
+
+      let url = `${url_base}/set-routing/${store.getActiveSerial()}/${input}/${output}/${new_state}`;
+      fetch(url, {method: 'POST'}).then(result => {
+        if (result.status === 200) {
           store.getActiveDevice().router_table[input][output] = new_state;
         }
-      });
+      })
     },
 
     isEnabled: function (output, input) {

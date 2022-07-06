@@ -17,8 +17,8 @@ import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import Button from "@/components/button_list/Button";
 import {CoughMuteBehaviours, getMuteIdByName} from "@/util/mixerMapping";
-import {invoke} from "@tauri-apps/api";
 import {store} from "@/store";
+import {url_base} from "@/main";
 
 export default {
   name: "CoughButtonSettings",
@@ -67,14 +67,13 @@ export default {
       this.updateDevice();
     },
     updateDevice: function (){
-      invoke('set_cough_behaviour', {
-        serial: store.getActiveSerial(),
-        coughMuteFunction: this.activeMuteFunction
-      })
+      let serial = store.getActiveSerial();
+      let coughMuteFunction = this.activeMuteFunction;
+
+      let url = `${url_base}/set-cough-behaviour/${serial}/${coughMuteFunction}`;
+      fetch(url, { method: 'POST' });
     }
-
   },
-
 }
 </script>
 

@@ -24,7 +24,6 @@
 import ContentBox from "../ContentBox";
 import ButtonList from "../button_list/ButtonList";
 import Button from "../button_list/Button";
-import {invoke} from "@tauri-apps/api/tauri";
 import {
   FaderTargets,
   getMixerIdByName, getMixerNameById,
@@ -34,6 +33,7 @@ import {
   MuteBehaviours
 } from "@/util/mixerMapping";
 import {store} from "@/store";
+import {url_base} from "@/main";
 
 export default {
   /**
@@ -60,12 +60,13 @@ export default {
     sourcePressed: function (id) {
       let self = this;
 
-      // Let Rust know!
-      invoke('set_fader_channel', {
-        serial: store.getActiveSerial(),
-        fader: this.activeChannel,
-        channel: parseInt(id)
-      }).then(function() {
+      let serial = store.getActiveSerial();
+      let fader = this.activeChannel;
+      let channel = parseInt(id);
+
+      let url = `${url_base}/set-fader-channel/${serial}/${fader}/${channel}`
+      fetch(url, { method: 'POST' })
+      .then(function() {
         store.getActiveDevice().fader_status[self.activeChannel].channel = getMixerNameById(parseInt(id));
 
         // Double check mute function is valid..
@@ -82,13 +83,16 @@ export default {
     setMuteFunction: function(id) {
       let self = this;
 
-      invoke('set_fader_mute_function', {
-        serial: store.getActiveSerial(),
-        fader: this.activeChannel,
-        function: parseInt(id)
-      }).then(function(result) {
-        if (result) {
-          store.getActiveDevice().fader_status[self.activeChannel].mute_type = getMuteNameById(id);
+      let serial = store.getActiveSerial();
+      let fader = this.activeChannel;
+      let mute_function = parseInt(id);
+
+      let url = `${url_base}/set-fader-mute/${serial}/${fader}/${mute_function}`
+
+      fetch(url, { method: 'POST' })
+      .then(response => {
+        if (response.status === 200) {
+          store.getActiveDevice().fader_status[self.activeChannel].mute_type = getMuteNameById(id)
         }
       });
     },

@@ -1,11 +1,12 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import App from './App.vue'
-import {invoke} from "@tauri-apps/api";
 import {store} from "@/store";
 
-invoke('get_profiles').then(function (result) {
-    store.replaceData(result)
-})
+export const url_base = "http://localhost:8000/api";
+
+fetch( `${url_base}/get-devices`)
+    .then(result => result.text())
+    .then(data => store.replaceData(data));
 
 let app = createApp(App);
 app.mount('#app')

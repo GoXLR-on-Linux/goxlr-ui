@@ -25,7 +25,7 @@ import ExpandoBox from "../util/ExpandoBox";
 import {MixerMap, MixerType} from "@/util/mixerMapping";
 import Spacer from "@/components/slider/Spacer";
 import {store} from "@/store";
-import {invoke} from "@tauri-apps/api/tauri";
+import {url_base} from "@/main";
 
 export default {
   name: "MixerTop",
@@ -42,11 +42,8 @@ export default {
   methods: {
     // eslint-disable-next-line no-unused-vars
     valueChange(id, volume) {
-      invoke('set_volume', {
-        serial: store.getActiveSerial(),
-        channel: id,
-        volume: volume
-      });
+      let url = `${url_base}/set-volume/${store.getActiveSerial()}/${id}/${volume}`;
+      fetch(url, {method: 'POST'});
     },
 
     // eslint-disable-next-line no-unused-vars

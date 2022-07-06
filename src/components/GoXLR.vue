@@ -71,8 +71,8 @@ import Mic from "@/components/sections/Mic";
 import DeviceSelector from "@/components/sections/DeviceSelector";
 import Profiles from "@/components/sections/Profiles";
 import {store} from "@/store";
-import {invoke} from "@tauri-apps/api";
 import Cough from "@/components/sections/Cough";
+import {url_base} from "@/main";
 
 export default {
   name: 'GoXLR',
@@ -96,9 +96,12 @@ export default {
 
   methods: {
     updateState() {
-      invoke('get_profiles').then(function (result) {
-        store.replaceData(result);
-      });
+
+      if (!store.isPaused()) {
+        fetch(`${url_base}/get-devices`)
+            .then(result => result.text())
+            .then(data => store.replaceData(data));
+      }
     },
 
     cancelUpdate() {

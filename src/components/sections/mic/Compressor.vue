@@ -20,7 +20,7 @@ import ExpandoBox from "../../util/ExpandoBox";
 import ContentBox from "../../ContentBox";
 import Slider from "../../slider/Slider";
 import {store} from "@/store";
-import {invoke} from "@tauri-apps/api/tauri";
+import {url_base} from "@/main";
 export default {
   name: "MicCompressor",
   components: {Slider, ContentBox, ExpandoBox},
@@ -34,19 +34,19 @@ export default {
   methods: {
     setValue(id, value) {
       switch (id) {
-        case 0: this.commitValue("set_compressor_threshold", value); break;
-        case 1: this.commitValue("set_compressor_ratio", value); break;
-        case 2: this.commitValue("set_compressor_attack", value); break;
-        case 3: this.commitValue("set_compressor_release", value); break;
-        case 4: this.commitValue("set_compressor_makeup", value); break;
+        case 0: this.commitValue("set-compressor_threshold", value); break;
+        case 1: this.commitValue("set-compressor-ratio", value); break;
+        case 2: this.commitValue("set-compressor-attack", value); break;
+        case 3: this.commitValue("set-compressor-release", value); break;
+        case 4: this.commitValue("set-compressor-makeup", value); break;
       }
     },
 
     commitValue(name, value) {
-      invoke(name, {
-        serial: store.getActiveSerial(),
-        value: value
-      })
+      let serial = store.getActiveSerial();
+
+      let url = `${url_base}/${name}/${serial}/${value}`;
+      fetch(url, { method: 'POST' });
     },
 
     getThresholdValue() {

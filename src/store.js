@@ -1,6 +1,7 @@
 import {reactive} from "vue";
 
 export const store = reactive({
+    active: true,
     data: {},
     activeSerial: "",
 
@@ -24,7 +25,21 @@ export const store = reactive({
     },
 
     replaceData(newData) {
-        Object.assign(this.data, JSON.parse(newData).mixers);
+        if (this.active) {
+            Object.assign(this.data, JSON.parse(newData).mixers);
+        }
+    },
+
+    pause() {
+        this.active = false;
+    },
+
+    resume() {
+        this.active = true;
+    },
+
+    isPaused() {
+        return this.active;
     },
 
     isReady() {
