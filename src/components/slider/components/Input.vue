@@ -132,6 +132,8 @@ export default {
   background-image:none;
   box-shadow: none;
   outline: none;
+
+  -moz-appearance:textfield;
 }
 
 .sliderInput  input[type=number]::-webkit-inner-spin-button {
