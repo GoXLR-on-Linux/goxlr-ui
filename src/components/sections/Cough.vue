@@ -39,7 +39,6 @@ export default {
         _ => {
           this.activeMuteFunction = getMuteIdByName(store.getActiveDevice().cough_button.mute_type);
           this.coughBehavior = store.getActiveDevice().cough_button.is_toggle;
-          console.log(store.getActiveDevice())
         }
     );
   },
