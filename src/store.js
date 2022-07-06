@@ -39,7 +39,7 @@ export const store = reactive({
     },
 
     isPaused() {
-        return this.active;
+        return !this.active;
     },
 
     isReady() {
