@@ -12,6 +12,7 @@ import Profile from "@/components/button_list/Profile";
 import {store} from "@/store";
 import SelectorList from "@/components/button_list/SelectorList";
 import {url_base} from "@/main";
+import {waitFor} from "@/util/util";
 
 export default {
   name: "ProFiles",
@@ -28,7 +29,7 @@ export default {
   created() {
     this.getPath()
     // eslint-disable-next-line no-unused-vars
-    this.waitFor(_ => store.hasActiveDevice() === true).then(
+    waitFor(_ => store.hasActiveDevice() === true).then(
         // eslint-disable-next-line no-unused-vars
         _ => this.activeProfile = store.getActiveDevice().profile_name
     );
@@ -46,17 +47,6 @@ export default {
 
       let url = `${url_base}/set-profile/${serial}/${profile}`
       fetch(url, { method: 'POST' });
-    },
-
-    // TODO: This method appears in multiple places, it should be abstracted..
-    waitFor(conditionFunction) {
-      const poll = resolve => {
-        if (conditionFunction()) resolve();
-        // eslint-disable-next-line no-unused-vars
-        else setTimeout(_ =>
-            poll(resolve), 400);
-      }
-      return new Promise(poll);
     },
   }
 }

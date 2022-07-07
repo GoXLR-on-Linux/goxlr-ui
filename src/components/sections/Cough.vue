@@ -19,6 +19,7 @@ import Button from "@/components/button_list/Button";
 import {CoughMuteBehaviours, getMuteIdByName} from "@/util/mixerMapping";
 import {store} from "@/store";
 import {url_base} from "@/main";
+import {waitFor} from "@/util/util";
 
 export default {
   name: "CoughButtonSettings",
@@ -34,7 +35,7 @@ export default {
 
   created() {
     // eslint-disable-next-line no-unused-vars
-    this.waitFor(_ => store.hasActiveDevice() === true).then(
+    waitFor(_ => store.hasActiveDevice() === true).then(
         // eslint-disable-next-line no-unused-vars
         _ => {
           this.activeMuteFunction = getMuteIdByName(store.getActiveDevice().cough_button.mute_type);
@@ -50,15 +51,6 @@ export default {
     setActiveMuteFunction: function (id) {
       this.activeMuteFunction = id;
       this.updateDevice();
-    },
-    waitFor(conditionFunction) {
-      const poll = resolve => {
-        if (conditionFunction()) resolve();
-        // eslint-disable-next-line no-unused-vars
-        else setTimeout(_ =>
-            poll(resolve), 400);
-      }
-      return new Promise(poll);
     },
     behaviorPressed: function (id){
       if (id === '0') { this.coughBehavior = false }
