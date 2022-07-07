@@ -1,6 +1,8 @@
 <template>
   <ContentBox>
-    <button @click="showModal = true">Setup</button>
+    <BigButton :title="setupTitle" @button-clicked="showModal = true">
+      <MicIcon class="center" :view-box="'0 0 47.964 47.965'"/>
+    </BigButton>
   </ContentBox>
 
   <!-- Build the Modal -->
@@ -26,19 +28,25 @@ import Modal from "@/components/util/Modal";
 import ButtonList from "@/components/button_list/ButtonList";
 import Button from "@/components/button_list/Button";
 import Slider from "@/components/slider/Slider";
+import BigButton from "@/components/big_buttons/BigButton";
+import MicIcon from "@/components/icons/MicIcon";
 
 export default {
   name: "SetupButton",
-  components: {Slider, Button, ButtonList, ContentBox, Modal},
+  components: {BigButton, Slider, Button, ButtonList, ContentBox, Modal, MicIcon},
 
   data() {
     return {
       showModal: false,
+      setupTitle: "Mic Setup"
     }
   }
 }
 </script>
 
 <style scoped>
-
+.center{
+  display: block;
+  margin: auto;
+}
 </style>
