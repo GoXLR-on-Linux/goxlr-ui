@@ -5,7 +5,7 @@
    -->
   <ContentBox title="Mixer">
     <Component :is="isSlider(item) ? 'Slider' : 'Spacer'" v-for="item in channelMap.mixer" :key="item.id"
-               :id=item.id :title=item.name :slider-min-value=0 :slider-max-value=255 :text-min-value=0
+               :id=item.id :title=item.name :slider-min-value="getMin(item.id)" :slider-max-value="getMax(item.id)" :text-min-value=0
                :text-max-value=100 text-suffix="%" :slider-value="getValue(item.id)" @value-changed="valueChange" />
   </ContentBox>
 
@@ -41,20 +41,43 @@ export default {
 
   methods: {
     valueChange(id, volume) {
-      let command = { "SetVolume": [
-          getMixerNameById(id),
-          volume
-        ]
-      };
+      let command = undefined;
+      if (id === 11) {
+        command = {
+          "SetSwearButtonVolume": volume
+        };
+      } else {
+        command = {
+          "SetVolume": [
+            getMixerNameById(id),
+            volume
+          ]
+        };
+      }
+      console.log(command);
 
       websocket.send_command(store.getActiveSerial(), command).then(response => {
         console.log(response);
       });
     },
 
+    getMin(id) {
+      if (id === 11) { return -34; }
+      return 0;
+    },
+
+    getMax(id) {
+      if (id === 11) { return 0; }
+      return 255;
+    },
+
     // eslint-disable-next-line no-unused-vars
     getValue(id) {
       if (store.hasActiveDevice()) {
+        if (id === 11) {
+          //return store.getActiveDevice().volumes[id];
+          return store.getActiveDevice().bleep_volume;
+        }
         return store.getActiveDevice().volumes[id];
       }
     },

@@ -20,6 +20,8 @@
  * command are expected to be sent as an array of values. Using the above, SetVolume can be represented in JSON as:
  * { "SetVolume": ["Chat", 145] }
  *
+ * If there is only one parameter for a command, an array isn't required.
+ *
  * Extra Technical Stuff (not needed for most people), Obviously a command requires a serial, and the actual message
  * sent to the Daemon is a Command object, in this case, the same rules as above apply. Command is defined as:
  * Command(String, GoXLRCommand)
