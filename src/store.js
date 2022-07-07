@@ -26,7 +26,17 @@ export const store = reactive({
 
     replaceData(newData) {
         if (this.active) {
-            Object.assign(this.data, JSON.parse(newData).mixers);
+            // This is a minor fudge for websocket compatibility reasons..
+            let json = JSON.parse(newData);
+
+            let root_node;
+            if (json["Status"] !== undefined) {
+                root_node = json.Status.mixers;
+            } else {
+                root_node = json.mixers;
+            }
+
+            Object.assign(this.data, root_node);
         }
     },
 

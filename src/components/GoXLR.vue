@@ -72,7 +72,8 @@ import DeviceSelector from "@/components/sections/DeviceSelector";
 import Profiles from "@/components/sections/Profiles";
 import {store} from "@/store";
 import Cough from "@/components/sections/Cough";
-import {url_base} from "@/main";
+//import {url_base} from "@/main";
+import {websocket} from "@/util/websocket";
 
 export default {
   name: 'GoXLR',
@@ -98,9 +99,13 @@ export default {
     updateState() {
 
       if (!store.isPaused()) {
-        fetch(`${url_base}/get-devices`)
-            .then(result => result.text())
-            .then(data => store.replaceData(data));
+        websocket.get_status().then(data => {
+          store.replaceData(data);
+        });
+
+        // fetch(`${url_base}/get-devices`)
+        //     .then(result => result.text())
+        //     .then(data => store.replaceData(data));
       }
     },
 

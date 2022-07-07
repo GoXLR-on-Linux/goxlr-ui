@@ -22,10 +22,10 @@
 import Slider from "../slider/Slider";
 import ContentBox from "../ContentBox";
 import ExpandoBox from "../util/ExpandoBox";
-import {MixerMap, MixerType} from "@/util/mixerMapping";
+import {getMixerNameById, MixerMap, MixerType} from "@/util/mixerMapping";
 import Spacer from "@/components/slider/Spacer";
 import {store} from "@/store";
-import {url_base} from "@/main";
+import {websocket} from "@/util/websocket";
 
 export default {
   name: "MixerTop",
@@ -40,10 +40,16 @@ export default {
   },
 
   methods: {
-    // eslint-disable-next-line no-unused-vars
     valueChange(id, volume) {
-      let url = `${url_base}/set-volume/${store.getActiveSerial()}/${id}/${volume}`;
-      fetch(url, {method: 'POST'});
+      let command = { "SetVolume": [
+          getMixerNameById(id),
+          volume
+        ]
+      };
+
+      websocket.send_command(store.getActiveSerial(), command).then(response => {
+        console.log(response);
+      });
     },
 
     // eslint-disable-next-line no-unused-vars
