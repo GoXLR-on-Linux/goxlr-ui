@@ -1,5 +1,5 @@
 <template>
-  <ContentBox title="Equalizer">
+  <ContentBox  title="Equalizer">
     <div class="rowContent" :class="{ hidden: isVisible }">
       <Slider :id=10 title="Bass" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
               text-suffix="" :slider-value=getBassValue() />
