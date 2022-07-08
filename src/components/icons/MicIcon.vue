@@ -22,7 +22,7 @@ export default {
   props: {
     viewBox: {
       type: String,
-      default: "0 0 64 64"
+      default: "0 0 47.964 47.965"
     }
   },
 

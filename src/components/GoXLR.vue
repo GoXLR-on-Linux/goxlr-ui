@@ -55,6 +55,13 @@
           </div>
         </div>
       </Tab>
+      <Tab name="System" :left_align="false">
+        <div class="contentPad">
+          <div class="section">
+            <SystemComponent />
+          </div>
+        </div>
+      </Tab>
     </Tabs>
   </div>
 
@@ -72,12 +79,12 @@ import DeviceSelector from "@/components/sections/DeviceSelector";
 import Profiles from "@/components/sections/Profiles";
 import {store} from "@/store";
 import Cough from "@/components/sections/Cough";
-//import {url_base} from "@/main";
 import {websocket} from "@/util/websocket";
+import SystemComponent from "@/components/sections/System";
 
 export default {
   name: 'GoXLR',
-  components: {Cough, DeviceSelector, Routing, Tab, Tabs, Mixer, Faders, Mic, Profiles},
+  components: {SystemComponent, Cough, DeviceSelector, Routing, Tab, Tabs, Mixer, Faders, Mic, Profiles},
 
   data() {
     return {
