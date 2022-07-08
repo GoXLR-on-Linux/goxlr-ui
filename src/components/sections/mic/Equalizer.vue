@@ -77,7 +77,7 @@ export default {
       }
       // Probably a better way to do this
       let freq = undefined;
-      if (!this.isDeviceMini()) {
+      if (this.isDeviceMini()) {
         freq = parseInt(store.getActiveDevice().mic_status.equaliser_mini.frequency[EqMiniFreqs[id]]);
       } else {
         freq = parseInt(store.getActiveDevice().mic_status.equaliser.frequency[EqFreqs[id]]);
