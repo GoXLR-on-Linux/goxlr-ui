@@ -9,11 +9,11 @@
               text-suffix="" :slider-value=getTrebleValue() />
     </div>
 
-    <div class="rowContent" :class="{ hidden: !isVisible}">
-      <Slider v-for="(index) in new Array(length).entries()" :id="index[0]" :key="index[0]" :slider-min-value=-9
+    <div class="rowContent" :class="{hidden: !isVisible}">
+      <Slider v-for="index in this.getElementCount()" :id=index :key=index :slider-min-value=-9
               :slider-max-value=9
-              :text-min-value=-9 :text-max-value=9 text-suffix="" :slider-value="getValue(index[0])"
-              :title=getTitle(index[0]) @value-changed=valueChange />
+              :text-min-value=-9 :text-max-value=9 text-suffix="" :slider-value="getValue(index)"
+              :title=getTitle(index) @value-changed=valueChange />
     </div>
 
   </ContentBox>
@@ -25,7 +25,6 @@ import ContentBox from "../../ContentBox";
 import Slider from "../../slider/Slider";
 import ExpandoBox from "../../util/ExpandoBox";
 import {store} from "@/store";
-import {waitFor} from "@/util/util";
 import {EqFreqs, EqMiniFreqs} from "@/util/mixerMapping";
 import {websocket} from "@/util/websocket";
 
@@ -45,22 +44,6 @@ export default {
     }
   },
 
-  created() {
-    // eslint-disable-next-line no-unused-vars
-    waitFor(_ => store.hasActiveDevice() === true).then(
-        // eslint-disable-next-line no-unused-vars
-        _ => {
-          console.log(store.getActiveDevice())
-          this.deviceType = store.getActiveDevice().hardware.device_type === "Full";
-          if (this.deviceType) {
-            this.length = 10
-          } else {
-            this.length = 6
-          }
-        }
-    );
-  },
-
   methods: {
     hideExpanded() {
       return false;
@@ -70,18 +53,33 @@ export default {
       this.isVisible = !this.isVisible;
     },
 
+    isDeviceMini() {
+      // Do this here, rather than on created() so it can update if the device changes
+      if (!store.hasActiveDevice()) {
+        return true;
+      }
+      return store.getActiveDevice().hardware.device_type === "Mini";
+    },
+
+    getElementCount() {
+      if (this.isDeviceMini()) {
+        return EqMiniFreqs.length;
+      }
+      return EqFreqs.length;
+    },
+
     getTitle(id) {
+      // Vue counts from 1 instead of 0 which we need for positioning..
+      id -= 1;
 
       if (!store.hasActiveDevice()) {
         return "";
       }
       // Probably a better way to do this
       let freq = undefined;
-      if (!this.deviceType) {
-
+      if (!this.isDeviceMini()) {
         freq = parseInt(store.getActiveDevice().mic_status.equaliser_mini.frequency[EqMiniFreqs[id]]);
       } else {
-
         freq = parseInt(store.getActiveDevice().mic_status.equaliser.frequency[EqFreqs[id]]);
       }
       // Turn this frequency into a 'Number'
@@ -93,31 +91,30 @@ export default {
     },
 
     valueChange(id, value) {
-      let commandName = (!this.deviceType) ? "SetEqMiniGain" : "SetEqGain";
-      console.log(command);
-      let key = (!this.deviceType) ? EqMiniFreqs[id] : EqFreqs[id];
-      console.log(key);
+      id -= 1;
+
+      let commandName = (this.isDeviceMini()) ? "SetEqMiniGain" : "SetEqGain";
+      let key = (this.isDeviceMini()) ? EqMiniFreqs[id] : EqFreqs[id];
+
       // Build the command..
-      console.log("command: {"+command +": [" +key+","+value +"]}");
       let command = {
         [commandName]: [
           key,
           value
         ]
       }
-      console.log();
-      console.log(id)
       websocket.send_command(store.getActiveSerial(), command);
     },
 
     getValue(id) {
+      id -= 1;
+
       if (!store.hasActiveDevice()) {
         return 0;
       }
-      if (!this.deviceType) {
+      if (this.isDeviceMini()) {
         return parseInt(store.getActiveDevice().mic_status.equaliser_mini.gain[EqMiniFreqs[id]]);
       } else {
-        //console.log(store.getActiveDevice().mic_status.equaliser.gain[EqFreqs[id]])
         return parseInt(store.getActiveDevice().mic_status.equaliser.gain[EqFreqs[id]]);
       }
     },
