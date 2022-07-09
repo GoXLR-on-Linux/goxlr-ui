@@ -1,12 +1,12 @@
 <template>
   <ContentBox  title="Equalizer">
     <div class="rowContent" :class="{ hidden: isVisible }">
-      <Slider :id=10 title="Bass" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
-              text-suffix="" :slider-value=getBassValue() />
-      <Slider :id=11 title="Mid" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
-              text-suffix="" :slider-value=getMidValue() />
-      <Slider :id=12 title="Treble" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
-              text-suffix="" :slider-value=getTrebleValue() />
+      <Slider :id=100 title="Bass" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
+              text-suffix="" :slider-value=getBassValue() @value-changed=valueChange />
+      <Slider :id=110 title="Mid" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
+              text-suffix="" :slider-value=getMidValue() @value-changed=valueChange />
+      <Slider :id=120 title="Treble" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
+              text-suffix="" :slider-value=getTrebleValue() @value-changed=valueChange />
     </div>
 
     <div class="rowContent" :class="{hidden: !isVisible}">
@@ -91,9 +91,90 @@ export default {
     },
 
     valueChange(id, value) {
+      let commandName = (this.isDeviceMini()) ? "SetEqMiniGain" : "SetEqGain";
+      //Check if Bass-Slider was moved and move all Bass sliders to this value (behaviour copied from the original app)
+      if (id === 100){
+        if (this.isDeviceMini()){
+          for (let i = 0; i < 2; i++){
+            let key = EqMiniFreqs[i];
+            let command = {
+              [commandName]: [
+                key,
+                value
+              ]
+            }
+            websocket.send_command(store.getActiveSerial(), command)
+          }
+        } else {
+          for (let i = 0; i < 4; i++){
+            let key = EqFreqs[i];
+            let command = {
+              [commandName]: [
+                key,
+                value
+              ]
+            }
+            websocket.send_command(store.getActiveSerial(), command)
+          }
+        }
+        return
+      }
+      //Check if Mid-Slider was moved and move all Bass sliders to this value (behaviour copied from the original app)
+      if (id === 110){
+        if (this.isDeviceMini()){
+          for (let i = 2; i < 4; i++){
+            let key = EqMiniFreqs[i];
+            let command = {
+              [commandName]: [
+                key,
+                value
+              ]
+            }
+            websocket.send_command(store.getActiveSerial(), command)
+          }
+        } else {
+          for (let i = 4; i < 7; i++){
+            let key = EqFreqs[i];
+            let command = {
+              [commandName]: [
+                key,
+                value
+              ]
+            }
+            websocket.send_command(store.getActiveSerial(), command)
+          }
+        }
+        return
+      }
+      //Check if Treble-Slider was moved and move all Bass sliders to this value (behaviour copied from the original app)
+      if (id === 120){
+        if (this.isDeviceMini()){
+          for (let i = 4; i < 6; i++){
+            let key = EqMiniFreqs[i];
+            let command = {
+              [commandName]: [
+                key,
+                value
+              ]
+            }
+            websocket.send_command(store.getActiveSerial(), command)
+          }
+        } else {
+          for (let i = 7; i < 10; i++){
+            let key = EqFreqs[i];
+            let command = {
+              [commandName]: [
+                key,
+                value
+              ]
+            }
+            websocket.send_command(store.getActiveSerial(), command)
+          }
+        }
+        return
+      }
       id -= 1;
 
-      let commandName = (this.isDeviceMini()) ? "SetEqMiniGain" : "SetEqGain";
       let key = (this.isDeviceMini()) ? EqMiniFreqs[id] : EqFreqs[id];
 
       // Build the command..
