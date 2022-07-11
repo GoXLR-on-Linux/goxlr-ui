@@ -1,12 +1,12 @@
 <template>
   <ContentBox  title="Equalizer">
     <div class="rowContent" :class="{ hidden: isVisible }">
-      <Slider :id=100 title="Bass" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
-              text-suffix="" :slider-value=getBassValue() @value-changed=valueChange />
-      <Slider :id=110 title="Mid" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
-              text-suffix="" :slider-value=getMidValue() @value-changed=valueChange />
-      <Slider :id=120 title="Treble" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
-              text-suffix="" :slider-value=getTrebleValue() @value-changed=valueChange />
+      <Slider :id=0 title="Bass" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
+              text-suffix="" :slider-value=getBassValue() @value-changed=aggregateChanged />
+      <Slider :id=1 title="Mid" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
+              text-suffix="" :slider-value=getMidValue() @value-changed=aggregateChanged />
+      <Slider :id=2 title="Treble" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
+              text-suffix="" :slider-value=getTrebleValue() @value-changed=aggregateChanged />
     </div>
 
     <div class="rowContent" :class="{hidden: !isVisible}">
@@ -92,98 +92,33 @@ export default {
 
     valueChange(id, value) {
       let commandName = (this.isDeviceMini()) ? "SetEqMiniGain" : "SetEqGain";
-      //Check if Bass-Slider was moved and move all Bass sliders to this value (behaviour copied from the original app)
-      if (id === 100){
-        if (this.isDeviceMini()){
-          for (let i = 0; i < 2; i++){
-            let key = EqMiniFreqs[i];
-            let command = {
-              [commandName]: [
-                key,
-                value
-              ]
-            }
-            websocket.send_command(store.getActiveSerial(), command)
-          }
-        } else {
-          for (let i = 0; i < 4; i++){
-            let key = EqFreqs[i];
-            let command = {
-              [commandName]: [
-                key,
-                value
-              ]
-            }
-            websocket.send_command(store.getActiveSerial(), command)
-          }
-        }
-        return
-      }
-      //Check if Mid-Slider was moved and move all Bass sliders to this value (behaviour copied from the original app)
-      if (id === 110){
-        if (this.isDeviceMini()){
-          for (let i = 2; i < 4; i++){
-            let key = EqMiniFreqs[i];
-            let command = {
-              [commandName]: [
-                key,
-                value
-              ]
-            }
-            websocket.send_command(store.getActiveSerial(), command)
-          }
-        } else {
-          for (let i = 4; i < 7; i++){
-            let key = EqFreqs[i];
-            let command = {
-              [commandName]: [
-                key,
-                value
-              ]
-            }
-            websocket.send_command(store.getActiveSerial(), command)
-          }
-        }
-        return
-      }
-      //Check if Treble-Slider was moved and move all Bass sliders to this value (behaviour copied from the original app)
-      if (id === 120){
-        if (this.isDeviceMini()){
-          for (let i = 4; i < 6; i++){
-            let key = EqMiniFreqs[i];
-            let command = {
-              [commandName]: [
-                key,
-                value
-              ]
-            }
-            websocket.send_command(store.getActiveSerial(), command)
-          }
-        } else {
-          for (let i = 7; i < 10; i++){
-            let key = EqFreqs[i];
-            let command = {
-              [commandName]: [
-                key,
-                value
-              ]
-            }
-            websocket.send_command(store.getActiveSerial(), command)
-          }
-        }
-        return
-      }
       id -= 1;
 
       let key = (this.isDeviceMini()) ? EqMiniFreqs[id] : EqFreqs[id];
+      this.sendGainCommand(commandName, key, value);
+    },
 
-      // Build the command..
-      let command = {
-        [commandName]: [
-          key,
-          value
-        ]
+    aggregateChanged(id, newValue) {
+      let commandName = (this.isDeviceMini()) ? "SetEqMiniGain" : "SetEqGain";
+      let keyArray = (this.isDeviceMini()) ? EqMiniFreqs : EqFreqs;
+      let index = []
+
+      // TODO: Check these indexes, I think the mini has [0,1], [2,3,4], [5]
+      if (id === 0) {
+        index = (this.isDeviceMini()) ? [0, 1] : [0, 1, 2];
+      } else if (id === 1) {
+        index = (this.isDeviceMini()) ? [2, 3] : [3, 4, 5, 6];
+      } else if (id === 2) {
+        index = (this.isDeviceMini()) ? [4, 5] : [7, 8, 9];
       }
+
+      for (let i of index) {
+        this.sendGainCommand(commandName, keyArray[i], newValue);
+      }
+    },
+
+    sendGainCommand(commandName, key, value) {
+      let command = { [commandName]: [ key, value ] };
       websocket.send_command(store.getActiveSerial(), command);
     },
 
@@ -238,7 +173,7 @@ export default {
       if (this.deviceType) {
         treble = Math.round((gain[EqFreqs[7]] + gain[EqFreqs[8]] + gain[EqFreqs[9]]) / 3)
       } else {
-        treble = Math.round((gain[EqMiniFreqs[4]] + gain[EqMiniFreqs[5]]) / 3)
+        treble = Math.round((gain[EqMiniFreqs[4]] + gain[EqMiniFreqs[5]]) / 2)
       }
       return treble
     },
