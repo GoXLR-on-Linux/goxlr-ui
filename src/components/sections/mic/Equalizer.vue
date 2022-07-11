@@ -135,13 +135,12 @@ export default {
         return 0;
       }
 
-      let mic_status = store.getActiveDevice().mic_status;
-      let gain = (this.isDeviceMini()) ? mic_status.equaliser_mini.gain : mic_status.equaliser.gain;
-
       let bass = 0;
       if (!this.isDeviceMini()) {
+        let gain = store.getActiveDevice().mic_status.equaliser.gain;
         bass = Math.round((gain[EqFreqs[0]] + gain[EqFreqs[1]] + gain[EqFreqs[2]] + gain[EqFreqs[3]]) / 4)
       } else {
+        let gain = store.getActiveDevice().mic_status.equaliser_mini.gain;
         bass = Math.round((gain[EqMiniFreqs[0]] + gain[EqMiniFreqs[1]]) / 2)
       }
       return bass
@@ -152,13 +151,12 @@ export default {
         return 0;
       }
 
-      let mic_status = store.getActiveDevice().mic_status;
-      let gain = (this.isDeviceMini()) ? mic_status.equaliser_mini.gain : mic_status.equaliser.gain;
-
       let mid = 0;
       if (!this.isDeviceMini()) {
+        let gain = store.getActiveDevice().mic_status.equaliser.gain;
         mid = Math.round((gain[EqFreqs[4]] + gain[EqFreqs[5]] + gain[EqFreqs[6]]) / 3)
       } else {
+        let gain = store.getActiveDevice().mic_status.equaliser_mini.gain;
         mid = Math.round((gain[EqMiniFreqs[2]] + gain[EqMiniFreqs[3]]) / 2)
       }
       return mid
@@ -169,13 +167,12 @@ export default {
         return 0;
       }
 
-      let mic_status = store.getActiveDevice().mic_status;
-      let gain = (this.isDeviceMini()) ? mic_status.equaliser_mini.gain : mic_status.equaliser.gain;
-
       let treble = 0;
       if (!this.isDeviceMini()) {
+        let gain = store.getActiveDevice().mic_status.equaliser.gain;
         treble = Math.round((gain[EqFreqs[7]] + gain[EqFreqs[8]] + gain[EqFreqs[9]]) / 3)
       } else {
+        let gain = store.getActiveDevice().mic_status.equaliser_mini.gain;
         treble = Math.round((gain[EqMiniFreqs[4]] + gain[EqMiniFreqs[5]]) / 2)
       }
       return treble
