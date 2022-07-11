@@ -1,9 +1,8 @@
 <template>
   <SelectorList>
-    <Profile v-for="value in dirContents" :button-id="value.name" :key="value"
-             :label="value.name.toString().replace('.goxlr', '').replace('Profile', '')"
-             :is-active="value.name.toString().replace('.goxlr', '').replace('Profile', '') === activeProfile"
-             @button-pressed="handleButtonPress"/>
+    <!-- TODO: Consider expanding <PushButton /> to be more versatile -->
+    <Profile v-for="(name, index) in getProfileList()" :key="index" :button-id="name"
+             :label="name" :is-active="isActiveProfile(name)" @button-pressed="handleButtonPress"/>
   </SelectorList>
 </template>
 
@@ -11,8 +10,7 @@
 import Profile from "@/components/button_list/Profile";
 import {store} from "@/store";
 import SelectorList from "@/components/button_list/SelectorList";
-import {url_base} from "@/main";
-import {waitFor} from "@/util/util";
+import {websocket} from "@/util/websocket";
 
 export default {
   name: "ProFiles",
@@ -26,27 +24,29 @@ export default {
     }
   },
 
-  created() {
-    this.getPath()
-    // eslint-disable-next-line no-unused-vars
-    waitFor(_ => store.hasActiveDevice() === true).then(
-        // eslint-disable-next-line no-unused-vars
-        _ => this.activeProfile = store.getActiveDevice().profile_name
-    );
-  },
-
   methods: {
-    getPath() {
-      // TODO: Reimplement this without tauri..
+    getProfileList() {
+      if (!store.hasActiveDevice()) {
+        return [];
+      }
+      return store.getProfileFiles();
     },
+
+    isActiveProfile(name) {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+
+      return store.getActiveDevice().profile_name === name;
+    },
+
     handleButtonPress: function (label) {
-      this.activeProfile = label;
+      let command = {
+        "LoadProfile": label
+      };
 
-      let serial = store.getActiveSerial();
-      let profile = this.activeProfile;
-
-      let url = `${url_base}/set-profile/${serial}/${profile}`
-      fetch(url, { method: 'POST' });
+      websocket.send_command(store.getActiveSerial(), command);
+      store.getActiveDevice().profile_name = label;
     },
   }
 }

@@ -1,6 +1,6 @@
 <template>
 
-  <div class="button" v-bind:class="{ active: isActive}" @click="setActive">{{ label }}</div>
+  <div class="button" v-bind:class="{ active: isActive }" @click="setActive">{{ label }}</div>
 
 </template>
 
