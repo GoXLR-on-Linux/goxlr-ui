@@ -6,6 +6,10 @@ export const store = reactive({
     files: {},
     activeSerial: "",
 
+    getDeviceCount() {
+        return Object.keys(this.data).length;
+    },
+
     setActiveSerial(serial) {
         this.activeSerial = serial;
     },

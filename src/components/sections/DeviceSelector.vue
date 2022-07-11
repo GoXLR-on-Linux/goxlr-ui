@@ -2,10 +2,11 @@
   <div class="buttonList">
     <div>
       <div class="label">Select Device</div>
-      <div class="buttonHolder">
+      <div class="buttonHolder" v-if="deviceCount > 0">
         <Button v-for="(device, key) in getMixers()" :key=key :button-id=key :is-active=false
                 :label="getLabel2(key, device)" @button-pressed="setDevice(key)"/>
       </div>
+      <div v-else class="no-device">No GoXLR Devices Found</div>
     </div>
   </div>
 </template>
@@ -24,6 +25,21 @@ export default {
     }
   },
 
+  computed: {
+    deviceCount() {
+      return store.getDeviceCount();
+    }
+  },
+
+  watch: {
+    // This code probably isn't needed, but is for when a GoXLR suddenly appears in the data.
+    deviceCount(newCount, oldCount) {
+      if (newCount === 1 && oldCount === 0) {
+        store.setActiveSerial(Object.keys(this.getMixers())[0]);
+      }
+    }
+  },
+
   methods: {
     getMixers() {
       return store.data;
@@ -37,6 +53,12 @@ export default {
       return "[" + serial + "] GoXLR " + device.hardware.device_type + " connected to USB bus " + device.hardware.usb_device.bus_number + " address " + device.hardware.usb_device.address;
     },
   },
+
+  created() {
+    if (this.deviceCount === 1) {
+      store.setActiveSerial(Object.keys(this.getMixers())[0]);
+    }
+  }
 }
 </script>
 
@@ -77,6 +99,7 @@ export default {
 }
 
 .label {
+  width: 680px;
   padding: 10px;
   color: #fff;
   background-color: #3b413f;
@@ -84,6 +107,10 @@ export default {
   text-transform: uppercase;
 
   margin-bottom: 8px;
+}
+
+.no-device {
+  color: #fff;
 }
 
 </style>

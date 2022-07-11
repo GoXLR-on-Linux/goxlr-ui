@@ -88,31 +88,16 @@ export default {
 
   data() {
     return {
-      device_set: false,
       timer: ''
-    }
-  },
-
-  watch: {
-    device_set(newValue, oldValue) {
-      if (oldValue === false && newValue === true) {
-        // Set the timer to automatically pull the profile settings
-        this.timer = setInterval(this.updateState, 250);
-      }
     }
   },
 
   methods: {
     updateState() {
-
       if (!store.isPaused()) {
         websocket.get_status().then(data => {
           store.replaceData(data);
         });
-
-        // fetch(`${url_base}/get-devices`)
-        //     .then(result => result.text())
-        //     .then(data => store.replaceData(data));
       }
     },
 
@@ -121,15 +106,17 @@ export default {
     },
 
     isDeviceSet() {
-      this.device_set = store.hasActiveDevice();
       return store.hasActiveDevice();
     },
+  },
+
+  created() {
+    this.timer = setInterval(this.updateState, 250);
   },
 
   beforeUnmount() {
     this.cancelUpdate();
   }
-
 }
 </script>
 
