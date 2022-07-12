@@ -54,11 +54,7 @@ export default {
           ]
         };
       }
-      console.log(command);
-
-      websocket.send_command(store.getActiveSerial(), command).then(response => {
-        console.log(response);
-      });
+      websocket.send_command(store.getActiveSerial(), command);
     },
 
     getMin(id) {

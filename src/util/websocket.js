@@ -32,6 +32,7 @@
  * The websocket class will abstract away the need to build a complete message.
  */
 import {ws_base} from "@/main";
+import {store} from "@/store";
 
 // TODO: Error checking and handling!
 export class Websocket {
@@ -44,8 +45,13 @@ export class Websocket {
 
         let self = this;
         self.#websocket.addEventListener('message', function(event) {
-            // Not pretty to look at, but call the resolve() method..
-            self.#message_queue.shift()[0](event.data);
+            // A message can be one of two things, either a DaemonStatus, or an error..
+            let json = JSON.parse(event.data);
+            if (json["Status"] !== undefined) {
+                store.replaceData(json);
+            } else {
+                console.log("Received Error from Websocket: " + event.data);
+            }
         });
 
         self.#websocket.addEventListener('open', function() {
@@ -74,20 +80,6 @@ export class Websocket {
 
     #sendRequest(request) {
         this.#websocket.send(JSON.stringify(request));
-        return this.#generateResponsePromise();
-    }
-
-    #generateResponsePromise() {
-        // Create a promise, and extract the resolve / reject methods..
-        let promiseResolve, promiseReject;
-        let promise = new Promise((resolve, reject) => {
-            promiseResolve = resolve;
-            promiseReject = reject;
-        })
-
-        // Store these in the message queue
-        this.#message_queue.push([promiseResolve, promiseReject]);
-        return promise;
     }
 }
 

@@ -75,9 +75,7 @@ export default {
   methods: {
     updateState() {
       if (!store.isPaused()) {
-        websocket.get_status().then(data => {
-          store.replaceData(data);
-        });
+        websocket.get_status();
       }
     },
 
