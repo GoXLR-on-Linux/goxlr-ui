@@ -1,20 +1,22 @@
 <template>
-  <SelectorList>
-    <!-- TODO: Consider expanding <PushButton /> to be more versatile -->
-    <Profile v-for="(name, index) in getProfileList()" :key="index" :button-id="name"
-             :label="name" :is-active="isActiveProfile(name)" @button-pressed="handleButtonPress"/>
-  </SelectorList>
+  <div style="margin-top: 10px">
+    <!-- Buttons are buttons are buttons. -->
+    <SelectorList>
+      <PushButton v-for="(name, index) in getProfileList()" :key="index" :button-id="name"
+                  :label="name" :is-active="isActiveProfile(name)" @button-pressed="handleButtonPress"/>
+    </SelectorList>
+  </div>
 </template>
 
 <script>
-import Profile from "@/components/button_list/Profile";
 import {store} from "@/store";
-import SelectorList from "@/components/button_list/SelectorList";
 import {websocket} from "@/util/websocket";
+import PushButton from "@/components/button_list/Button";
+import SelectorList from "@/components/button_list/SelectorList";
 
 export default {
-  name: "ProFiles",
-  components: {Profile, SelectorList},
+  name: "ProfileSelector",
+  components: {SelectorList, PushButton},
 
 
   data() {
@@ -29,7 +31,7 @@ export default {
       if (!store.hasActiveDevice()) {
         return [];
       }
-      return store.getProfileFiles();
+      return store.getProfileFiles().sort();
     },
 
     isActiveProfile(name) {
@@ -53,5 +55,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

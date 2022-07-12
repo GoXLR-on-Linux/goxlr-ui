@@ -1,31 +1,11 @@
 <template>
 
   <div id="main">
-    <DeviceSelector :style="{display: !isDeviceSet() ? '' : 'none'}"/>
-    <Tabs :style="{display: isDeviceSet() ? '' : 'none'}" style="width: 35%; height: 400px">
-      <Tab name="Profiles" :selected="true" style="height: 320px">
-        <div class="contentPad">
-          <div class="section">
-            <Profiles />
-          </div>
-        </div>
-      </Tab>
-      <Tab name="Samples" :left_align="false" style="height: 320px">
-        <div class="contentPad">
-          <div class="section">
+    <DeviceSelector v-show="!isDeviceSet()" />
 
-          </div>
-        </div>
-      </Tab>
-      <Tab name="Presets" :left_align="false" style="height: 320px">
-        <div class="contentPad">
-          <div class="section">
+    <FileTabs :device-set="isDeviceSet()" />
 
-          </div>
-        </div>
-      </Tab>
-    </Tabs>
-    <Tabs :style="{display: isDeviceSet() ? '' : 'none'}">
+    <Tabs v-show="isDeviceSet()">
       <Tab name="Mic">
         <div class="contentPad">
           <div class="section">
@@ -33,7 +13,7 @@
           </div>
         </div>
       </Tab>
-      <Tab name="Mixer" :selected="true">
+      <Tab name="Mixer" selected>
         <div class="contentPad">
           <div class="section">
             <Faders/>
@@ -76,15 +56,15 @@ import Tab from "@/components/tabs/Tab";
 import Routing from "@/components/sections/Routing";
 import Mic from "@/components/sections/Mic";
 import DeviceSelector from "@/components/sections/DeviceSelector";
-import Profiles from "@/components/sections/Profiles";
 import {store} from "@/store";
 import Cough from "@/components/sections/Cough";
 import {websocket} from "@/util/websocket";
 import SystemComponent from "@/components/sections/System";
+import FileTabs from "@/components/sections/files/FileTabs";
 
 export default {
   name: 'GoXLR',
-  components: {SystemComponent, Cough, DeviceSelector, Routing, Tab, Tabs, Mixer, Faders, Mic, Profiles},
+  components: {FileTabs, SystemComponent, Cough, DeviceSelector, Routing, Tab, Tabs, Mixer, Faders, Mic },
 
   data() {
     return {
@@ -136,9 +116,5 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-}
-
-.hidden {
-  display: none;
 }
 </style>
