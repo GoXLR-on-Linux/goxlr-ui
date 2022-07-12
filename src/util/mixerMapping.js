@@ -230,3 +230,9 @@ export const EqFreqs = [
     "Equalizer8KHz",
     "Equalizer16KHz",
 ]
+
+export const MicrophoneTypes = [
+    "Dynamic",
+    "Condenser",
+    "Jack",
+]
