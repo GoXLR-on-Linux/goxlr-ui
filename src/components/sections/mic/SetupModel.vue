@@ -48,8 +48,6 @@ export default {
           value
         ]
       };
-      console.log(command);
-
       websocket.send_command(store.getActiveSerial(), command);
     },
 
