@@ -67,14 +67,12 @@ export default {
       return 255;
     },
 
-    // eslint-disable-next-line no-unused-vars
     getValue(id) {
       if (store.hasActiveDevice()) {
         if (id === 11) {
-          //return store.getActiveDevice().volumes[id];
-          return store.getActiveDevice().bleep_volume;
+          return store.getActiveDevice().levels.bleep;
         }
-        return store.getActiveDevice().volumes[id];
+        return store.getActiveDevice().levels.volumes[id];
       }
     },
 
