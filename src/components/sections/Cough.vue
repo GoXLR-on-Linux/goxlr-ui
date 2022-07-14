@@ -19,7 +19,7 @@ import Button from "@/components/button_list/Button";
 import {CoughMuteBehaviours, getMuteIdByName, MuteFunction} from "@/util/mixerMapping";
 import {store} from "@/store";
 import {waitFor} from "@/util/util";
-import {sendHttpCommand} from "@/util/sockets";
+import {websocket} from "@/util/sockets";
 
 export default {
   name: "CoughButtonSettings",
@@ -64,7 +64,7 @@ export default {
       let command = {
         "SetCoughMuteFunction": coughMuteFunction
       }
-      sendHttpCommand(serial, command);
+      websocket.send_command(serial, command);
     }
   },
 }

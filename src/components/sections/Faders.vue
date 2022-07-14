@@ -27,12 +27,14 @@ import Button from "../button_list/Button";
 import {
   FaderName,
   FaderTargets,
-  getMixerIdByName, getMixerNameById,
+  getMixerIdByName,
+  getMixerNameById,
   MixerID,
-  MuteBehaviours, MuteFunction
+  MuteBehaviours,
+  MuteFunction
 } from "@/util/mixerMapping";
 import {store} from "@/store";
-import {sendHttpCommand} from "@/util/sockets";
+import {websocket} from "@/util/sockets";
 
 export default {
   /**
@@ -67,14 +69,13 @@ export default {
         "SetFader": [fader, channel]
       }
 
-      sendHttpCommand(serial, command).then(() => {
-        store.getActiveDevice().fader_status[self.activeChannel].channel = getMixerNameById(parseInt(id));
+      websocket.send_command(serial, command);
+      store.getActiveDevice().fader_status[self.activeChannel].channel = getMixerNameById(parseInt(id));
 
-        // Double check mute function is valid..
-        if (self.isMuteFunctionDisabled(self.getActiveMuteFunction())) {
-          self.setMuteFunction(0)
-        }
-      })
+      // Double check mute function is valid..
+      if (self.isMuteFunctionDisabled(self.getActiveMuteFunction())) {
+        self.setMuteFunction(0)
+      }
     },
 
     micBehaviourPressed: function (id) {
@@ -94,13 +95,8 @@ export default {
         ]
       }
 
-      sendHttpCommand(serial, command)
-          .then(() => {
-            store.getActiveDevice().fader_status[self.activeChannel].mute_type = mute_function;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+      websocket.send_command(serial, command);
+      store.getActiveDevice().fader_status[self.activeChannel].mute_type = mute_function;
     },
 
     isActiveChannel: function (id) {

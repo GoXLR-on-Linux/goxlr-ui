@@ -39,7 +39,7 @@ import ContentBox from "@/components/ContentBox";
 import Cell from "@/components/sections/routing/Cell";
 import {store} from "@/store";
 import {InputDevice, OutputDevice} from "@/util/mixerMapping";
-import {sendHttpCommand} from "@/util/sockets";
+import {websocket} from "@/util/sockets";
 
 export default {
   name: "RoutingTable",
@@ -70,9 +70,8 @@ export default {
         "SetRouter": [inputDevice, outputDevice, new_state]
       };
 
-      sendHttpCommand(store.getActiveSerial(), command).then(() => {
-        store.getActiveDevice().router_table[input][output] = new_state;
-      })
+      websocket.send_command(store.getActiveSerial(), command);
+      store.getActiveDevice().router_table[input][output] = new_state;
     },
 
     isEnabled: function (output, input) {

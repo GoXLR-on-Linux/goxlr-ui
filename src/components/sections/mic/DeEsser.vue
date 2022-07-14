@@ -8,7 +8,7 @@
 import ContentBox from "../../ContentBox";
 import Slider from "../../slider/Slider";
 import {store} from "@/store";
-import {sendHttpCommand} from "@/util/sockets";
+import {websocket} from "@/util/sockets";
 export default {
   name: "MicDeEsser",
   components: {Slider, ContentBox},
@@ -23,7 +23,7 @@ export default {
 
     valueChanged(id, value) {
       let command = { "SetDeeser": value };
-      sendHttpCommand(store.getActiveSerial(), command);
+      websocket.send_command(store.getActiveSerial(), command);
     }
   }
 }

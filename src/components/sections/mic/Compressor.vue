@@ -20,7 +20,8 @@ import ExpandoBox from "../../util/ExpandoBox";
 import ContentBox from "../../ContentBox";
 import Slider from "../../slider/Slider";
 import {store} from "@/store";
-import {sendHttpCommand} from "@/util/sockets";
+import {websocket} from "@/util/sockets";
+
 export default {
   name: "MicCompressor",
   components: {Slider, ContentBox, ExpandoBox},
@@ -37,7 +38,7 @@ export default {
         case 0: this.commitValue("SetCompressorThreshold", value); break;
         case 1: this.commitValue("SetCompressorRatio", value); break;
         case 2: this.commitValue("SetCompressorAttack", value); break;
-        case 3: this.commitValue("SetCompressorRelease", value); break;
+        case 3: this.commitValue("SetCompressorReleaseTime", value); break;
         case 4: this.commitValue("SetCompressorMakeupGain", value); break;
       }
     },
@@ -48,8 +49,7 @@ export default {
       let command = {
         [name]: value
       }
-
-      sendHttpCommand(serial, command);
+      websocket.send_command(serial, command);
     },
 
     getThresholdValue() {

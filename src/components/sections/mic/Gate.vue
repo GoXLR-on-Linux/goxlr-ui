@@ -19,7 +19,7 @@ import ContentBox from "../../ContentBox";
 import ExpandoBox from "../../util/ExpandoBox";
 import Slider from "../../slider/Slider";
 import {store} from "@/store";
-import {sendHttpCommand} from "@/util/sockets";
+import {websocket} from "@/util/sockets";
 
 export default {
   name: "MicGate",
@@ -90,8 +90,7 @@ export default {
       let command = {
         [name]: value
       }
-
-      sendHttpCommand(serial, command);
+      websocket.send_command(serial, command);
     },
 
     getGateValueMap: function (){
