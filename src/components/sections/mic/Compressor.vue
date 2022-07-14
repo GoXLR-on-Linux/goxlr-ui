@@ -27,7 +27,7 @@ export default {
 
   data() {
     return {
-      isVisible: false,
+      isVisible: true,
     }
   },
 
@@ -101,7 +101,8 @@ export default {
     },
 
     toggleExpando() {
-      this.isVisible = !this.isVisible;
+      //this.isVisible = !this.isVisible;
+      // TODO: Until compressor calcs are available, disable this..
     }
   }
 }
