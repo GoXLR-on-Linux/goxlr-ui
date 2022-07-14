@@ -58,7 +58,7 @@ import Mic from "@/components/sections/Mic";
 import DeviceSelector from "@/components/sections/DeviceSelector";
 import {store} from "@/store";
 import Cough from "@/components/sections/Cough";
-import {websocket} from "@/util/websocket";
+import {websocket} from "@/util/sockets";
 import SystemComponent from "@/components/sections/System";
 import FileTabs from "@/components/sections/files/FileTabs";
 

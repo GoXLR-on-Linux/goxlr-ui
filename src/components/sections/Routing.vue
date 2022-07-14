@@ -3,14 +3,14 @@
   <ContentBox title="Routing">
     <table>
       <thead>
-        <tr>
-          <th colspan="2" class="hidden"></th>
-          <th :colspan="inputs.length">Inputs</th>
-        </tr>
-        <tr class="subHeader">
-          <th colspan="2" class="hidden"></th>
-          <th v-for="input in inputs" :key="input">{{ input }}</th>
-        </tr>
+      <tr>
+        <th colspan="2" class="hidden"></th>
+        <th :colspan="inputs.length">Inputs</th>
+      </tr>
+      <tr class="subHeader">
+        <th colspan="2" class="hidden"></th>
+        <th v-for="input in inputs" :key="input">{{ input }}</th>
+      </tr>
       </thead>
 
       <tr v-for="output in outputs" :key="output">
@@ -38,7 +38,8 @@
 import ContentBox from "@/components/ContentBox";
 import Cell from "@/components/sections/routing/Cell";
 import {store} from "@/store";
-import {url_base} from "@/main";
+import {InputDevice, OutputDevice} from "@/util/mixerMapping";
+import {sendHttpCommand} from "@/util/sockets";
 
 export default {
   name: "RoutingTable",
@@ -61,11 +62,16 @@ export default {
     handleClick: function (output, input) {
       let new_state = !this.isEnabled(output, input);
 
-      let url = `${url_base}/set-routing/${store.getActiveSerial()}/${input}/${output}/${new_state}`;
-      fetch(url, {method: 'POST'}).then(result => {
-        if (result.status === 200) {
-          store.getActiveDevice().router_table[input][output] = new_state;
-        }
+      let inputDevice = InputDevice[input];
+      let outputDevice = OutputDevice[output];
+
+      // eslint-disable-next-line no-unused-vars
+      let command = {
+        "SetRouter": [inputDevice, outputDevice, new_state]
+      };
+
+      sendHttpCommand(store.getActiveSerial(), command).then(() => {
+        store.getActiveDevice().router_table[input][output] = new_state;
       })
     },
 

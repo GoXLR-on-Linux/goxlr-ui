@@ -10,7 +10,7 @@
 
 <script>
 import {store} from "@/store";
-import {websocket} from "@/util/websocket";
+import {sendHttpCommand} from "@/util/sockets";
 import PushButton from "@/components/button_list/Button";
 import SelectorList from "@/components/button_list/SelectorList";
 
@@ -47,8 +47,13 @@ export default {
         "LoadProfile": label
       };
 
-      websocket.send_command(store.getActiveSerial(), command);
-      store.getActiveDevice().profile_name = label;
+      sendHttpCommand(store.getActiveSerial(), command)
+          .then(() => {
+            store.getActiveDevice().profile_name = label;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     },
   }
 }

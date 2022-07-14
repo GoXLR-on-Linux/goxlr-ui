@@ -20,53 +20,83 @@ export class MixerID {
 }
 
 export function getMixerIdByName(name) {
-    if (name === "Mic") { return MixerID.MICROPHONE.id; }
-    if (name === "Chat") { return MixerID.CHAT.id; }
-    if (name === "Music") { return MixerID.MUSIC.id; }
-    if (name === "Game") { return MixerID.GAME.id; }
-    if (name === "Console") { return MixerID.CONSOLE.id; }
-    if (name === "LineIn") { return MixerID.LINE_IN.id; }
-    if (name === "LineOut") { return MixerID.LINE_OUT.id; }
-    if (name === "System") { return MixerID.SYSTEM.id; }
-    if (name === "Sample") { return MixerID.SAMPLE.id; }
-    if (name === "Headphones") { return MixerID.HEADPHONES.id; }
-    if (name === "MicMonitor") { return MixerID.MIC_MONITOR.id; }
-    if (name === "Bleep") { return MixerID.BLEEP.id; }
+    if (name === "Mic") {
+        return MixerID.MICROPHONE.id;
+    }
+    if (name === "Chat") {
+        return MixerID.CHAT.id;
+    }
+    if (name === "Music") {
+        return MixerID.MUSIC.id;
+    }
+    if (name === "Game") {
+        return MixerID.GAME.id;
+    }
+    if (name === "Console") {
+        return MixerID.CONSOLE.id;
+    }
+    if (name === "LineIn") {
+        return MixerID.LINE_IN.id;
+    }
+    if (name === "LineOut") {
+        return MixerID.LINE_OUT.id;
+    }
+    if (name === "System") {
+        return MixerID.SYSTEM.id;
+    }
+    if (name === "Sample") {
+        return MixerID.SAMPLE.id;
+    }
+    if (name === "Headphones") {
+        return MixerID.HEADPHONES.id;
+    }
+    if (name === "MicMonitor") {
+        return MixerID.MIC_MONITOR.id;
+    }
+    if (name === "Bleep") {
+        return MixerID.BLEEP.id;
+    }
 }
 
 export function getMixerNameById(id) {
-    if (id === MixerID.MICROPHONE.id) { return "Mic" }
-    if (id === MixerID.CHAT.id) { return "Chat" }
-    if (id === MixerID.MUSIC.id) { return "Music" }
-    if (id === MixerID.GAME.id) { return "Game" }
-    if (id === MixerID.CONSOLE.id) { return "Console" }
-    if (id === MixerID.LINE_IN.id) { return "LineIn" }
-    if (id === MixerID.LINE_OUT.id) { return "LineOut" }
-    if (id === MixerID.SYSTEM.id) { return "System" }
-    if (id === MixerID.SAMPLE.id) { return "Sample" }
-    if (id === MixerID.HEADPHONES.id) { return "Headphones" }
-    if (id === MixerID.MIC_MONITOR.id) { return "MicMonitor" }
-    if (id === MixerID.BLEEP.id) { return "Bleep" }
+    if (id === MixerID.MICROPHONE.id) {
+        return "Mic"
+    }
+    if (id === MixerID.CHAT.id) {
+        return "Chat"
+    }
+    if (id === MixerID.MUSIC.id) {
+        return "Music"
+    }
+    if (id === MixerID.GAME.id) {
+        return "Game"
+    }
+    if (id === MixerID.CONSOLE.id) {
+        return "Console"
+    }
+    if (id === MixerID.LINE_IN.id) {
+        return "LineIn"
+    }
+    if (id === MixerID.LINE_OUT.id) {
+        return "LineOut"
+    }
+    if (id === MixerID.SYSTEM.id) {
+        return "System"
+    }
+    if (id === MixerID.SAMPLE.id) {
+        return "Sample"
+    }
+    if (id === MixerID.HEADPHONES.id) {
+        return "Headphones"
+    }
+    if (id === MixerID.MIC_MONITOR.id) {
+        return "MicMonitor"
+    }
+    if (id === MixerID.BLEEP.id) {
+        return "Bleep"
+    }
 
 }
-
-export function getMuteIdByName(id) {
-    if (id === "All") { return 0; }
-    if (id === "ToStream") { return 1; }
-    if (id === "ToVoiceChat") { return 2; }
-    if (id === "ToPhones") { return 3; }
-    if (id === "ToLineOut") { return 4; }
-}
-
-export function getMuteNameById(id) {
-    if (id === 0) { return "All" }
-    if (id === 1) { return "ToStream" }
-    if (id === 2) { return "ToVoiceChat" }
-    if (id === 3) { return "ToPhones" }
-    if (id === 4) { return "ToLineOut" }
-}
-
-//export class
 
 export class MixerType {
     static SLIDER = new MixerType(0);
@@ -201,12 +231,44 @@ export let MuteBehaviours = [
     "Mute to Line Out"
 ]
 
+export const MuteFunction = [
+    "All",
+    "ToStream",
+    "ToVoiceChat",
+    "ToPhones",
+    "ToLineOut",
+]
+
 export let CoughMuteBehaviours = [
     "Mute to All",
     "Mute to Stream",
     "Mute to Voice Chat",
     "Mute to Phones",
     "Mute to Line Out"
+]
+
+export const FaderName = [
+    "A",
+    "B",
+    "C",
+    "D"
+]
+
+export const InputDevice = ["Microphone", "Chat", "Music", "Game", "Console", "LineIn", "System", "Samples"]
+export const OutputDevice = ["Headphones", "BroadcastMix", "LineOut", "ChatMic", "Sampler"]
+
+export const ChannelName = [
+    "Mic",
+    "LineIn",
+    "Console",
+    "System",
+    "Game",
+    "Chat",
+    "Sample",
+    "Music",
+    "Headphones",
+    "MicMonitor",
+    "LineOut",
 ]
 
 export const EqMiniFreqs = [

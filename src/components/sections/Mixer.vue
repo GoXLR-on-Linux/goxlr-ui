@@ -25,7 +25,7 @@ import ExpandoBox from "../util/ExpandoBox";
 import {getMixerNameById, MixerMap, MixerType} from "@/util/mixerMapping";
 import Spacer from "@/components/slider/Spacer";
 import {store} from "@/store";
-import {websocket} from "@/util/websocket";
+import {websocket} from "@/util/sockets";
 
 export default {
   name: "MixerTop",

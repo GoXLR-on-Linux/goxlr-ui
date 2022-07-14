@@ -16,10 +16,10 @@
 import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import Button from "@/components/button_list/Button";
-import {CoughMuteBehaviours, getMuteIdByName} from "@/util/mixerMapping";
+import {CoughMuteBehaviours, getMuteIdByName, MuteFunction} from "@/util/mixerMapping";
 import {store} from "@/store";
-import {url_base} from "@/main";
 import {waitFor} from "@/util/util";
+import {sendHttpCommand} from "@/util/sockets";
 
 export default {
   name: "CoughButtonSettings",
@@ -59,10 +59,12 @@ export default {
     },
     updateDevice: function (){
       let serial = store.getActiveSerial();
-      let coughMuteFunction = this.activeMuteFunction;
+      let coughMuteFunction = MuteFunction[this.activeMuteFunction];
 
-      let url = `${url_base}/set-cough-behaviour/${serial}/${coughMuteFunction}`;
-      fetch(url, { method: 'POST' });
+      let command = {
+        "SetCoughMuteFunction": coughMuteFunction
+      }
+      sendHttpCommand(serial, command);
     }
   },
 }

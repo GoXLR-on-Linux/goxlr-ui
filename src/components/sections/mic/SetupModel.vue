@@ -18,7 +18,7 @@ import Button from "@/components/button_list/Button";
 import Slider from "@/components/slider/Slider";
 import {store} from "@/store";
 import {MicrophoneTypes} from "@/util/mixerMapping";
-import {websocket} from "@/util/websocket";
+import {websocket} from "@/util/sockets";
 
 export default {
   name: "SetupModel",

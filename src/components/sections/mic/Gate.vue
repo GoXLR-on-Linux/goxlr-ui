@@ -19,7 +19,7 @@ import ContentBox from "../../ContentBox";
 import ExpandoBox from "../../util/ExpandoBox";
 import Slider from "../../slider/Slider";
 import {store} from "@/store";
-import {url_base} from "@/main";
+import {sendHttpCommand} from "@/util/sockets";
 
 export default {
   name: "MicGate",
@@ -72,23 +72,26 @@ export default {
       switch (id) {
         case 0: {
           this.updateThreshold(value)
-          this.commitValue("set-noise-gate-threshold", this.threshold);
+          this.commitValue("SetGateThreshold", this.threshold);
         } break
         case 1: {
-          this.commitValue("set-noise-gate-threshold", value);
+          this.commitValue("SetGateThreshold", value);
           this.updateAmount(value)
         } break
-        case 2: this.commitValue("set-noise-gate-attenuation", value); break
-        case 3: this.commitValue("set-noise-gate-attack", value); break
-        case 4: this.commitValue("set-noise-gate-release", value); break
+        case 2: this.commitValue("SetGateAttenuation", value); break
+        case 3: this.commitValue("SetGateAttack", value); break
+        case 4: this.commitValue("SetGateRelease", value); break
       }
     },
 
     commitValue: function (name, value){
       let serial = store.getActiveSerial();
 
-      let url = `${url_base}/${name}/${serial}/${value}`;
-      fetch(url, { method: 'POST' });
+      let command = {
+        [name]: value
+      }
+
+      sendHttpCommand(serial, command);
     },
 
     getGateValueMap: function (){

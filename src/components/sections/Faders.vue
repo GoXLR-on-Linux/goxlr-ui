@@ -25,15 +25,14 @@ import ContentBox from "../ContentBox";
 import ButtonList from "../button_list/ButtonList";
 import Button from "../button_list/Button";
 import {
+  FaderName,
   FaderTargets,
   getMixerIdByName, getMixerNameById,
-  getMuteIdByName,
-  getMuteNameById,
   MixerID,
-  MuteBehaviours
+  MuteBehaviours, MuteFunction
 } from "@/util/mixerMapping";
 import {store} from "@/store";
-import {url_base} from "@/main";
+import {sendHttpCommand} from "@/util/sockets";
 
 export default {
   /**
@@ -61,40 +60,47 @@ export default {
       let self = this;
 
       let serial = store.getActiveSerial();
-      let fader = this.activeChannel;
-      let channel = parseInt(id);
+      let fader = FaderName[this.activeChannel];
+      let channel = getMixerNameById(parseInt(id));
 
-      let url = `${url_base}/set-fader-channel/${serial}/${fader}/${channel}`
-      fetch(url, { method: 'POST' })
-      .then(function() {
+      let command = {
+        "SetFader": [fader, channel]
+      }
+
+      sendHttpCommand(serial, command).then(() => {
         store.getActiveDevice().fader_status[self.activeChannel].channel = getMixerNameById(parseInt(id));
 
         // Double check mute function is valid..
         if (self.isMuteFunctionDisabled(self.getActiveMuteFunction())) {
           self.setMuteFunction(0)
         }
-      });
+      })
     },
 
     micBehaviourPressed: function (id) {
       this.setMuteFunction(parseInt(id));
     },
 
-    setMuteFunction: function(id) {
-      let self = this;
-
+    setMuteFunction: function (id) {
       let serial = store.getActiveSerial();
-      let fader = this.activeChannel;
-      let mute_function = parseInt(id);
+      let fader = FaderName[this.activeChannel];
+      let mute_function = MuteFunction[parseInt(id)];
 
-      let url = `${url_base}/set-fader-mute/${serial}/${fader}/${mute_function}`
+      // Build the Command..
+      let command = {
+        "SetFaderMuteFunction": [
+          fader,
+          mute_function
+        ]
+      }
 
-      fetch(url, { method: 'POST' })
-      .then(response => {
-        if (response.status === 200) {
-          store.getActiveDevice().fader_status[self.activeChannel].mute_type = getMuteNameById(id)
-        }
-      });
+      sendHttpCommand(serial, command)
+          .then(() => {
+            store.getActiveDevice().fader_status[self.activeChannel].mute_type = mute_function;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     },
 
     isActiveChannel: function (id) {
@@ -111,7 +117,7 @@ export default {
 
     isActiveMuteFunction: function (id) {
       if (store.hasActiveDevice()) {
-        let active = getMuteIdByName(store.getActiveDevice().fader_status[this.activeChannel].mute_type);
+        let active = MuteFunction.indexOf(store.getActiveDevice().fader_status[this.activeChannel].mute_type);
         return active === id;
       }
       return false;
@@ -138,16 +144,16 @@ export default {
       }
     },
 
-    getActiveSource: function() {
+    getActiveSource: function () {
       if (store.hasActiveDevice()) {
         return getMixerIdByName(store.getActiveDevice().fader_status[this.activeChannel].channel);
       }
       return 0;
     },
 
-    getActiveMuteFunction: function() {
+    getActiveMuteFunction: function () {
       if (store.hasActiveDevice()) {
-        return getMuteIdByName(store.getActiveDevice().fader_status[this.activeChannel].mute_type);
+        return MuteFunction.indexOf(store.getActiveDevice().fader_status[this.activeChannel].mute_type);
       }
       return 0;
     }

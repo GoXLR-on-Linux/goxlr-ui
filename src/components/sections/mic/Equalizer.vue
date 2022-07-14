@@ -26,7 +26,7 @@ import Slider from "../../slider/Slider";
 import ExpandoBox from "../../util/ExpandoBox";
 import {store} from "@/store";
 import {EqFreqs, EqMiniFreqs} from "@/util/mixerMapping";
-import {websocket} from "@/util/websocket";
+import {websocket} from "@/util/sockets";
 
 export default {
   name: "MicEqualiser",

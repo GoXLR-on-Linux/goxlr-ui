@@ -20,7 +20,7 @@ import ExpandoBox from "../../util/ExpandoBox";
 import ContentBox from "../../ContentBox";
 import Slider from "../../slider/Slider";
 import {store} from "@/store";
-import {url_base} from "@/main";
+import {sendHttpCommand} from "@/util/sockets";
 export default {
   name: "MicCompressor",
   components: {Slider, ContentBox, ExpandoBox},
@@ -34,19 +34,22 @@ export default {
   methods: {
     setValue(id, value) {
       switch (id) {
-        case 0: this.commitValue("set-compressor_threshold", value); break;
-        case 1: this.commitValue("set-compressor-ratio", value); break;
-        case 2: this.commitValue("set-compressor-attack", value); break;
-        case 3: this.commitValue("set-compressor-release", value); break;
-        case 4: this.commitValue("set-compressor-makeup", value); break;
+        case 0: this.commitValue("SetCompressorThreshold", value); break;
+        case 1: this.commitValue("SetCompressorRatio", value); break;
+        case 2: this.commitValue("SetCompressorAttack", value); break;
+        case 3: this.commitValue("SetCompressorRelease", value); break;
+        case 4: this.commitValue("SetCompressorMakeupGain", value); break;
       }
     },
 
     commitValue(name, value) {
       let serial = store.getActiveSerial();
 
-      let url = `${url_base}/${name}/${serial}/${value}`;
-      fetch(url, { method: 'POST' });
+      let command = {
+        [name]: value
+      }
+
+      sendHttpCommand(serial, command);
     },
 
     getThresholdValue() {
