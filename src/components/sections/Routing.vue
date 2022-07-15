@@ -3,14 +3,14 @@
   <ContentBox title="Routing">
     <table>
       <thead>
-        <tr>
-          <th colspan="2" class="hidden"></th>
-          <th :colspan="inputs.length">Inputs</th>
-        </tr>
-        <tr class="subHeader">
-          <th colspan="2" class="hidden"></th>
-          <th v-for="input in inputs" :key="input">{{ input }}</th>
-        </tr>
+      <tr>
+        <th colspan="2" class="hidden"></th>
+        <th :colspan="inputs.length">Inputs</th>
+      </tr>
+      <tr class="subHeader">
+        <th colspan="2" class="hidden"></th>
+        <th v-for="input in inputs" :key="input">{{ input }}</th>
+      </tr>
       </thead>
 
       <tr v-for="output in outputs" :key="output">
@@ -38,7 +38,8 @@
 import ContentBox from "@/components/ContentBox";
 import Cell from "@/components/sections/routing/Cell";
 import {store} from "@/store";
-import {invoke} from "@tauri-apps/api";
+import {InputDevice, OutputDevice} from "@/util/mixerMapping";
+import {websocket} from "@/util/sockets";
 
 export default {
   name: "RoutingTable",
@@ -60,16 +61,17 @@ export default {
   methods: {
     handleClick: function (output, input) {
       let new_state = !this.isEnabled(output, input);
-      invoke("set_routing", {
-        serial: store.getActiveSerial(),
-        input: input,
-        output: output,
-        value: new_state
-      }).then(function(result) {
-        if (result) {
-          store.getActiveDevice().router_table[input][output] = new_state;
-        }
-      });
+
+      let inputDevice = InputDevice[input];
+      let outputDevice = OutputDevice[output];
+
+      // eslint-disable-next-line no-unused-vars
+      let command = {
+        "SetRouter": [inputDevice, outputDevice, new_state]
+      };
+
+      websocket.send_command(store.getActiveSerial(), command);
+      store.getActiveDevice().router_table[input][output] = new_state;
     },
 
     isEnabled: function (output, input) {

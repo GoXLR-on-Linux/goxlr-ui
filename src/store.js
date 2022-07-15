@@ -1,8 +1,14 @@
 import {reactive} from "vue";
 
 export const store = reactive({
+    active: true,
     data: {},
+    files: {},
     activeSerial: "",
+
+    getDeviceCount() {
+        return Object.keys(this.data).length;
+    },
 
     setActiveSerial(serial) {
         this.activeSerial = serial;
@@ -23,8 +29,27 @@ export const store = reactive({
         return this.activeSerial;
     },
 
-    replaceData(newData) {
-        Object.assign(this.data, JSON.parse(newData).mixers);
+    getProfileFiles() {
+        return this.files.profiles;
+    },
+
+    replaceData(json) {
+        if (this.active) {
+            Object.assign(this.data, json.Status.mixers);
+            Object.assign(this.files, json.Status.files);
+        }
+    },
+
+    pause() {
+        this.active = false;
+    },
+
+    resume() {
+        this.active = true;
+    },
+
+    isPaused() {
+        return !this.active;
     },
 
     isReady() {

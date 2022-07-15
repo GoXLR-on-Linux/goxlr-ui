@@ -24,16 +24,17 @@
 import ContentBox from "../ContentBox";
 import ButtonList from "../button_list/ButtonList";
 import Button from "../button_list/Button";
-import {invoke} from "@tauri-apps/api/tauri";
 import {
+  FaderName,
   FaderTargets,
-  getMixerIdByName, getMixerNameById,
-  getMuteIdByName,
-  getMuteNameById,
+  getMixerIdByName,
+  getMixerNameById,
   MixerID,
-  MuteBehaviours
+  MuteBehaviours,
+  MuteFunction
 } from "@/util/mixerMapping";
 import {store} from "@/store";
+import {websocket} from "@/util/sockets";
 
 export default {
   /**
@@ -60,37 +61,42 @@ export default {
     sourcePressed: function (id) {
       let self = this;
 
-      // Let Rust know!
-      invoke('set_fader_channel', {
-        serial: store.getActiveSerial(),
-        fader: this.activeChannel,
-        channel: parseInt(id)
-      }).then(function() {
-        store.getActiveDevice().fader_status[self.activeChannel].channel = getMixerNameById(parseInt(id));
+      let serial = store.getActiveSerial();
+      let fader = FaderName[this.activeChannel];
+      let channel = getMixerNameById(parseInt(id));
 
-        // Double check mute function is valid..
-        if (self.isMuteFunctionDisabled(self.getActiveMuteFunction())) {
-          self.setMuteFunction(0)
-        }
-      });
+      let command = {
+        "SetFader": [fader, channel]
+      }
+
+      websocket.send_command(serial, command);
+      store.getActiveDevice().fader_status[self.activeChannel].channel = getMixerNameById(parseInt(id));
+
+      // Double check mute function is valid..
+      if (self.isMuteFunctionDisabled(self.getActiveMuteFunction())) {
+        self.setMuteFunction(0)
+      }
     },
 
     micBehaviourPressed: function (id) {
       this.setMuteFunction(parseInt(id));
     },
 
-    setMuteFunction: function(id) {
-      let self = this;
+    setMuteFunction: function (id) {
+      let serial = store.getActiveSerial();
+      let fader = FaderName[this.activeChannel];
+      let mute_function = MuteFunction[parseInt(id)];
 
-      invoke('set_fader_mute_function', {
-        serial: store.getActiveSerial(),
-        fader: this.activeChannel,
-        function: parseInt(id)
-      }).then(function(result) {
-        if (result) {
-          store.getActiveDevice().fader_status[self.activeChannel].mute_type = getMuteNameById(id);
-        }
-      });
+      // Build the Command..
+      let command = {
+        "SetFaderMuteFunction": [
+          fader,
+          mute_function
+        ]
+      }
+
+      websocket.send_command(serial, command);
+      store.getActiveDevice().fader_status[self.activeChannel].mute_type = mute_function;
     },
 
     isActiveChannel: function (id) {
@@ -107,7 +113,7 @@ export default {
 
     isActiveMuteFunction: function (id) {
       if (store.hasActiveDevice()) {
-        let active = getMuteIdByName(store.getActiveDevice().fader_status[this.activeChannel].mute_type);
+        let active = MuteFunction.indexOf(store.getActiveDevice().fader_status[this.activeChannel].mute_type);
         return active === id;
       }
       return false;
@@ -134,16 +140,16 @@ export default {
       }
     },
 
-    getActiveSource: function() {
+    getActiveSource: function () {
       if (store.hasActiveDevice()) {
         return getMixerIdByName(store.getActiveDevice().fader_status[this.activeChannel].channel);
       }
       return 0;
     },
 
-    getActiveMuteFunction: function() {
+    getActiveMuteFunction: function () {
       if (store.hasActiveDevice()) {
-        return getMuteIdByName(store.getActiveDevice().fader_status[this.activeChannel].mute_type);
+        return MuteFunction.indexOf(store.getActiveDevice().fader_status[this.activeChannel].mute_type);
       }
       return 0;
     }

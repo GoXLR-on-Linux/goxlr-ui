@@ -5,7 +5,7 @@
    -->
   <ContentBox title="Mixer">
     <Component :is="isSlider(item) ? 'Slider' : 'Spacer'" v-for="item in channelMap.mixer" :key="item.id"
-               :id=item.id :title=item.name :slider-min-value=0 :slider-max-value=255 :text-min-value=0
+               :id=item.id :title=item.name :slider-min-value="getMin(item.id)" :slider-max-value="getMax(item.id)" :text-min-value=0
                :text-max-value=100 text-suffix="%" :slider-value="getValue(item.id)" @value-changed="valueChange" />
   </ContentBox>
 
@@ -22,10 +22,10 @@
 import Slider from "../slider/Slider";
 import ContentBox from "../ContentBox";
 import ExpandoBox from "../util/ExpandoBox";
-import {MixerMap, MixerType} from "@/util/mixerMapping";
+import {getMixerNameById, MixerMap, MixerType} from "@/util/mixerMapping";
 import Spacer from "@/components/slider/Spacer";
 import {store} from "@/store";
-import {invoke} from "@tauri-apps/api/tauri";
+import {websocket} from "@/util/sockets";
 
 export default {
   name: "MixerTop",
@@ -40,19 +40,39 @@ export default {
   },
 
   methods: {
-    // eslint-disable-next-line no-unused-vars
     valueChange(id, volume) {
-      invoke('set_volume', {
-        serial: store.getActiveSerial(),
-        channel: id,
-        volume: volume
-      });
+      let command = undefined;
+      if (id === 11) {
+        command = {
+          "SetSwearButtonVolume": volume
+        };
+      } else {
+        command = {
+          "SetVolume": [
+            getMixerNameById(id),
+            volume
+          ]
+        };
+      }
+      websocket.send_command(store.getActiveSerial(), command);
     },
 
-    // eslint-disable-next-line no-unused-vars
+    getMin(id) {
+      if (id === 11) { return -34; }
+      return 0;
+    },
+
+    getMax(id) {
+      if (id === 11) { return 0; }
+      return 255;
+    },
+
     getValue(id) {
       if (store.hasActiveDevice()) {
-        return store.getActiveDevice().volumes[id];
+        if (id === 11) {
+          return store.getActiveDevice().levels.bleep;
+        }
+        return store.getActiveDevice().levels.volumes[id];
       }
     },
 

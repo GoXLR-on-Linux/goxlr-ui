@@ -1,31 +1,11 @@
 <template>
 
   <div id="main">
-    <DeviceSelector :style="{display: !isDeviceSet() ? '' : 'none'}"/>
-    <Tabs :style="{display: isDeviceSet() ? '' : 'none'}" style="width: 35%; height: 400px">
-      <Tab name="Profiles" :selected="true" style="height: 320px">
-        <div class="contentPad">
-          <div class="section">
-            <Profiles />
-          </div>
-        </div>
-      </Tab>
-      <Tab name="Samples" :left_align="false" style="height: 320px">
-        <div class="contentPad">
-          <div class="section">
+    <DeviceSelector v-show="!isDeviceSet()" />
 
-          </div>
-        </div>
-      </Tab>
-      <Tab name="Presets" :left_align="false" style="height: 320px">
-        <div class="contentPad">
-          <div class="section">
+    <FileTabs :device-set="isDeviceSet()" />
 
-          </div>
-        </div>
-      </Tab>
-    </Tabs>
-    <Tabs :style="{display: isDeviceSet() ? '' : 'none'}">
+    <Tabs v-show="isDeviceSet()">
       <Tab name="Mic">
         <div class="contentPad">
           <div class="section">
@@ -33,7 +13,7 @@
           </div>
         </div>
       </Tab>
-      <Tab name="Mixer" :selected="true">
+      <Tab name="Mixer" selected>
         <div class="contentPad">
           <div class="section">
             <Faders/>
@@ -55,6 +35,13 @@
           </div>
         </div>
       </Tab>
+      <Tab name="System" :left_align="false">
+        <div class="contentPad">
+          <div class="section">
+            <SystemComponent />
+          </div>
+        </div>
+      </Tab>
     </Tabs>
   </div>
 
@@ -69,36 +56,27 @@ import Tab from "@/components/tabs/Tab";
 import Routing from "@/components/sections/Routing";
 import Mic from "@/components/sections/Mic";
 import DeviceSelector from "@/components/sections/DeviceSelector";
-import Profiles from "@/components/sections/Profiles";
 import {store} from "@/store";
-import {invoke} from "@tauri-apps/api";
 import Cough from "@/components/sections/Cough";
+import {websocket} from "@/util/sockets";
+import SystemComponent from "@/components/sections/System";
+import FileTabs from "@/components/sections/files/FileTabs";
 
 export default {
   name: 'GoXLR',
-  components: {Cough, DeviceSelector, Routing, Tab, Tabs, Mixer, Faders, Mic, Profiles},
+  components: {FileTabs, SystemComponent, Cough, DeviceSelector, Routing, Tab, Tabs, Mixer, Faders, Mic },
 
   data() {
     return {
-      device_set: false,
       timer: ''
-    }
-  },
-
-  watch: {
-    device_set(newValue, oldValue) {
-      if (oldValue === false && newValue === true) {
-        // Set the timer to automatically pull the profile settings
-        this.timer = setInterval(this.updateState, 250);
-      }
     }
   },
 
   methods: {
     updateState() {
-      invoke('get_profiles').then(function (result) {
-        store.replaceData(result);
-      });
+      if (!store.isPaused()) {
+        websocket.get_status();
+      }
     },
 
     cancelUpdate() {
@@ -106,15 +84,17 @@ export default {
     },
 
     isDeviceSet() {
-      this.device_set = store.hasActiveDevice();
       return store.hasActiveDevice();
     },
+  },
+
+  created() {
+    this.timer = setInterval(this.updateState, 250);
   },
 
   beforeUnmount() {
     this.cancelUpdate();
   }
-
 }
 </script>
 
@@ -134,9 +114,5 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-}
-
-.hidden {
-  display: none;
 }
 </style>

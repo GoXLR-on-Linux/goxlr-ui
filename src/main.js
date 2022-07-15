@@ -1,11 +1,8 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import App from './App.vue'
-import {invoke} from "@tauri-apps/api";
-import {store} from "@/store";
+import {websocket} from "@/util/sockets";
 
-invoke('get_profiles').then(function (result) {
-    store.replaceData(result)
-})
-
-let app = createApp(App);
-app.mount('#app')
+websocket.connect().then(() => {
+        let app = createApp(App);
+        app.mount('#app')
+});

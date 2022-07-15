@@ -3,7 +3,6 @@
     <div class="tab">
       <button v-for="tab in tabs" :key="tab.name" :class="{ 'active': tab.isActive }" @click="selectTab(tab)">{{tab.name}}</button>
     </div>
-
     <div class="tabs-details">
       <slot></slot>
     </div>
@@ -66,20 +65,15 @@ export default {
       0 0 5px #59b1b6;
 }
 
-.tab .filler {
-  border: 1px solid #fff;
-  width: 100%;
-}
-
 .tabs-details {
   border: 1px solid #59b1b6;
   border-top: 0;
-
-  overflow-x: scroll;
+  overflow: auto;
 }
 
 .tabs-details::-webkit-scrollbar {
   height: 6px;
+  width: 6px;
 }
 
 .tabs-details::-webkit-scrollbar-track {

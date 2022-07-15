@@ -14,8 +14,6 @@ export default {
 
 <style scoped>
 .selectorList {
-  height: 220px;
-  width: 200px;
   background: transparent;
   margin: 3px;
 }
@@ -25,8 +23,6 @@ export default {
 }
 
 .buttonHolder {
-  height: 170px;
-  width: 200px;
   box-sizing: border-box;
   overflow-y: auto;
 }

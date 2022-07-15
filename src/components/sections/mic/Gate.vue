@@ -18,7 +18,7 @@ import ContentBox from "../../ContentBox";
 import ExpandoBox from "../../util/ExpandoBox";
 import Slider from "../../slider/Slider";
 import {store} from "@/store";
-import {invoke} from "@tauri-apps/api";
+import {websocket} from "@/util/sockets";
 
 export default {
   name: "MicGate",
@@ -71,23 +71,25 @@ export default {
       switch (id) {
         case 0: {
           this.updateThreshold(value)
-          this.commitValue("set_noise_gate_threshold", this.threshold);
+          this.commitValue("SetGateThreshold", this.threshold);
         } break
         case 1: {
-          this.commitValue("set_noise_gate_threshold", value);
+          this.commitValue("SetGateThreshold", value);
           this.updateAmount(value)
         } break
-        case 2: this.commitValue("set_noise_gate_attenuation", value); break
-        case 3: this.commitValue("set_noise_gate_attack", value); break
-        case 4: this.commitValue("set_noise_gate_release", value); break
+        case 2: this.commitValue("SetGateAttenuation", value); break
+        case 3: this.commitValue("SetGateAttack", value); break
+        case 4: this.commitValue("SetGateRelease", value); break
       }
     },
 
     commitValue: function (name, value){
-      invoke(name,{
-        serial: store.getActiveSerial(),
-        value: value
-      })
+      let serial = store.getActiveSerial();
+
+      let command = {
+        [name]: value
+      }
+      websocket.send_command(serial, command);
     },
 
     getGateValueMap: function (){
