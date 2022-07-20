@@ -1,46 +1,38 @@
 <template>
 
   <div id="main">
-    <DeviceSelector v-show="!isDeviceSet()" />
+    <DeviceSelector v-show="!isDeviceSet()"/>
 
-    <FileTabs :device-set="isDeviceSet()" />
+    <FileTabs :device-set="isDeviceSet()"/>
+
+    <div style="height: 25px; background-color: #3b413f"/>
 
     <Tabs v-show="isDeviceSet()">
       <Tab name="Mic">
-        <div class="contentPad">
-          <div class="section">
-            <Mic/>
-          </div>
-        </div>
+        <MainTabContent>
+          <Mic/>
+        </MainTabContent>
       </Tab>
       <Tab name="Mixer" selected>
-        <div class="contentPad">
-          <div class="section">
-            <Faders/>
-            <Mixer/>
-          </div>
-        </div>
+        <MainTabContent>
+          <Faders/>
+          <Mixer/>
+        </MainTabContent>
       </Tab>
       <Tab name="Cough" :left_align="false">
-        <div class="contentPad">
-          <div class="section">
-            <Cough/>
-          </div>
-        </div>
+        <MainTabContent>
+          <Cough/>
+        </MainTabContent>
       </Tab>
       <Tab name="Router" :left_align="false">
-        <div class="contentPad">
-          <div class="section">
-            <Routing/>
-          </div>
-        </div>
+        <MainTabContent>
+          <Routing/>
+        </MainTabContent>
       </Tab>
       <Tab name="System" :left_align="false">
-        <div class="contentPad">
-          <div class="section">
-            <SystemComponent />
-          </div>
-        </div>
+        <MainTabContent>
+          <SystemComponent/>
+        </MainTabContent>
       </Tab>
     </Tabs>
   </div>
@@ -61,10 +53,23 @@ import Cough from "@/components/sections/Cough";
 import {websocket} from "@/util/sockets";
 import SystemComponent from "@/components/sections/System";
 import FileTabs from "@/components/sections/files/FileTabs";
+import MainTabContent from "@/components/design/MainTabContent";
 
 export default {
   name: 'GoXLR',
-  components: {FileTabs, SystemComponent, Cough, DeviceSelector, Routing, Tab, Tabs, Mixer, Faders, Mic },
+  components: {
+    MainTabContent,
+    FileTabs,
+    SystemComponent,
+    Cough,
+    DeviceSelector,
+    Routing,
+    Tab,
+    Tabs,
+    Mixer,
+    Faders,
+    Mic
+  },
 
   data() {
     return {
@@ -102,17 +107,5 @@ export default {
 #main {
   width: 100%;
   font-size: 10pt;
-}
-
-.contentPad {
-  display: inline-block;
-  padding: 40px;
-  text-align: center;
-}
-
-.section {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
 }
 </style>

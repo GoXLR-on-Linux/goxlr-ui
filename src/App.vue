@@ -16,6 +16,8 @@ export default {
 <style>
 body {
   background-color: #252927;
+  padding: 0;
+  margin: 0;
 }
 
 @font-face {

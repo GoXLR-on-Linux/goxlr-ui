@@ -23,7 +23,7 @@
 <script>
 import ContentBox from "../../ContentBox";
 import Slider from "../../slider/Slider";
-import ExpandoBox from "../../util/ExpandoBox";
+import ExpandoBox from "../../design/ExpandoBox";
 import {store} from "@/store";
 import {EqFreqs, EqMiniFreqs} from "@/util/mixerMapping";
 import {websocket} from "@/util/sockets";

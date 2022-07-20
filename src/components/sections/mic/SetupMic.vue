@@ -13,7 +13,7 @@
 
 <script>
 import ContentBox from "@/components/ContentBox";
-import Modal from "@/components/util/Modal";
+import Modal from "@/components/design/Modal";
 import BigButton from "@/components/big_buttons/BigButton";
 import MicIcon from "@/components/icons/MicIcon";
 import SetupModel from "@/components/sections/mic/SetupModel";

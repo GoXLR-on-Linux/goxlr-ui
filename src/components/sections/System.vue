@@ -24,7 +24,7 @@ import ContentBox from "@/components/ContentBox";
 import BigButton from "@/components/big_buttons/BigButton";
 import MicIcon from "@/components/icons/MicIcon";
 import HelpIcon from "@/components/icons/HelpIcon";
-import Modal from "@/components/util/Modal";
+import Modal from "@/components/design/Modal";
 import SetupModel from "@/components/sections/mic/SetupModel";
 export default {
   name: "SystemComponent",

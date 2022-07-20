@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import ExpandoBox from "../../util/ExpandoBox";
+import ExpandoBox from "../../design/ExpandoBox";
 import ContentBox from "../../ContentBox";
 import Slider from "../../slider/Slider";
 import {store} from "@/store";

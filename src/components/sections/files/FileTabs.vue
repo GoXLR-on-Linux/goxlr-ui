@@ -1,25 +1,11 @@
 <template>
-  <Tabs v-show="deviceSet" style="width: 35%; height: 400px">
-    <Tab name="Profiles" :selected="true" style="height: 320px">
-      <div class="contentPad">
-        <div class="section">
+  <Tabs v-show="deviceSet" style="width: 480px">
+    <Tab name="Profiles" :selected="true">
           <ProfileSelector />
-        </div>
-      </div>
     </Tab>
-    <Tab name="Samples" :left_align="false" style="height: 320px">
-      <div class="contentPad">
-        <div class="section">
-
-        </div>
-      </div>
+    <Tab name="Samples" :left_align="false">
     </Tab>
-    <Tab name="Presets" :left_align="false" style="height: 320px">
-      <div class="contentPad">
-        <div class="section">
-
-        </div>
-      </div>
+    <Tab name="Presets" :left_align="false">
     </Tab>
   </Tabs>
 </template>

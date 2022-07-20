@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-left: 8px; margin-right: 8px">
     <div class="tab">
       <button v-for="tab in tabs" :key="tab.name" :class="{ 'active': tab.isActive }" @click="selectTab(tab)">{{tab.name}}</button>
     </div>
@@ -42,7 +42,7 @@ export default {
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 14px 16px;
+  padding: 10px 20px;
   margin-bottom: -1px;
   width: 150px;
 
@@ -68,21 +68,10 @@ export default {
 .tabs-details {
   border: 1px solid #59b1b6;
   border-top: 0;
+  padding: 0;
+  margin: 0;
   overflow: auto;
-}
-
-.tabs-details::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
-}
-
-.tabs-details::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
-.tabs-details::-webkit-scrollbar-thumb {
-  background-color: #dfdfdf;
-  border-radius: 3px;
+  vertical-align: middle;
 }
 
 </style>

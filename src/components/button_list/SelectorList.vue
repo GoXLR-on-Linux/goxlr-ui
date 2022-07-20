@@ -15,27 +15,25 @@ export default {
 <style scoped>
 .selectorList {
   background: transparent;
-  margin: 3px;
-}
-
-.selectorList:not(:last-child) {
-  margin-right: 20px;
+  height: calc(100% - 40px);
+  overflow-y: scroll;
 }
 
 .buttonHolder {
+  margin-top: 10px;
   box-sizing: border-box;
-  overflow-y: auto;
 }
 
-.buttonHolder::-webkit-scrollbar {
+.selectorList::-webkit-scrollbar {
   width: 3px;
 }
 
-.buttonHolder::-webkit-scrollbar-track {
+.selectorList::-webkit-scrollbar-track {
   background-color: transparent;
 }
 
-.buttonHolder::-webkit-scrollbar-thumb {
+.selectorList::-webkit-scrollbar-thumb {
+  background-color: #dfdfdf;
   border-radius: 3px;
 }
 

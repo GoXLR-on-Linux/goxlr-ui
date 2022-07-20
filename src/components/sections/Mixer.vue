@@ -21,7 +21,7 @@
 <script>
 import Slider from "../slider/Slider";
 import ContentBox from "../ContentBox";
-import ExpandoBox from "../util/ExpandoBox";
+import ExpandoBox from "../design/ExpandoBox";
 import {getMixerNameById, MixerMap, MixerType} from "@/util/mixerMapping";
 import Spacer from "@/components/slider/Spacer";
 import {store} from "@/store";

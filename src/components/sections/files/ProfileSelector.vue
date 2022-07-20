@@ -1,6 +1,6 @@
 <template>
-  <div style="margin-top: 10px">
     <!-- Buttons are buttons are buttons. -->
+  <div style="height: 320px">
     <SelectorList>
       <PushButton v-for="(name, index) in getProfileList()" :key="index" :button-id="name"
                   :label="name" :is-active="isActiveProfile(name)" @button-pressed="handleButtonPress"/>

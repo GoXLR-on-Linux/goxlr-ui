@@ -15,7 +15,7 @@
 
 <script>
 import ContentBox from "../../ContentBox";
-import ExpandoBox from "../../util/ExpandoBox";
+import ExpandoBox from "../../design/ExpandoBox";
 import Slider from "../../slider/Slider";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
