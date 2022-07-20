@@ -15,7 +15,7 @@ export default {
 <style scoped>
 .selectorList {
   background: transparent;
-  height: calc(100% - 40px);
+  height: calc(100% - 55px);
   overflow-y: scroll;
 }
 

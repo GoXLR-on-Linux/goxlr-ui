@@ -14,8 +14,14 @@ import {websocket} from "@/util/sockets";
 
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {faMicrophone, faCircleQuestion} from "@fortawesome/free-solid-svg-icons";
-library.add(faMicrophone, faCircleQuestion);
+import {
+        faMicrophone,
+        faCircleQuestion,
+        faFloppyDisk,
+        faFileCirclePlus,
+        faCopy, faTrash
+} from "@fortawesome/free-solid-svg-icons";
+library.add(faMicrophone, faCircleQuestion, faFloppyDisk, faFileCirclePlus, faCopy, faTrash);
 
 websocket.connect().then(() => {
         let app = createApp(App);
