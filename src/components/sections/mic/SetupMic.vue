@@ -1,7 +1,7 @@
 <template>
   <ContentBox>
     <BigButton :title="setupTitle" @button-clicked="showModal = true">
-      <font-awesome-icon icon="fa-solid fa-microphone" />
+      <font-awesome-icon icon="fa-solid fa-microphone-lines" />
     </BigButton>
   </ContentBox>
 

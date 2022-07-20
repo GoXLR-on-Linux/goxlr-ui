@@ -1,7 +1,7 @@
 <template>
   <ContentBox :title="'System'">
     <BigButton :title="'Mic Setup'" @button-clicked="showModal = true">
-      <font-awesome-icon icon="fa-solid fa-microphone" />
+      <font-awesome-icon icon="fa-solid fa-microphone-lines" />
     </BigButton>
     <div style="margin-right: 30px"></div>
     <a :href="'https://discord.gg/Wbp3UxkX2j'">
