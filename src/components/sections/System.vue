@@ -1,12 +1,12 @@
 <template>
   <ContentBox :title="'System'">
     <BigButton :title="'Mic Setup'" @button-clicked="showModal = true">
-      <MicIcon />
+      <font-awesome-icon icon="fa-solid fa-microphone" />
     </BigButton>
     <div style="margin-right: 30px"></div>
     <a :href="'https://discord.gg/Wbp3UxkX2j'">
       <BigButton :title="'Help'">
-        <HelpIcon />
+        <font-awesome-icon icon="fa-solid fa-circle-question" />
       </BigButton>
     </a>
 
@@ -22,13 +22,12 @@
 <script>
 import ContentBox from "@/components/ContentBox";
 import BigButton from "@/components/big_buttons/BigButton";
-import MicIcon from "@/components/icons/MicIcon";
-import HelpIcon from "@/components/icons/HelpIcon";
 import Modal from "@/components/design/Modal";
 import SetupModel from "@/components/sections/mic/SetupModel";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 export default {
   name: "SystemComponent",
-  components: {SetupModel, HelpIcon, BigButton, ContentBox, MicIcon, Modal},
+  components: {SetupModel, BigButton, ContentBox, FontAwesomeIcon, Modal},
 
   data() {
     return {

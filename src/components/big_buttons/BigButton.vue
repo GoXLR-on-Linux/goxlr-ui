@@ -38,7 +38,10 @@ export default {
 .img-section{
   display: inline-flex;
   flex-direction: row;
+  font-size: 80px;
+  color: #6e7676;
 }
+
 
 .iconTitle{
   background-color: #2d3230;

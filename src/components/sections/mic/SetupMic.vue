@@ -1,7 +1,7 @@
 <template>
   <ContentBox>
     <BigButton :title="setupTitle" @button-clicked="showModal = true">
-      <MicIcon class="center" :view-box="'0 0 47.964 47.965'"/>
+      <font-awesome-icon icon="fa-solid fa-microphone" />
     </BigButton>
   </ContentBox>
 
@@ -15,12 +15,11 @@
 import ContentBox from "@/components/ContentBox";
 import Modal from "@/components/design/Modal";
 import BigButton from "@/components/big_buttons/BigButton";
-import MicIcon from "@/components/icons/MicIcon";
 import SetupModel from "@/components/sections/mic/SetupModel";
 
 export default {
   name: "SetupButton",
-  components: {BigButton, ContentBox, Modal, MicIcon, SetupModel},
+  components: {BigButton, ContentBox, Modal, SetupModel},
 
   data() {
     return {
