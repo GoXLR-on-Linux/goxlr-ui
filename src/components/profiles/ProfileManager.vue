@@ -27,6 +27,8 @@ import ProfileButtonList from "@/components/profiles/ProfileButtonList";
 import ProfileButton from "@/components/profiles/ProfileButton";
 
 export default {
+  emits: ['load-profile'],
+
   name: "ProfileManager",
   components: {ProfileButton, ProfileButtonList},
   props: {

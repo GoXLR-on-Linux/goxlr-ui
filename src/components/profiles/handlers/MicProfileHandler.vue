@@ -3,7 +3,7 @@
     <div class="title">Mic Profiles</div>
     <div style="height: 235px">
       <ProfileManager :profile-list="getProfileList()" :active-profile="getActiveProfile()"
-                      @load-profile="loadProfile"/>
+                      @load-profile="loadProfile" />
     </div>
   </div>
 </template>
@@ -14,16 +14,8 @@ import {sendHttpCommand} from "@/util/sockets";
 import ProfileManager from "@/components/profiles/ProfileManager";
 
 export default {
-  emits: ['load-profile'],
-
   name: "MicProfileHandler",
   components: {ProfileManager},
-
-  data() {
-    return {
-      selectedProfile: "",
-    }
-  },
 
   methods: {
     getProfileList() {
