@@ -62,6 +62,11 @@ export class Websocket {
         });
     }
 
+    // Forces the daemon to re-read file directories..
+    invalidate_caches() {
+        return this.#sendRequest("InvalidateCaches");
+    }
+
     get_status() {
         return this.#sendRequest("GetStatus");
     }
