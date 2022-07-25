@@ -2,8 +2,10 @@
     <!-- Buttons are buttons are buttons. -->
   <div style="height: 320px">
     <SelectorList>
-      <PushButton v-for="(name, index) in getProfileList()" :key="index" :button-id="name"
-                  :label="name" :is-active="isActiveProfile(name)" @button-pressed="handleButtonPress"/>
+      <ProfileButton v-for="(name, index) in getProfileList()" :key="index" :button-id="name"
+                     :label="name" :is-selected="isSelectedProfile(name)" :is-active="isActiveProfile(name)"
+                     @button-clicked="handleButtonPress"
+                     @button-double-clicked="handleDoubleClick"/>
     </SelectorList>
     <div class="buttonColumns">
       <div class="actionButton"><font-awesome-icon icon="fa-solid fa-floppy-disk" /></div>
@@ -18,19 +20,20 @@
 <script>
 import {store} from "@/store";
 import {sendHttpCommand} from "@/util/sockets";
-import PushButton from "@/components/button_list/Button";
 import SelectorList from "@/components/button_list/SelectorList";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import ProfileButton from "@/components/button_list/ProfileButton";
 
 export default {
   name: "ProfileSelector",
-  components: {SelectorList, PushButton, FontAwesomeIcon},
+  components: {ProfileButton, SelectorList, FontAwesomeIcon},
 
 
   data() {
     return {
       dirContents: [],
-      activeProfile: String
+      activeProfile: String,
+      selectedProfile: String,
     }
   },
 
@@ -50,7 +53,18 @@ export default {
       return store.getActiveDevice().profile_name === name;
     },
 
+    isSelectedProfile(name) {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      return name === this.selectedProfile;
+    },
+
     handleButtonPress: function (label) {
+      this.selectedProfile = label;
+    },
+
+    handleDoubleClick: function(label) {
       let command = {
         "LoadProfile": label
       };
@@ -62,7 +76,7 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-    },
+    }
   }
 }
 </script>

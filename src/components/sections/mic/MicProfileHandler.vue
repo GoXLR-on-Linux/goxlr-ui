@@ -3,8 +3,10 @@
     <div class="title">Mic Profiles</div>
     <div style="height: 235px">
       <SelectorList>
-        <PushButton v-for="(name, index) in getProfileList()" :key="index" :button-id="name"
-                    :label="name" :is-active=isActiveProfile(name) @button-pressed="handleButtonPress"/>
+        <ProfileButton v-for="(name, index) in getProfileList()" :key="index" :button-id="name"
+                       :label="name" :is-selected="isSelectedProfile(name)" :is-active="isActiveProfile(name)"
+                       @button-clicked="handleButtonPress"
+                       @button-double-clicked="handleDoubleClick"/>
       </SelectorList>
 
       <div class="buttonColumns">
@@ -28,12 +30,21 @@
 <script>
 import SelectorList from "@/components/button_list/SelectorList";
 import {store} from "@/store";
-import PushButton from "@/components/button_list/Button";
 import {sendHttpCommand} from "@/util/sockets";
+import ProfileButton from "@/components/button_list/ProfileButton";
 
 export default {
+  // TODO: This is incredibly close to ProfileSelector, find a way to merge them cleanly.
+
+
   name: "MicProfileHandler",
-  components: {PushButton, SelectorList},
+  components: {ProfileButton, SelectorList},
+
+  data() {
+    return {
+      selectedProfile: "",
+    }
+  },
 
   methods: {
     getProfileList() {
@@ -51,7 +62,18 @@ export default {
       return store.getActiveDevice().mic_profile_name === name;
     },
 
+    isSelectedProfile(name) {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      return name === this.selectedProfile;
+    },
+
     handleButtonPress(label) {
+      this.selectedProfile = label;
+    },
+
+    handleDoubleClick(label) {
       let command = {
         "LoadMicProfile": label
       };

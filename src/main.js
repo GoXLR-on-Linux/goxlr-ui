@@ -15,16 +15,17 @@ import {websocket} from "@/util/sockets";
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {
-        faMicrophoneLines,
-        faCircleQuestion,
-        faFloppyDisk,
-        faFileCirclePlus,
-        faCopy, faTrash, faCheckCircle
+    faMicrophoneLines,
+    faCircleQuestion,
+    faFloppyDisk,
+    faFileCirclePlus,
+    faCopy, faTrash, faCheckCircle, faCheck
 } from "@fortawesome/free-solid-svg-icons";
-library.add(faMicrophoneLines, faCircleQuestion, faFloppyDisk, faFileCirclePlus, faCopy, faTrash, faCheckCircle);
+
+library.add(faMicrophoneLines, faCircleQuestion, faFloppyDisk, faFileCirclePlus, faCopy, faTrash, faCheckCircle, faCheck);
 
 websocket.connect().then(() => {
-        let app = createApp(App);
-        app.component('font-awesome-icon', FontAwesomeIcon);
-        app.mount('#app');
+    let app = createApp(App);
+    app.component('font-awesome-icon', FontAwesomeIcon);
+    app.mount('#app');
 });
