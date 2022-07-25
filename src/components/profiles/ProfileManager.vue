@@ -9,10 +9,10 @@
     <div class="actionButton" @click="showSaveModal = true">
       <font-awesome-icon icon="fa-solid fa-floppy-disk"/>
     </div>
-    <div class="actionButton" @click="showNewModal = true" >
+    <div class="actionButton" @click="showNewModal = true">
       <font-awesome-icon icon="fa-solid fa-file-circle-plus"/>
     </div>
-    <div class="actionButton" :class="{ disabled: selectedProfile === '' }">
+    <div class="actionButton" :class="{ disabled: selectedProfile === '' }" @click="copyProfile()">
       <font-awesome-icon icon="fa-solid fa-copy"/>
     </div>
     <div class="actionButton" :class="{ disabled: isDeleteDisabled() }" @click="shouldShowDeleteModal()">
@@ -23,7 +23,7 @@
   <!-- We have a few modals to potentially use here, this one for hitting the 'save' button.. -->
   <ModalBox v-if="showSaveModal" @close="showSaveModal = false">
     <template v-slot:title>Overwrite Confirmation</template>
-    <div class="modal-body">Are you sure you want to overwrite the profile {{activeProfile}}?</div>
+    <div class="modal-body">Are you sure you want to overwrite the profile {{ activeProfile }}?</div>
     <template v-slot:footer>
       <button class="modal-button" @click="showSaveModal = false; saveActiveProfile()">OK</button>
       <button class="modal-button" @click="showSaveModal = false">Cancel</button>
@@ -34,17 +34,21 @@
     <template v-slot:title>New Profile Source</template>
     <div class="modal-body">Would you like to create a new profile from the default, or current configuration?</div>
     <template v-slot:footer>
-      <button class="modal-button" @click="showNewModal = false; showNameModal = true">Default</button>
-      <button class="modal-button" @click="showNewModal = false; showNameModal = true">Current</button>
+      <button class="modal-button" @click="showNewModal = false; createNewProfile = true; showNameModal = true">
+        Default
+      </button>
+      <button class="modal-button" @click="showNewModal = false; createNewProfile = false; showNameModal = true">
+        Current
+      </button>
       <button class="modal-button" @click="showNewModal = false">Cancel</button>
     </template>
   </ModalBox>
 
   <ModalBox v-if="showDeleteModal" @close="showDeleteModal = false">
     <template v-slot:title>Delete Confirmation</template>
-    <div class="modal-body">Are you sure you want to delete the profile {{selectedProfile}}?</div>
+    <div class="modal-body">Are you sure you want to delete the profile {{ selectedProfile }}?</div>
     <template v-slot:footer>
-      <button class="modal-button" @click="showDeleteModal = false">Ok</button>
+      <button class="modal-button" @click="showDeleteModal = false; deleteSelectedProfile()">Ok</button>
       <button class="modal-button" @click="showDeleteModal = false">Cancel</button>
     </template>
   </ModalBox>
@@ -52,14 +56,13 @@
   <ModalBox v-if="showNameModal" @close="showNameModal = false">
     <template v-slot:title>Enter New Profile Name</template>
     <div class="modal-body">
-      <input type="text" />
+      <input v-model="newProfileName" type="text" placeholder="Profile Name"/>
     </div>
     <template v-slot:footer>
-      <button class="modal-button" @click="showNameModal = false">Ok</button>
-      <button class="modal-button" @click="showNameModal = false">Cancel</button>
+      <button class="modal-button" @click="showNameModal = false; newProfile()">Ok</button>
+      <button class="modal-button" @click="showNameModal = false; newProfileName = ''">Cancel</button>
     </template>
   </ModalBox>
-
 </template>
 
 <script>
@@ -68,7 +71,7 @@ import ProfileButton from "@/components/profiles/ProfileButton";
 import ModalBox from "@/components/design/Modal";
 
 export default {
-  emits: ['load-profile', 'save-profile'],
+  emits: ['new-profile', 'load-profile', 'save-profile', 'save-profile-as', 'delete-profile'],
 
   name: "ProfileManager",
   components: {ModalBox, ProfileButton, ProfileButtonList},
@@ -84,6 +87,9 @@ export default {
       showNewModal: false,
       showDeleteModal: false,
       showNameModal: false,
+
+      createNewProfile: false,
+      newProfileName: ''
     }
   },
 
@@ -114,10 +120,49 @@ export default {
       }
     },
 
+    newProfile() {
+      if (this.createNewProfile) {
+        this.$emit('new-profile', this.newProfileName);
+      } else {
+        this.$emit('save-profile-as', this.newProfileName);
+      }
+
+      this.newProfileName = "";
+    },
+
+    copyProfile() {
+      // Per the Windows UI, copies the current settings into a new profile based on the name of the selected
+      // profile (It's a little counter-intuitive!)
+      let name = this.selectedProfile;
+
+      for (let i = 0; i < 10; i++) {
+        if (this.profileNameExists(name)) {
+          name = name + "_copy";
+        } else {
+          break;
+        }
+      }
+
+      this.$emit('save-profile-as', name);
+    },
+
+    profileNameExists(name) {
+      for (let check of this.profileList) {
+        console.log(check);
+        if (check === name) {
+          return true;
+        }
+      }
+      return false;
+    },
+
     saveActiveProfile() {
       this.$emit('save-profile');
-    }
+    },
 
+    deleteSelectedProfile() {
+      this.$emit('delete-profile', this.selectedProfile);
+    }
   }
 }
 </script>

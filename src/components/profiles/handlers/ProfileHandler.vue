@@ -1,13 +1,14 @@
 <template>
   <div style="height: 320px">
-    <ProfileManager :profile-list="getProfileList()" :active-profile="getActiveProfile()"
-                    @load-profile="loadProfile" @save-profile="saveProfile" />
+    <ProfileManager :profile-list="getProfileList()" :active-profile="getActiveProfile()" @new-profile="newProfile"
+                    @load-profile="loadProfile" @save-profile="saveProfile" @save-profile-as="saveProfileAs"
+                    @delete-profile="deleteProfile"/>
   </div>
 </template>
 
 <script>
 import {store} from "@/store";
-import {sendHttpCommand} from "@/util/sockets";
+import {sendHttpCommand, websocket} from "@/util/sockets";
 import ProfileManager from "@/components/profiles/ProfileManager";
 
 export default {
@@ -43,9 +44,30 @@ export default {
           });
     },
 
+    newProfile(name) {
+      sendHttpCommand(store.getActiveSerial(), {"NewProfile": name})
+      websocket.invalidate_caches();
+    },
+
     saveProfile() {
       console.log("Saving Main Profile..");
+      sendHttpCommand(store.getActiveSerial(), {"SaveProfile": []});
+    },
+
+    saveProfileAs(name) {
+      console.log(name);
+      let command = {
+        "SaveProfileAs": name
+      }
+      sendHttpCommand(store.getActiveSerial(), command);
+      websocket.invalidate_caches();
+    },
+
+    deleteProfile(name) {
+      sendHttpCommand(store.getActiveSerial(), {"DeleteProfile": name});
+      websocket.invalidate_caches();
     }
+
   }
 }
 </script>

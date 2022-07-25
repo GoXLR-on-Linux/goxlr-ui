@@ -2,15 +2,16 @@
   <div class="profile-border">
     <div class="title">Mic Profiles</div>
     <div style="height: 235px">
-      <ProfileManager :profile-list="getProfileList()" :active-profile="getActiveProfile()"
-                      @load-profile="loadProfile" @save-profile="saveProfile" />
+      <ProfileManager :profile-list="getProfileList()" :active-profile="getActiveProfile()" @new-profile="newProfile"
+                      @load-profile="loadProfile" @save-profile="saveProfile" @save-profile-as="saveProfileAs"
+                      @delete-profile="deleteProfile"/>
     </div>
   </div>
 </template>
 
 <script>
 import {store} from "@/store";
-import {sendHttpCommand} from "@/util/sockets";
+import {sendHttpCommand, websocket} from "@/util/sockets";
 import ProfileManager from "@/components/profiles/ProfileManager";
 
 export default {
@@ -46,9 +47,26 @@ export default {
           });
     },
 
-    saveProfile() {
-      console.log("Saving Profile..");
+    newProfile(name) {
+      sendHttpCommand(store.getActiveSerial(), {"NewMicProfile": name})
     },
+
+    saveProfile() {
+      sendHttpCommand(store.getActiveSerial(), {"SaveMicProfile": []});
+    },
+
+    saveProfileAs(name) {
+      let command = {
+        "SaveMicProfileAs": name
+      }
+      sendHttpCommand(store.getActiveSerial(), command);
+      websocket.invalidate_caches();
+    },
+
+    deleteProfile(name) {
+      sendHttpCommand(store.getActiveSerial(), { "DeleteMicProfile": name });
+      websocket.invalidate_caches();
+    }
   }
 }
 </script>
