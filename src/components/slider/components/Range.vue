@@ -1,7 +1,6 @@
 <template>
   <div class="rotation-wrapper">
     <div class="rotation">
-
       <input id="slider" type="range" v-bind:style="getCurrentStyle" v-model="localFieldValue" v-bind:min="minValue"
              v-bind:max="maxValue" v-on:input="update" v-on:mousedown="stopUpdates" v-on:mouseup="resumeUpdates"/>
     </div>
@@ -84,19 +83,24 @@ export default {
   display: block;
 }
 
-input[type='range']::-webkit-slider-thumb {
+input[type='range']::-webkit-slider-thumb  {
   width: 16px;
   height: 16px;
   border-radius: 8px;
   background: #82CFD0;
   -webkit-appearance: none;
+}
 
+input[type='range']::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 7px;
+  background: #82CFD0;
+  border: 0;
 }
 
 .rotation {
   transform: rotate(-90deg) translate(-85px);
-  transform-origin: top center;
-
   z-index: -1;
 }
 
