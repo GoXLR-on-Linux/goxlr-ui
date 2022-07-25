@@ -1,5 +1,7 @@
 <template>
-  <td @click="clicked" :class="{ enabled: enabled }"></td>
+  <td @click="clicked">
+    <font-awesome-icon v-if="enabled" icon="fa-solid fa-circle-check" />
+  </td>
 </template>
 
 <script>
@@ -22,13 +24,30 @@ export default {
 
 <style scoped>
   td {
+    font-size: 18px;
+    color: #59b1b6;
     background-color: #3b413f;
+    padding: 0;
+    margin: 0;
+    position: relative;
+  }
+
+  /* Force SVG to center of the Cell */
+  td svg {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
   }
 
   td:hover {
     background-color: #49514e;
   }
 
+  /*
   td.enabled {
     background-color: #006F19;
   }
@@ -36,4 +55,5 @@ export default {
   td.enabled:hover {
     background-color: #00A11A;
   }
+  */
 </style>
