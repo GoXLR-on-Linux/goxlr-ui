@@ -1,7 +1,7 @@
 <template>
   <div style="height: 320px">
     <ProfileManager :profile-list="getProfileList()" :active-profile="getActiveProfile()"
-                    @load-profile="loadProfile"/>
+                    @load-profile="loadProfile" @save-profile="saveProfile" />
   </div>
 </template>
 
@@ -41,6 +41,10 @@ export default {
           .catch((error) => {
             console.log(error);
           });
+    },
+
+    saveProfile() {
+      console.log("Saving Main Profile..");
     }
   }
 }

@@ -27,7 +27,6 @@ export default {
   methods: {
     handleClick() {
       let self = this;
-      console.log(self.timeout);
       if (!this.timeout) {
         // Emit the first click regardless..
         self.$emit('button-clicked', self.buttonId);

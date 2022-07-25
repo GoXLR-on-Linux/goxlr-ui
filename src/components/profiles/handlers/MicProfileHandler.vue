@@ -3,7 +3,7 @@
     <div class="title">Mic Profiles</div>
     <div style="height: 235px">
       <ProfileManager :profile-list="getProfileList()" :active-profile="getActiveProfile()"
-                      @load-profile="loadProfile" />
+                      @load-profile="loadProfile" @save-profile="saveProfile" />
     </div>
   </div>
 </template>
@@ -44,6 +44,10 @@ export default {
           .catch((error) => {
             console.log(error);
           });
+    },
+
+    saveProfile() {
+      console.log("Saving Profile..");
     },
   }
 }
