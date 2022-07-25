@@ -9,9 +9,7 @@
 
     <Tabs v-show="isDeviceSet()">
       <Tab name="Mic">
-        <MainTabContent>
           <Mic/>
-        </MainTabContent>
       </Tab>
       <Tab name="Mixer" selected>
         <MainTabContent>

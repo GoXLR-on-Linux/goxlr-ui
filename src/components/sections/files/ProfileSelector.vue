@@ -5,7 +5,7 @@
       <PushButton v-for="(name, index) in getProfileList()" :key="index" :button-id="name"
                   :label="name" :is-active="isActiveProfile(name)" @button-pressed="handleButtonPress"/>
     </SelectorList>
-    <div style="display: flex; flex-direction: row; height: 35px; margin-left: 10px; margin-right: 10px; margin-top: 10px">
+    <div class="buttonColumns">
       <div class="actionButton"><font-awesome-icon icon="fa-solid fa-floppy-disk" /></div>
       <div class="actionButton"><font-awesome-icon icon="fa-solid fa-file-circle-plus" /></div>
       <div class="actionButton"><font-awesome-icon icon="fa-solid fa-copy" /></div>
@@ -78,6 +78,15 @@ export default {
   margin-right: 5px;
   text-align: center;
   line-height: 40px;
+}
+
+.buttonColumns {
+  display: flex;
+  flex-direction: row;
+  height: 35px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
 }
 
 .actionButton:first-child {
