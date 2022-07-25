@@ -16,7 +16,7 @@
 import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import Button from "@/components/button_list/Button";
-import {CoughMuteBehaviours, MuteFunction} from "@/util/mixerMapping";
+import {MuteBehaviours, MuteFunction} from "@/util/mixerMapping";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 
@@ -26,7 +26,7 @@ export default {
 
   data() {
     return {
-      muteBehaviours: CoughMuteBehaviours,
+      muteBehaviours: MuteBehaviours,
     }
   },
 

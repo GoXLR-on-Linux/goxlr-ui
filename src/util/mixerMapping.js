@@ -239,14 +239,6 @@ export const MuteFunction = [
     "ToLineOut",
 ]
 
-export let CoughMuteBehaviours = [
-    "Mute to All",
-    "Mute to Stream",
-    "Mute to Voice Chat",
-    "Mute to Phones",
-    "Mute to Line Out"
-]
-
 export const FaderName = [
     "A",
     "B",
