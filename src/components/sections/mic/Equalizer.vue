@@ -100,9 +100,9 @@ export default {
 
       // TODO: Check these indexes, I think the mini has [0,1], [2,3,4], [5]
       if (id === 0) {
-        index = (this.isDeviceMini()) ? [0, 1] : [0, 1, 2];
+        index = (this.isDeviceMini()) ? [0, 1] : [0, 1, 2, 3];
       } else if (id === 1) {
-        index = (this.isDeviceMini()) ? [2, 3] : [3, 4, 5, 6];
+        index = (this.isDeviceMini()) ? [2, 3] : [4, 5, 6];
       } else if (id === 2) {
         index = (this.isDeviceMini()) ? [4, 5] : [7, 8, 9];
       }
