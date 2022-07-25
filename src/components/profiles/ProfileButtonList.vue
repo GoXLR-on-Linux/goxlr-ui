@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: "SelectorList"
+  name: "ProfileButtonList"
 }
 </script>
 
@@ -36,5 +36,4 @@ export default {
   background-color: #dfdfdf;
   border-radius: 3px;
 }
-
 </style>

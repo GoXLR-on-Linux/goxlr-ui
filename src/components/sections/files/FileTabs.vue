@@ -1,7 +1,7 @@
 <template>
   <Tabs v-show="deviceSet" style="width: 480px">
     <Tab name="Profiles" :selected="true">
-          <ProfileSelector />
+          <ProfileHandler />
     </Tab>
     <Tab name="Samples" :left_align="false">
     </Tab>
@@ -11,12 +11,12 @@
 </template>
 
 <script>
-import ProfileSelector from "@/components/sections/files/ProfileSelector";
 import Tabs from "@/components/tabs/Tabs";
 import Tab from "@/components/tabs/Tab";
+import ProfileHandler from "@/components/profiles/handlers/ProfileHandler";
 export default {
   name: "FileTabs",
-  components: {ProfileSelector, Tabs, Tab},
+  components: {ProfileHandler, Tabs, Tab},
 
   props: {
     deviceSet: Boolean

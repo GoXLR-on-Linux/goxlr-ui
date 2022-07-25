@@ -20,8 +20,8 @@ import Compressor from "./mic/Compressor";
 import DeEsser from "./mic/DeEsser";
 import SetupButton from "@/components/sections/mic/SetupMic";
 import MainTabContent from "@/components/design/MainTabContent";
-import MicProfileHandler from "@/components/sections/mic/MicProfileHandler";
 import {store} from "@/store";
+import MicProfileHandler from "@/components/profiles/handlers/MicProfileHandler";
 
 export default {
   name: "MicSections",
