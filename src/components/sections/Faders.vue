@@ -8,14 +8,14 @@
     </ButtonList>
 
     <ButtonList title="Source">
-      <Button v-for="item in faderTargets" :key="item.id" :label=item.name :buttonId=item.id.toString()
-              :is-active=isActiveSource(item.id) @button-pressed="sourcePressed"/>
+      <Button v-for="item in faderOrder" :key=item :label=getSourceLabel(item) :buttonId=getChannelName(item)
+              :is-active=isActiveSource(getChannelName(item)) @button-pressed="sourcePressed"/>
     </ButtonList>
 
     <ButtonList title="Mute Behaviour">
-      <Button v-for="(item, index) in muteBehaviours" :key=index :label=item :buttonId="index.toString()"
-              :is-active=isActiveMuteFunction(index) :is-disabled=isMuteFunctionDisabled(index)
-              @button-pressed="micBehaviourPressed"/>
+      <Button v-for="(item, index) in muteFunctions" :key=item :label=getMuteLabel(index) :buttonId=item
+              :is-active=isActiveMuteFunction(item) :is-disabled=isMuteFunctionDisabled(item)
+              @button-pressed="setMuteFunction"/>
     </ButtonList>
   </ContentBox>
 </template>
@@ -25,12 +25,9 @@ import ContentBox from "../ContentBox";
 import ButtonList from "../button_list/ButtonList";
 import Button from "../button_list/Button";
 import {
-  FaderName,
-  FaderTargets,
-  getMixerIdByName,
-  getMixerNameById,
-  MixerID,
-  MuteBehaviours,
+  ChannelName, ChannelNameReadable,
+  FaderName, FaderOrder,
+  MuteFunctionReadable,
   MuteFunction
 } from "@/util/mixerMapping";
 import {store} from "@/store";
@@ -46,46 +43,52 @@ export default {
 
   data() {
     return {
-      faderTargets: FaderTargets,
-      muteBehaviours: MuteBehaviours,
+      faderOrder: FaderOrder,
+      muteFunctions: MuteFunction,
 
       activeChannel: 0,
     }
   },
 
   methods: {
+    getSourceLabel(id) {
+      return ChannelNameReadable[id];
+    },
+
+    getMuteLabel(id) {
+      return MuteFunctionReadable[id];
+    },
+
+    getChannelName(id) {
+      return ChannelName[id];
+    },
+
     channelPressed: function (id) {
       this.activeChannel = parseInt(id); // parseInt required because javascript :D
     },
 
-    sourcePressed: function (id) {
+    sourcePressed: function (channelName) {
       let self = this;
 
       let serial = store.getActiveSerial();
       let fader = FaderName[this.activeChannel];
-      let channel = getMixerNameById(parseInt(id));
 
       let command = {
-        "SetFader": [fader, channel]
+        "SetFader": [fader, channelName]
       }
 
       websocket.send_command(serial, command);
-      store.getActiveDevice().fader_status[self.activeChannel].channel = getMixerNameById(parseInt(id));
+      store.getActiveDevice().fader_status[self.activeChannel].channel = channelName;
 
       // Double check mute function is valid..
       if (self.isMuteFunctionDisabled(self.getActiveMuteFunction())) {
-        self.setMuteFunction(0)
+        self.setMuteFunction("All")
       }
     },
 
-    micBehaviourPressed: function (id) {
-      this.setMuteFunction(parseInt(id));
-    },
-
-    setMuteFunction: function (id) {
+    setMuteFunction: function (mute_function) {
       let serial = store.getActiveSerial();
       let fader = FaderName[this.activeChannel];
-      let mute_function = MuteFunction[parseInt(id)];
 
       // Build the Command..
       let command = {
@@ -96,16 +99,16 @@ export default {
       }
 
       websocket.send_command(serial, command);
-      store.getActiveDevice().fader_status[self.activeChannel].mute_type = mute_function;
+      store.getActiveDevice().fader_status[this.activeChannel].mute_type = mute_function;
     },
 
     isActiveChannel: function (id) {
       return this.activeChannel === id;
     },
 
-    isActiveSource: function (id) {
+    isActiveSource: function (source) {
       if (store.hasActiveDevice()) {
-        return this.getActiveSource() === id;
+        return this.getActiveSource() === source;
       }
 
       return false;
@@ -113,28 +116,22 @@ export default {
 
     isActiveMuteFunction: function (id) {
       if (store.hasActiveDevice()) {
-        let active = MuteFunction.indexOf(store.getActiveDevice().fader_status[this.activeChannel].mute_type);
-        return active === id;
+        return store.getActiveDevice().fader_status[this.activeChannel].mute_type === id;
       }
       return false;
     },
 
-    isMuteFunctionDisabled: function (id) {
+    isMuteFunctionDisabled: function (muteFunction) {
       // According to the GoXLR UI, The Voice Chat mute button can't mute to voice chat..
-      if (this.getActiveSource() === MixerID.CHAT.id) {
-        if (id === 2) {
+      if (this.getActiveSource() === "Chat") {
+        if (muteFunction === "ToVoiceChat") {
           return true;
         }
       }
 
       // The Headphone and Line Out channels can only mute to 'All'.
-      if (this.getActiveSource() === MixerID.HEADPHONES.id) {
-        if (id > 0) {
-          return true;
-        }
-      }
-      if (this.getActiveSource() === MixerID.LINE_OUT.id) {
-        if (id > 0) {
+      if (this.getActiveSource() === "Headphones" || this.getActiveSource() === "LineOut") {
+        if (muteFunction !== "All") {
           return true;
         }
       }
@@ -142,14 +139,14 @@ export default {
 
     getActiveSource: function () {
       if (store.hasActiveDevice()) {
-        return getMixerIdByName(store.getActiveDevice().fader_status[this.activeChannel].channel);
+        return store.getActiveDevice().fader_status[this.activeChannel].channel;
       }
       return 0;
     },
 
     getActiveMuteFunction: function () {
       if (store.hasActiveDevice()) {
-        return MuteFunction.indexOf(store.getActiveDevice().fader_status[this.activeChannel].mute_type);
+        return store.getActiveDevice().fader_status[this.activeChannel].mute_type;
       }
       return 0;
     }

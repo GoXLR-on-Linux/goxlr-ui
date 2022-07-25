@@ -22,7 +22,7 @@
 import Slider from "../slider/Slider";
 import ContentBox from "../ContentBox";
 import ExpandoBox from "../design/ExpandoBox";
-import {getMixerNameById, MixerMap, MixerType} from "@/util/mixerMapping";
+import {ChannelName, MixerMap, MixerType} from "@/util/mixerMapping";
 import Spacer from "@/components/slider/Spacer";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
@@ -49,7 +49,7 @@ export default {
       } else {
         command = {
           "SetVolume": [
-            getMixerNameById(id),
+            ChannelName[id],
             volume
           ]
         };
