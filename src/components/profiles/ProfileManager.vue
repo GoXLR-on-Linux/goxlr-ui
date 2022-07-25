@@ -9,10 +9,10 @@
     <div class="actionButton" @click="showSaveModal = true">
       <font-awesome-icon icon="fa-solid fa-floppy-disk"/>
     </div>
-    <div class="actionButton" @click="showNewModal = true">
+    <div class="actionButton" @click="showNewModal = true" >
       <font-awesome-icon icon="fa-solid fa-file-circle-plus"/>
     </div>
-    <div class="actionButton">
+    <div class="actionButton" :class="{ disabled: selectedProfile === '' }">
       <font-awesome-icon icon="fa-solid fa-copy"/>
     </div>
     <div class="actionButton" :class="{ disabled: isDeleteDisabled() }" @click="shouldShowDeleteModal()">
