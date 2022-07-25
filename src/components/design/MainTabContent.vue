@@ -1,6 +1,6 @@
 <template>
   <div class="scroll">
-    <div class="contentPad">
+    <div class="contentPad" :class="{ contentPadNoLeft: noLeftPad }">
       <div class="section">
         <slot></slot>
       </div>
@@ -10,7 +10,11 @@
 
 <script>
 export default {
-  name: "MainTabContent"
+  name: "MainTabContent",
+
+  props: {
+    noLeftPad: Boolean,
+  }
 }
 </script>
 
@@ -25,6 +29,10 @@ export default {
   display: inline-block;
   padding: 40px;
   text-align: center;
+}
+
+.contentPadNoLeft {
+  padding-left: 0px;
 }
 
 .section {

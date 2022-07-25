@@ -37,7 +37,6 @@ export default {
 
   methods: {
     getProfileList() {
-      console.log(store.getMicProfileFiles());
       if (!store.hasActiveDevice()) {
         return [];
       }
@@ -87,9 +86,7 @@ export default {
   display: flex;
   flex-direction: row;
   height: 35px;
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-top: 10px
+  margin: 10px 10px 0 10px;
 }
 
 .actionButton {

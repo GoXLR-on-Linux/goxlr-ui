@@ -1,9 +1,9 @@
 <template>
   <div style="display: flex">
-    <div style="padding: 40px 0px 40px 40px;">
+    <div style="padding: 40px 20px 40px 40px;">
       <MicProfileHandler/>
     </div>
-    <MainTabContent>
+    <MainTabContent :no-left-pad=true>
       <SetupButton/>
       <Gate/>
       <Equaliser/>
