@@ -5,7 +5,7 @@
 
     <FileTabs :device-set="isDeviceSet()"/>
 
-    <div v-show="!isDeviceSet()" style="height: 25px; background-color: #3b413f"/>
+    <div v-show="isDeviceSet()" style="height: 25px; background-color: #3b413f"/>
 
     <Tabs v-show="isDeviceSet()">
       <Tab name="Mic">
