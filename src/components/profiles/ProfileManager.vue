@@ -34,10 +34,10 @@
     <template v-slot:title>New Profile Source</template>
     <div class="modal-body">Would you like to create a new profile from the default, or current configuration?</div>
     <template v-slot:footer>
-      <button class="modal-button" @click="showNewModal = false; createNewProfile = true; showNameModal = true">
+      <button class="modal-button" @click="showNewModal = false; createNewProfile = true; displayNameModal()">
         Default
       </button>
-      <button class="modal-button" @click="showNewModal = false; createNewProfile = false; showNameModal = true">
+      <button class="modal-button" @click="showNewModal = false; createNewProfile = false; displayNameModal()">
         Current
       </button>
       <button class="modal-button" @click="showNewModal = false">Cancel</button>
@@ -56,7 +56,9 @@
   <ModalBox v-if="showNameModal" @close="showNameModal = false">
     <template v-slot:title>Enter New Profile Name</template>
     <div class="modal-body">
-      <input v-model="newProfileName" type="text" placeholder="Profile Name"/>
+      <input ref="newName" class="text" v-model="newProfileName"
+             type="text" v-on:keyup.enter="showNameModal = false; newProfile()"
+             placeholder="Profile Name"/>
     </div>
     <template v-slot:footer>
       <button class="modal-button" @click="showNameModal = false; newProfile()">Ok</button>
@@ -120,7 +122,18 @@ export default {
       }
     },
 
+    displayNameModal() {
+      this.showNameModal = true;
+      this.$nextTick(() => {
+        this.$refs.newName.focus();
+      })
+    },
+
     newProfile() {
+      if (this.newProfileName === "") {
+        return;
+      }
+
       if (this.createNewProfile) {
         this.$emit('new-profile', this.newProfileName);
       } else {
@@ -222,5 +235,13 @@ export default {
 .modal-body {
   color: #fff;
   padding: 20px;
+}
+
+.text {
+  width: calc(100% - 10px);
+  background-color: #2B2F2D;
+  border: 1px solid #3b413f;
+  padding: 5px;
+  color: #fff;
 }
 </style>
