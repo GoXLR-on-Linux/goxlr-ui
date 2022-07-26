@@ -71,6 +71,14 @@ export class Websocket {
         return this.#sendRequest("GetStatus");
     }
 
+    open_path(type) {
+        let request = {
+            "OpenPath": type
+        }
+
+        return this.#sendRequest(request);
+    }
+
     send_command(serial, command) {
         let request = {
             "Command": [
@@ -94,15 +102,17 @@ export const websocket = new Websocket();
  * errors, so we'll handle fulfill or reject here based on what comes back.
  */
 export function sendHttpCommand(serial, command) {
-    // eslint-disable-next-line no-unused-vars
-    let cmd_resolve, cmd_reject;
-
     let request = {
         "Command": [
             serial,
             command
         ]
     }
+    return executeHttpRequest(request);
+}
+
+function executeHttpRequest(request) {
+    let cmd_resolve, cmd_reject;
 
     fetch(getHTTPAddress(), {
         method: 'POST',
