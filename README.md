@@ -3,7 +3,7 @@
 The GoXLR UI is designed to be used alongside the [GoXLR Utility](https://github.com/GoXLR-on-Linux/goxlr-utility) daemon
 to perform configuration of the GoXLR device. It's still in its early days it currently supports the following features:
 
-* Simply Loading Profiles
+* Profile Management
 * Configuring microphone type and gain
 * Configuring Mic Gate, EQ, Compressor and DeEsser
 * Configuring Faders, and mute behaviours
