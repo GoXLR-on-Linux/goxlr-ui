@@ -5,7 +5,7 @@
       <Slider title="Amount" :slider-min-value=0 :slider-max-value=100 :text-min-value=0 :text-max-value=100 text-suffix="" :slider-value=0 />
     </div>
     <div class="rowContent" :class="{ hidden: !isVisible }">
-      <Slider title="Threshold" :id=0 :slider-min-value=-24 :slider-max-value=0 :text-min-value=-24 :text-max-value=0 text-suffix="dB" :slider-value="getThresholdValue()" @value-changed="setValue" />
+      <Slider title="Threshold" :id=0 :slider-min-value=-40 :slider-max-value=0 :text-min-value=-40 :text-max-value=0 text-suffix="dB" :slider-value="getThresholdValue()" @value-changed="setValue" />
       <Slider title="Ratio" :id=1 :slider-min-value=1 :slider-max-value=64 :text-min-value=1 :text-max-value=64 text-suffix=":1" :value-map="ratioValueMap()" :slider-value="getRatioValue()" @value-changed="setValue" />
       <Slider title="Attack" :id=2 :slider-min-value=0 :slider-max-value=40 :text-min-value=0 :text-max-value=40 text-suffix="ms" :value-map="attackValueMap()" :slider-value="getAttackValue()" @value-changed="setValue" />
       <Slider title="Release" :id=3 :slider-min-value=0 :slider-max-value=3000 :text-min-value=0 :text-max-value=3000 text-suffix="ms" :value-map="releaseValueMap()" :slider-value="getReleaseValue()" @value-changed="setValue" />
