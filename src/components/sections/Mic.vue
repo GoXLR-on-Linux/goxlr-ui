@@ -8,7 +8,7 @@
       <Gate/>
       <Equaliser/>
       <Compressor/>
-      <DeEsser v-show="!isDeviceMini()"/>
+      <MicExtra />
     </MainTabContent>
   </div>
 </template>
@@ -17,24 +17,14 @@
 import Gate from "./mic/Gate";
 import Equaliser from "./mic/Equalizer";
 import Compressor from "./mic/Compressor";
-import DeEsser from "./mic/DeEsser";
+import MicExtra from "./mic/MicExtra";
 import SetupButton from "@/components/sections/mic/SetupMic";
 import MainTabContent from "@/components/design/MainTabContent";
-import {store} from "@/store";
 import MicProfileHandler from "@/components/profiles/handlers/MicProfileHandler";
 
 export default {
   name: "MicSections",
-  components: {MicProfileHandler, MainTabContent, SetupButton, DeEsser, Compressor, Equaliser, Gate},
-
-  methods: {
-    isDeviceMini() {
-      if (!store.hasActiveDevice()) {
-        return false;
-      }
-      return store.getActiveDevice().hardware.device_type === "Mini";
-    }
-  }
+  components: {MicProfileHandler, MainTabContent, SetupButton, MicExtra, Compressor, Equaliser, Gate},
 }
 </script>
 

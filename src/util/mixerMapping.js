@@ -55,7 +55,7 @@ export const ChannelNameReadable = [
     "Sample",
     "Music",
     "Headphones",
-    "MicMonitor",
+    "Mic Monitor",
     "Line Out",
 ]
 
@@ -101,85 +101,23 @@ export let FaderOrder = [
     ChannelName.indexOf("LineOut")
 ]
 
-// Still not a fan of this chunk of code, it's a little verbose..
-export class MixerType {
-    static SLIDER = new MixerType(0);
-    static SPACER = new MixerType(1);
+export let MixerOrder = [
+    ChannelName.indexOf("Mic"),
+    ChannelName.indexOf("Chat"),
+    ChannelName.indexOf("Music"),
+    ChannelName.indexOf("Game"),
+    ChannelName.indexOf("Console"),
+    ChannelName.indexOf("LineIn"),
+    ChannelName.indexOf("LineOut"),
+    ChannelName.indexOf("System"),
+    ChannelName.indexOf("Sample"),
+]
 
-    constructor(id) {
-        this.id = id;
-    }
-}
+export let HeadphoneMixerOrder = [
+    ChannelName.indexOf("Headphones"),
+    ChannelName.indexOf("MicMonitor"),
+]
 
-export let MixerMap = {
-    'mixer': [
-        {
-            type: MixerType.SLIDER,
-            name: "Mic",
-            id: ChannelName.indexOf("Mic"),
-        },
-        {
-            type: MixerType.SLIDER,
-            name: "Chat",
-            id: ChannelName.indexOf("Chat"),
-        },
-        {
-            type: MixerType.SLIDER,
-            name: "Music",
-            id: ChannelName.indexOf("Music"),
-        },
-        {
-            type: MixerType.SLIDER,
-            name: "Game",
-            id: ChannelName.indexOf("Game"),
-        },
-        {
-            type: MixerType.SLIDER,
-            name: "Console",
-            id: ChannelName.indexOf("Console"),
-        },
-        {
-            type: MixerType.SLIDER,
-            name: "Line In",
-            id: ChannelName.indexOf("LineIn"),
-        },
-        {
-            type: MixerType.SLIDER,
-            name: "Line Out",
-            id: ChannelName.indexOf("LineOut"),
-        },
-        {
-            type: MixerType.SLIDER,
-            name: "System",
-            id: ChannelName.indexOf("System"),
-        },
-        {
-            type: MixerType.SLIDER,
-            name: "Sample",
-            id: ChannelName.indexOf("Sample"),
-        },
-        {
-            type: MixerType.SPACER,
-            id: -1,
-        },
-        {
-            type: MixerType.SLIDER,
-            name: "Bleep",
-            id: 11,
-        },
-    ],
-    'headphones': [
-        {
-            type: MixerType.SLIDER,
-            name: "Level",
-            id: ChannelName.indexOf("Headphones"),
-            hidden: false,
-        },
-        {
-            type: MixerType.SLIDER,
-            name: "Mic Monitor",
-            id: ChannelName.indexOf("MicMonitor"),
-            hidden: true,
-        },
-    ]
-};
+export let HeadphoneMixerHidden = [
+    ChannelName.indexOf("MicMonitor")
+]

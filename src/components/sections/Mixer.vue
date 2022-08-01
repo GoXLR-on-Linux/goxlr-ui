@@ -1,19 +1,16 @@
 <template>
-  <!--
-    Rather than Copy / Pasting a million sliders, we'll borrow the mixer map from mixerMapping.js, which will simplify
-    updates, and allow tweaking without having to change the components here.
-   -->
   <ContentBox title="Mixer">
-    <Component :is="isSlider(item) ? 'Slider' : 'Spacer'" v-for="item in channelMap.mixer" :key="item.id"
-               :id=item.id :title=item.name :slider-min-value="getMin(item.id)" :slider-max-value="getMax(item.id)" :text-min-value=0
-               :text-max-value=100 text-suffix="%" :slider-value="getValue(item.id)" @value-changed="valueChange" />
+    <Slider v-for="item in mixerOrder" :key="item" :id=item :title="channelNamesReadable[item]" :slider-min-value=0
+            :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%" :slider-value="getValue(item)"
+            @value-changed="valueChange"
+    />
   </ContentBox>
 
   <ContentBox title="Headphones">
-    <Component :is="isSlider(item) ? 'Slider' : 'Spacer'" v-for="item in channelMap.headphones" :key="item.id"
-               :id=item.id :title=item.name :slider-min-value=0 :slider-max-value=255 :text-min-value=0
-               :text-max-value=100 text-suffix="%" :slider-value="getValue(item.id)" @value-changed="valueChange"
-               :class="{ hidden: (item.hidden && !isVisible) }" />
+    <Slider v-for="item in headphoneOrder" :key="item" :id=item :title="channelNamesReadable[item]" :slider-min-value=0
+            :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%" :slider-value="getValue(item)"
+            @value-changed="valueChange" v-show="(!hpHide.includes(item) || (hpHide.includes(item) && isVisible))"
+    />
   </ContentBox>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="isVisible"/>
 </template>
@@ -22,19 +19,29 @@
 import Slider from "../slider/Slider";
 import ContentBox from "../ContentBox";
 import ExpandoBox from "../design/ExpandoBox";
-import {ChannelName, MixerMap, MixerType} from "@/util/mixerMapping";
-import Spacer from "@/components/slider/Spacer";
+import {
+  ChannelName,
+  ChannelNameReadable,
+  HeadphoneMixerHidden,
+  HeadphoneMixerOrder,
+  MixerOrder
+} from "@/util/mixerMapping";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 
 export default {
   name: "MixerTop",
-  components: {ExpandoBox, ContentBox, Slider, Spacer},
+  components: {ExpandoBox, ContentBox, Slider},
 
   data() {
     return {
+      mixerOrder: MixerOrder,
+      headphoneOrder: HeadphoneMixerOrder,
+      hpHide: HeadphoneMixerHidden,
+      channelNames: ChannelName,
+      channelNamesReadable: ChannelNameReadable,
+
       isVisible: false,
-      channelMap: MixerMap,
       volumes: [],
     }
   },
@@ -42,29 +49,14 @@ export default {
   methods: {
     valueChange(id, volume) {
       let command = undefined;
-      if (id === 11) {
-        command = {
-          "SetSwearButtonVolume": volume
-        };
-      } else {
-        command = {
-          "SetVolume": [
-            ChannelName[id],
-            volume
-          ]
-        };
-      }
+
+      command = {
+        "SetVolume": [
+          ChannelName[id],
+          volume
+        ]
+      };
       websocket.send_command(store.getActiveSerial(), command);
-    },
-
-    getMin(id) {
-      if (id === 11) { return -34; }
-      return 0;
-    },
-
-    getMax(id) {
-      if (id === 11) { return 0; }
-      return 255;
     },
 
     getValue(id) {
@@ -76,24 +68,12 @@ export default {
       }
     },
 
-    hideExpanded() {
-      return false;
-    },
-
     toggleExpando() {
       this.isVisible = !this.isVisible;
     },
-
-    isSlider(item) {
-      return item.type.id === MixerType.SLIDER.id;
-    }
   }
 }
 </script>
 
 <style scoped>
-.hidden {
-  visibility: hidden;
-  display: none;
-}
 </style>
