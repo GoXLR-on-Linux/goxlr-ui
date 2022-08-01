@@ -1,10 +1,10 @@
 <template>
   <ContentBox title="Gate">
-    <div class="rowContent" :class="{ hidden: isVisible }">
-      <Slider title="Amount" :id=0 :slider-min-value=0 :slider-max-value=100 :text-min-value=0 :text-max-value=100 text-suffix="" :slider-value=amount :value-map="getAmountValueMap()" @value-changed="setValue"/>
+    <div class="rowContent" v-show="!isVisible">
+      <Slider title="Amount" :id=0 :slider-min-value=0 :slider-max-value=100 :text-min-value=0 :text-max-value=100 text-suffix="" :slider-value=amount @value-changed="setValue"/>
     </div>
-    <div class="rowContent" :class="{ hidden: !isVisible }">
-      <Slider title="Threshold" :id=1 :slider-min-value=-60 :slider-max-value=0 :text-min-value=-60 :text-max-value=0 text-suffix="dB" :slider-value=threshold @value-changed="setValue"/>
+    <div class="rowContent" v-show="isVisible">
+      <Slider title="Threshold" :id=1 :slider-min-value=-59 :slider-max-value=0 :text-min-value=-59 :text-max-value=0 text-suffix="dB" :slider-value=threshold @value-changed="setValue"/>
       <Slider title="Attenuation" :id=2 :slider-min-value=0 :slider-max-value=100 :text-min-value=0 :text-max-value=100 text-suffix="%"  :slider-value=attenuation @value-changed="setValue"/>
       <Slider title="Attack" :id=3 :slider-min-value=10 :slider-max-value=2000 :text-min-value=10 :text-max-value=2000 text-suffix="ms" :value-map="getGateValueMap()" :slider-value=attack @value-changed="setValue"/>
       <Slider title="Release" :id=4 :slider-min-value=10 :slider-max-value=2000 :text-min-value=10 :text-max-value=2000 text-suffix="ms" :value-map="getGateValueMap()" :slider-value=release @value-changed="setValue"/>
@@ -35,10 +35,7 @@ export default {
   },
 
   created() {
-    // eslint-disable-next-line no-unused-vars
-    this.waitFor(_ => store.hasActiveDevice() === true).then(
-        // eslint-disable-next-line no-unused-vars
-        _ => {
+    this.waitFor(() => store.hasActiveDevice() === true).then(() => {
           this.threshold = store.getActiveDevice().mic_status.noise_gate.threshold
           this.attack = store.getActiveDevice().mic_status.noise_gate.attack
           this.release = store.getActiveDevice().mic_status.noise_gate.release
@@ -60,9 +57,7 @@ export default {
     waitFor(conditionFunction) {
       const poll = resolve => {
         if (conditionFunction()) resolve();
-        // eslint-disable-next-line no-unused-vars
-        else setTimeout(_ =>
-            poll(resolve), 400);
+        else setTimeout(() => poll(resolve), 400);
       }
       return new Promise(poll);
     },
@@ -99,32 +94,17 @@ export default {
     },
 
     updateAmount: function (value){
-      let localAmount = 2 * Math.round(((value+60)*(5/3)) / 2);
-      this.amount = this.getAmountValueMap().indexOf(localAmount.toString());
+      this.amount = Math.round((value + 59) / 59 * 100);
     },
 
     updateThreshold: function (value) {
-      this.threshold = parseInt((((value * 2) / (5/3)) - 60).toFixed());
+      this.threshold = Math.round(value / 100 * 59) - 59;
     },
-
-    getAmountValueMap: function (){
-      return ["0", "2", "4", "6", "8", "10", "12", "14", "16", "18",
-        "20", "22", "24", "26", "28", "30", "32", "34", "36", "38",
-        "40", "42", "44", "46", "48", "50", "52", "54", "56", "58",
-        "60", "62", "64", "66", "68", "70", "72", "74", "76", "78",
-        "80", "82", "84", "86", "88", "90", "92", "94", "96", "98", "100"]
-    }
-
   }
 }
 </script>
 
 <style scoped>
-.hidden {
-  visibility: hidden;
-  display: none !important;
-}
-
 .rowContent {
   display: inline-flex;
   flex-direction: row;
