@@ -1,8 +1,11 @@
 <template>
   <div id="sliderBox">
-    <Label v-bind:title="title" />
-    <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()" @value-updated="sliderValueUpdated" />
-    <Input :current-text-value="textValue" :min-value="textMinValue" :max-value="textMaxValue" :textSuffix="textSuffix" :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated" />
+    <Label v-bind:title="title"/>
+    <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
+           @value-updated="sliderValueUpdated" @mouse-down="setMouseDown" @mouse-up="setMouseUp"/>
+
+    <Input :current-text-value="textValue" :min-value="textMinValue" :max-value="textMaxValue" :textSuffix="textSuffix"
+           :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"/>
   </div>
 </template>
 
@@ -13,14 +16,12 @@
  * input boxes below them are an 'abstract' representation of the slider state (for example,
  * a percentage) which are all dynamically handled, calculated, and presented based on the general
  * definitions provided.
- *
- * TODO: Some sliders have custom stepping, that can accelerate after certain points, we need to find
- * a way to support similar behaviour..
  */
 
 import Label from "./components/Label";
 import Range from "./components/Range";
 import Input from "./components/Input";
+
 export default {
   name: "SliderInput",
   components: {Input, Range, Label},
@@ -29,13 +30,16 @@ export default {
     return {
       fieldValue: 0,
       textValue: 0,
+
+      lastValue: 0,
+      timer: undefined,
     }
   },
 
   props: {
-    id: { type: Number, default: -1 },
+    id: {type: Number, default: -1},
 
-    title: { type: String, default: "UNSET" },
+    title: {type: String, default: "UNSET"},
 
     sliderMinValue: Number,
     sliderMaxValue: Number,
@@ -51,9 +55,7 @@ export default {
   methods: {
     sliderValueUpdated(newValue) {
       this.fieldValue = parseInt(newValue);
-
       this.calculateTextValue();
-      this.$emit('value-changed', this.id, this.fieldValue);
     },
 
     inputValueUpdated(newValue) {
@@ -135,6 +137,25 @@ export default {
         return undefined;
       }
       return this.valueMap[this.fieldValue];
+    },
+
+    setMouseDown() {
+      let self = this;
+      this.lastValue = this.fieldValue;
+
+      this.timer = setInterval(() => {
+        if (self.lastValue !== self.fieldValue) {
+          this.$emit('value-changed', self.id, self.fieldValue);
+          self.lastValue = self.fieldValue;
+        }
+      }, 5);
+    },
+
+    setMouseUp() {
+      clearInterval(this.timer);
+
+      // Emit the latest value..
+      this.$emit('value-changed', this.id, this.fieldValue);
     }
   },
 
@@ -150,7 +171,7 @@ export default {
   },
 
   watch: {
-    sliderValue: function() {
+    sliderValue: function () {
       this.fieldValue = this.sliderValue;
       this.calculateTextValue();
     }
@@ -159,9 +180,9 @@ export default {
 </script>
 
 <style scoped>
-  #sliderBox {
-    margin: 3px;
-    width: 90px;
-    background-color: #353937;
-  }
+#sliderBox {
+  margin: 3px;
+  width: 90px;
+  background-color: #353937;
+}
 </style>

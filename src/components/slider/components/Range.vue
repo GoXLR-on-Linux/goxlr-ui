@@ -2,7 +2,7 @@
   <div class="rotation-wrapper">
     <div class="rotation">
       <input id="slider" type="range" v-bind:style="getCurrentStyle" v-model="localFieldValue" v-bind:min="minValue"
-             v-bind:max="maxValue" v-on:input="update" v-on:mousedown="stopUpdates" v-on:mouseup="resumeUpdates"/>
+             v-bind:max="maxValue" v-on:input="update" v-on:mousedown="mouseDown" v-on:mouseup="mouseUp"/>
     </div>
   </div>
 </template>
@@ -26,11 +26,13 @@ export default {
   },
 
   methods: {
-    stopUpdates() {
+    mouseDown() {
       store.pause();
+      this.$emit("mouse-down")
     },
 
-    resumeUpdates() {
+    mouseUp() {
+      this.$emit("mouse-up")
       store.resume();
     },
 
