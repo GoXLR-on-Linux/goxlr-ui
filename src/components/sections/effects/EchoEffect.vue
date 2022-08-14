@@ -1,5 +1,14 @@
 <template>
   <ContentBox title="Echo">
+    <ButtonList title="Style">
+      <PushButton label="Quarter" buttonId="0" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Eighth" buttonId="1" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Triplet" buttonId="2" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Ping Pong" buttonId="3" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Classic Slap" buttonId="4" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="MultiTap" buttonId="5" :is-active=false @button-pressed="buttonPressed"/>
+    </ButtonList>
+
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" />
     <SliderInput title="Feedback" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackValue()" v-show="is_expanded" />
     <SliderInput title="Tempo" :slider-min-value=45 :slider-max-value=300 text-suffix="BPM" :slider-value="getTempoValue()" v-show="is_expanded" />
@@ -18,10 +27,12 @@ import {store} from "@/store";
 import ContentBox from "@/components/ContentBox";
 import SliderInput from "@/components/slider/Slider";
 import ExpandoBox from "@/components/design/ExpandoBox";
+import ButtonList from "@/components/button_list/ButtonList";
+import PushButton from "@/components/button_list/Button";
 
 export default {
   name: "EchoEffect",
-  components: {ExpandoBox, SliderInput, ContentBox},
+  components: {PushButton, ButtonList, ExpandoBox, SliderInput, ContentBox},
   data() {
     return {
       is_expanded: false,
@@ -31,6 +42,10 @@ export default {
   methods: {
     toggleExpando() {
       this.is_expanded = !this.is_expanded;
+    },
+
+    buttonPressed() {
+      console.log("Button Pressed");
     },
 
     getAmountValue() {

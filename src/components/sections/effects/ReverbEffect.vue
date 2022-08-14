@@ -1,5 +1,14 @@
 <template>
   <ContentBox title="Reverb">
+    <ButtonList title="Style">
+      <PushButton label="Library" buttonId="0" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Dark Bloom" buttonId="1" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Music Club" buttonId="2" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Real Plate" buttonId="3" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Chapel" buttonId="4" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Hockey Arena" buttonId="5" :is-active=false @button-pressed="buttonPressed"/>
+    </ButtonList>
+
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()"/>
     <SliderInput title="Decay" :slider-min-value=0 :slider-max-value=100 :slider-value="getDecayValue()"
                  v-show="is_expanded"/>
@@ -31,10 +40,13 @@
 import ContentBox from "@/components/ContentBox";
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
+import ButtonList from "@/components/button_list/ButtonList";
+import PushButton from "@/components/button_list/Button";
+import ExpandoBox from "@/components/design/ExpandoBox";
 
 export default {
   name: "ReverbEffect",
-  components: {SliderInput, ContentBox},
+  components: {ExpandoBox, PushButton, ButtonList, SliderInput, ContentBox},
 
   data() {
     return {
@@ -45,6 +57,10 @@ export default {
   methods: {
     toggleExpando() {
       this.is_expanded = !this.is_expanded;
+    },
+
+    buttonPressed() {
+      console.log("Pressed");
     },
 
     getAmountValue() {

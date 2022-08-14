@@ -1,5 +1,11 @@
 <template>
   <ContentBox title="Robot">
+    <ButtonList title="Style">
+      <PushButton label="Robot 1" buttonId="0" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Robot 2" buttonId="1" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Robot 3" buttonId="2" :is-active=false @button-pressed="buttonPressed"/>
+    </ButtonList>
+
     <SliderInput title="Low Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
                  :slider-value="getLowGainValue()" v-show="is_expanded"/>
     <SliderInput title="Low Freq" :slider-min-value=0 :slider-max-value=88 text-suffix="Hz"
@@ -31,10 +37,12 @@ import ContentBox from "@/components/ContentBox";
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
 import ExpandoBox from "@/components/design/ExpandoBox";
+import ButtonList from "@/components/button_list/ButtonList";
+import PushButton from "@/components/button_list/Button";
 
 export default {
   name: "RobotEffect",
-  components: {ExpandoBox, SliderInput, ContentBox},
+  components: {PushButton, ButtonList, ExpandoBox, SliderInput, ContentBox},
 
   data() {
     return {
@@ -45,6 +53,10 @@ export default {
   methods: {
     toggleExpando() {
       this.is_expanded = !this.is_expanded;
+    },
+
+    buttonPressed() {
+      console.log("Button Pressed");
     },
 
     // TODO: Freq and Width need some work, they represent differently in the UI, and are both curves..
