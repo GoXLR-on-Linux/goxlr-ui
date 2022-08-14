@@ -1,7 +1,7 @@
 <template>
   <div style="margin-left: 8px; margin-right: 8px">
     <div class="tab">
-      <button v-for="tab in tabs" :key="tab.name" :class="{ 'active': tab.isActive }" @click="selectTab(tab)">{{tab.name}}</button>
+      <button v-for="tab in tabs" :key="tab.name" :class="{ 'active': tab.isActive }" v-show="!tab.hidden" @click="selectTab(tab)">{{tab.name}}</button>
     </div>
     <div class="tabs-details">
       <slot></slot>

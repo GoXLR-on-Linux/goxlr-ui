@@ -17,6 +17,9 @@
           <Mixer/>
         </MainTabContent>
       </Tab>
+      <Tab name="Effects" :hidden="isDeviceMini()" >
+        <EffectsTab />
+      </Tab>
       <Tab name="Cough" :left_align="false">
         <MainTabContent>
           <Cough/>
@@ -52,10 +55,13 @@ import {websocket} from "@/util/sockets";
 import SystemComponent from "@/components/sections/System";
 import FileTabs from "@/components/sections/files/FileTabs";
 import MainTabContent from "@/components/design/MainTabContent";
+import EffectsTab from "@/components/sections/EffectsTab";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: 'GoXLR',
   components: {
+    EffectsTab,
     MainTabContent,
     FileTabs,
     SystemComponent,
@@ -76,6 +82,10 @@ export default {
   },
 
   methods: {
+    isDeviceMini() {
+      return isDeviceMini();
+    },
+
     updateState() {
       if (!store.isPaused()) {
         websocket.get_status();

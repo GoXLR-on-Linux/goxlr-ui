@@ -8,11 +8,12 @@
 export default {
   name: "TabButton",
   props: {
-      name: { type: String, required: true },
-      selected: { type: Boolean, default: false },
-      left_align: { type: Boolean, default: true },
+    name: {type: String, required: true},
+    selected: {type: Boolean, default: false},
+    left_align: {type: Boolean, default: true},
+    hidden: {type: Boolean, default: false}
   },
-  data () {
+  data() {
     return {
       isActive: true
     }
@@ -29,6 +30,7 @@ export default {
   },
 
   created() {
+    console.log(this.hidden);
     this.$parent.tabs.push(this);
   }
 
