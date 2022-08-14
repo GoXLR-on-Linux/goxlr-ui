@@ -1,9 +1,9 @@
 <template>
   <ContentBox title="Gender">
     <ButtonList title="Style">
-      <PushButton label="Narrow" buttonId="0" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Medium" buttonId="1" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Wide" buttonId="2" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Narrow" buttonId="Narrow" :is-active="isActiveStyle('Narrow')" @button-pressed="stylePressed"/>
+      <PushButton label="Medium" buttonId="Medium" :is-active="isActiveStyle('Medium')" @button-pressed="stylePressed"/>
+      <PushButton label="Wide" buttonId="Wide" :is-active="isActiveStyle('Wide')" @button-pressed="stylePressed"/>
     </ButtonList>
 
     <SliderInput title="Amount" :slider-min-value=-50 :slider-max-value=50 :slider-value="getAmountValue()" />
@@ -21,8 +21,15 @@ export default {
   components: {PushButton, ButtonList, SliderInput, ContentBox},
 
   methods: {
-    buttonPressed() {
-      console.log("Button Pressed");
+    isActiveStyle(buttonName) {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      return buttonName === store.getActiveDevice().effects.gender.style;
+    },
+
+    stylePressed(button) {
+      console.log(button);
     },
 
     getAmountValue() {

@@ -1,12 +1,12 @@
 <template>
   <ContentBox title="Echo">
     <ButtonList title="Style">
-      <PushButton label="Quarter" buttonId="0" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Eighth" buttonId="1" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Triplet" buttonId="2" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Ping Pong" buttonId="3" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Classic Slap" buttonId="4" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="MultiTap" buttonId="5" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Quarter" buttonId="Quarter" :is-active="isActiveStyle('Quarter')" @button-pressed="stylePressed"/>
+      <PushButton label="Eighth" buttonId="Eighth" :is-active="isActiveStyle('Eighth')" @button-pressed="stylePressed"/>
+      <PushButton label="Triplet" buttonId="Triplet" :is-active="isActiveStyle('Triplet')" @button-pressed="stylePressed"/>
+      <PushButton label="Ping Pong" buttonId="PingPong" :is-active="isActiveStyle('PingPong')" @button-pressed="stylePressed"/>
+      <PushButton label="Classic Slap" buttonId="ClassicSlap" :is-active="isActiveStyle('ClassicSlap')" @button-pressed="stylePressed"/>
+      <PushButton label="MultiTap" buttonId="MultiTap" :is-active="isActiveStyle('MultiTap')" @button-pressed="stylePressed"/>
     </ButtonList>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" />
@@ -44,8 +44,15 @@ export default {
       this.is_expanded = !this.is_expanded;
     },
 
-    buttonPressed() {
-      console.log("Button Pressed");
+    isActiveStyle(buttonName) {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      return buttonName === store.getActiveDevice().effects.echo.style;
+    },
+
+    stylePressed(button) {
+      console.log(button);
     },
 
     getAmountValue() {

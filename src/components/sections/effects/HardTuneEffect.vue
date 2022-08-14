@@ -1,9 +1,9 @@
 <template>
   <ContentBox title="Hard Tune">
     <ButtonList title="Style">
-      <PushButton label="Natural" buttonId="0" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Medium" buttonId="1" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Hard" buttonId="2" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Natural" buttonId="Natural" :is-active="isActiveStyle('Natural')" @button-pressed="stylePressed"/>
+      <PushButton label="Medium" buttonId="Medium" :is-active="isActiveStyle('Medium')" @button-pressed="stylePressed"/>
+      <PushButton label="Hard" buttonId="Hard" :is-active="isActiveStyle('Hard')" @button-pressed="stylePressed"/>
     </ButtonList>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" v-show="is_expanded" />
@@ -11,10 +11,10 @@
     <SliderInput title="Window" :slider-min-value=0 :slider-max-value=600 :slider-value="getWindowValue()" v-show="is_expanded" />
 
     <ButtonList title="Hardtune Source">
-      <PushButton label="All" buttonId="0" :is-active=false @button-pressed="sourcePressed"/>
-      <PushButton label="Music" buttonId="1" :is-active=false @button-pressed="sourcePressed"/>
-      <PushButton label="Line In" buttonId="2" :is-active=false @button-pressed="sourcePressed"/>
-      <PushButton label="System" buttonId="3" :is-active=false @button-pressed="sourcePressed"/>
+      <PushButton label="All" buttonId="All" :is-active="isActiveSource('All')" @button-pressed="sourcePressed"/>
+      <PushButton label="Music" buttonId="Music" :is-active="isActiveSource('Music')" @button-pressed="sourcePressed"/>
+      <PushButton label="Line In" buttonId="LineIn" :is-active="isActiveSource('LineIn')" @button-pressed="sourcePressed"/>
+      <PushButton label="System" buttonId="System" :is-active="isActiveSource('System')" @button-pressed="sourcePressed"/>
     </ButtonList>
 
   </ContentBox>
@@ -42,12 +42,27 @@ export default {
       this.is_expanded = !this.is_expanded;
     },
 
-    buttonPressed() {
-      console.log("Button Pressed");
+    isActiveStyle(buttonName) {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      return buttonName === store.getActiveDevice().effects.hard_tune.style;
     },
 
-    sourcePressed() {
-      console.log("Source Pressed");
+    stylePressed(button) {
+      console.log(button);
+    },
+
+
+    isActiveSource(buttonName) {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      return buttonName === store.getActiveDevice().effects.hard_tune.source;
+    },
+
+    sourcePressed(button) {
+      console.log(button);
     },
 
     getAmountValue() {

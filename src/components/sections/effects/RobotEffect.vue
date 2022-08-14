@@ -1,9 +1,9 @@
 <template>
   <ContentBox title="Robot">
     <ButtonList title="Style">
-      <PushButton label="Robot 1" buttonId="0" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Robot 2" buttonId="1" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Robot 3" buttonId="2" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Robot 1" buttonId="Robot1" :is-active="isActiveStyle('Robot1')" @button-pressed="stylePressed"/>
+      <PushButton label="Robot 2" buttonId="Robot2" :is-active="isActiveStyle('Robot2')" @button-pressed="stylePressed"/>
+      <PushButton label="Robot 3" buttonId="Robot3" :is-active="isActiveStyle('Robot3')" @button-pressed="stylePressed"/>
     </ButtonList>
 
     <SliderInput title="Low Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
@@ -55,8 +55,15 @@ export default {
       this.is_expanded = !this.is_expanded;
     },
 
-    buttonPressed() {
-      console.log("Button Pressed");
+    stylePressed(button) {
+      console.log(button);
+    },
+
+    isActiveStyle(buttonName) {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      return buttonName === store.getActiveDevice().effects.robot.style;
     },
 
     // TODO: Freq and Width need some work, they represent differently in the UI, and are both curves..
@@ -64,7 +71,6 @@ export default {
       if (!store.hasActiveDevice()) {
         return 0;
       }
-      console.log(store.getActiveDevice().effects.robot);
       return store.getActiveDevice().effects.robot.low_gain;
     },
     getLowFreqValue() {

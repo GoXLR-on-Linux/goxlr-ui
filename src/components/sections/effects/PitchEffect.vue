@@ -1,8 +1,8 @@
 <template>
   <ContentBox title="Pitch">
     <ButtonList title="Style">
-      <PushButton label="Narrow" buttonId="0" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Wide" buttonId="1" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Narrow" buttonId="Narrow" :is-active="isActiveStyle('Narrow')" @button-pressed="stylePressed"/>
+      <PushButton label="Wide" buttonId="Wide" :is-active="isActiveStyle('Wide')" @button-pressed="stylePressed"/>
     </ButtonList>
 
 
@@ -33,10 +33,16 @@ export default {
       this.is_expanded = !this.is_expanded;
     },
 
-    buttonPressed() {
-      console.log("Button Pressed");
+    isActiveStyle(buttonName) {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      return buttonName === store.getActiveDevice().effects.pitch.style;
     },
 
+    stylePressed(button) {
+      console.log(button);
+    },
 
     getAmountValue() {
       if (!store.hasActiveDevice()) {

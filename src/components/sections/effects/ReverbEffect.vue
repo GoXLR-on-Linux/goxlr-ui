@@ -1,12 +1,12 @@
 <template>
   <ContentBox title="Reverb">
     <ButtonList title="Style">
-      <PushButton label="Library" buttonId="0" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Dark Bloom" buttonId="1" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Music Club" buttonId="2" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Real Plate" buttonId="3" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Chapel" buttonId="4" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Hockey Arena" buttonId="5" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Library" buttonId="Library" :is-active="isActiveStyle('Library')" @button-pressed="stylePressed"/>
+      <PushButton label="Dark Bloom" buttonId="DarkBloom" :is-active="isActiveStyle('DarkBloom')" @button-pressed="stylePressed"/>
+      <PushButton label="Music Club" buttonId="MusicClub" :is-active="isActiveStyle('MusicClub')" @button-pressed="stylePressed"/>
+      <PushButton label="Real Plate" buttonId="RealPlate" :is-active="isActiveStyle('RealPlate')" @button-pressed="stylePressed"/>
+      <PushButton label="Chapel" buttonId="Chapel" :is-active="isActiveStyle('Chapel')" @button-pressed="stylePressed"/>
+      <PushButton label="Hockey Arena" buttonId="HockeyArena" :is-active="isActiveStyle('HockeyArena')" @button-pressed="stylePressed"/>
     </ButtonList>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()"/>
@@ -59,9 +59,17 @@ export default {
       this.is_expanded = !this.is_expanded;
     },
 
-    buttonPressed() {
-      console.log("Pressed");
+    isActiveStyle(buttonName) {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      return buttonName === store.getActiveDevice().effects.reverb.style;
     },
+
+    stylePressed(button) {
+      console.log(button);
+    },
+
 
     getAmountValue() {
       if (!store.hasActiveDevice()) {
@@ -75,7 +83,6 @@ export default {
       if (!store.hasActiveDevice()) {
         return 0;
       }
-      console.log(store.getActiveDevice().effects.reverb);
       return store.getActiveDevice().effects.reverb.decay;
 
     },

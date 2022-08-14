@@ -1,12 +1,12 @@
 <template>
   <ContentBox title="Megaphone">
     <ButtonList title="Style">
-      <PushButton label="Megaphone" buttonId="0" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Radio" buttonId="1" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="On the Phone" buttonId="2" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Overdrive" buttonId="3" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Buzz Cutt" buttonId="4" :is-active=false @button-pressed="buttonPressed"/>
-      <PushButton label="Tweed" buttonId="5" :is-active=false @button-pressed="buttonPressed"/>
+      <PushButton label="Megaphone" buttonId="Megaphone" :is-active="isActiveStyle('Megaphone')" @button-pressed="stylePressed"/>
+      <PushButton label="Radio" buttonId="Radio" :is-active="isActiveStyle('Radio')" @button-pressed="stylePressed"/>
+      <PushButton label="On the Phone" buttonId="OnThePhone" :is-active="isActiveStyle('OnThePhone')" @button-pressed="stylePressed"/>
+      <PushButton label="Overdrive" buttonId="Overdrive" :is-active="isActiveStyle('Overdrive')" @button-pressed="stylePressed"/>
+      <PushButton label="Buzz Cutt" buttonId="BuzzCutt" :is-active="isActiveStyle('BuzzCut')" @button-pressed="stylePressed"/>
+      <PushButton label="Tweed" buttonId="Tweed" :is-active="isActiveStyle('Tweed')" @button-pressed="stylePressed"/>
     </ButtonList>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getAmountValue()" v-show="is_expanded" />
@@ -37,8 +37,15 @@ export default {
       this.is_expanded = !this.is_expanded;
     },
 
-    buttonPressed() {
-      console.log("Button Pressed.");
+    isActiveStyle(buttonName) {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      return buttonName === store.getActiveDevice().effects.megaphone.style;
+    },
+
+    stylePressed(button) {
+      console.log(button);
     },
 
     getAmountValue() {
