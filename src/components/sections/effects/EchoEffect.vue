@@ -25,7 +25,6 @@ export default {
       if (!store.hasActiveDevice()) {
         return 0;
       }
-      console.log(store.getActiveDevice().effects.echo);
       return store.getActiveDevice().effects.echo.amount;
     },
     getFeedbackValue() {
@@ -77,7 +76,6 @@ export default {
       return store.getActiveDevice().effects.echo.feedback_xfb_r_to_l;
     }
   }
-
 }
 </script>
 
