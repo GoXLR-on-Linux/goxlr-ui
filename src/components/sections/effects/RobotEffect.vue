@@ -86,7 +86,21 @@ export default {
         return 0;
       }
       console.log(store.getActiveDevice().effects.robot.low_freq);
-      return store.getActiveDevice().effects.robot.low_freq;
+
+      // We need to correctly calculate Low Frequency, this is crazy, but it's how the GoXLR expects
+      // values on the low end. This is likely due to rounding errors on the low curve...
+      let freq = store.getActiveDevice().effects.robot.low_freq;
+      if (freq === 0) {
+        return 0;
+      } else if (freq === 1) {
+        return 3
+      } else if (freq === 2) {
+        return 5
+      } else if (freq === 3) {
+        return 7
+      } else {
+        return freq - 4;
+      }
     },
     getLowWidthValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
@@ -104,7 +118,8 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.robot.mid_freq;
+      console.log(store.getActiveDevice().effects.robot.mid_freq - 86);
+      return store.getActiveDevice().effects.robot.mid_freq  - 86;
     },
     getMidWidthValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
@@ -122,7 +137,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.robot.high_freq;
+      return store.getActiveDevice().effects.robot.high_freq - 182;
     },
     getHighWidthValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
@@ -165,8 +180,6 @@ export default {
 
     // Ok, these are *REALLY* obviously a curve from bottom to top, but I've not been able to work out the specifics,
     // so I'll define hard from the GoXLR Windows UI.
-
-    // TODO: Double check this on windows, the Range is 0 -> 88, but the UI only exposes 84 values..
     getLowFreqValueMap() {
       return ["20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36",
         "37", "38", "39", "40", "41", "42", "44", "45", "46", "48", "49", "50", "52", "53", "55", "57", "58", "60",
@@ -176,20 +189,18 @@ export default {
       ];
     },
 
-    // TODO: Same for This (95 Values)
     getMidFreqValueMap() {
       return ["240", "247", "254", "261", "269", "277", "285", "293", "302", "311", "320", "329", "339", "349", "359",
         "370", "381", "392", "403", "415", "427", "440", "453", "466", "479", "494", "508", "523", "538", "554", "570",
         "587", "604", "622", "640", "659", "678", "698", "718", "739", "761", "783", "806", "830", "854", "879", "905",
-        "932", "959", "987", "1016", "1046", "1076", "1108", "1140", "1174", "1208", "1244", "1280", "1308", "1356",
+        "932", "959", "987", "1016", "1046", "1076", "1108", "1140", "1174", "1208", "1244", "1280", "1318", "1356",
         "1396", "1437", "1479", "1522", "1567", "1613", "1660", "1709", "1759", "1810", "1863", "1918", "1974", "2032",
-        "2091", "2216", "2281", "2348", "2416", "2387", "2560", "2635", "2712", "2792", "2874", "3044", "3134", "3320",
-        "3417", "3517", "3620", "3726", "3836", "4064"
+        "2091", "2153", "2216", "2281", "2348", "2416", "2487", "2560", "2635", "2712", "2792", "2874", "2958", "3044",
+        "3134", "3225", "3320", "3417", "3517", "3620", "3726", "3836", "3948", "4064"
       ];
     },
 
 
-    // TODO: And apparently this (59 Values)
     getHighFreqValueMap() {
       return ["3836", "3948", "4064", "4183", "4305", "4432", "4561", "4695", "4833", "4974", "5120", "5270", "5424",
         "5583", "5747", "5915", "6089", "6267", "6451", "6640", "6834", "7035", "7241", "7453", "7617", "7896",
