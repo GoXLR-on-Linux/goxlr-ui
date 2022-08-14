@@ -1,32 +1,53 @@
 <template>
   <ContentBox title="Robot">
-    <SliderInput title="Low Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB" :slider-value="getLowGainValue()" />
-    <SliderInput title="Low Freq" :slider-min-value=0 :slider-max-value=88 text-suffix="Hz" :slider-value="getLowFreqValue()" />
-    <SliderInput title="Low Width" :slider-min-value=0 :slider-max-value=32 :slider-value="getLowWidthValue()" />
-    <SliderInput title="Mid Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB" :slider-value="getMidGainValue()" />
-    <SliderInput title="Mid Freq" :slider-min-value=86 :slider-max-value=184 text-suffix="Hz" :slider-value="getMidFreqValue()" />
-    <SliderInput title="Mid Width" :slider-min-value=0 :slider-max-value=32 :slider-value="getMidWidthValue()" />
-    <SliderInput title="Hi Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB" :slider-value="getHighGainValue()" />
-    <SliderInput title="Hi Freq" :slider-min-value=182 :slider-max-value=240 text-suffix="Hz" :slider-value="getHighFreqValue()" />
-    <SliderInput title="Hi Width" :slider-min-value=0 :slider-max-value=32 :slider-value="getHighWidthValue()" />
-    <SliderInput title="Waveform" :slider-min-value=0 :slider-max-value=2 :slider-value="getWaveformValue()" />
-    <SliderInput title="Pulse Width" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getPulseWidthValue()" />
-    <SliderInput title="Threshold" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB" :slider-value="getThresholdValue()" />
-    <SliderInput title="Dry Mix" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB" :slider-value="getDryMixValue()" />
+    <SliderInput title="Low Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
+                 :slider-value="getLowGainValue()" v-show="is_expanded"/>
+    <SliderInput title="Low Freq" :slider-min-value=0 :slider-max-value=88 text-suffix="Hz"
+                 :slider-value="getLowFreqValue()" v-show="is_expanded"/>
+    <SliderInput title="Low Width" :slider-min-value=0 :slider-max-value=32 :slider-value="getLowWidthValue()" v-show="is_expanded"/>
+    <SliderInput title="Mid Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
+                 :slider-value="getMidGainValue()" v-show="is_expanded"/>
+    <SliderInput title="Mid Freq" :slider-min-value=86 :slider-max-value=184 text-suffix="Hz"
+                 :slider-value="getMidFreqValue()" v-show="is_expanded"/>
+    <SliderInput title="Mid Width" :slider-min-value=0 :slider-max-value=32 :slider-value="getMidWidthValue()" v-show="is_expanded" />
+    <SliderInput title="Hi Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
+                 :slider-value="getHighGainValue()" v-show="is_expanded"/>
+    <SliderInput title="Hi Freq" :slider-min-value=182 :slider-max-value=240 text-suffix="Hz"
+                 :slider-value="getHighFreqValue()" v-show="is_expanded"/>
+    <SliderInput title="Hi Width" :slider-min-value=0 :slider-max-value=32 :slider-value="getHighWidthValue()" v-show="is_expanded"/>
+    <SliderInput title="Waveform" :slider-min-value=0 :slider-max-value=2 :slider-value="getWaveformValue()" v-show="is_expanded"/>
+    <SliderInput title="Pulse Width" :slider-min-value=0 :slider-max-value=100 text-suffix="%"
+                 :slider-value="getPulseWidthValue()" v-show="is_expanded"/>
+    <SliderInput title="Threshold" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB"
+                 :slider-value="getThresholdValue()" v-show="is_expanded"/>
+    <SliderInput title="Dry Mix" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB"
+                 :slider-value="getDryMixValue()" v-show="is_expanded"/>
   </ContentBox>
+  <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
 </template>
 
 <script>
 import ContentBox from "@/components/ContentBox";
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
+import ExpandoBox from "@/components/design/ExpandoBox";
+
 export default {
   name: "RobotEffect",
-  components: {SliderInput, ContentBox},
+  components: {ExpandoBox, SliderInput, ContentBox},
+
+  data() {
+    return {
+      is_expanded: false,
+    }
+  },
 
   methods: {
-    // TODO: Freq and Width need some work, they represent differently in the UI, and are both curves..
+    toggleExpando() {
+      this.is_expanded = !this.is_expanded;
+    },
 
+    // TODO: Freq and Width need some work, they represent differently in the UI, and are both curves..
     getLowGainValue() {
       if (!store.hasActiveDevice()) {
         return 0;

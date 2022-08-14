@@ -1,21 +1,29 @@
 <template>
   <ContentBox title="Reverb">
-    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" />
-    <SliderInput title="Decay" :slider-min-value=0 :slider-max-value=100 :slider-value="getDecayValue()"/>
+    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()"/>
+    <SliderInput title="Decay" :slider-min-value=0 :slider-max-value=100 :slider-value="getDecayValue()"
+                 v-show="is_expanded"/>
     <SliderInput title="Early Level" :slider-min-value=-25 :slider-max-value=0 text-suffix="dB"
-                 :slider-value="getEarlyLevelValue()"/>
+                 :slider-value="getEarlyLevelValue()" v-show="is_expanded"/>
     <SliderInput title="Tail Level" :slider-min-value=-25 :slider-max-value=0 text-suffix="dB"
-                 :slider-value="getTailLevelValue()"/>
+                 :slider-value="getTailLevelValue()" v-show="is_expanded"/>
     <SliderInput title="PreDelay" :slider-min-value=0 :slider-max-value=100 text-suffix="ms"
-                 :slider-value="getPreDelayValue()"/>
-    <SliderInput title="Lo Colour" :slider-min-value=-50 :slider-max-value=50 :slider-value="getLowColourValue() "/>
-    <SliderInput title="Hi Colour" :slider-min-value=-50 :slider-max-value=50 :slider-value="getHighColourValue() "/>
-    <SliderInput title="Hi Factor" :slider-min-value=-25 :slider-max-value=25 :slider-value="getHighFactorValue()"/>
-    <SliderInput title="Diffuse" :slider-min-value=-50 :slider-max-value=50 :slider-value="getDiffuseValue() "/>
-    <SliderInput title="ModSpeed" :slider-min-value=-25 :slider-max-value=25 :slider-value="getModSpeedValue() "/>
-    <SliderInput title="ModDepth" :slider-min-value=-25 :slider-max-value=25 :slider-value="getModDepthValue()"/>
+                 :slider-value="getPreDelayValue()" v-show="is_expanded"/>
+    <SliderInput title="Lo Colour" :slider-min-value=-50 :slider-max-value=50 :slider-value="getLowColourValue()"
+                 v-show="is_expanded"/>
+    <SliderInput title="Hi Colour" :slider-min-value=-50 :slider-max-value=50 :slider-value="getHighColourValue()"
+                 v-show="is_expanded"/>
+    <SliderInput title="Hi Factor" :slider-min-value=-25 :slider-max-value=25 :slider-value="getHighFactorValue()"
+                 v-show="is_expanded"/>
+    <SliderInput title="Diffuse" :slider-min-value=-50 :slider-max-value=50 :slider-value="getDiffuseValue()"
+                 v-show="is_expanded"/>
+    <SliderInput title="ModSpeed" :slider-min-value=-25 :slider-max-value=25 :slider-value="getModSpeedValue()"
+                 v-show="is_expanded"/>
+    <SliderInput title="ModDepth" :slider-min-value=-25 :slider-max-value=25 :slider-value="getModDepthValue()"
+                 v-show="is_expanded"/>
 
   </ContentBox>
+  <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
 </template>
 
 <script>
@@ -28,7 +36,17 @@ export default {
   name: "ReverbEffect",
   components: {SliderInput, ContentBox},
 
+  data() {
+    return {
+      is_expanded: false,
+    }
+  },
+
   methods: {
+    toggleExpando() {
+      this.is_expanded = !this.is_expanded;
+    },
+
     getAmountValue() {
       if (!store.hasActiveDevice()) {
         return 0;
