@@ -10,16 +10,15 @@ import ContentBox from "../../ContentBox";
 import Slider from "../../slider/Slider";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
+import {isDeviceMini} from "@/util/util";
 export default {
   name: "MicExtra",
   components: {Slider, ContentBox},
 
+
   methods: {
     isDeviceMini() {
-      if (!store.hasActiveDevice()) {
-        return false;
-      }
-      return store.getActiveDevice().hardware.device_type === "Mini";
+      return isDeviceMini();
     },
 
     getDeEssValue() {

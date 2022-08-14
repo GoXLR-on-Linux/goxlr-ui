@@ -27,6 +27,7 @@ import ExpandoBox from "../../design/ExpandoBox";
 import {store} from "@/store";
 import {EqFreqs, EqMiniFreqs} from "@/util/mixerMapping";
 import {websocket} from "@/util/sockets";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "MicEqualiser",
@@ -48,16 +49,8 @@ export default {
       this.isVisible = !this.isVisible;
     },
 
-    isDeviceMini() {
-      // Do this here, rather than on created() so it can update if the device changes
-      if (!store.hasActiveDevice()) {
-        return true;
-      }
-      return store.getActiveDevice().hardware.device_type === "Mini";
-    },
-
     getElementCount() {
-      if (this.isDeviceMini()) {
+      if (isDeviceMini()) {
         return EqMiniFreqs.length;
       }
       return EqFreqs.length;
@@ -72,7 +65,7 @@ export default {
       }
       // Probably a better way to do this
       let freq = undefined;
-      if (this.isDeviceMini()) {
+      if (isDeviceMini()) {
         freq = parseInt(store.getActiveDevice().mic_status.equaliser_mini.frequency[EqMiniFreqs[id]]);
       } else {
         freq = parseInt(store.getActiveDevice().mic_status.equaliser.frequency[EqFreqs[id]]);
@@ -86,25 +79,25 @@ export default {
     },
 
     valueChange(id, value) {
-      let commandName = (this.isDeviceMini()) ? "SetEqMiniGain" : "SetEqGain";
+      let commandName = (isDeviceMini()) ? "SetEqMiniGain" : "SetEqGain";
       id -= 1;
 
-      let key = (this.isDeviceMini()) ? EqMiniFreqs[id] : EqFreqs[id];
+      let key = (isDeviceMini()) ? EqMiniFreqs[id] : EqFreqs[id];
       this.sendGainCommand(commandName, key, value);
     },
 
     aggregateChanged(id, newValue) {
-      let commandName = (this.isDeviceMini()) ? "SetEqMiniGain" : "SetEqGain";
-      let keyArray = (this.isDeviceMini()) ? EqMiniFreqs : EqFreqs;
+      let commandName = (isDeviceMini()) ? "SetEqMiniGain" : "SetEqGain";
+      let keyArray = (isDeviceMini()) ? EqMiniFreqs : EqFreqs;
       let index = []
 
       // TODO: Check these indexes, I think the mini has [0,1], [2,3,4], [5]
       if (id === 0) {
-        index = (this.isDeviceMini()) ? [0, 1] : [0, 1, 2, 3];
+        index = (isDeviceMini()) ? [0, 1] : [0, 1, 2, 3];
       } else if (id === 1) {
-        index = (this.isDeviceMini()) ? [2, 3] : [4, 5, 6];
+        index = (isDeviceMini()) ? [2, 3] : [4, 5, 6];
       } else if (id === 2) {
-        index = (this.isDeviceMini()) ? [4, 5] : [7, 8, 9];
+        index = (isDeviceMini()) ? [4, 5] : [7, 8, 9];
       }
 
       for (let i of index) {
@@ -123,7 +116,7 @@ export default {
       if (!store.hasActiveDevice()) {
         return 0;
       }
-      if (this.isDeviceMini()) {
+      if (isDeviceMini()) {
         return parseInt(store.getActiveDevice().mic_status.equaliser_mini.gain[EqMiniFreqs[id]]);
       } else {
         return parseInt(store.getActiveDevice().mic_status.equaliser.gain[EqFreqs[id]]);
@@ -136,7 +129,7 @@ export default {
       }
 
       let bass = 0;
-      if (!this.isDeviceMini()) {
+      if (!isDeviceMini()) {
         let gain = store.getActiveDevice().mic_status.equaliser.gain;
         bass = Math.round((gain[EqFreqs[0]] + gain[EqFreqs[1]] + gain[EqFreqs[2]] + gain[EqFreqs[3]]) / 4)
       } else {
@@ -152,7 +145,7 @@ export default {
       }
 
       let mid = 0;
-      if (!this.isDeviceMini()) {
+      if (!isDeviceMini()) {
         let gain = store.getActiveDevice().mic_status.equaliser.gain;
         mid = Math.round((gain[EqFreqs[4]] + gain[EqFreqs[5]] + gain[EqFreqs[6]]) / 3)
       } else {
@@ -168,7 +161,7 @@ export default {
       }
 
       let treble = 0;
-      if (!this.isDeviceMini()) {
+      if (!isDeviceMini()) {
         let gain = store.getActiveDevice().mic_status.equaliser.gain;
         treble = Math.round((gain[EqFreqs[7]] + gain[EqFreqs[8]] + gain[EqFreqs[9]]) / 3)
       } else {
