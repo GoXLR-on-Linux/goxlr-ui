@@ -4,7 +4,8 @@
     <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
            @value-updated="sliderValueUpdated" @mouse-down="setMouseDown" @mouse-up="setMouseUp"/>
 
-    <Input :current-text-value="textValue" :min-value="textMinValue" :max-value="textMaxValue" :textSuffix="textSuffix"
+    <Input :current-text-value="textValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
+           :textSuffix="textSuffix"
            :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"/>
   </div>
 </template>
@@ -70,15 +71,13 @@ export default {
       } else {
         this.textValue = newValue;
       }
-
       this.calculateFieldValue();
-
     },
 
     calculateTextValue() {
       // Get the distances between the slider, and text numbers..
       let sliderDistance = this.sliderMaxValue - this.sliderMinValue;
-      let textDistance = this.textMaxValue - this.textMinValue;
+     let textDistance = this.maximumTextValue - this.minimumTextValue;
 
       // Get the position of the slider in the range..
       let position = this.getPosition(parseInt(this.fieldValue), this.sliderMinValue, this.sliderMaxValue);
@@ -87,7 +86,7 @@ export default {
       let input = Math.round((position / sliderDistance) * textDistance);
 
       // Now set it..
-      this.textValue = this.textMinValue + input;
+      this.textValue = this.minimumTextValue + input;
     },
 
     calculateFieldValue() {
@@ -160,6 +159,14 @@ export default {
   },
 
   computed: {
+    minimumTextValue: function () {
+      return this.textMinValue || this.sliderMinValue;
+    },
+
+    maximumTextValue: function () {
+      return this.textMaxValue || this.sliderMaxValue;
+    },
+
     getValue() {
       return this.fieldValue;
     }
