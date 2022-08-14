@@ -10,7 +10,7 @@
     </ButtonList>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getAmountValue()" v-show="is_expanded" />
-    <SliderInput title="Post Gain" :slider-min-value=0 :slider-max-value=100 text-suffix="dB" :slider-value="getPostGainValue()" v-show="is_expanded" />
+    <SliderInput title="Post Gain" :slider-min-value=-20 :slider-max-value=20 text-suffix="dB" :slider-value="getPostGainValue()" v-show="is_expanded" />
   </ContentBox>
 
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>

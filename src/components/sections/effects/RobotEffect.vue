@@ -85,7 +85,6 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      console.log(store.getActiveDevice().effects.robot.low_freq);
 
       // We need to correctly calculate Low Frequency, this is crazy, but it's how the GoXLR expects
       // values on the low end. This is likely due to rounding errors on the low curve...
@@ -118,7 +117,6 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      console.log(store.getActiveDevice().effects.robot.mid_freq - 86);
       return store.getActiveDevice().effects.robot.mid_freq  - 86;
     },
     getMidWidthValue() {
