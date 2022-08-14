@@ -30,7 +30,6 @@ export default {
   },
 
   created() {
-    console.log(this.hidden);
     this.$parent.tabs.push(this);
   }
 

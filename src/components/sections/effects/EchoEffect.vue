@@ -29,6 +29,7 @@ import SliderInput from "@/components/slider/Slider";
 import ExpandoBox from "@/components/design/ExpandoBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "EchoEffect",
@@ -45,7 +46,7 @@ export default {
     },
 
     isActiveStyle(buttonName) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
       return buttonName === store.getActiveDevice().effects.echo.style;
@@ -56,55 +57,55 @@ export default {
     },
 
     getAmountValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.echo.amount;
     },
     getFeedbackValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.echo.feedback;
     },
     getTempoValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.echo.tempo;
     },
     getDelayLValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.echo.delay_left;
     },
     getDelayRValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.echo.delay_right;
     },
     getFeedbackLValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.echo.feedback_left;
     },
     getFeedbackRValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.echo.feedback_right;
     },
     getXFBLtoRValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.echo.feedback_xfb_l_to_r;
     },
     getXFBRtoLValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.echo.feedback_xfb_r_to_l;

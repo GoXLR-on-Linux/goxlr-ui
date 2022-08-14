@@ -23,6 +23,7 @@ import {store} from "@/store";
 import ExpandoBox from "@/components/design/ExpandoBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
+import {isDeviceMini} from "@/util/util";
 export default {
   name: "MegaphoneEffect",
   components: {PushButton, ButtonList, ExpandoBox, SliderInput, ContentBox},
@@ -38,7 +39,7 @@ export default {
     },
 
     isActiveStyle(buttonName) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
       return buttonName === store.getActiveDevice().effects.megaphone.style;
@@ -49,14 +50,14 @@ export default {
     },
 
     getAmountValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       // TODO, the values can change depending on the style :D
       return store.getActiveDevice().effects.megaphone.amount;
     },
     getPostGainValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       // TODO, the values can change depending on the style :D

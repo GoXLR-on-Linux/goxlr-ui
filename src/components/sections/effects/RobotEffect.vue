@@ -39,6 +39,7 @@ import {store} from "@/store";
 import ExpandoBox from "@/components/design/ExpandoBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "RobotEffect",
@@ -60,7 +61,7 @@ export default {
     },
 
     isActiveStyle(buttonName) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
       return buttonName === store.getActiveDevice().effects.robot.style;
@@ -68,79 +69,79 @@ export default {
 
     // TODO: Freq and Width need some work, they represent differently in the UI, and are both curves..
     getLowGainValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.low_gain;
     },
     getLowFreqValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.low_freq;
     },
     getLowWidthValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.low_width;
     },
     getMidGainValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.mid_gain;
     },
     getMidFreqValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.mid_freq;
     },
     getMidWidthValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.mid_width;
     },
     getHighGainValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.high_gain;
     },
     getHighFreqValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.high_freq;
     },
     getHighWidthValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.high_width;
     },
     getWaveformValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.waveform;
     },
     getPulseWidthValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.pulse_width;
     },
     getThresholdValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.threshold;
     },
     getDryMixValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.dry_mix;

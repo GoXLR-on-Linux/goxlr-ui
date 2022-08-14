@@ -16,13 +16,14 @@ import {store} from "@/store";
 import SliderInput from "@/components/slider/Slider";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
+import {isDeviceMini} from "@/util/util";
 export default {
   name: "GenderEffect",
   components: {PushButton, ButtonList, SliderInput, ContentBox},
 
   methods: {
     isActiveStyle(buttonName) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
       return buttonName === store.getActiveDevice().effects.gender.style;
@@ -33,7 +34,7 @@ export default {
     },
 
     getAmountValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       // TODO, the values can change depending on the style :D

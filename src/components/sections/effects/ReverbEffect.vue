@@ -43,6 +43,7 @@ import {store} from "@/store";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
 import ExpandoBox from "@/components/design/ExpandoBox";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "ReverbEffect",
@@ -60,7 +61,7 @@ export default {
     },
 
     isActiveStyle(buttonName) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
       return buttonName === store.getActiveDevice().effects.reverb.style;
@@ -72,7 +73,7 @@ export default {
 
 
     getAmountValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.reverb.amount;
@@ -80,63 +81,63 @@ export default {
     getDecayValue() {
       // TODO: Decay needs specials :p
 
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.reverb.decay;
 
     },
     getEarlyLevelValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.reverb.early_level;
     },
     getTailLevelValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.reverb.tail_level;
     },
     getPreDelayValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.reverb.pre_delay;
     },
     getLowColourValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.reverb.lo_colour;
 
     },
     getHighColourValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.reverb.hi_colour;
     },
     getHighFactorValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.reverb.hi_factor;
     },
     getDiffuseValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.reverb.diffuse;
     },
     getModSpeedValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.reverb.mod_speed;
     },
     getModDepthValue() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.reverb.mod_depth;
