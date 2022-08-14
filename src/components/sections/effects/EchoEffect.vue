@@ -1,10 +1,10 @@
 <template>
-  Mixer?
+
 </template>
 
 <script>
 export default {
-  name: "MainMixer"
+  name: "EchoEffect"
 }
 </script>
 

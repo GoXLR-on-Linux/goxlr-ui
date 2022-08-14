@@ -1,7 +1,7 @@
 <template>
   <ContentBox title="Extras">
-      <Slider v-show="!isDeviceMini()" title="De-Esser" :slider-min-value=0 :slider-max-value=100 :text-min-value=0 :text-max-value=100 text-suffix="" :slider-value="getDeEssValue()" @value-changed="deEssValueChanged" />
-      <Slider title="Bleep" :slider-min-value=-34 :slider-max-value=0 :text-min-value=0 :text-max-value=100 text-suffix="%" :slider-value="getBleepValue()" @value-changed="bleepValueChanged" />
+      <Slider v-show="!isDeviceMini()" title="De-Esser" :slider-min-value=0 :slider-max-value=100 text-suffix="" :slider-value="getDeEssValue()" @value-changed="deEssValueChanged" />
+      <Slider title="Bleep" :slider-min-value=-34 :slider-max-value=0 text-suffix="%" :slider-value="getBleepValue()" @value-changed="bleepValueChanged" />
   </ContentBox>
 </template>
 

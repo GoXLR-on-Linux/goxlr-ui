@@ -1,12 +1,12 @@
 <template>
-  <ContentBox  title="Equalizer">
+  <ContentBox title="Equalizer">
     <div class="rowContent" :class="{ hidden: isVisible }">
-      <Slider :id=0 title="Bass" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
-              text-suffix="" :slider-value=getBassValue() @value-changed=aggregateChanged />
-      <Slider :id=1 title="Mid" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
-              text-suffix="" :slider-value=getMidValue() @value-changed=aggregateChanged />
-      <Slider :id=2 title="Treble" :slider-min-value=-9 :slider-max-value=9 :text-min-value=-9 :text-max-value=9
-              text-suffix="" :slider-value=getTrebleValue() @value-changed=aggregateChanged />
+      <Slider :id=0 title="Bass" :slider-min-value=-9 :slider-max-value=9 text-suffix="" :slider-value=getBassValue()
+              @value-changed=aggregateChanged />
+      <Slider :id=1 title="Mid" :slider-min-value=-9 :slider-max-value=9 text-suffix="" :slider-value=getMidValue()
+              @value-changed=aggregateChanged />
+      <Slider :id=2 title="Treble" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
+              :slider-value=getTrebleValue() @value-changed=aggregateChanged />
     </div>
 
     <div class="rowContent" :class="{hidden: !isVisible}">
@@ -106,7 +106,7 @@ export default {
     },
 
     sendGainCommand(commandName, key, value) {
-      let command = { [commandName]: [ key, value ] };
+      let command = {[commandName]: [key, value]};
       websocket.send_command(store.getActiveSerial(), command);
     },
 

@@ -1,14 +1,15 @@
 <template>
   <MainTabContent>
-    Hi.
+    <ReverbEffect />
   </MainTabContent>
 </template>
 
 <script>
 import MainTabContent from "@/components/design/MainTabContent";
+import ReverbEffect from "@/components/sections/effects/ReverbEffect";
 export default {
   name: "EffectsTab",
-  components: {MainTabContent}
+  components: {ReverbEffect, MainTabContent}
 }
 </script>
 
