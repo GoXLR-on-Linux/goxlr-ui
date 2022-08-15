@@ -6,9 +6,9 @@
       <PushButton label="Hard" buttonId="Hard" :is-active="isActiveStyle('Hard')" @button-pressed="stylePressed"/>
     </ButtonList>
 
-    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" v-show="is_expanded" />
-    <SliderInput title="Rate" :slider-min-value=0 :slider-max-value=100 :slider-value="getRateValue()" v-show="is_expanded" />
-    <SliderInput title="Window" :slider-min-value=0 :slider-max-value=600 :slider-value="getWindowValue()" v-show="is_expanded" />
+    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" v-show="is_expanded" @value-changed="setAmountValue" />
+    <SliderInput title="Rate" :slider-min-value=0 :slider-max-value=100 :slider-value="getRateValue()" v-show="is_expanded" @value-changed="setRateValue" />
+    <SliderInput title="Window" :slider-min-value=0 :slider-max-value=600 :slider-value="getWindowValue()" v-show="is_expanded" @value-changed="setWindowValue" />
 
     <ButtonList title="Hardtune Source">
       <PushButton label="All" buttonId="All" :is-active="isActiveSource('All')" @button-pressed="sourcePressed"/>
@@ -29,6 +29,7 @@ import ExpandoBox from "@/components/design/ExpandoBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
 import {isDeviceMini} from "@/util/util";
+import {websocket} from "@/util/sockets";
 export default {
   name: "HardTuneEffect",
   components: {PushButton, ButtonList, ExpandoBox, SliderInput, ContentBox},
@@ -51,7 +52,7 @@ export default {
     },
 
     stylePressed(button) {
-      console.log(button);
+      websocket.send_command(store.getActiveSerial(), { "SetHardTuneStyle": button });
     },
 
 
@@ -63,7 +64,7 @@ export default {
     },
 
     sourcePressed(button) {
-      console.log(button);
+      websocket.send_command(store.getActiveSerial(), { "SetHardTuneSource": button });
     },
 
     getAmountValue() {
@@ -72,17 +73,26 @@ export default {
       }
       return store.getActiveDevice().effects.hard_tune.amount;
     },
+    setAmountValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetHardTuneAmount": value });
+    },
     getRateValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.hard_tune.rate;
     },
+    setRateValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetHardTuneRate": value });
+    },
     getWindowValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.hard_tune.window;
+    },
+    setWindowValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetHardTuneWindow": value });
     },
   }
 }

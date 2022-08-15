@@ -10,31 +10,31 @@
     </ButtonList>
 
     <SliderInput title="Low Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
-                 :slider-value="getLowGainValue()" v-show="is_expanded"/>
+                 :slider-value="getLowGainValue()" v-show="is_expanded" @value-changed="setLowGainValue"/>
     <SliderInput title="Low Freq" :value-map="getLowFreqValueMap()" text-suffix="Hz"
-                 :slider-value="getLowFreqValue()" v-show="is_expanded"/>
+                 :slider-value="getLowFreqValue()" v-show="is_expanded" @value-changed="setLowFreqValue"/>
     <SliderInput title="Low Width" :slider-value="getLowWidthValue()" :value-map="getWidthValueMap()"
-                 v-show="is_expanded"/>
+                 v-show="is_expanded" @value-changed="setLowWidthValue"/>
     <SliderInput title="Mid Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
-                 :slider-value="getMidGainValue()" v-show="is_expanded"/>
+                 :slider-value="getMidGainValue()" v-show="is_expanded" @value-changed="setMidGainValue"/>
     <SliderInput title="Mid Freq" :value-map="getMidFreqValueMap()" text-suffix="Hz"
-                 :slider-value="getMidFreqValue()" v-show="is_expanded"/>
+                 :slider-value="getMidFreqValue()" v-show="is_expanded" @value-changed="setMidFreqValue"/>
     <SliderInput title="Mid Width" :slider-value="getMidWidthValue()" :value-map="getWidthValueMap()"
-                 v-show="is_expanded"/>
+                 v-show="is_expanded" @value-changed="setMidWidthValue"/>
     <SliderInput title="Hi Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
-                 :slider-value="getHighGainValue()" v-show="is_expanded"/>
+                 :slider-value="getHighGainValue()" v-show="is_expanded" @value-changed="setHighGainValue"/>
     <SliderInput title="Hi Freq" :value-map="getHighFreqValueMap()" text-suffix="Hz"
-                 :slider-value="getHighFreqValue()" v-show="is_expanded"/>
+                 :slider-value="getHighFreqValue()" v-show="is_expanded" @value-changed="setHighFreqValue"/>
     <SliderInput title="Hi Width" :slider-value="getHighWidthValue()" :value-map="getWidthValueMap()"
-                 v-show="is_expanded"/>
+                 v-show="is_expanded" @value-changed="setHighWidthValue"/>
     <SliderInput title="Waveform" :slider-min-value=0 :slider-max-value=2 :slider-value="getWaveformValue()"
-                 v-show="is_expanded"/>
+                 v-show="is_expanded" @value-changed="setWaveformValue"/>
     <SliderInput title="Pulse Width" :slider-min-value=0 :slider-max-value=100 text-suffix="%"
-                 :slider-value="getPulseWidthValue()" v-show="is_expanded"/>
+                 :slider-value="getPulseWidthValue()" v-show="is_expanded" @value-changed="setPulseWidthValue"/>
     <SliderInput title="Threshold" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB"
-                 :slider-value="getThresholdValue()" v-show="is_expanded"/>
+                 :slider-value="getThresholdValue()" v-show="is_expanded" @value-changed="setThresholdValue"/>
     <SliderInput title="Dry Mix" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB"
-                 :slider-value="getDryMixValue()" v-show="is_expanded"/>
+                 :slider-value="getDryMixValue()" v-show="is_expanded" @value-changed="setDryMixValue"/>
   </ContentBox>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
 </template>
@@ -47,6 +47,7 @@ import ExpandoBox from "@/components/design/ExpandoBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
 import {isDeviceMini} from "@/util/util";
+import {websocket} from "@/util/sockets";
 
 export default {
   name: "RobotEffect",
@@ -64,7 +65,7 @@ export default {
     },
 
     stylePressed(button) {
-      console.log(button);
+      websocket.send_command(store.getActiveSerial(), { "SetRobotStyle": button });
     },
 
     isActiveStyle(buttonName) {
@@ -81,6 +82,10 @@ export default {
       }
       return store.getActiveDevice().effects.robot.low_gain;
     },
+    setLowGainValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetRobotGain": [ "Low", value ] });
+    },
+
     getLowFreqValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
@@ -101,71 +106,131 @@ export default {
         return freq - 4;
       }
     },
+    setLowFreqValue(id, value) {
+      let sent_value;
+      if (value === 0) {
+        sent_value = 0;
+      } else if (value === 1) {
+        sent_value = 3;
+      } else if (value === 2) {
+        sent_value = 3;
+      } else if (value === 3) {
+        sent_value = 7;
+      } else {
+        sent_value = value + 4;
+      }
+      websocket.send_command(store.getActiveSerial(), { "SetRobotFreq": [ "Low", sent_value ] });
+    },
+
     getLowWidthValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.low_width;
     },
+    setLowWidthValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetRobotWidth": [ "Low", value ] });
+    },
+
     getMidGainValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.mid_gain;
     },
+    setMidGainValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetRobotGain": [ "Medium", value ] });
+    },
+
     getMidFreqValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.mid_freq  - 86;
     },
+    setMidFreqValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetRobotFreq": [ "Medium", value + 86 ] });
+    },
+
     getMidWidthValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.mid_width;
     },
+    setMidWidthValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetRobotWidth": [ "Medium", value ] });
+    },
+
+
     getHighGainValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.high_gain;
     },
+    setHighGainValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetRobotGain": [ "High", value ] });
+    },
+
     getHighFreqValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.high_freq - 182;
     },
+    setHighFreqValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetRobotFreq": [ "High", value + 182 ] });
+    },
+
     getHighWidthValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.high_width;
     },
+    setHighWidthValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetRobotWidth": [ "High", value ] });
+    },
+
     getWaveformValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.waveform;
     },
+    setWaveformValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetRobotWaveform": value });
+    },
+
     getPulseWidthValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.pulse_width;
     },
+    setPulseWidthValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetRobotPulseWidth": value });
+    },
+
     getThresholdValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.threshold;
     },
+    setThresholdValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetRobotThreshold": value });
+    },
+
     getDryMixValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
       return store.getActiveDevice().effects.robot.dry_mix;
+    },
+    setDryMixValue(id, value) {
+      websocket.send_command(store.getActiveSerial(), { "SetRobotDryMix": value });
     },
 
     // This is a calculated curve, but I've struggled to find a pattern that matches these values. 0.10 and 10.00

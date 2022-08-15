@@ -45,29 +45,13 @@ export default {
 
   watch: {
     currentFieldValue: function (newValue) {
-      console.log("New Current Value: " + newValue);
       this.localFieldValue = newValue;
     },
-
-    minValue: function(newValue) {
-      console.log("Min Value Changed: " + newValue);
-    },
-
-    maxValue: function(newValue) {
-      console.log("Max Value Changed: " + newValue);
-    },
-
-    localFieldValue: function(newValue) {
-      console.log("Local Value Changed: " + newValue);
-    }
-
   },
 
 
   computed: {
     getCurrentStyle() {
-      console.log("Style Update?");
-
       // This code essentially adjusts the background position to keep it below the 'thumb'..
       let distance = this.maxValue - this.minValue;
       let position = 0;
@@ -77,11 +61,7 @@ export default {
         }
       }
 
-      console.log("Min: " + this.minValue);
-      console.log("Max: " + this.maxValue);
-
       let width = (position / distance) * 100;
-      console.log(width);
 
       return {
         background: 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + width + '%, #252927 ' + width + '%, #252927 100%)'
