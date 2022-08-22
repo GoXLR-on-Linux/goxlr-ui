@@ -33,7 +33,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
-      return buttonName === store.getActiveDevice().effects.gender.style;
+      return buttonName === store.getActiveDevice().effects.current.gender.style;
     },
 
     getSliderValue(isMin) {
@@ -41,7 +41,7 @@ export default {
         return 0;
       }
       let multiplier = (isMin)? -1 : 1;
-      let style = store.getActiveDevice().effects.gender.style;
+      let style = store.getActiveDevice().effects.current.gender.style;
       switch (style) {
         case "Narrow": return 12 * multiplier;
         case "Medium": return 25 * multiplier;
@@ -58,7 +58,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.gender.amount;
+      return store.getActiveDevice().effects.current.gender.amount;
     },
     setAmountValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetGenderAmount": value});

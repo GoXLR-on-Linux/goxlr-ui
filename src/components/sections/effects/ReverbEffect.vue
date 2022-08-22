@@ -72,7 +72,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
-      return buttonName === store.getActiveDevice().effects.reverb.style;
+      return buttonName === store.getActiveDevice().effects.current.reverb.style;
     },
 
     stylePressed(button) {
@@ -84,7 +84,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.reverb.amount;
+      return store.getActiveDevice().effects.current.reverb.amount;
     },
     setAmountValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetReverbAmount": value})
@@ -95,7 +95,7 @@ export default {
         return 0;
       }
 
-      let decay = store.getActiveDevice().effects.reverb.decay;
+      let decay = store.getActiveDevice().effects.current.reverb.decay;
 
       // The follow code only really applies for values of less than a second..
       if (decay < 1000) {
@@ -116,7 +116,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.reverb.early_level;
+      return store.getActiveDevice().effects.current.reverb.early_level;
     },
     setEarlyLevelValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetReverbEarlyLevel": value})
@@ -126,7 +126,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.reverb.tail_level;
+      return store.getActiveDevice().effects.current.reverb.tail_level;
     },
     setTailLevelValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetReverbTailLevel": value})
@@ -136,7 +136,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.reverb.pre_delay;
+      return store.getActiveDevice().effects.current.reverb.pre_delay;
     },
     setPreDelayValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetReverbPreDelay": value})
@@ -146,7 +146,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.reverb.lo_colour;
+      return store.getActiveDevice().effects.current.reverb.lo_colour;
     },
     setLowColourValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetReverbLowColour": value})
@@ -157,7 +157,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.reverb.hi_colour;
+      return store.getActiveDevice().effects.current.reverb.hi_colour;
     },
     setHighColourValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetReverbHighColour": value})
@@ -167,7 +167,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.reverb.hi_factor;
+      return store.getActiveDevice().effects.current.reverb.hi_factor;
     },
     setHighFactorValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetReverbHighFactor": value})
@@ -177,7 +177,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.reverb.diffuse;
+      return store.getActiveDevice().effects.current.reverb.diffuse;
     },
     setDiffuseValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetReverbDiffuse": value})
@@ -187,7 +187,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.reverb.mod_speed;
+      return store.getActiveDevice().effects.current.reverb.mod_speed;
     },
     setModSpeedValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetReverbModSpeed": value})
@@ -197,7 +197,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.reverb.mod_depth;
+      return store.getActiveDevice().effects.current.reverb.mod_depth;
     },
     setModDepthValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetReverbModDepth": value})

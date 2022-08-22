@@ -72,7 +72,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
-      return buttonName === store.getActiveDevice().effects.robot.style;
+      return buttonName === store.getActiveDevice().effects.current.robot.style;
     },
 
     // TODO: Freq and Width need some work, they represent differently in the UI, and are both curves..
@@ -80,7 +80,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.robot.low_gain;
+      return store.getActiveDevice().effects.current.robot.low_gain;
     },
     setLowGainValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetRobotGain": [ "Low", value ] });
@@ -93,7 +93,7 @@ export default {
 
       // We need to correctly calculate Low Frequency, this is crazy, but it's how the GoXLR expects
       // values on the low end. This is likely due to rounding errors on the low curve...
-      let freq = store.getActiveDevice().effects.robot.low_freq;
+      let freq = store.getActiveDevice().effects.current.robot.low_freq;
       if (freq === 0) {
         return 0;
       } else if (freq === 1) {
@@ -126,7 +126,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.robot.low_width;
+      return store.getActiveDevice().effects.current.robot.low_width;
     },
     setLowWidthValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetRobotWidth": [ "Low", value ] });
@@ -136,7 +136,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.robot.mid_gain;
+      return store.getActiveDevice().effects.current.robot.mid_gain;
     },
     setMidGainValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetRobotGain": [ "Medium", value ] });
@@ -146,7 +146,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.robot.mid_freq  - 86;
+      return store.getActiveDevice().effects.current.robot.mid_freq  - 86;
     },
     setMidFreqValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetRobotFreq": [ "Medium", value + 86 ] });
@@ -156,7 +156,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.robot.mid_width;
+      return store.getActiveDevice().effects.current.robot.mid_width;
     },
     setMidWidthValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetRobotWidth": [ "Medium", value ] });
@@ -167,7 +167,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.robot.high_gain;
+      return store.getActiveDevice().effects.current.robot.high_gain;
     },
     setHighGainValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetRobotGain": [ "High", value ] });
@@ -177,7 +177,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.robot.high_freq - 182;
+      return store.getActiveDevice().effects.current.robot.high_freq - 182;
     },
     setHighFreqValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetRobotFreq": [ "High", value + 182 ] });
@@ -187,7 +187,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.robot.high_width;
+      return store.getActiveDevice().effects.current.robot.high_width;
     },
     setHighWidthValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetRobotWidth": [ "High", value ] });
@@ -197,7 +197,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.robot.waveform;
+      return store.getActiveDevice().effects.current.robot.waveform;
     },
     setWaveformValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetRobotWaveform": value });
@@ -207,7 +207,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.robot.pulse_width;
+      return store.getActiveDevice().effects.current.robot.pulse_width;
     },
     setPulseWidthValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetRobotPulseWidth": value });
@@ -217,7 +217,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.robot.threshold;
+      return store.getActiveDevice().effects.current.robot.threshold;
     },
     setThresholdValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetRobotThreshold": value });
@@ -227,7 +227,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.robot.dry_mix;
+      return store.getActiveDevice().effects.current.robot.dry_mix;
     },
     setDryMixValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetRobotDryMix": value });

@@ -48,7 +48,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
-      return buttonName === store.getActiveDevice().effects.hard_tune.style;
+      return buttonName === store.getActiveDevice().effects.current.hard_tune.style;
     },
 
     stylePressed(button) {
@@ -60,7 +60,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
-      return buttonName === store.getActiveDevice().effects.hard_tune.source;
+      return buttonName === store.getActiveDevice().effects.current.hard_tune.source;
     },
 
     sourcePressed(button) {
@@ -71,7 +71,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.hard_tune.amount;
+      return store.getActiveDevice().effects.current.hard_tune.amount;
     },
     setAmountValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetHardTuneAmount": value });
@@ -80,7 +80,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.hard_tune.rate;
+      return store.getActiveDevice().effects.current.hard_tune.rate;
     },
     setRateValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetHardTuneRate": value });
@@ -89,7 +89,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.hard_tune.window;
+      return store.getActiveDevice().effects.current.hard_tune.window;
     },
     setWindowValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetHardTuneWindow": value });

@@ -39,7 +39,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
-      return buttonName === store.getActiveDevice().effects.pitch.style;
+      return buttonName === store.getActiveDevice().effects.current.pitch.style;
     },
 
     stylePressed(button) {
@@ -51,8 +51,8 @@ export default {
         return ["0"];
       }
 
-      let hardtune_enabled = store.getActiveDevice().effects.hard_tune.is_enabled;
-      let pitch_style = store.getActiveDevice().effects.pitch.style;
+      let hardtune_enabled = store.getActiveDevice().effects.current.hard_tune.is_enabled;
+      let pitch_style = store.getActiveDevice().effects.current.pitch.style;
       if (hardtune_enabled) {
         if (pitch_style === "Narrow") {
           return ["-12", "0", "12"];
@@ -73,9 +73,9 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      let hardtune_enabled = store.getActiveDevice().effects.hard_tune.is_enabled;
-      let pitch_style = store.getActiveDevice().effects.pitch.style;
-      let base_value = store.getActiveDevice().effects.pitch.amount;
+      let hardtune_enabled = store.getActiveDevice().effects.current.hard_tune.is_enabled;
+      let pitch_style = store.getActiveDevice().effects.current.pitch.style;
+      let base_value = store.getActiveDevice().effects.current.pitch.amount;
       if (hardtune_enabled) {
          if (pitch_style === "Narrow") {
            return base_value + 1;
@@ -91,8 +91,8 @@ export default {
     },
 
     setAmountValue(id, value) {
-      let hardtune_enabled = store.getActiveDevice().effects.hard_tune.is_enabled;
-      let pitch_style = store.getActiveDevice().effects.pitch.style;
+      let hardtune_enabled = store.getActiveDevice().effects.current.hard_tune.is_enabled;
+      let pitch_style = store.getActiveDevice().effects.current.pitch.style;
       let base_value = value;
 
       if (hardtune_enabled) {
@@ -115,7 +115,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.pitch.character;
+      return store.getActiveDevice().effects.current.pitch.character;
     },
     setCharacterValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetPitchCharacter": value});

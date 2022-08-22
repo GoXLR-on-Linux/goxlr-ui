@@ -50,7 +50,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
-      return buttonName === store.getActiveDevice().effects.echo.style;
+      return buttonName === store.getActiveDevice().effects.current.echo.style;
     },
 
     stylePressed(button) {
@@ -61,7 +61,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.echo.amount;
+      return store.getActiveDevice().effects.current.echo.amount;
     },
     setAmountValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetEchoAmount": value });
@@ -71,7 +71,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.echo.feedback;
+      return store.getActiveDevice().effects.current.echo.feedback;
     },
     setFeedbackValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetEchoFeedback": value });
@@ -81,7 +81,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.echo.tempo;
+      return store.getActiveDevice().effects.current.echo.tempo;
     },
     setTempoValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetEchoTempo": value });
@@ -92,7 +92,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.echo.delay_left;
+      return store.getActiveDevice().effects.current.echo.delay_left;
     },
     setDelayLValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetEchoDelayLeft": value });
@@ -102,7 +102,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.echo.delay_right;
+      return store.getActiveDevice().effects.current.echo.delay_right;
     },
     setDelayRValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetEchoDelayRight": value });
@@ -112,7 +112,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.echo.feedback_left;
+      return store.getActiveDevice().effects.current.echo.feedback_left;
     },
     setFeedbackLValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetEchoFeedbackLeft": value });
@@ -122,7 +122,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.echo.feedback_right;
+      return store.getActiveDevice().effects.current.echo.feedback_right;
     },
     setFeedbackRValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetEchoFeedbackRight": value });
@@ -132,7 +132,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.echo.feedback_xfb_l_to_r;
+      return store.getActiveDevice().effects.current.echo.feedback_xfb_l_to_r;
     },
     setXFBLtoRValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetEchoFeedbackXFBLtoR": value });
@@ -142,7 +142,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.echo.feedback_xfb_r_to_l;
+      return store.getActiveDevice().effects.current.echo.feedback_xfb_r_to_l;
     },
     setXFBRtoLValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetEchoFeedbackXFBRtoL": value });

@@ -50,7 +50,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
-      return buttonName === store.getActiveDevice().effects.megaphone.style;
+      return buttonName === store.getActiveDevice().effects.current.megaphone.style;
     },
 
     stylePressed(button) {
@@ -62,7 +62,7 @@ export default {
         return 0;
       }
       // TODO, the values can change depending on the style :D
-      return store.getActiveDevice().effects.megaphone.amount;
+      return store.getActiveDevice().effects.current.megaphone.amount;
     },
     setAmountValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetMegaphoneAmount": value});
@@ -72,7 +72,7 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return 0;
       }
-      return store.getActiveDevice().effects.megaphone.post_gain;
+      return store.getActiveDevice().effects.current.megaphone.post_gain;
     },
     setPostGainValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetMegaphonePostGain": value});
