@@ -17,7 +17,7 @@
           <Mixer/>
         </MainTabContent>
       </Tab>
-      <Tab name="Effects" :hidden="isDeviceMini()" >
+      <Tab name="Effects" :hidden="isDeviceMini()" :left_align="false" >
         <EffectsTab />
       </Tab>
       <Tab name="Cough" :left_align="false">

@@ -59,6 +59,15 @@ export const ChannelNameReadable = [
     "Line Out",
 ]
 
+export const EffectPresets = [
+    "Preset1",
+    "Preset2",
+    "Preset3",
+    "Preset4",
+    "Preset5",
+    "Preset6",
+]
+
 export const EqMiniFreqs = [
     "Equalizer90Hz",
     "Equalizer250Hz",
