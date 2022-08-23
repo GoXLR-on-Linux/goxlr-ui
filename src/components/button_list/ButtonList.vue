@@ -1,7 +1,7 @@
 <template>
   <div class="buttonList">
     <div class="label">{{ title }}</div>
-    <div class="buttonHolder">
+    <div ref="buttonList" class="buttonHolder">
         <slot/>
     </div>
   </div>
@@ -13,6 +13,12 @@ export default {
 
   props: {
     title: String
+  },
+
+  methods: {
+    getScrollTop() {
+      return this.$refs.buttonList.scrollTop;
+    }
   }
 }
 </script>
@@ -35,9 +41,7 @@ export default {
   width: 200px;
 
   box-sizing: border-box;
-
   overflow-y: auto;
-
 }
 
 .buttonHolder::-webkit-scrollbar {

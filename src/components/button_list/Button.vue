@@ -1,5 +1,8 @@
 <template>
-  <div class="button" v-bind:class="{ active: isActive, disabled: isDisabled }" @click="setActive">{{ label }}</div>
+  <div ref="button" style="display: flex" class="button" v-bind:class="{ active: isActive, disabled: isDisabled }" @click="setActive">
+    <div class="left_side"><slot name="left">{{ label }}</slot></div>
+    <div ref="right" class="right_side"><slot name="right"></slot></div>
+  </div>
 </template>
 
 <script>
@@ -21,6 +24,13 @@ export default {
       }
     }
   },
+
+  computed: {
+    right_width: function() {
+      return this.$refs.right.clientWidth + "px";
+    }
+  }
+
 }
 </script>
 
@@ -47,6 +57,16 @@ export default {
 
 .button:last-child {
   margin-bottom: 0px;
+}
+
+.left_side {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100% - v-bind(right_width));
+}
+
+.right_side {
 }
 
 .active {
