@@ -2,7 +2,7 @@
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div class="modal-container" v-click-outside="onClickOutside">
 
           <div class="modal-header">
             <div class="title"><slot name="title"></slot></div>
@@ -26,7 +26,14 @@
 
 <script>
 export default {
-  name: "ModalBox"
+  emits: ['close'],
+  name: "ModalBox",
+
+  methods: {
+    onClickOutside() {
+      this.$emit('close');
+    }
+  }
 }
 </script>
 
@@ -80,7 +87,6 @@ export default {
   padding: 15px;
   float: right;
   cursor: pointer;
-
 }
 
 .modal-body {

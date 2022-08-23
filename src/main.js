@@ -1,6 +1,7 @@
 import {createApp} from 'vue'
 import App from './App.vue'
 import {websocket} from "@/util/sockets";
+import vClickOutside from "click-outside-vue3";
 
 
 /**
@@ -27,5 +28,6 @@ library.add(faMicrophoneLines, faCircleQuestion, faFloppyDisk, faFileCirclePlus,
 websocket.connect().then(() => {
     let app = createApp(App);
     app.component('font-awesome-icon', FontAwesomeIcon);
+    app.use(vClickOutside);
     app.mount('#app');
 });
