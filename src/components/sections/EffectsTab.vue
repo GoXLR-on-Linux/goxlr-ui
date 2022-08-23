@@ -8,7 +8,7 @@
         </ButtonList>
       </ContentBox>
     </div>
-    <MainTabContent>
+    <MainTabContent :no-left-pad="true">
       <ReverbEffect/>
       <EchoEffect/>
       <PitchEffect/>
