@@ -29,6 +29,10 @@ export default {
   emits: ['close'],
   name: "ModalBox",
 
+  props: {
+    bodyPadding: {type: String, default: "20px"},
+  },
+
   methods: {
     onClickOutside() {
       this.$emit('close');
@@ -91,6 +95,8 @@ export default {
 
 .modal-body {
   background-color: #2d3230;
+  color: #fff;
+  padding: v-bind(bodyPadding);
 }
 
 .modal-footer {

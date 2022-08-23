@@ -5,21 +5,21 @@
     </BigButton>
   </ContentBox>
 
-  <Modal v-if="showModal" @close="showModal = false">
+  <ModalBox body-padding="0px" v-if="showModal" @close="showModal = false">
     <template v-slot:title>MIC SETUP</template>
     <SetupModel />
-  </Modal>
+  </ModalBox>
 </template>
 
 <script>
 import ContentBox from "@/components/ContentBox";
-import Modal from "@/components/design/Modal";
 import BigButton from "@/components/big_buttons/BigButton";
 import SetupModel from "@/components/sections/mic/SetupModel";
+import ModalBox from "@/components/design/modal/ModalBox";
 
 export default {
   name: "SetupButton",
-  components: {BigButton, ContentBox, Modal, SetupModel},
+  components: {ModalBox, BigButton, ContentBox, SetupModel},
 
   data() {
     return {
@@ -31,8 +31,4 @@ export default {
 </script>
 
 <style scoped>
-.center{
-  display: block;
-  margin: auto;
-}
 </style>

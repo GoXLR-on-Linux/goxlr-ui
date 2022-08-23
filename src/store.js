@@ -37,6 +37,10 @@ export const store = reactive({
         return this.files.mic_profiles;
     },
 
+    getPresetFiles() {
+        return this.files.presets;
+    },
+
     replaceData(json) {
         if (this.active) {
             Object.assign(this.data, json.Status.mixers);

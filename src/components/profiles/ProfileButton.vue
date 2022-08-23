@@ -1,6 +1,6 @@
 <template>
   <div class="button" :class="{ selected: isSelected }" @click="handleClick">
-    <span style="width: 20px; display: inline-block; color: #59b1b6">
+    <span v-show="showCheck" style="width: 20px; display: inline-block; color: #59b1b6">
       <font-awesome-icon v-show="isActive" icon="fa-solid fa-check" />
     </span>
     <span>{{ label }}</span>
@@ -16,6 +16,8 @@ export default {
     label: String,
     isActive: Boolean,
     isSelected: Boolean,
+
+    showCheck: {type: Boolean, default: true}
   },
 
   data() {

@@ -12,22 +12,22 @@
 
   </ContentBox>
 
-  <Modal v-if="showModal" @close="showModal = false">
+  <ModalBox v-if="showModal" @close="showModal = false">
       <template v-slot:title>MIC SETUP</template>
       <SetupModel />
-  </Modal>
+  </ModalBox>
 </template>
 
 
 <script>
 import ContentBox from "@/components/ContentBox";
 import BigButton from "@/components/big_buttons/BigButton";
-import Modal from "@/components/design/Modal";
 import SetupModel from "@/components/sections/mic/SetupModel";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import ModalBox from "@/components/design/modal/ModalBox";
 export default {
   name: "SystemComponent",
-  components: {SetupModel, BigButton, ContentBox, FontAwesomeIcon, Modal},
+  components: {ModalBox, SetupModel, BigButton, ContentBox, FontAwesomeIcon},
 
   data() {
     return {

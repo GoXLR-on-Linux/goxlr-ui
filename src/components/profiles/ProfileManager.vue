@@ -23,46 +23,43 @@
   <!-- We have a few modals to potentially use here, this one for hitting the 'save' button.. -->
   <ModalBox v-if="showSaveModal" @close="showSaveModal = false">
     <template v-slot:title>Overwrite Confirmation</template>
-    <div class="modal-body">Are you sure you want to overwrite the profile {{ activeProfile }}?</div>
+    <template v-slot:default>Are you sure you want to overwrite the profile {{ activeProfile }}?</template>
     <template v-slot:footer>
-      <button class="modal-button" @click="showSaveModal = false; saveActiveProfile()">OK</button>
-      <button class="modal-button" @click="showSaveModal = false">Cancel</button>
+      <ModalButton @click="showSaveModal = false; saveActiveProfile()">OK</ModalButton>
+      <ModalButton @click="showSaveModal = false">Cancel</ModalButton>
     </template>
   </ModalBox>
 
   <ModalBox v-if="showNewModal" @close="showNewModal = false">
     <template v-slot:title>New Profile Source</template>
-    <div class="modal-body">Would you like to create a new profile from the default, or current configuration?</div>
+    <template v-slot:default>
+      Would you like to create a new profile from the default, or current configuration?
+    </template>
     <template v-slot:footer>
-      <button class="modal-button" @click="showNewModal = false; createNewProfile = true; displayNameModal()">
-        Default
-      </button>
-      <button class="modal-button" @click="showNewModal = false; createNewProfile = false; displayNameModal()">
-        Current
-      </button>
-      <button class="modal-button" @click="showNewModal = false">Cancel</button>
+      <ModalButton @click="showNewModal = false; createNewProfile = true; displayNameModal()">Default</ModalButton>
+      <ModalButton @click="showNewModal = false; createNewProfile = false; displayNameModal()">Current</ModalButton>
+      <ModalButton @click="showNewModal = false">Cancel</ModalButton>
     </template>
   </ModalBox>
 
   <ModalBox v-if="showDeleteModal" @close="showDeleteModal = false">
     <template v-slot:title>Delete Confirmation</template>
-    <div class="modal-body">Are you sure you want to delete the profile {{ selectedProfile }}?</div>
+    <template v-slot:default>Are you sure you want to delete the profile {{ selectedProfile }}?</template>
     <template v-slot:footer>
-      <button class="modal-button" @click="showDeleteModal = false; deleteSelectedProfile()">Ok</button>
-      <button class="modal-button" @click="showDeleteModal = false">Cancel</button>
+      <ModalButton @click="showDeleteModal = false; deleteSelectedProfile()">Ok</ModalButton>
+      <ModalButton @click="showDeleteModal = false">Cancel</ModalButton>
     </template>
   </ModalBox>
 
   <ModalBox v-if="showNameModal" @close="showNameModal = false">
     <template v-slot:title>Enter New Profile Name</template>
-    <div class="modal-body">
-      <input ref="newName" class="text" v-model="newProfileName"
-             type="text" v-on:keyup.enter="showNameModal = false; newProfile()"
-             placeholder="Profile Name"/>
-    </div>
+    <template v-slot:default>
+      <ModalInput ref="newName" v-model="newProfileName" placeholder="Profile Name"
+                  @on-enter="showNameModal = false; newProfile()"/>
+    </template>
     <template v-slot:footer>
-      <button class="modal-button" @click="showNameModal = false; newProfile()">Ok</button>
-      <button class="modal-button" @click="showNameModal = false; newProfileName = ''">Cancel</button>
+      <ModalButton @click="showNameModal = false; newProfile()">Ok</ModalButton>
+      <ModalButton @click="showNameModal = false; newProfileName = ''">Cancel</ModalButton>
     </template>
   </ModalBox>
 </template>
@@ -70,13 +67,15 @@
 <script>
 import ProfileButtonList from "@/components/profiles/ProfileButtonList";
 import ProfileButton from "@/components/profiles/ProfileButton";
-import ModalBox from "@/components/design/Modal";
+import ModalBox from "@/components/design/modal/ModalBox";
+import ModalButton from "@/components/design/modal/ModalButton";
+import ModalInput from "@/components/design/modal/ModalInput";
 
 export default {
   emits: ['new-profile', 'load-profile', 'save-profile', 'save-profile-as', 'delete-profile'],
 
   name: "ProfileManager",
-  components: {ModalBox, ProfileButton, ProfileButtonList},
+  components: {ModalInput, ModalButton, ModalBox, ProfileButton, ProfileButtonList},
   props: {
     activeProfile: String,
     profileList: Array,
@@ -125,7 +124,7 @@ export default {
     displayNameModal() {
       this.showNameModal = true;
       this.$nextTick(() => {
-        this.$refs.newName.focus();
+        this.$refs.newName.focusInput();
       })
     },
 
@@ -217,31 +216,5 @@ export default {
 
 .actionButton:hover {
   background-color: #49514e;
-}
-
-.modal-button {
-  background-color: #353937;
-  color: #fff;
-  padding: 8px 30px;
-  border: none;
-  margin: 8px;
-  width: 120px;
-}
-
-.modal-button:hover {
-  background-color: #737775;
-}
-
-.modal-body {
-  color: #fff;
-  padding: 20px;
-}
-
-.text {
-  width: calc(100% - 10px);
-  background-color: #2B2F2D;
-  border: 1px solid #3b413f;
-  padding: 5px;
-  color: #fff;
 }
 </style>
