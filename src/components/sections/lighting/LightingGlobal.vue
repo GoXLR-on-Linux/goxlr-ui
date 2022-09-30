@@ -3,7 +3,7 @@
     <ContentBox title="Areas">
       <ButtonList title="Area">
         <PushButton label="Accent" :is-active="isAccent" @click="isAccent = true" />
-        <PushButton label="Global" :is-active="!isAccent" @click="isAccent = false" />
+        <PushButton label="Global" :is-active="!isAccent" :is-disabled=true />
       </ButtonList>
       <ColourBox title="Colour" :colour-value="getColour()" @colour-changed="onColourChange" />
     </ContentBox>
