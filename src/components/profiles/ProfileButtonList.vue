@@ -1,5 +1,5 @@
 <template>
-  <div class="selectorList">
+  <div ref="selectorList" class="selectorList">
     <div class="buttonHolder">
       <slot/>
     </div>

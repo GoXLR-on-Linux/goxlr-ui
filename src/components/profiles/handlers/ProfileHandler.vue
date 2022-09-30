@@ -8,8 +8,8 @@
     </div>
   </div>
   <div style="height: 290px">
-    <ProfileManager :profile-list="getProfileList()" :active-profile="getActiveProfile()" @new-profile="newProfile"
-                    @load-profile="loadProfile" @save-profile="saveProfile" @save-profile-as="saveProfileAs"
+    <ProfileManager :profile-list="getProfileList()" :active-profile="getActiveProfile()" :menu-list="menuList" @new-profile="newProfile"
+                    @load-profile="loadProfile" @save-profile="saveProfile" @save-profile-as="saveProfileAs" @menu-item-pressed="menuItemPressed"
                     @delete-profile="deleteProfile"/>
   </div>
 </template>
@@ -22,6 +22,12 @@ import ProfileManager from "@/components/profiles/ProfileManager";
 export default {
   name: "ProfileHandler",
   components: {ProfileManager},
+
+  data() {
+    return {
+      menuList: [{name: 'Load Colours Only', slug: 'colours'}]
+    }
+  },
 
   methods: {
     getProfileList() {
@@ -38,6 +44,12 @@ export default {
       return store.getActiveDevice().profile_name;
     },
 
+    menuItemPressed(event) {
+      if (event.option.slug === "colours") {
+        this.loadProfileColours(event.item);
+      }
+    },
+
     loadProfile: function (label) {
       let command = {
         "LoadProfile": label
@@ -50,6 +62,10 @@ export default {
           .catch((error) => {
             console.log(error);
           });
+    },
+
+    loadProfileColours: function(label) {
+      sendHttpCommand(store.getActiveSerial(), { "LoadProfileColours": label });
     },
 
     newProfile(name) {

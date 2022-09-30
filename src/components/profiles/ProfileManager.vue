@@ -1,9 +1,15 @@
 <template>
-  <ProfileButtonList>
+  <ProfileButtonList ref="buttonList">
     <ProfileButton v-for="(name, index) in profileList" :key="index" :button-id="name"
                    :label="name" :is-selected="isSelectedProfile(name)" :is-active="isActiveProfile(name)"
                    @button-clicked="handleButtonPress"
-                   @button-double-clicked="handleDoubleClick"/>
+                   @button-double-clicked="handleDoubleClick">
+      <template #right v-if="menuList.length > 0">
+        <div class="menu" @click.prevent.stop="menuPressed($event, name)">
+          <font-awesome-icon icon="fa-solid fa-ellipsis-vertical"/>
+        </div>
+      </template>
+    </ProfileButton>
   </ProfileButtonList>
   <div class="buttonColumns">
     <div class="actionButton" @click="showSaveModal = true">
@@ -19,6 +25,13 @@
       <font-awesome-icon icon="fa-solid fa-trash"/>
     </div>
   </div>
+
+  <DropMenu
+      :options="menuList"
+      ref="contextMenu"
+      @option-clicked="optionClicked"
+  >
+  </DropMenu>
 
   <!-- We have a few modals to potentially use here, this one for hitting the 'save' button.. -->
   <ModalBox v-if="showSaveModal" @close="showSaveModal = false">
@@ -70,15 +83,17 @@ import ProfileButton from "@/components/profiles/ProfileButton";
 import ModalBox from "@/components/design/modal/ModalBox";
 import ModalButton from "@/components/design/modal/ModalButton";
 import ModalInput from "@/components/design/modal/ModalInput";
+import DropMenu from "@/components/design/DropMenu";
 
 export default {
-  emits: ['new-profile', 'load-profile', 'save-profile', 'save-profile-as', 'delete-profile'],
+  emits: ['new-profile', 'load-profile', 'save-profile', 'save-profile-as', 'delete-profile', 'menu-item-pressed'],
 
   name: "ProfileManager",
-  components: {ModalInput, ModalButton, ModalBox, ProfileButton, ProfileButtonList},
+  components: {DropMenu, ModalInput, ModalButton, ModalBox, ProfileButton, ProfileButtonList},
   props: {
     activeProfile: String,
     profileList: Array,
+    menuList: { type: Array, default: () => ([]) },
   },
 
   data() {
@@ -174,6 +189,15 @@ export default {
 
     deleteSelectedProfile() {
       this.$emit('delete-profile', this.selectedProfile);
+    },
+
+    menuPressed(event, item) {
+      this.handleButtonPress(item);
+      this.$refs.contextMenu.showMenu(event, item, this.$refs.buttonList.$refs.selectorList.scrollTop);
+    },
+
+    optionClicked(event) {
+      this.$emit('menu-item-pressed', event);
     }
   }
 }
@@ -216,5 +240,15 @@ export default {
 
 .actionButton:hover {
   background-color: #49514e;
+}
+
+.menu {
+  padding-left: 4px;
+  padding-right: 4px;
+
+}
+
+.menu:hover {
+  cursor: pointer;
 }
 </style>
