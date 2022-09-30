@@ -28,6 +28,13 @@ export const FaderName = [
     "D"
 ]
 
+export const MuteButtonNamesForFader = [
+    "Fader1Mute",
+    "Fader2Mute",
+    "Fader3Mute",
+    "Fader4Mute",
+]
+
 export const InputDevice = ["Microphone", "Chat", "Music", "Game", "Console", "LineIn", "System", "Samples"]
 export const OutputDevice = ["Headphones", "BroadcastMix", "LineOut", "ChatMic", "Sampler"]
 

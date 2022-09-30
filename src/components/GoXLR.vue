@@ -25,6 +25,10 @@
           <Cough/>
         </MainTabContent>
       </Tab>
+      <Tab name="Lighting" :left_align="false">
+
+          <LightingTab />
+      </Tab>
       <Tab name="Router" :left_align="false">
         <MainTabContent>
           <Routing/>
@@ -57,10 +61,12 @@ import FileTabs from "@/components/sections/files/FileTabs";
 import MainTabContent from "@/components/design/MainTabContent";
 import EffectsTab from "@/components/sections/EffectsTab";
 import {isDeviceMini} from "@/util/util";
+import LightingTab from "@/components/sections/LightingTab";
 
 export default {
   name: 'GoXLR',
   components: {
+    LightingTab,
     EffectsTab,
     MainTabContent,
     FileTabs,
