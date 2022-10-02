@@ -2,7 +2,7 @@
   <div class="colourBox">
     <div class="label">{{ title }}</div>
 
-    <img src="wheel.png" @mousemove="mouseMove" @click="mouseClick"/>
+    <img src="wheel.png" draggable="false" @mousemove.stop="mouseMove" @click="mouseClick"/>
 
     <div class="bottom" style="display: flex">
       <div class="colourRef"></div>
