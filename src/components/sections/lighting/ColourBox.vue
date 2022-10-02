@@ -2,8 +2,8 @@
   <div class="colourBox">
     <div class="label">{{ title }}</div>
 
-    <input ref="colourInput" type="color" @change="updateText" />
-    <input type="text" :value="textValue" @keyup="updateColour" />
+    <img src="wheel.png" @mousemove="mouseMove" @click="mouseClick"/>
+    <input type="text" :value="textValue" @keyup="updateColour"/>
 
   </div>
 </template>
@@ -25,8 +25,36 @@ export default {
   },
 
   methods: {
-    updateText(event) {
-      this.textValue = event.target.value;
+
+    mouseMove(event) {
+      let rect = event.target.getBoundingClientRect();
+
+      /* eslint-disable no-unused-vars */
+      let x = Math.floor(event.clientX - rect.left);
+      let y = Math.floor(event.clientY - rect.top);
+      /* eslint-enable no-unused-vars */
+
+    },
+
+    mouseClick(event) {
+      let rect = event.target.getBoundingClientRect();
+      let x = Math.floor(event.clientX - rect.left);
+      let y = Math.floor(event.clientY - rect.top);
+
+      let canvas = document.getElementById('wheelCanvas').getContext("2d");
+      let colour = canvas.getImageData(x, y, 1, 1).data;
+      let hex = "#" + ("000000" + this.rgbToHex(colour[0], colour[1], colour[2])).slice(-6).toUpperCase();
+      this.updateText(hex);
+    },
+
+    rgbToHex(r, g, b) {
+      if (r > 255 || g > 255 || b > 255)
+        throw "Invalid color component";
+      return ((r << 16) | (g << 8) | b).toString(16);
+    },
+
+    updateText(value) {
+      this.textValue = value;
       this.$emit('colour-changed', this.id, this.textValue);
     },
     updateColour(event) {
@@ -34,7 +62,7 @@ export default {
 
       const regex = /^#([a-f0-9]{6})\b$/
       if (value.match(regex)) {
-        this.$refs.colourInput.value = value;
+        //this.$refs.colourInput.value = value;
         this.$emit('colour-changed', this.id, this.textValue);
       }
     }
@@ -42,13 +70,13 @@ export default {
 
   mounted() {
     this.textValue = this.colourValue;
-    this.$refs.colourInput.value = this.textValue;
+    //this.$refs.colourInput.value = this.textValue;
   },
 
   watch: {
     colourValue: function () {
       this.textValue = this.colourValue;
-      this.$refs.colourInput.value = this.textValue;
+      //this.$refs.colourInput.value = this.textValue;
     }
   }
 }
@@ -88,14 +116,14 @@ input[type=color] {
   width: 100%;
   height: 50px;
 
-  border:none;
-  background-image:none;
+  border: none;
+  background-image: none;
   box-shadow: none;
   outline: none;
 
   cursor: pointer;
 
-  -moz-appearance:textfield;
+  -moz-appearance: textfield;
 }
 
 input[type=text] {
@@ -110,14 +138,22 @@ input[type=text] {
 
   width: 100%;
 
-  margin-top: 15px;
+  margin-top: 10px;
 
-  border:none;
-  background-image:none;
+  border: none;
+  background-image: none;
   box-shadow: none;
   outline: none;
 
-  -moz-appearance:textfield;
+  -moz-appearance: textfield;
 }
+
+img {
+  border-radius: 50%;
+}
+
+/*img:hover {
+  cursor: none;
+}*/
 
 </style>

@@ -11,7 +11,17 @@
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
+    <canvas id="wheelCanvas" style="position: absolute; top: -140px; left: -140px; width: 130px; height: 130px"></canvas>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script type="text/javascript">
+      window.onload = function(){
+          let canvas = document.getElementById('wheelCanvas');
+          let context = canvas.getContext('2d');
+          let img = new Image();
+          img.onload = () => context.drawImage(img, 0, 0);
+          img.src = 'wheel.png';
+      };
+    </script>
   </body>
 </html>
