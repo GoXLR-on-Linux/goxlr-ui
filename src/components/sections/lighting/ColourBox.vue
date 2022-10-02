@@ -2,7 +2,7 @@
   <div class="colourBox">
     <div class="label">{{ title }}</div>
 
-    <img src="wheel.png" draggable="false" @mousemove.stop="mouseMove" @click="mouseClick"/>
+    <img src="wheel.png" draggable="false" @mousemove.stop="mouseMove" @mouseleave="mouseLeave" @click="mouseClick"/>
 
     <div class="bottom" style="display: flex">
       <div class="colourRef"></div>
@@ -21,6 +21,8 @@ export default {
   data() {
     return {
       textValue: "#ff0000",
+      canvasContext: undefined,
+      hoverContainer: undefined,
     }
   },
 
@@ -33,24 +35,35 @@ export default {
   methods: {
 
     mouseMove(event) {
-      let rect = event.target.getBoundingClientRect();
+      this.hoverContainer.style.left = (event.pageX - 12) + "px";
+      this.hoverContainer.style.top = (event.pageY - 12) + "px";
+      this.hoverContainer.style.backgroundColor = this.getHoveredColourFromArray(this.getPositionFrom(event));
+    },
 
-      /* eslint-disable no-unused-vars */
-      let x = Math.floor(event.clientX - rect.left);
-      let y = Math.floor(event.clientY - rect.top);
-      /* eslint-enable no-unused-vars */
-
+    mouseLeave() {
+      this.hoverContainer.style.left = "-30px";
+      this.hoverContainer.style.top = "-30px";
     },
 
     mouseClick(event) {
+      this.updateText(this.getHoveredColourFromArray(this.getPositionFrom(event)));
+    },
+
+    getHoveredColourFromArray(position) {
+      return this.getHoveredColour(position[0], position[1]);
+    },
+
+    getHoveredColour(x, y) {
+      let colour = this.canvasContext.getImageData(x, y, 1, 1).data;
+      return "#" + ("000000" + this.rgbToHex(colour[0], colour[1], colour[2])).slice(-6).toUpperCase();
+    },
+
+    getPositionFrom(event) {
       let rect = event.target.getBoundingClientRect();
       let x = Math.floor(event.clientX - rect.left);
       let y = Math.floor(event.clientY - rect.top);
 
-      let canvas = document.getElementById('wheelCanvas').getContext("2d");
-      let colour = canvas.getImageData(x, y, 1, 1).data;
-      let hex = "#" + ("000000" + this.rgbToHex(colour[0], colour[1], colour[2])).slice(-6).toUpperCase();
-      this.updateText(hex);
+      return [x, y];
     },
 
     rgbToHex(r, g, b) {
@@ -75,14 +88,14 @@ export default {
   },
 
   mounted() {
+    this.canvasContext = document.getElementById('wheelCanvas').getContext("2d");
+    this.hoverContainer = document.getElementById("colourHover");
     this.textValue = this.colourValue;
-    //this.$refs.colourInput.value = this.textValue;
   },
 
   watch: {
     colourValue: function () {
       this.textValue = this.colourValue;
-      //this.$refs.colourInput.value = this.textValue;
     }
   }
 }
@@ -144,8 +157,8 @@ img {
   border-radius: 50%;
 }
 
-/*img:hover {
+img:hover {
   cursor: none;
-}*/
+}
 
 </style>
