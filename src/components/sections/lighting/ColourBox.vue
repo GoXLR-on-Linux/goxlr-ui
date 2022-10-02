@@ -3,7 +3,13 @@
     <div class="label">{{ title }}</div>
 
     <img src="wheel.png" @mousemove="mouseMove" @click="mouseClick"/>
-    <input type="text" :value="textValue" @keyup="updateColour"/>
+
+    <div class="bottom" style="display: flex">
+      <div class="colourRef"></div>
+      <div style="text-align: left">
+        <input type="text" :value="textValue" @keyup="updateColour"/>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -101,51 +107,37 @@ export default {
   background-color: #3b413f;
 
   text-transform: uppercase;
-
   margin-bottom: 8px;
 }
 
-input[type=color] {
+.bottom {
   background-color: #3b413f;
   color: #59b1b6;
-  padding: 10px;
   box-sizing: border-box;
-
-  text-align: center;
-
   width: 100%;
-  height: 50px;
+  margin-top: 10px;
+}
 
-  border: none;
-  background-image: none;
-  box-shadow: none;
-  outline: none;
-
-  cursor: pointer;
-
-  -moz-appearance: textfield;
+.colourRef {
+  background-color: v-bind(textValue);
+  width: 35px;
 }
 
 input[type=text] {
   font-family: LeagueMonoCondensed, sans-serif;
-
   background-color: #3b413f;
   color: #59b1b6;
-  padding: 10px;
   box-sizing: border-box;
-
   text-align: center;
 
-  width: 100%;
-
-  margin-top: 10px;
-
+  padding: 10px;
   border: none;
   background-image: none;
   box-shadow: none;
   outline: none;
 
   -moz-appearance: textfield;
+  width: calc(100% - 35px);
 }
 
 img {
