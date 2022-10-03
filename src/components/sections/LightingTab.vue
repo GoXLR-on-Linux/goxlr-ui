@@ -4,11 +4,13 @@
       <LightingSection :is_selected="isActive(0)" @click="sectionClick(0)">Mixer</LightingSection>
       <LightingSection :is_selected="isActive(1)" @click="sectionClick(1)">Cough / Bleep</LightingSection>
       <LightingSection :is_selected="isActive(2)" @click="sectionClick(2)">Global</LightingSection>
+      <LightingSection v-show="!isDeviceMini()" :is_selected="isActive(3)" @click="sectionClick(3)">Effects</LightingSection>
     </div>
     <div>
       <LightingMixer v-show="activeTab === 0"/>
       <LightingCough v-show="activeTab === 1"/>
       <LightingGlobal v-show="activeTab === 2" />
+      <LightingEffects v-show="activeTab === 3" />
     </div>
   </div>
 </template>
@@ -18,10 +20,12 @@ import LightingSection from "@/components/sections/lighting/LightingSection";
 import LightingMixer from "@/components/sections/lighting/LightingMixer";
 import LightingCough from "@/components/sections/lighting/LightingCough";
 import LightingGlobal from "@/components/sections/lighting/LightingGlobal";
+import LightingEffects from "@/components/sections/lighting/LightingEffects";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "LightingTab",
-  components: {LightingGlobal, LightingCough, LightingMixer, LightingSection},
+  components: {LightingEffects, LightingGlobal, LightingCough, LightingMixer, LightingSection},
   data() {
     return {
       activeTab: 0,
@@ -35,7 +39,11 @@ export default {
 
     sectionClick(id) {
       this.activeTab = id;
-    }
+    },
+
+    isDeviceMini() {
+      return isDeviceMini();
+    },
   }
 
 }

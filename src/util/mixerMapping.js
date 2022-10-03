@@ -75,6 +75,37 @@ export const EffectPresets = [
     "Preset6",
 ]
 
+export const EffectLightingPresets = [
+    "EffectSelect1",
+    "EffectSelect2",
+    "EffectSelect3",
+    "EffectSelect4",
+    "EffectSelect5",
+    "EffectSelect6",
+]
+
+export const EncoderLighting = [
+    "Reverb",
+    "Echo",
+    "Pitch",
+    "Gender",
+]
+
+export const EffectButtons = [
+    "EffectMegaphone",
+    "EffectRobot",
+    "EffectHardTune",
+    "EffectFx",
+]
+
+export const EffectButtonText = [
+    "Megaphone",
+    "Robot",
+    "Hardtune",
+    "Fx",
+]
+
+
 export const EqMiniFreqs = [
     "Equalizer90Hz",
     "Equalizer250Hz",
