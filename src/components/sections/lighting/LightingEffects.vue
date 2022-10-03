@@ -1,6 +1,6 @@
 <template>
   <MainTabContent :no-left-pad=false>
-    <ContentBox title="Presets">
+    <ContentBox title="Preset Buttons">
       <ButtonList title="Preset">
         <PushButton v-for="(value, id) in effectPresets" :key="id" :button-id="value"
                     :is-active="activePreset === value" :label="getLabel(id, value)" @click="activePreset = value"/>
@@ -30,7 +30,7 @@
                  @colour-changed="onEncoderColourChange"/>
     </ContentBox>
 
-    <ContentBox title="Effects">
+    <ContentBox title="Effect Buttons">
       <ButtonList title="Effect">
         <PushButton v-for="(value, id) in effectButtons" :key="id" :button-id="value"
                     :is-active="activeEffect === value" :label="effectButtonLabels[id]"
