@@ -82,9 +82,6 @@ export default {
       if (!store.hasActiveDevice()) {
         return false;
       }
-      // console.log("Checking: " + match);
-      // console.log(store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].style);
-      // console.log(store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].style.includes(match));
       return store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].style.includes(match);
     },
 
@@ -106,7 +103,6 @@ export default {
           newValue = "Meter";
           break;
       }
-      console.log(newValue);
       websocket.send_command(store.getActiveSerial(), {"SetFaderDisplayStyle": [FaderName[this.activeChannel], newValue]});
       store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].style = newValue;
     },
@@ -151,7 +147,6 @@ export default {
       if (!store.hasActiveDevice()) {
         return "#000000";
       }
-      console.log(ScribbleNames[this.activeChannel]);
       return "#" + store.getActiveDevice().lighting.simple[ScribbleNames[this.activeChannel]].colour_one;
     },
 
@@ -186,9 +181,6 @@ export default {
       } else {
         bottom = value.substr(1, 6);
       }
-
-      console.log(top + " - " + bottom);
-
       websocket.send_command(store.getActiveSerial(), {"SetFaderColours": [FaderName[this.activeChannel], top, bottom]})
     },
 
