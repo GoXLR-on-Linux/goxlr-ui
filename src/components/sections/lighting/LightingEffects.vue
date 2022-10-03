@@ -3,7 +3,7 @@
     <ContentBox title="Presets">
       <ButtonList title="Preset">
         <PushButton v-for="(value, id) in effectPresets" :key="id" :button-id="value"
-                    :is-active="isActive(value)" :label="getLabel(id, value)" @click="buttonPressed(value)"/>
+                    :is-active="activePreset === value" :label="getLabel(id, value)" @click="activePreset = value"/>
       </ButtonList>
       <ColourBox id="active" title="Active" :colour-value="getColour(true)" @colour-changed="onColourChange"/>
       <ButtonList title="Inactive Option">
@@ -64,9 +64,7 @@ import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
 import {
   EffectButtons,
-  EffectButtonText,
-  EffectLightingPresets,
-  EffectPresets,
+  EffectButtonText, EffectLightingPresets, EffectPresets,
   EncoderLighting
 } from "@/util/mixerMapping";
 import {store} from "@/store";
@@ -81,10 +79,11 @@ export default {
 
   data() {
     return {
-      effectPresets: EffectPresets,
+      effectPresets: EffectLightingPresets,
       encoderLighting: EncoderLighting,
       effectButtons: EffectButtons,
       effectButtonLabels: EffectButtonText,
+      activePreset: "EffectSelect1",
       activeEncoder: "Reverb",
       activeEffect: "EffectMegaphone",
     };
@@ -95,20 +94,8 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return "";
       }
-      return (id + 1).toString() + ": " + store.getActiveDevice().effects.preset_names[key];
-    },
-
-    isActive(key) {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
-      }
-      return store.getActiveDevice().effects.active_preset === key;
-    },
-
-    buttonPressed(id) {
-      if (!this.isActive(id)) {
-        websocket.send_command(store.getActiveSerial(), {"SetActiveEffectPreset": id});
-      }
+      let preset = EffectPresets[EffectLightingPresets.indexOf(key)]
+      return (id + 1).toString() + ": " + store.getActiveDevice().effects.preset_names[preset];
     },
 
     isPresetMuteInactiveState(state) {
@@ -126,7 +113,7 @@ export default {
     },
 
     setPresetMuteInactiveState(state) {
-      let button = EffectLightingPresets[EffectPresets.indexOf(store.getActiveDevice().effects.active_preset)];
+      let button = this.activePreset;
 
       websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [button, state]});
       store.getActiveDevice().lighting.buttons[button].off_style = state;
@@ -141,7 +128,7 @@ export default {
       if (!store.hasActiveDevice()) {
         return "#000000";
       }
-      let button = EffectLightingPresets[EffectPresets.indexOf(store.getActiveDevice().effects.active_preset)];
+      let button = this.activePreset;
       let colour = (active) ? "colour_one" : "colour_two";
       return "#" + store.getActiveDevice().lighting.buttons[button].colours[colour];
     },
@@ -162,7 +149,7 @@ export default {
     },
 
     onColourChange(id, value) {
-      let button = EffectLightingPresets[EffectPresets.indexOf(store.getActiveDevice().effects.active_preset)];
+      let button = this.activePreset;
       let active = store.getActiveDevice().lighting.buttons[button].colours.colour_one;
       let inactive = store.getActiveDevice().lighting.buttons[button].colours.colour_two;
 
