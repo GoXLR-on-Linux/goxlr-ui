@@ -21,6 +21,10 @@
         <ColourBox title="Top Colour" id="top" :colour-value="getTopColour()" @colour-changed="onFaderColourChange"/>
       </ContentBox>
 
+      <ContentBox v-show="!isDeviceMini()" title="Screen">
+        <ColourBox title="Background Colour" :colour-value="getScreenColour()" @colour-changed="onScreenColourChange" />
+      </ContentBox>
+
       <ContentBox title="Mute">
         <ColourBox id="active" title="Active" :colour-value="getMuteActiveColour()"
                    @colour-changed="onButtonColourChange"/>
@@ -48,7 +52,8 @@ import PushButton from "@/components/button_list/Button";
 import ColourBox from "@/components/sections/lighting/ColourBox";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import {FaderName, MuteButtonNamesForFader} from "@/util/mixerMapping";
+import {FaderName, MuteButtonNamesForFader, ScribbleNames} from "@/util/mixerMapping";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "LightingMixer",
@@ -61,6 +66,10 @@ export default {
   },
 
   methods: {
+    isDeviceMini() {
+      return isDeviceMini();
+    },
+
     isActiveChannel: function (id) {
       return this.activeChannel === id;
     },
@@ -138,6 +147,14 @@ export default {
       return "#" + store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].colours.colour_two;
     },
 
+    getScreenColour() {
+      if (!store.hasActiveDevice()) {
+        return "#000000";
+      }
+      console.log(ScribbleNames[this.activeChannel]);
+      return "#" + store.getActiveDevice().lighting.simple[ScribbleNames[this.activeChannel]].colour_one;
+    },
+
     getMuteActiveColour() {
       if (!store.hasActiveDevice()) {
         return "#000000";
@@ -173,6 +190,12 @@ export default {
       console.log(top + " - " + bottom);
 
       websocket.send_command(store.getActiveSerial(), {"SetFaderColours": [FaderName[this.activeChannel], top, bottom]})
+    },
+
+    onScreenColourChange(id, value) {
+      value = value.substr(1,6);
+
+      websocket.send_command(store.getActiveSerial(), { "SetSimpleColour": [ScribbleNames[this.activeChannel], value]});
     },
 
     onButtonColourChange(id, value) {

@@ -28,6 +28,13 @@ export const FaderName = [
     "D"
 ]
 
+export const ScribbleNames = [
+    "Scribble1",
+    "Scribble2",
+    "Scribble3",
+    "Scribble4",
+]
+
 export const MuteButtonNamesForFader = [
     "Fader1Mute",
     "Fader2Mute",
