@@ -21,6 +21,7 @@ export default {
   margin-right: 2px;
   background-color: #2B2F2D;
   color: #fff;
+  width: 10px;
 }
 
 .rotated.active {
