@@ -20,13 +20,17 @@
       <Tab name="Effects" :hidden="isDeviceMini()" :left_align="false" >
         <EffectsTab />
       </Tab>
+      <Tab name="Sampler" :hidden="isDeviceMini()" :left_align="true" >
+        <MainTabContent>
+          <SamplerTab />
+        </MainTabContent>
+      </Tab>
       <Tab name="Cough" :left_align="false">
         <MainTabContent>
           <Cough/>
         </MainTabContent>
       </Tab>
       <Tab name="Lighting" :left_align="false">
-
           <LightingTab />
       </Tab>
       <Tab name="Router" :left_align="false">
@@ -62,10 +66,12 @@ import MainTabContent from "@/components/design/MainTabContent";
 import EffectsTab from "@/components/sections/EffectsTab";
 import {isDeviceMini} from "@/util/util";
 import LightingTab from "@/components/sections/LightingTab";
+import SamplerTab from "@/components/sections/SamplerTab";
 
 export default {
   name: 'GoXLR',
   components: {
+    SamplerTab,
     LightingTab,
     EffectsTab,
     MainTabContent,
