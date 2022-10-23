@@ -1,17 +1,17 @@
 <template>
   <ContentBox title="Bank">
     <ButtonList title="Bank">
-      <PushButton label="A" :is-active="activeBank === 'A'" @click="activeBank = 'A'"/>
-      <PushButton label="B" :is-active="activeBank === 'B'" @click="activeBank = 'B'"/>
-      <PushButton label="C" :is-active="activeBank === 'C'" @click="activeBank = 'C'"/>
+      <PushButton label="A" :is-active="activeBank === 'A'" @click="activeBank = 'A'; activeSample = -1;"/>
+      <PushButton label="B" :is-active="activeBank === 'B'" @click="activeBank = 'B'; activeSample = -1;"/>
+      <PushButton label="C" :is-active="activeBank === 'C'" @click="activeBank = 'C'; activeSample = -1;"/>
     </ButtonList>
 
     <ButtonList title="Button">
-      <PushButton label="Top Left" :is-active="activeButton === 'TopLeft'" @click="activeButton = 'TopLeft'"/>
-      <PushButton label="Top Right" :is-active="activeButton === 'TopRight'" @click="activeButton = 'TopRight'"/>
-      <PushButton label="Bottom Left" :is-active="activeButton === 'BottomLeft'" @click="activeButton = 'BottomLeft'"/>
+      <PushButton label="Top Left" :is-active="activeButton === 'TopLeft'" @click="activeButton = 'TopLeft'; activeSample = -1;"/>
+      <PushButton label="Top Right" :is-active="activeButton === 'TopRight'" @click="activeButton = 'TopRight'; activeSample = -1;"/>
+      <PushButton label="Bottom Left" :is-active="activeButton === 'BottomLeft'" @click="activeButton = 'BottomLeft'; activeSample = -1;"/>
       <PushButton label="Bottom Right" :is-active="activeButton === 'BottomRight'"
-                  @click="activeButton = 'BottomRight'"/>
+                  @click="activeButton = 'BottomRight'; activeSample = -1;"/>
     </ButtonList>
 
     <ButtonList title="Function">
@@ -30,13 +30,15 @@
   </ContentBox>
   <ContentBox title="Sampler">
     <ButtonList title="Samples">
-      <PushButton v-for="(sample, index) in getSamples()" :key="index" :label="sample"/>
+      <PushButton v-for="(sample, index) in getSamples()" :key="index" :is-active="activeSample === index" @click="activeSample = index" :label="sample.name"/>
       <PushButton>
         <template #left>
           <div style="text-align: center">+</div>
         </template>
       </PushButton>
     </ButtonList>
+
+    <AudioVisualiser :active-bank="activeBank" :active-button="activeButton" :active-sample="activeSample" @deselect-sample="activeSample = -1" />
   </ContentBox>
 </template>
 
@@ -46,15 +48,17 @@ import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
+import AudioVisualiser from "@/components/sections/sampler/AudioVisualiser";
 
 export default {
   name: "SamplerTab",
-  components: {PushButton, ButtonList, ContentBox},
+  components: {AudioVisualiser, PushButton, ButtonList, ContentBox},
 
   data() {
     return {
       activeBank: "A",
       activeButton: "TopLeft",
+      activeSample: -1,
     }
   },
 
@@ -86,9 +90,8 @@ export default {
         return [];
       }
       return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].samples;
-    }
+    },
   }
-
 }
 </script>
 
