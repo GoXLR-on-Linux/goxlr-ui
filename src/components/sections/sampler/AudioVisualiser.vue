@@ -109,7 +109,7 @@ export default {
       {
         // Calculate the left Percentage from the Positions...
         let wrapperWidth = this.$refs.wrapper.clientWidth - this.$refs.left.clientWidth;
-        let leftPosition = parseInt(this.$refs.left.style.left);
+        let leftPosition = parseInt(this.leftPosition);
 
         let percentage = 0;
         if (leftPosition > 0) {
@@ -121,7 +121,7 @@ export default {
       // Now for the Right...
       {
         let wrapperWidth = this.$refs.wrapper.clientWidth - this.$refs.left.clientWidth;
-        let rightPosition = parseInt(window.getComputedStyle(this.$refs.right).getPropertyValue("left"));
+        let rightPosition = parseInt(this.rightPosition);
         let percentage = rightPosition / wrapperWidth * 100;
         websocket.send_command(store.getActiveSerial(), {"SetSampleStopPercent": [this.activeBank, this.activeButton, this.activeSample, percentage]});
       }
@@ -148,13 +148,13 @@ export default {
 
       // Check the right side of this box...
       let rightPosition = position + this.positions.elementWidth;
-      let rightBar = parseInt(window.getComputedStyle(this.$refs.right).getPropertyValue("left"));
+      let rightBar = this.rightPosition;
 
       if (rightPosition > rightBar) {
-        this.$refs.right.style.left = rightPosition + "px";
+        this.rightPosition = rightPosition + "px";
       }
 
-      this.$refs.left.style.left =  position + "px";
+      this.leftPosition = position + "px";
     },
 
     mouseMoveRight(event) {
@@ -168,13 +168,12 @@ export default {
       }
 
       let leftPosition = position;
-      let leftBarRight = parseInt(this.$refs.left.style.left) + this.positions.elementWidth;
+      let leftBarRight = parseInt(this.leftPosition) + this.positions.elementWidth;
       if (leftPosition < leftBarRight) {
-        this.$refs.left.style.left = position - this.positions.elementWidth + "px";
+        this.leftPosition = position - this.positions.elementWidth + "px";
       }
 
-
-      this.$refs.right.style.left = position + "px";
+      this.rightPosition = position + "px";
     },
 
     resolvePercentages() {
