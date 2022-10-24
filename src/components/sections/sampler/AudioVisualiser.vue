@@ -2,7 +2,7 @@
   <div class="contextBox">
     <div class="label">Waveform</div>
     <div class="content">
-      <div class="vertical_button" v-bind:class="{enabled: (activeSample !== -1)}" @click="playActiveSample()"><font-awesome-icon icon="fa-solid fa-trash"></font-awesome-icon></div>
+      <div class="vertical_button" v-bind:class="{enabled: (activeSample !== -1)}" @click="playActiveSample()"><font-awesome-icon :icon="getPlaybackButton()"></font-awesome-icon></div>
 
       <div ref="wrapper" style="position: relative; width: 500px">
         <div class="drag_handle left" ref="left" v-bind:class="{enabled: (activeSample !== -1)}" @mousedown.stop="mouseDownLeft">|</div>
@@ -39,14 +39,28 @@ export default {
       movingLeft: false,
       movingRight: false,
 
-      leftPosition: 0,
+      leftPosition: "0px",
       rightPosition: "480px",
     }
   },
 
   methods: {
     playActiveSample() {
+      if (store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].is_playing) {
+        websocket.send_command(store.getActiveSerial(), {"StopSamplePlayback": [this.activeBank, this.activeButton]});
+      } else {
+        websocket.send_command(store.getActiveSerial(), {"PlaySampleByIndex": [this.activeBank, this.activeButton, this.activeSample]});
+      }
+    },
 
+    getPlaybackButton() {
+      if (!store.hasActiveDevice()) {
+        return "fa-solid fa-play";
+      }
+      if (store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].is_playing) {
+        return "fa-solid fa-stop";
+      }
+      return "fa-solid fa-play";
     },
 
     deleteActiveSample() {
@@ -55,11 +69,19 @@ export default {
     },
 
     mouseDownLeft(event) {
+      if (this.activeSample === -1) {
+        return;
+      }
+
       this.movingLeft = true;
       this.mouseDown(event);
     },
 
     mouseDownRight(event) {
+      if (this.activeSample === -1) {
+        return;
+      }
+
       this.movingRight = true;
       this.mouseDown(event);
     },
@@ -85,7 +107,7 @@ export default {
       window.onmouseup = null;
 
       {
-        // Calculate the left Percentage from the Positions..
+        // Calculate the left Percentage from the Positions...
         let wrapperWidth = this.$refs.wrapper.clientWidth - this.$refs.left.clientWidth;
         let leftPosition = parseInt(this.$refs.left.style.left);
 
@@ -99,12 +121,10 @@ export default {
       // Now for the Right...
       {
         let wrapperWidth = this.$refs.wrapper.clientWidth - this.$refs.left.clientWidth;
-        let rightPosition = parseInt(this.$refs.right.style.left);
-
+        let rightPosition = parseInt(window.getComputedStyle(this.$refs.right).getPropertyValue("left"));
         let percentage = rightPosition / wrapperWidth * 100;
         websocket.send_command(store.getActiveSerial(), {"SetSampleStopPercent": [this.activeBank, this.activeButton, this.activeSample, percentage]});
       }
-
     },
 
     mouseMove(event) {
@@ -128,7 +148,7 @@ export default {
 
       // Check the right side of this box...
       let rightPosition = position + this.positions.elementWidth;
-      let rightBar = parseInt(this.$refs.right.style.left);
+      let rightBar = parseInt(window.getComputedStyle(this.$refs.right).getPropertyValue("left"));
 
       if (rightPosition > rightBar) {
         this.$refs.right.style.left = rightPosition + "px";
