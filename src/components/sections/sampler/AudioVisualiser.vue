@@ -148,7 +148,7 @@ export default {
 
       // Check the right side of this box...
       let rightPosition = position + this.positions.elementWidth;
-      let rightBar = this.rightPosition;
+      let rightBar = parseInt(this.rightPosition);
 
       if (rightPosition > rightBar) {
         this.rightPosition = rightPosition + "px";

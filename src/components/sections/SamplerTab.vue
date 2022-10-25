@@ -31,7 +31,7 @@
   <ContentBox title="Sampler">
     <ButtonList title="Samples">
       <PushButton v-for="(sample, index) in getSamples()" :key="index" :is-active="activeSample === index" @click="activeSample = index" :label="sample.name"/>
-      <PushButton>
+      <PushButton @click="showAddModal = true">
         <template #left>
           <div style="text-align: center">+</div>
         </template>
@@ -40,6 +40,22 @@
 
     <AudioVisualiser :active-bank="activeBank" :active-button="activeButton" :active-sample="activeSample" @deselect-sample="activeSample = -1" />
   </ContentBox>
+
+  <ModalBox v-if="showAddModal" @close="showAddModal = false">
+    <template v-slot:title>Add Sample (Double Click) - WIP</template>
+    <div style="overflow: auto; height: 230px">
+      <SampleHandler @sample-clicked="addSample"/>
+    </div>
+    <template #footer>&nbsp;</template>
+  </ModalBox>
+
+  <ModalBox v-if="waitModal">
+    <template v-slot:title>Add Sample</template>
+      <div>Please wait, sample being analysed.<br />
+        This process may take a couple of minutes.<br />
+      Your GoXLR <b>WILL</b> be Unresponsive during this time.</div>
+    <template #footer>&nbsp;</template>
+  </ModalBox>
 </template>
 
 <script>
@@ -47,18 +63,23 @@ import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
 import {store} from "@/store";
-import {websocket} from "@/util/sockets";
+import {sendHttpCommand, websocket} from "@/util/sockets";
 import AudioVisualiser from "@/components/sections/sampler/AudioVisualiser";
+import SampleHandler from "@/components/sections/files/SampleHandler";
+import ModalBox from "@/components/design/modal/ModalBox";
 
 export default {
   name: "SamplerTab",
-  components: {AudioVisualiser, PushButton, ButtonList, ContentBox},
+  components: {ModalBox, SampleHandler, AudioVisualiser, PushButton, ButtonList, ContentBox},
 
   data() {
     return {
       activeBank: "A",
       activeButton: "TopLeft",
       activeSample: -1,
+
+      showAddModal: false,
+      waitModal: false,
     }
   },
 
@@ -91,6 +112,19 @@ export default {
       }
       return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].samples;
     },
+
+    addSample(name) {
+      this.waitModal = true;
+      this.showAddModal = false;
+      store.pause();
+
+      this.$nextTick(() => {
+        sendHttpCommand(store.getActiveSerial(), {"AddSample": [this.activeBank, this.activeButton, name]}).then(() => {
+          this.waitModal = false;
+          store.resume();
+        });
+      })
+    }
   }
 }
 </script>
