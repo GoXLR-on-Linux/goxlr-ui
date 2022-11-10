@@ -99,14 +99,14 @@ export default {
     },
 
     isPresetMuteInactiveState(state) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
       return store.getActiveDevice().lighting.buttons[this.activeEffect].off_style === state;
     },
 
     isEffectMuteInactiveState(state) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
       return store.getActiveDevice().lighting.buttons[this.activeEffect].off_style === state;
@@ -125,7 +125,7 @@ export default {
     },
 
     getColour(active) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return "#000000";
       }
       let button = this.activePreset;
@@ -134,14 +134,14 @@ export default {
     },
 
     getEncoderColour(colour) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return "#000000";
       }
       return "#" + store.getActiveDevice().lighting.encoders[this.activeEncoder][colour];
     },
 
     getEffectColour(active) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return "#000000";
       }
       let colour = (active) ? "colour_one" : "colour_two";

@@ -18,6 +18,7 @@
 <script>
 import {websocket} from "@/util/sockets";
 import {store} from "@/store";
+import {isDeviceMini} from "@/util/util";
 export default {
   name: "AudioVisualiser",
   props: {
@@ -54,7 +55,7 @@ export default {
     },
 
     getPlaybackButton() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return "fa-solid fa-play";
       }
       if (store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].is_playing) {

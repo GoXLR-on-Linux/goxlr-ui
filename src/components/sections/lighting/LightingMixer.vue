@@ -170,14 +170,14 @@ export default {
     },
 
     getScreenColour() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return "#000000";
       }
       return "#" + store.getActiveDevice().lighting.simple[ScribbleNames[this.activeChannel]].colour_one;
     },
 
     getScreenIcons() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return [];
       }
 
@@ -185,7 +185,7 @@ export default {
     },
 
     isActiveIcon(file_name) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
       return store.getActiveDevice().fader_status[this.activeChannel].scribble.file_name === file_name;
@@ -200,7 +200,7 @@ export default {
     },
 
     isShowNumber() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
       if (this.textValue === null) {
@@ -216,7 +216,7 @@ export default {
     },
 
     isInverted() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
 
@@ -229,7 +229,7 @@ export default {
     },
 
     getBottomText() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
       let text = store.getActiveDevice().fader_status[this.activeChannel].scribble.bottom_text;

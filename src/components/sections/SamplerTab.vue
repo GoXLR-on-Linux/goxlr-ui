@@ -67,6 +67,7 @@ import {sendHttpCommand, websocket} from "@/util/sockets";
 import AudioVisualiser from "@/components/sections/sampler/AudioVisualiser";
 import SampleHandler from "@/components/sections/files/SampleHandler";
 import ModalBox from "@/components/design/modal/ModalBox";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "SamplerTab",
@@ -85,7 +86,7 @@ export default {
 
   methods: {
     isActiveFunction(sampleFunction) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
       return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].function === sampleFunction;
@@ -96,7 +97,7 @@ export default {
     },
 
     isActiveOrder(order) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
       return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].order === order;
@@ -107,7 +108,7 @@ export default {
     },
 
     getSamples() {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return [];
       }
       return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].samples;

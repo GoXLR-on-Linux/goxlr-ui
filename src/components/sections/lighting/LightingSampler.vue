@@ -32,6 +32,7 @@ import PushButton from "@/components/button_list/Button";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import ColourBox from "@/components/sections/lighting/ColourBox";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "LightingSampler",
@@ -45,7 +46,7 @@ export default {
 
   methods: {
     isInactiveState(state) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
       return store.getActiveDevice().lighting.sampler[this.activeBank].off_style === state;
@@ -55,7 +56,7 @@ export default {
     },
 
     getColour(element) {
-      if (!store.hasActiveDevice()) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
         return "#000000";
       }
       return "#" + store.getActiveDevice().lighting.sampler[this.activeBank].colours[element];
