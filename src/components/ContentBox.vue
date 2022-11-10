@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <div class="contentTitle">{{ title }}</div>
+    <div class="contentTitle"><slot name="title">{{ title }}</slot></div>
     <div class="contentBody">
       <slot />
     </div>

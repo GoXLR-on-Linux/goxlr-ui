@@ -45,6 +45,10 @@ export const store = reactive({
         return this.files.samples;
     },
 
+    getIconFiles() {
+        return this.files.icons;
+    },
+
     replaceData(json) {
         if (this.active) {
             Object.assign(this.data, json.Status.mixers);

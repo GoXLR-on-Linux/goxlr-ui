@@ -1,6 +1,6 @@
 <template>
   <div class="buttonList">
-    <div class="label">{{ title }}</div>
+    <div class="label"><slot name="title">{{ title }}</slot></div>
     <div ref="buttonList" class="buttonHolder">
         <slot/>
     </div>

@@ -22,7 +22,31 @@
       </ContentBox>
 
       <ContentBox v-show="!isDeviceMini()" title="Screen">
-        <ColourBox title="Background Colour" :colour-value="getScreenColour()" @colour-changed="onScreenColourChange" />
+        <ColourBox title="Background Colour" :colour-value="getScreenColour()" @colour-changed="onScreenColourChange"/>
+        <ButtonList title="Icon">
+          <template #title>
+            ICONS
+            <span class="openButton" @click="openIcons">
+              <font-awesome-icon icon="fa-solid fa-folder" />
+            </span>
+          </template>
+          <template #default>
+            <PushButton label="-- NONE --" button-id="" :is-active="isActiveIcon(null)"
+                        @button-pressed="setActiveIcon"/>
+            <PushButton v-for="item in getScreenIcons()" :key=item :label=item :buttonId=item
+                        :is-active=isActiveIcon(item) @button-pressed="setActiveIcon"/>
+          </template>
+        </ButtonList>
+
+        <ButtonList title="Options">
+          <PushButton label="Show Number" :is-active="isShowNumber()" @button-pressed="toggleShowNumber"/>
+          <PushButton label="Invert Display" :is-active="isInverted()" @button-pressed="toggleInverted"/>
+          <hr/>
+          <div style="color: #fff; text-align: left; padding-left: 10px; margin-top: 25px;">Text:</div>
+          <input type="text" v-model="textValue" @blur="applyUpdate"
+                 v-on:keyup.enter="applyUpdate"/>
+        </ButtonList>
+
       </ContentBox>
 
       <ContentBox title="Mute">
@@ -62,6 +86,7 @@ export default {
   data() {
     return {
       activeChannel: 0,
+      textValue: null,
     }
   },
 
@@ -76,6 +101,7 @@ export default {
 
     channelPressed(id) {
       this.activeChannel = parseInt(id);
+      this.textValue = this.getBottomText();
     },
 
     styleContains(match) {
@@ -150,6 +176,81 @@ export default {
       return "#" + store.getActiveDevice().lighting.simple[ScribbleNames[this.activeChannel]].colour_one;
     },
 
+    getScreenIcons() {
+      if (!store.hasActiveDevice()) {
+        return [];
+      }
+
+      return store.getIconFiles().sort();
+    },
+
+    isActiveIcon(file_name) {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      return store.getActiveDevice().fader_status[this.activeChannel].scribble.file_name === file_name;
+    },
+
+    setActiveIcon(value) {
+      websocket.send_command(store.getActiveSerial(), {"SetScribbleIcon": [FaderName[this.activeChannel], value]})
+    },
+
+    openIcons() {
+      websocket.open_path("Icons");
+    },
+
+    isShowNumber() {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      if (this.textValue === null) {
+        this.textValue = this.getBottomText();
+      }
+
+      return store.getActiveDevice().fader_status[this.activeChannel].scribble.left_text !== null;
+    },
+
+    toggleShowNumber() {
+      let value = this.isShowNumber() ? "" : this.activeChannel + 1;
+      websocket.send_command(store.getActiveSerial(), {"SetScribbleNumber": [FaderName[this.activeChannel], value.toString()]})
+    },
+
+    isInverted() {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+
+      return store.getActiveDevice().fader_status[this.activeChannel].scribble.inverted;
+    },
+
+    toggleInverted() {
+      let value = !this.isInverted();
+      websocket.send_command(store.getActiveSerial(), {"SetScribbleInvert": [FaderName[this.activeChannel], value]})
+    },
+
+    getBottomText() {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      let text = store.getActiveDevice().fader_status[this.activeChannel].scribble.bottom_text;
+      if (text == null) {
+        return "";
+      }
+
+      return text;
+    },
+
+    updateText(event) {
+      console.log(store.getActiveDevice().fader_status[this.activeChannel].scribble.bottom_text);
+      let value = event.target.value;
+      store.getActiveDevice().fader_status[this.activeChannel].scribble.bottom_text = value;
+    },
+
+    applyUpdate(event) {
+      let value = event.target.value;
+      websocket.send_command(store.getActiveSerial(), {"SetScribbleText": [FaderName[this.activeChannel], value]})
+    },
+
     getMuteActiveColour() {
       if (!store.hasActiveDevice()) {
         return "#000000";
@@ -185,9 +286,9 @@ export default {
     },
 
     onScreenColourChange(id, value) {
-      value = value.substr(1,6);
+      value = value.substr(1, 6);
 
-      websocket.send_command(store.getActiveSerial(), { "SetSimpleColour": [ScribbleNames[this.activeChannel], value]});
+      websocket.send_command(store.getActiveSerial(), {"SetSimpleColour": [ScribbleNames[this.activeChannel], value]});
     },
 
     onButtonColourChange(id, value) {
@@ -212,5 +313,30 @@ export default {
 </script>
 
 <style scoped>
+input[type=text] {
+  font-family: LeagueMonoCondensed, sans-serif;
+  background-color: #3b413f;
+  color: #59b1b6;
+  box-sizing: border-box;
+  text-align: center;
 
+  padding: 10px;
+  border: none;
+  background-image: none;
+  box-shadow: none;
+  outline: none;
+
+  -moz-appearance: textfield;
+}
+
+.openButton {
+  display: inline-block;
+  color: #a5a7a6;
+  font-size: 14px
+}
+
+.openButton:hover {
+  color: #fff;
+  cursor: pointer;
+}
 </style>
