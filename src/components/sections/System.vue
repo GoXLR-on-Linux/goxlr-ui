@@ -1,6 +1,6 @@
 <template>
   <ContentBox :title="'System'">
-    <BigButton :title="'Mic Setup'" @button-clicked="showModal = true">
+    <BigButton :title="'Mic Setup'" @button-clicked="showMicModal = true">
       <font-awesome-icon icon="fa-solid fa-microphone-lines" />
     </BigButton>
     <div style="margin-right: 30px"></div>
@@ -20,7 +20,7 @@
 
   </ContentBox>
 
-  <ModalBox v-if="showMicModal" @close="showModal = false">
+  <ModalBox v-if="showMicModal" @close="showMicModal = false">
       <template v-slot:title>MIC SETUP</template>
       <SetupModel />
   </ModalBox>
