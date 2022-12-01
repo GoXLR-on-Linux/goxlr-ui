@@ -15,6 +15,10 @@ export const store = reactive({
         "files": {}
     },
 
+    getVersion() {
+        return this.status.daemon_version;
+    },
+
     getDeviceCount() {
         return Object.keys(this.status.mixers).length;
     },
