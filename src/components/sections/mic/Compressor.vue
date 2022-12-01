@@ -2,14 +2,14 @@
   <ContentBox title="Compressor">
     <div class="rowContent" :class="{ hidden: isVisible }">
       <!--TODO("Add method to calculate amount.")-->
-      <Slider title="Amount" :slider-min-value=0 :slider-max-value=100 text-suffix="" :slider-value=0 />
+      <Slider title="Amount" :slider-min-value=0 :slider-max-value=100 text-suffix="" :slider-value=0 store-path="/" />
     </div>
     <div class="rowContent" :class="{ hidden: !isVisible }">
-      <Slider title="Threshold" :id=0 :slider-min-value=-40 :slider-max-value=0 text-suffix="dB" :slider-value="getThresholdValue()" @value-changed="setValue" />
-      <Slider title="Ratio" :id=1 :slider-min-value=1 :slider-max-value=64 text-suffix=":1" :value-map="ratioValueMap()" :slider-value="getRatioValue()" @value-changed="setValue" />
-      <Slider title="Attack" :id=2 :slider-min-value=0 :slider-max-value=40 text-suffix="ms" :value-map="attackValueMap()" :slider-value="getAttackValue()" @value-changed="setValue" />
-      <Slider title="Release" :id=3 :slider-min-value=0 :slider-max-value=3000 text-suffix="ms" :value-map="releaseValueMap()" :slider-value="getReleaseValue()" @value-changed="setValue" />
-      <Slider title="Make-up Gain" :id=4 :slider-min-value=0 :slider-max-value=24 text-suffix="dB" :slider-value="getGainValue()" @value-changed="setValue" />
+      <Slider title="Threshold" :id=0 :slider-min-value=-40 :slider-max-value=0 text-suffix="dB" :slider-value="getThresholdValue()" :store-path="getStorePath('threshold')" @value-changed="setValue" />
+      <Slider title="Ratio" :id=1 :slider-min-value=1 :slider-max-value=64 text-suffix=":1" :value-map="ratioValueMap()" :slider-value="getRatioValue()" :store-path="getStorePath('ratio')" @value-changed="setValue" />
+      <Slider title="Attack" :id=2 :slider-min-value=0 :slider-max-value=40 text-suffix="ms" :value-map="attackValueMap()" :slider-value="getAttackValue()" :store-path="getStorePath('attack')" @value-changed="setValue" />
+      <Slider title="Release" :id=3 :slider-min-value=0 :slider-max-value=3000 text-suffix="ms" :value-map="releaseValueMap()" :slider-value="getReleaseValue()" :store-path="getStorePath('release')" @value-changed="setValue" />
+      <Slider title="Make-up Gain" :id=4 :slider-min-value=0 :slider-max-value=24 text-suffix="dB" :slider-value="getGainValue()" :store-path="getStorePath('makeup_gain')" @value-changed="setValue" />
     </div>
   </ContentBox>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="isVisible" />
@@ -103,6 +103,10 @@ export default {
     toggleExpando() {
       //this.isVisible = !this.isVisible;
       // TODO: Until compressor calcs are available, disable this..
+    },
+
+    getStorePath: function(target) {
+      return "/mixers/" + store.getActiveSerial() + "/mic_status/compressor/" + target;
     }
   }
 }

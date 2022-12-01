@@ -6,8 +6,8 @@
     </ButtonList>
 
 
-    <SliderInput title="Amount" :value-map="getValueMap()" :slider-value="getAmountValue()" @value-changed="setAmountValue" />
-    <SliderInput title="Character" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getCharacterValue()" v-show="is_expanded" @value-changed="setCharacterValue" />
+    <SliderInput title="Amount" :value-map="getValueMap()" :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />
+    <SliderInput title="Character" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getCharacterValue()" :store-path="getStorePath('character')" v-show="is_expanded" @value-changed="setCharacterValue" />
   </ContentBox>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
 </template>
@@ -119,7 +119,11 @@ export default {
     },
     setCharacterValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetPitchCharacter": value});
-    }
+    },
+
+    getStorePath(name) {
+      return "/mixers/" + store.getActiveSerial() + "/effects/current/pitch/" + name;
+    },
   }
 }
 </script>

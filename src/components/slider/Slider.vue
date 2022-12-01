@@ -2,7 +2,8 @@
   <div id="sliderBox">
     <Label v-bind:title="title"/>
     <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
-           @value-updated="sliderValueUpdated" @mouse-down="setMouseDown" @mouse-up="setMouseUp"/>
+           :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
+           @mouse-up="setMouseUp"/>
 
     <Input :current-text-value="textValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
            :textSuffix="textSuffix"
@@ -39,6 +40,8 @@ export default {
 
   props: {
     id: {type: Number, default: -1},
+
+    storePath: {type: String, required: true},
 
     title: {type: String, default: "UNSET"},
 
@@ -77,7 +80,7 @@ export default {
     calculateTextValue() {
       // Get the distances between the slider, and text numbers..
       let sliderDistance = this.sliderMaxValue - this.sliderMinValue;
-     let textDistance = this.maximumTextValue - this.minimumTextValue;
+      let textDistance = this.maximumTextValue - this.minimumTextValue;
 
       // Get the position of the slider in the range..
       let position = this.getPosition(parseInt(this.fieldValue), this.sliderMinValue, this.sliderMaxValue);

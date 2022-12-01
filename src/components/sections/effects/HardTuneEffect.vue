@@ -6,9 +6,9 @@
       <PushButton label="Hard" buttonId="Hard" :is-active="isActiveStyle('Hard')" @button-pressed="stylePressed"/>
     </ButtonList>
 
-    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" v-show="is_expanded" @value-changed="setAmountValue" />
-    <SliderInput title="Rate" :slider-min-value=0 :slider-max-value=100 :slider-value="getRateValue()" v-show="is_expanded" @value-changed="setRateValue" />
-    <SliderInput title="Window" :slider-min-value=0 :slider-max-value=600 :slider-value="getWindowValue()" v-show="is_expanded" @value-changed="setWindowValue" />
+    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" :store-path="getStorePath('amount')" v-show="is_expanded" @value-changed="setAmountValue" />
+    <SliderInput title="Rate" :slider-min-value=0 :slider-max-value=100 :slider-value="getRateValue()" :store-path="getStorePath('rate')"  v-show="is_expanded" @value-changed="setRateValue" />
+    <SliderInput title="Window" :slider-min-value=0 :slider-max-value=600 :slider-value="getWindowValue()" :store-path="getStorePath('window')" v-show="is_expanded" @value-changed="setWindowValue" />
 
     <ButtonList title="Hardtune Source">
       <PushButton label="All" buttonId="All" :is-active="isActiveSource('All')" @button-pressed="sourcePressed"/>
@@ -93,6 +93,10 @@ export default {
     },
     setWindowValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetHardTuneWindow": value });
+    },
+
+    getStorePath(name) {
+      return "/mixers/" + store.getActiveSerial() + "/effects/current/hard_tune/" + name;
     },
   }
 }

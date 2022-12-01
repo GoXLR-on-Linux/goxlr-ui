@@ -15,27 +15,30 @@
     </ButtonList>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()"
-                 @value-changed="setAmountValue"/>
+                 :store-path="getStorePath('amount')" @value-changed="setAmountValue"/>
     <SliderInput title="Decay" :value-map="decay_map" :slider-value="getDecayValue()" text-suffix="ms"
-                 v-show="is_expanded" @value-changed="setDecayValue"/>
+                 :store-path="getStorePath('decay')" v-show="is_expanded" @value-changed="setDecayValue"/>
     <SliderInput title="Early Level" :slider-min-value=-25 :slider-max-value=0 text-suffix="dB"
-                 :slider-value="getEarlyLevelValue()" v-show="is_expanded" @value-changed="setEarlyLevelValue"/>
+                 :slider-value="getEarlyLevelValue()" :store-path="getStorePath('early_level')" v-show="is_expanded"
+                 @value-changed="setEarlyLevelValue"/>
     <SliderInput title="Tail Level" :slider-min-value=-25 :slider-max-value=0 text-suffix="dB"
-                 :slider-value="getTailLevelValue()" v-show="is_expanded" @value-changed="setTailLevelValue"/>
+                 :slider-value="getTailLevelValue()" :store-path="getStorePath('tail_level')" v-show="is_expanded"
+                 @value-changed="setTailLevelValue"/>
     <SliderInput title="PreDelay" :slider-min-value=0 :slider-max-value=100 text-suffix="ms"
-                 :slider-value="getPreDelayValue()" v-show="is_expanded" @value-changed="setPreDelayValue"/>
+                 :slider-value="getPreDelayValue()" :store-path="getStorePath('pre_delay')" v-show="is_expanded"
+                 @value-changed="setPreDelayValue"/>
     <SliderInput title="Lo Colour" :slider-min-value=-50 :slider-max-value=50 :slider-value="getLowColourValue()"
-                 v-show="is_expanded" @value-changed="setLowColourValue"/>
+                 :store-path="getStorePath('lo_colour')" v-show="is_expanded" @value-changed="setLowColourValue"/>
     <SliderInput title="Hi Colour" :slider-min-value=-50 :slider-max-value=50 :slider-value="getHighColourValue()"
-                 v-show="is_expanded" @value-changed="setHighColourValue"/>
+                 :store-path="getStorePath('hi_colour')" v-show="is_expanded" @value-changed="setHighColourValue"/>
     <SliderInput title="Hi Factor" :slider-min-value=-25 :slider-max-value=25 :slider-value="getHighFactorValue()"
-                 v-show="is_expanded" @value-changed="setHighFactorValue"/>
+                 :store-path="getStorePath('hi_factor')" v-show="is_expanded" @value-changed="setHighFactorValue"/>
     <SliderInput title="Diffuse" :slider-min-value=-50 :slider-max-value=50 :slider-value="getDiffuseValue()"
-                 v-show="is_expanded" @value-changed="setDiffuseValue"/>
+                 :store-path="getStorePath('diffuse')" v-show="is_expanded" @value-changed="setDiffuseValue"/>
     <SliderInput title="ModSpeed" :slider-min-value=-25 :slider-max-value=25 :slider-value="getModSpeedValue()"
-                 v-show="is_expanded" @value-changed="setModSpeedValue"/>
+                 :store-path="getStorePath('mod_speed')" v-show="is_expanded" @value-changed="setModSpeedValue"/>
     <SliderInput title="ModDepth" :slider-min-value=-25 :slider-max-value=25 :slider-value="getModDepthValue()"
-                 v-show="is_expanded" @value-changed="setModDepthValue"/>
+                 :store-path="getStorePath('mod_depth')" v-show="is_expanded" @value-changed="setModDepthValue"/>
 
   </ContentBox>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
@@ -201,6 +204,10 @@ export default {
     },
     setModDepthValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetReverbModDepth": value})
+    },
+
+    getStorePath(name) {
+      return "/mixers/" + store.getActiveSerial() + "/effects/current/reverb/" + name;
     },
   },
 

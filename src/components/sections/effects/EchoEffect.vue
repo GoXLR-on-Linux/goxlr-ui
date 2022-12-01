@@ -9,15 +9,15 @@
       <PushButton label="MultiTap" buttonId="MultiTap" :is-active="isActiveStyle('MultiTap')" @button-pressed="stylePressed"/>
     </ButtonList>
 
-    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" @value-changed="setAmountValue" />
-    <SliderInput title="Feedback" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackValue()" v-show="is_expanded" @value-changed="setFeedbackValue" />
-    <SliderInput title="Tempo" :slider-min-value=45 :slider-max-value=300 text-suffix="BPM" :slider-value="getTempoValue()" v-show="is_expanded" @value-changed="setTempoValue"/>
-    <SliderInput title="Delay L" :slider-min-value=0 :slider-max-value=2500 text-suffix="ms" :slider-value="getDelayLValue()" v-show="is_expanded" @value-changed="setDelayLValue"/>
-    <SliderInput title="Delay R" :slider-min-value=0 :slider-max-value=2500 text-suffix="ms" :slider-value="getDelayRValue()" v-show="is_expanded" @value-changed="setDelayRValue"/>
-    <SliderInput title="Feedback L" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackLValue()" v-show="is_expanded" @value-changed="setFeedbackLValue"/>
-    <SliderInput title="XFB L to R" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getXFBLtoRValue()" v-show="is_expanded" @value-changed="setXFBLtoRValue"/>
-    <SliderInput title="Feedback R" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackRValue()" v-show="is_expanded" @value-changed="setFeedbackRValue"/>
-    <SliderInput title="XFB R to L" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getXFBRtoLValue()" v-show="is_expanded" @value-changed="setXFBRtoLValue"/>
+    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />
+    <SliderInput title="Feedback" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackValue()" :store-path="getStorePath('feedback')" v-show="is_expanded" @value-changed="setFeedbackValue" />
+    <SliderInput title="Tempo" :slider-min-value=45 :slider-max-value=300 text-suffix="BPM" :slider-value="getTempoValue()" :store-path="getStorePath('tempo')" v-show="is_expanded" @value-changed="setTempoValue"/>
+    <SliderInput title="Delay L" :slider-min-value=0 :slider-max-value=2500 text-suffix="ms" :slider-value="getDelayLValue()" :store-path="getStorePath('delay_left')" v-show="is_expanded" @value-changed="setDelayLValue"/>
+    <SliderInput title="Delay R" :slider-min-value=0 :slider-max-value=2500 text-suffix="ms" :slider-value="getDelayRValue()" :store-path="getStorePath('delay_right')" v-show="is_expanded" @value-changed="setDelayRValue"/>
+    <SliderInput title="Feedback L" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackLValue()" :store-path="getStorePath('feedback_left')" v-show="is_expanded" @value-changed="setFeedbackLValue"/>
+    <SliderInput title="XFB L to R" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getXFBLtoRValue()" :store-path="getStorePath('feedback_xfb_l_to_r')" v-show="is_expanded" @value-changed="setXFBLtoRValue"/>
+    <SliderInput title="Feedback R" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackRValue()" :store-path="getStorePath('feedback_right')" v-show="is_expanded" @value-changed="setFeedbackRValue"/>
+    <SliderInput title="XFB R to L" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getXFBRtoLValue()" v-show="is_expanded" :store-path="getStorePath('feedback_xfb_r_to_l')" @value-changed="setXFBRtoLValue"/>
   </ContentBox>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
 </template>
@@ -146,6 +146,10 @@ export default {
     },
     setXFBRtoLValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetEchoFeedbackXFBRtoL": value });
+    },
+
+    getStorePath(name) {
+      return "/mixers/" + store.getActiveSerial() + "/effects/current/echo/" + name;
     },
   }
 }

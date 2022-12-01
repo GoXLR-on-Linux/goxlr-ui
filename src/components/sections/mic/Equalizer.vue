@@ -2,18 +2,19 @@
   <ContentBox title="Equalizer">
     <div class="rowContent" :class="{ hidden: isVisible }">
       <Slider :id=0 title="Bass" :slider-min-value=-9 :slider-max-value=9 text-suffix="" :slider-value=getBassValue()
-              @value-changed=aggregateChanged />
+              :store-path="getAggregateStorePaths(0)" @value-changed=aggregateChanged />
       <Slider :id=1 title="Mid" :slider-min-value=-9 :slider-max-value=9 text-suffix="" :slider-value=getMidValue()
-              @value-changed=aggregateChanged />
+              :store-path="getAggregateStorePaths(1)" @value-changed=aggregateChanged />
       <Slider :id=2 title="Treble" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
-              :slider-value=getTrebleValue() @value-changed=aggregateChanged />
+              :store-path="getAggregateStorePaths(2)" :slider-value=getTrebleValue()
+              @value-changed=aggregateChanged />
     </div>
 
     <div class="rowContent" :class="{hidden: !isVisible}">
       <Slider v-for="index in this.getElementCount()" :id=index :key=index :slider-min-value=-9
               :slider-max-value=9
               :text-min-value=-9 :text-max-value=9 text-suffix="" :slider-value="getValue(index)"
-              :title=getTitle(index) @value-changed=valueChange />
+              :title=getTitle(index) :store-path="getStorePath(index)" @value-changed=valueChange />
     </div>
 
   </ContentBox>
@@ -170,6 +171,38 @@ export default {
       }
       return treble
     },
+
+    getStorePath(id) {
+      if (!store.hasActiveDevice()) {
+        return "/";
+      }
+
+      id -= 1;
+      let path = isDeviceMini() ? "equaliser_mini" : "equaliser";
+      let title = isDeviceMini() ? EqMiniFreqs[id] : EqFreqs[id];
+      return "/mixers/" + store.getActiveSerial() + "/mic_status/" + path + "/gain/" + title;
+    },
+
+    getAggregateStorePaths(id) {
+      if (!store.hasActiveDevice()) {
+        return "/";
+      }
+
+      // This is ugly :(
+      if (id === 0) {
+        return (isDeviceMini()) ?
+            this.getStorePath(1) + ";" + this.getStorePath(2) :
+            this.getStorePath(1) + ";" + this.getStorePath(2) + ";" + this.getStorePath(3) + ";" + this.getStorePath(4);
+      } else if (id === 1) {
+        return (isDeviceMini()) ?
+            this.getStorePath(3) + ";" + this.getStorePath(4) :
+            this.getStorePath(5) + ";" + this.getStorePath(6) + ";" + this.getStorePath(7);
+      } else if (id === 2) {
+        return (isDeviceMini()) ?
+            this.getStorePath(5) + ";" + this.getStorePath(6) :
+            this.getStorePath(8) + ";" + this.getStorePath(9) + ";" + this.getStorePath(10);
+      }
+    }
 
   }
 }

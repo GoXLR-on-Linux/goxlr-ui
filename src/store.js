@@ -1,13 +1,22 @@
 import {reactive} from "vue";
+import {applyOperation} from "fast-json-patch";
+
 
 export const store = reactive({
+    have_device: false,
     active: true,
-    data: {},
-    files: {},
     activeSerial: "",
 
+    pausedPaths: [],
+
+    // Set a 'base' status struct..
+    status: {
+        "mixers": {},
+        "files": {}
+    },
+
     getDeviceCount() {
-        return Object.keys(this.data).length;
+        return Object.keys(this.status.mixers).length;
     },
 
     setActiveSerial(serial) {
@@ -18,7 +27,7 @@ export const store = reactive({
         if (this.activeSerial === "") {
             return undefined;
         }
-        return this.data[this.activeSerial];
+        return this.status.mixers[this.activeSerial];
     },
 
     hasActiveDevice() {
@@ -30,29 +39,66 @@ export const store = reactive({
     },
 
     getProfileFiles() {
-        return this.files.profiles;
+        return this.status.files.profiles;
     },
 
     getMicProfileFiles() {
-        return this.files.mic_profiles;
+        return this.status.files.mic_profiles;
     },
 
     getPresetFiles() {
-        return this.files.presets;
+        return this.status.files.presets;
     },
 
     getSampleFiles() {
-        return this.files.samples;
+        return this.status.files.samples;
     },
 
     getIconFiles() {
-        return this.files.icons;
+        return this.status.files.icons;
     },
 
     replaceData(json) {
         if (this.active) {
-            Object.assign(this.data, json.Status.mixers);
-            Object.assign(this.files, json.Status.files);
+            Object.assign(this.status, json.Status);
+            this.have_device = true;
+        }
+    },
+
+    pausePatchPath(path) {
+        if (path === undefined) {
+            console.error("Attempted to Stop Patches for Undefined!");
+            return;
+        }
+        let paths = path.split(";");
+        for (path of paths) {
+            console.log("Pausing Path: " + path);
+            this.pausedPaths.push(path);
+        }
+    },
+
+    resumePatchPath(path) {
+        let paths = path.split(";");
+        for (path of paths) {
+            let index = this.pausedPaths.indexOf(path);
+            if (index !== -1) {
+                console.log("Resuming Patching for " + path);
+                this.pausedPaths.slice(index, 1);
+            }
+        }
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    patchData(json) {
+        if (this.have_device) {
+            for (let patch of json.Patch) {
+                if (this.pausedPaths.includes(patch.path)) {
+                    console.log("Ignoring Patch on " + patch.path);
+                    continue;
+                }
+
+                applyOperation(this.status, patch, true, true, false);
+            }
         }
     },
 
@@ -67,15 +113,4 @@ export const store = reactive({
     isPaused() {
         return !this.active;
     },
-
-    isReady() {
-        return this.data.length === 0;
-    },
-
-    getVolume(id) {
-        if (this.activeSerial === "") {
-            return 0;
-        }
-        return this.data[this.activeSerial].volumes[id];
-    }
 });

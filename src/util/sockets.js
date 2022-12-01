@@ -47,6 +47,8 @@ export class Websocket {
             let json = JSON.parse(event.data);
             if (json["Status"] !== undefined) {
                 store.replaceData(json);
+            } else if (json["Patch"] !== undefined) {
+                store.patchData(json);
             } else {
                 console.log("Received Error from Websocket: " + event.data);
             }

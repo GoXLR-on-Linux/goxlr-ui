@@ -42,7 +42,7 @@ export default {
 
   methods: {
     getMixers() {
-      return store.data;
+      return store.status.mixers;
     },
 
     setDevice(serial) {
@@ -56,6 +56,7 @@ export default {
 
   created() {
     if (this.deviceCount === 1) {
+      console.log("Setting Device..");
       store.setActiveSerial(Object.keys(this.getMixers())[0]);
     }
   }

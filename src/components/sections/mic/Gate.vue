@@ -1,13 +1,13 @@
 <template>
   <ContentBox title="Gate">
     <div class="rowContent" v-show="!isVisible">
-      <Slider title="Amount" :id=0 :slider-min-value=0 :slider-max-value=100 text-suffix="" :slider-value=amount @value-changed="setValue"/>
+      <Slider title="Amount" :id=0 :slider-min-value=0 :slider-max-value=100 text-suffix="" :slider-value=amount @value-changed="setValue" :store-path="getStorePath('threshold')"/>
     </div>
     <div class="rowContent" v-show="isVisible">
-      <Slider title="Threshold" :id=1 :slider-min-value=-59 :slider-max-value=0 text-suffix="dB" :slider-value=threshold @value-changed="setValue"/>
-      <Slider title="Attenuation" :id=2 :slider-min-value=0 :slider-max-value=100 text-suffix="%"  :slider-value=attenuation @value-changed="setValue"/>
-      <Slider title="Attack" :id=3 :slider-min-value=10 :slider-max-value=2000 text-suffix="ms" :value-map="getGateValueMap()" :slider-value=attack @value-changed="setValue"/>
-      <Slider title="Release" :id=4 :slider-min-value=10 :slider-max-value=2000 text-suffix="ms" :value-map="getGateValueMap()" :slider-value=release @value-changed="setValue"/>
+      <Slider title="Threshold" :id=1 :slider-min-value=-59 :slider-max-value=0 text-suffix="dB" :slider-value=threshold @value-changed="setValue" :store-path="getStorePath('threshold')"/>
+      <Slider title="Attenuation" :id=2 :slider-min-value=0 :slider-max-value=100 text-suffix="%"  :slider-value=attenuation @value-changed="setValue" :store-path="getStorePath('attenuation')"/>
+      <Slider title="Attack" :id=3 :slider-min-value=10 :slider-max-value=2000 text-suffix="ms" :value-map="getGateValueMap()" :slider-value=attack @value-changed="setValue" :store-path="getStorePath('attack')"/>
+      <Slider title="Release" :id=4 :slider-min-value=10 :slider-max-value=2000 text-suffix="ms" :value-map="getGateValueMap()" :slider-value=release @value-changed="setValue" :store-path="getStorePath('release')"/>
     </div>
   </ContentBox>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="isVisible" />
@@ -100,6 +100,10 @@ export default {
     updateThreshold: function (value) {
       this.threshold = Math.round(value / 100 * 59) - 59;
     },
+
+    getStorePath: function(target) {
+      return "/mixers/" + store.getActiveSerial() + "/mic_status/noise_gate/" + target;
+    }
   }
 }
 </script>

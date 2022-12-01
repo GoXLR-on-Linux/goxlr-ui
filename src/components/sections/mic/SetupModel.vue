@@ -7,7 +7,7 @@
       <Button label="3.5mm" buttonId="2" :is-active=isMicTypeActive(2) @button-pressed="handleButtonPress"/>
     </ButtonList>
     <Slider title="Gain" :slider-min-value=0 :slider-max-value=72 text-suffix="dB"
-            :slider-value=getGainValue() @value-changed="setGain" />
+            :slider-value=getGainValue() :store-path="getStorePath()" @value-changed="setGain" />
   </ContentBox>
 </template>
 
@@ -58,6 +58,14 @@ export default {
 
       websocket.send_command(store.getActiveSerial(), command);
       store.getActiveDevice().mic_status.mic_type = MicrophoneTypes[id];
+    },
+
+    getStorePath() {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+
+      return "/mixers/" + store.getActiveSerial() + "/mic_status/mic_gains/" + MicrophoneTypes.indexOf(store.getActiveDevice().mic_status.mic_type);
     }
   }
 }

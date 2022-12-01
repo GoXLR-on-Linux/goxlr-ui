@@ -2,14 +2,15 @@
   <ContentBox title="Mixer">
     <Slider v-for="item in mixerOrder" :key="item" :id=item :title="channelNamesReadable[item]" :slider-min-value=0
             :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%" :slider-value="getValue(item)"
-            @value-changed="valueChange"
+            :store-path="getStorePath(item)" @value-changed="valueChange"
     />
   </ContentBox>
 
   <ContentBox title="Headphones">
     <Slider v-for="item in headphoneOrder" :key="item" :id=item :title="channelNamesReadable[item]" :slider-min-value=0
             :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%" :slider-value="getValue(item)"
-            @value-changed="valueChange" v-show="(!hpHide.includes(item) || (hpHide.includes(item) && isVisible))"
+            :store-path="getStorePath(item)" @value-changed="valueChange"
+            v-show="(!hpHide.includes(item) || (hpHide.includes(item) && isVisible))"
     />
   </ContentBox>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="isVisible"/>
@@ -70,6 +71,10 @@ export default {
 
     toggleExpando() {
       this.isVisible = !this.isVisible;
+    },
+
+    getStorePath(id) {
+      return "/mixers/" + store.getActiveSerial() + "/levels/volumes/" + id;
     },
   }
 }

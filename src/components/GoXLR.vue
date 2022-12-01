@@ -114,7 +114,8 @@ export default {
   },
 
   created() {
-    this.timer = setInterval(this.updateState, 250);
+    //this.timer = setInterval(this.updateState, 250);
+    this.updateState();
   },
 
   beforeUnmount() {

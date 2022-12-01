@@ -3,7 +3,6 @@ import App from './App.vue'
 import {websocket} from "@/util/sockets";
 import vClickOutside from "click-outside-vue3";
 
-
 /**
  * We use FontAwesome for SVG icons, before they can be used they need to be imported here, so they're correctly
  * embedded into the app at build time. If you need a new Icon, search for it at:

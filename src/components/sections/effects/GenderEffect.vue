@@ -6,7 +6,7 @@
       <PushButton label="Wide" buttonId="Wide" :is-active="isActiveStyle('Wide')" @button-pressed="stylePressed"/>
     </ButtonList>
 
-    <SliderInput title="Amount" :slider-min-value="getSliderValue(true)" :slider-max-value="getSliderValue(false)" :slider-value="getAmountValue()" @value-changed="setAmountValue" />
+    <SliderInput title="Amount" :slider-min-value="getSliderValue(true)" :slider-max-value="getSliderValue(false)" :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />
   </ContentBox>
 </template>
 
@@ -62,8 +62,11 @@ export default {
     },
     setAmountValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetGenderAmount": value});
-    }
+    },
 
+    getStorePath(name) {
+      return "/mixers/" + store.getActiveSerial() + "/effects/current/gender/" + name;
+    },
   },
 }
 </script>

@@ -10,31 +10,40 @@
     </ButtonList>
 
     <SliderInput title="Low Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
-                 :slider-value="getLowGainValue()" v-show="is_expanded" @value-changed="setLowGainValue"/>
+                 :slider-value="getLowGainValue()" :store-path="getStorePath('low_gain')" v-show="is_expanded"
+                 @value-changed="setLowGainValue"/>
     <SliderInput title="Low Freq" :value-map="getLowFreqValueMap()" text-suffix="Hz"
-                 :slider-value="getLowFreqValue()" v-show="is_expanded" @value-changed="setLowFreqValue"/>
+                 :slider-value="getLowFreqValue()" :store-path="getStorePath('low_freq')" v-show="is_expanded"
+                 @value-changed="setLowFreqValue"/>
     <SliderInput title="Low Width" :slider-value="getLowWidthValue()" :value-map="getWidthValueMap()"
-                 v-show="is_expanded" @value-changed="setLowWidthValue"/>
+                 :store-path="getStorePath('low_width')" v-show="is_expanded" @value-changed="setLowWidthValue"/>
     <SliderInput title="Mid Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
-                 :slider-value="getMidGainValue()" v-show="is_expanded" @value-changed="setMidGainValue"/>
+                 :slider-value="getMidGainValue()" :store-path="getStorePath('mid_gain')" v-show="is_expanded"
+                 @value-changed="setMidGainValue"/>
     <SliderInput title="Mid Freq" :value-map="getMidFreqValueMap()" text-suffix="Hz"
-                 :slider-value="getMidFreqValue()" v-show="is_expanded" @value-changed="setMidFreqValue"/>
+                 :slider-value="getMidFreqValue()" :store-path="getStorePath('mid_freq')" v-show="is_expanded"
+                 @value-changed="setMidFreqValue"/>
     <SliderInput title="Mid Width" :slider-value="getMidWidthValue()" :value-map="getWidthValueMap()"
-                 v-show="is_expanded" @value-changed="setMidWidthValue"/>
+                 :store-path="getStorePath('mid_width')" v-show="is_expanded" @value-changed="setMidWidthValue"/>
     <SliderInput title="Hi Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
-                 :slider-value="getHighGainValue()" v-show="is_expanded" @value-changed="setHighGainValue"/>
+                 :slider-value="getHighGainValue()" :store-path="getStorePath('hi_gain')" v-show="is_expanded"
+                 @value-changed="setHighGainValue"/>
     <SliderInput title="Hi Freq" :value-map="getHighFreqValueMap()" text-suffix="Hz"
-                 :slider-value="getHighFreqValue()" v-show="is_expanded" @value-changed="setHighFreqValue"/>
+                 :slider-value="getHighFreqValue()" :store-path="getStorePath('hi_freq')" v-show="is_expanded"
+                 @value-changed="setHighFreqValue"/>
     <SliderInput title="Hi Width" :slider-value="getHighWidthValue()" :value-map="getWidthValueMap()"
-                 v-show="is_expanded" @value-changed="setHighWidthValue"/>
+                 :store-path="getStorePath('hi_width')" v-show="is_expanded" @value-changed="setHighWidthValue"/>
     <SliderInput title="Waveform" :slider-min-value=0 :slider-max-value=2 :slider-value="getWaveformValue()"
-                 v-show="is_expanded" @value-changed="setWaveformValue"/>
+                 :store-path="getStorePath('waveform')" v-show="is_expanded" @value-changed="setWaveformValue"/>
     <SliderInput title="Pulse Width" :slider-min-value=0 :slider-max-value=100 text-suffix="%"
-                 :slider-value="getPulseWidthValue()" v-show="is_expanded" @value-changed="setPulseWidthValue"/>
+                 :slider-value="getPulseWidthValue()" :store-path="getStorePath('pulse_width')"
+                 v-show="is_expanded" @value-changed="setPulseWidthValue"/>
     <SliderInput title="Threshold" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB"
-                 :slider-value="getThresholdValue()" v-show="is_expanded" @value-changed="setThresholdValue"/>
+                 :slider-value="getThresholdValue()" :store-path="getStorePath('threshold')" v-show="is_expanded"
+                 @value-changed="setThresholdValue"/>
     <SliderInput title="Dry Mix" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB"
-                 :slider-value="getDryMixValue()" v-show="is_expanded" @value-changed="setDryMixValue"/>
+                 :slider-value="getDryMixValue()" :store-path="getStorePath('dry_mix')" v-show="is_expanded"
+                 @value-changed="setDryMixValue"/>
   </ContentBox>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
 </template>
@@ -270,6 +279,10 @@ export default {
         "8127", "8366", "8611", "8863", "9123", "9390", "9665", "9948", "10240", "10540", "10849", "11167", "11494",
         "11831", "12177", "12534", "12902", "13280", "13996", "14069", "14482", "14906", "15343", "15792", "16255",
         "16731", "17222", "17726", "18246", "18780", "19331", "19897", "20480" ];
+    },
+
+    getStorePath(name) {
+      return "/mixers/" + store.getActiveSerial() + "/effects/current/robot/" + name;
     },
 
   }

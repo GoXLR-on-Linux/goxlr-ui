@@ -24,16 +24,20 @@ export default {
     minValue: {type: Number, default: 0},
     maxValue: {type: Number, default: 100},
     currentFieldValue: Number,
+
+    storePath: { type: String, required: true },
   },
 
   methods: {
     mouseDown() {
+      store.pausePatchPath(this.storePath);
       store.pause();
       this.$emit("mouse-down")
     },
 
     mouseUp() {
       this.$emit("mouse-up")
+      store.resumePatchPath(this.storePath);
       store.resume();
     },
 
