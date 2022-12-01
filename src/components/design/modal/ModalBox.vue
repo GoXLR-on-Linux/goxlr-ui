@@ -31,6 +31,7 @@ export default {
 
   props: {
     bodyPadding: {type: String, default: "20px"},
+    width: {type: String, default: "500px" }
   },
 
   methods: {
@@ -63,7 +64,7 @@ export default {
   border: 1px solid #000;
 
 
-  width: 500px;
+  width: v-bind(width);
   margin: 0px auto;
   background-color: #fff;
   border-radius: 2px;
