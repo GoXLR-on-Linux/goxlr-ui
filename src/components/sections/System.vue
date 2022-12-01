@@ -59,7 +59,7 @@
 
   <ModalBox width="680px" v-if="showLicenseModal" @close="showLicenseModal = false">
     <template v-slot:title>Licenses</template>
-    <textarea style="width: 630px; height: 710px; background-color: #2B2F2D; color: #fff; border: 1px solid #000" disabled>Copyright (c) 2022 Nathan Adams
+    <textarea style="width: 630px; height: 710px; background-color: #2B2F2D; color: #fff; border: 1px solid #000; resize: none" disabled>Copyright (c) 2022 Nathan Adams
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
