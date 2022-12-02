@@ -1,16 +1,16 @@
 <template>
   <ContentBox title="Gate">
-    <div class="rowContent" v-show="!isVisible">
+    <div class="rowContent" v-show="!isAdvanced()">
       <Slider title="Amount" :id=0 :slider-min-value=0 :slider-max-value=100 text-suffix="" :slider-value=amount @value-changed="setValue" :store-path="getStorePath('threshold')"/>
     </div>
-    <div class="rowContent" v-show="isVisible">
+    <div class="rowContent" v-show="isAdvanced()">
       <Slider title="Threshold" :id=1 :slider-min-value=-59 :slider-max-value=0 text-suffix="dB" :slider-value=threshold @value-changed="setValue" :store-path="getStorePath('threshold')"/>
       <Slider title="Attenuation" :id=2 :slider-min-value=0 :slider-max-value=100 text-suffix="%"  :slider-value=attenuation @value-changed="setValue" :store-path="getStorePath('attenuation')"/>
       <Slider title="Attack" :id=3 :slider-min-value=10 :slider-max-value=2000 text-suffix="ms" :value-map="getGateValueMap()" :slider-value=attack @value-changed="setValue" :store-path="getStorePath('attack')"/>
       <Slider title="Release" :id=4 :slider-min-value=10 :slider-max-value=2000 text-suffix="ms" :value-map="getGateValueMap()" :slider-value=release @value-changed="setValue" :store-path="getStorePath('release')"/>
     </div>
   </ContentBox>
-  <ExpandoBox @expando-clicked="toggleExpando" :expanded="isVisible" />
+  <ExpandoBox @expando-clicked="toggleAdvanced" :expanded="isAdvanced()" />
 </template>
 
 <script>
@@ -25,7 +25,6 @@ export default {
   components: {Slider, ExpandoBox, ContentBox},
   data() {
     return {
-      isVisible: false,
       amount: 15,
       threshold: 0,
       attenuation: 10,
@@ -46,12 +45,17 @@ export default {
   },
 
   methods: {
-    hideExpanded() {
-      return false;
+    isAdvanced() {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+
+      return store.getActiveDevice().settings.display.gate === "Advanced";
     },
 
-    toggleExpando() {
-      this.isVisible = !this.isVisible;
+    toggleAdvanced() {
+      let mode = (store.getActiveDevice().settings.display.gate === "Advanced" ? "Simple" : "Advanced");
+      websocket.send_command(store.getActiveSerial(), {"SetElementDisplayMode": ["NoiseGate", mode]})
     },
 
     waitFor(conditionFunction) {

@@ -1,6 +1,6 @@
 <template>
   <ContentBox title="Equalizer">
-    <div class="rowContent" :class="{ hidden: isVisible }">
+    <div class="rowContent" v-show="!isAdvanced()">
       <Slider :id=0 title="Bass" :slider-min-value=-9 :slider-max-value=9 text-suffix="" :slider-value=getBassValue()
               :store-path="getAggregateStorePaths(0)" @value-changed=aggregateChanged />
       <Slider :id=1 title="Mid" :slider-min-value=-9 :slider-max-value=9 text-suffix="" :slider-value=getMidValue()
@@ -10,7 +10,7 @@
               @value-changed=aggregateChanged />
     </div>
 
-    <div class="rowContent" :class="{hidden: !isVisible}">
+    <div class="rowContent" v-show="isAdvanced()">
       <Slider v-for="index in this.getElementCount()" :id=index :key=index :slider-min-value=-9
               :slider-max-value=9
               :text-min-value=-9 :text-max-value=9 text-suffix="" :slider-value="getValue(index)"
@@ -18,7 +18,7 @@
     </div>
 
   </ContentBox>
-  <ExpandoBox @expando-clicked="toggleExpando" :expanded="isVisible"/>
+  <ExpandoBox @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()"/>
 </template>
 
 <script>
@@ -36,18 +36,21 @@ export default {
 
   data() {
     return {
-      isVisible: false,
       length: Number,
     }
   },
 
   methods: {
-    hideExpanded() {
-      return false;
+    isAdvanced() {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      return store.getActiveDevice().settings.display.equaliser === "Advanced";
     },
 
-    toggleExpando() {
-      this.isVisible = !this.isVisible;
+    toggleAdvanced() {
+      let mode = (store.getActiveDevice().settings.display.equaliser === "Advanced" ? "Simple" : "Advanced");
+      websocket.send_command(store.getActiveSerial(), {"SetElementDisplayMode": ["Equaliser", mode]})
     },
 
     getElementCount() {

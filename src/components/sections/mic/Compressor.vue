@@ -1,10 +1,10 @@
 <template>
   <ContentBox title="Compressor">
-    <div class="rowContent" :class="{ hidden: isVisible }">
+    <div class="rowContent" v-show="!isAdvanced()">
       <!--TODO("Add method to calculate amount.")-->
       <Slider title="Amount" :slider-min-value=0 :slider-max-value=100 text-suffix="" :slider-value=0 store-path="/" />
     </div>
-    <div class="rowContent" :class="{ hidden: !isVisible }">
+    <div class="rowContent" v-show="isAdvanced()">
       <Slider title="Threshold" :id=0 :slider-min-value=-40 :slider-max-value=0 text-suffix="dB" :slider-value="getThresholdValue()" :store-path="getStorePath('threshold')" @value-changed="setValue" />
       <Slider title="Ratio" :id=1 :slider-min-value=1 :slider-max-value=64 text-suffix=":1" :value-map="ratioValueMap()" :slider-value="getRatioValue()" :store-path="getStorePath('ratio')" @value-changed="setValue" />
       <Slider title="Attack" :id=2 :slider-min-value=0 :slider-max-value=40 text-suffix="ms" :value-map="attackValueMap()" :slider-value="getAttackValue()" :store-path="getStorePath('attack')" @value-changed="setValue" />
@@ -12,7 +12,7 @@
       <Slider title="Make-up Gain" :id=4 :slider-min-value=0 :slider-max-value=24 text-suffix="dB" :slider-value="getGainValue()" :store-path="getStorePath('makeup_gain')" @value-changed="setValue" />
     </div>
   </ContentBox>
-  <ExpandoBox @expando-clicked="toggleExpando" :expanded="isVisible" />
+  <ExpandoBox @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()" />
 </template>
 
 <script>
@@ -26,13 +26,19 @@ export default {
   name: "MicCompressor",
   components: {Slider, ContentBox, ExpandoBox},
 
-  data() {
-    return {
-      isVisible: true,
-    }
-  },
-
   methods: {
+    isAdvanced() {
+      if (!store.hasActiveDevice()) {
+        return false;
+      }
+      return store.getActiveDevice().settings.display.compressor === "Advanced";
+    },
+
+    toggleAdvanced() {
+      let mode = (store.getActiveDevice().settings.display.compressor === "Advanced" ? "Simple" : "Advanced");
+      websocket.send_command(store.getActiveSerial(), {"SetElementDisplayMode": ["Compressor", mode]})
+    },
+
     setValue(id, value) {
       switch (id) {
         case 0: this.commitValue("SetCompressorThreshold", value); break;
@@ -94,15 +100,6 @@ export default {
       if (store.hasActiveDevice()) {
         return store.getActiveDevice().mic_status.compressor.makeup_gain;
       }
-    },
-
-    hideExpanded() {
-      return false;
-    },
-
-    toggleExpando() {
-      //this.isVisible = !this.isVisible;
-      // TODO: Until compressor calcs are available, disable this..
     },
 
     getStorePath: function(target) {
