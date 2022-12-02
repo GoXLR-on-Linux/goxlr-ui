@@ -112,6 +112,14 @@ export default {
     sendGainCommand(commandName, key, value) {
       let command = {[commandName]: [key, value]};
       websocket.send_command(store.getActiveSerial(), command);
+
+      // We might be updating a slider from another slider, so we need to force store the change, as
+      // we disable patching while the slider is active.
+      if (isDeviceMini()) {
+        store.getActiveDevice().mic_status.equaliser_mini.gain[key] = value;
+      } else {
+        store.getActiveDevice().mic_status.equaliser.gain[key] = value;
+      }
     },
 
     getValue(id) {
