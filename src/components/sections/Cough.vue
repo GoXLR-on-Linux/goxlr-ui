@@ -66,7 +66,6 @@ export default {
         "SetCoughMuteFunction": coughMuteFunction
       }
       websocket.send_command(serial, command);
-      store.getActiveDevice().cough_button.mute_type = coughMuteFunction;
     }
   },
 }

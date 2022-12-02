@@ -56,9 +56,6 @@ export default {
       };
 
       sendHttpCommand(store.getActiveSerial(), command)
-          .then(() => {
-            store.getActiveDevice().profile_name = label;
-          })
           .catch((error) => {
             console.log(error);
           });

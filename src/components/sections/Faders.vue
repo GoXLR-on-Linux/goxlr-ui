@@ -78,7 +78,6 @@ export default {
       }
 
       websocket.send_command(serial, command);
-      store.getActiveDevice().fader_status[self.activeChannel].channel = channelName;
 
       // Double check mute function is valid..
       if (self.isMuteFunctionDisabled(self.getActiveMuteFunction())) {
@@ -99,7 +98,6 @@ export default {
       }
 
       websocket.send_command(serial, command);
-      store.getActiveDevice().fader_status[this.activeChannel].mute_type = mute_function;
     },
 
     isActiveChannel: function (id) {

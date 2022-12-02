@@ -71,7 +71,6 @@ export default {
       };
 
       websocket.send_command(store.getActiveSerial(), command);
-      store.getActiveDevice().router_table[input][output] = new_state;
     },
 
     isEnabled: function (output, input) {

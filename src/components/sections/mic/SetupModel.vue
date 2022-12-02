@@ -57,7 +57,6 @@ export default {
       }
 
       websocket.send_command(store.getActiveSerial(), command);
-      store.getActiveDevice().mic_status.mic_type = MicrophoneTypes[id];
     },
 
     getStorePath() {

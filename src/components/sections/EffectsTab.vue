@@ -129,9 +129,6 @@ export default {
       let command = {"RenameActivePreset": this.newPresetName}
 
       sendHttpCommand(store.getActiveSerial(), command)
-          .then(() => {
-            //store.getActiveDevice().profile_name = label;
-          })
           .catch((error) => {
             console.log(error);
           });
@@ -139,9 +136,6 @@ export default {
 
     saveActivePreset() {
       sendHttpCommand(store.getActiveSerial(),{ "SaveActivePreset": [] })
-          .then(() => {
-            //store.getActiveDevice().profile_name = label;
-          })
           .catch((error) => {
             console.log(error);
           });

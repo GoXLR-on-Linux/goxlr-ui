@@ -54,7 +54,6 @@ export default {
     setMuteInactiveState(state) {
       let button = (this.isCough) ? "Cough" : "Bleep";
       websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [button, state]});
-      store.getActiveDevice().lighting.buttons[button].off_style = state;
     },
 
     getColour(active) {

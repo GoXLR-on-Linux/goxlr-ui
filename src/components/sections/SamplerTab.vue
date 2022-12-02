@@ -93,7 +93,6 @@ export default {
     },
     setActiveFunction(sampleFunction) {
       websocket.send_command(store.getActiveSerial(), {"SetSamplerFunction": [this.activeBank, this.activeButton, sampleFunction]});
-      store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].function = sampleFunction;
     },
 
     isActiveOrder(order) {
@@ -104,7 +103,6 @@ export default {
     },
     setActiveOrder(sampleOrder) {
       websocket.send_command(store.getActiveSerial(), {"SetSamplerOrder": [this.activeBank, this.activeButton, sampleOrder]});
-      return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].order = sampleOrder;
     },
 
     getSamples() {

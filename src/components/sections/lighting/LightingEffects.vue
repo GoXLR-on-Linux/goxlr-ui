@@ -116,12 +116,10 @@ export default {
       let button = this.activePreset;
 
       websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [button, state]});
-      store.getActiveDevice().lighting.buttons[button].off_style = state;
     },
 
     setEffectMuteInactiveState(state) {
       websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [this.activeEffect, state]});
-      store.getActiveDevice().lighting.buttons[this.activeEffect].off_style = state;
     },
 
     getColour(active) {

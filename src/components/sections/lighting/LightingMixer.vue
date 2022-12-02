@@ -130,7 +130,6 @@ export default {
           break;
       }
       websocket.send_command(store.getActiveSerial(), {"SetFaderDisplayStyle": [FaderName[this.activeChannel], newValue]});
-      store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].style = newValue;
     },
     toggleMeter() {
       let current = store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].style;
@@ -151,7 +150,6 @@ export default {
           break;
       }
       websocket.send_command(store.getActiveSerial(), {"SetFaderDisplayStyle": [FaderName[this.activeChannel], newValue]})
-      store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].style = newValue;
     },
 
     getTopColour() {
@@ -306,7 +304,6 @@ export default {
 
     setMuteInactiveState(state) {
       websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [MuteButtonNamesForFader[this.activeChannel], state]});
-      return store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[this.activeChannel]].off_style = state;
     }
   }
 }

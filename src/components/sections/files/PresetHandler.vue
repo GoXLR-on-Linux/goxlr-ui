@@ -56,9 +56,6 @@ export default {
 
     handleDoubleClick(label) {
       sendHttpCommand(store.getActiveSerial(),{ "LoadEffectPreset": label })
-          .then(() => {
-            //store.getActiveDevice().profile_name = label;
-          })
           .catch((error) => {
             console.log(error);
           });
