@@ -1,18 +1,25 @@
 <template>
   <ContentBox title="Compressor">
     <div class="rowContent" v-show="!isAdvanced()">
-      <!--TODO("Add method to calculate amount.")-->
-      <Slider title="Amount" :slider-min-value=0 :slider-max-value=100 text-suffix="" :slider-value=0 store-path="/" />
+      <Slider title="Amount" :slider-min-value=0 :slider-max-value=100 text-suffix="" :slider-value="getAmount()"
+              @value-changed="updateAmount" :store-path="getAmountStorePath()"/>
     </div>
     <div class="rowContent" v-show="isAdvanced()">
-      <Slider title="Threshold" :id=0 :slider-min-value=-40 :slider-max-value=0 text-suffix="dB" :slider-value="getThresholdValue()" :store-path="getStorePath('threshold')" @value-changed="setValue" />
-      <Slider title="Ratio" :id=1 :slider-min-value=1 :slider-max-value=64 text-suffix=":1" :value-map="ratioValueMap()" :slider-value="getRatioValue()" :store-path="getStorePath('ratio')" @value-changed="setValue" />
-      <Slider title="Attack" :id=2 :slider-min-value=0 :slider-max-value=40 text-suffix="ms" :value-map="attackValueMap()" :slider-value="getAttackValue()" :store-path="getStorePath('attack')" @value-changed="setValue" />
-      <Slider title="Release" :id=3 :slider-min-value=0 :slider-max-value=3000 text-suffix="ms" :value-map="releaseValueMap()" :slider-value="getReleaseValue()" :store-path="getStorePath('release')" @value-changed="setValue" />
-      <Slider title="Make-up Gain" :id=4 :slider-min-value=0 :slider-max-value=24 text-suffix="dB" :slider-value="getGainValue()" :store-path="getStorePath('makeup_gain')" @value-changed="setValue" />
+      <Slider title="Threshold" :id=0 :slider-min-value=-40 :slider-max-value=0 text-suffix="dB"
+              :slider-value="getThresholdValue()" :store-path="getStorePath('threshold')" @value-changed="setValue"/>
+      <Slider title="Ratio" :id=1 :slider-min-value=1 :slider-max-value=64 text-suffix=":1" :value-map="ratioValueMap()"
+              :slider-value="getRatioValue()" :store-path="getStorePath('ratio')" @value-changed="setValue"/>
+      <Slider title="Attack" :id=2 :slider-min-value=0 :slider-max-value=40 text-suffix="ms"
+              :value-map="attackValueMap()" :slider-value="getAttackValue()" :store-path="getStorePath('attack')"
+              @value-changed="setValue"/>
+      <Slider title="Release" :id=3 :slider-min-value=0 :slider-max-value=3000 text-suffix="ms"
+              :value-map="releaseValueMap()" :slider-value="getReleaseValue()" :store-path="getStorePath('release')"
+              @value-changed="setValue"/>
+      <Slider title="Make-up Gain" :id=4 :slider-min-value=0 :slider-max-value=24 text-suffix="dB"
+              :slider-value="getGainValue()" :store-path="getStorePath('makeup_gain')" @value-changed="setValue"/>
     </div>
   </ContentBox>
-  <ExpandoBox @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()" />
+  <ExpandoBox @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()"/>
 </template>
 
 <script>
@@ -41,11 +48,31 @@ export default {
 
     setValue(id, value) {
       switch (id) {
-        case 0: this.commitValue("SetCompressorThreshold", value); break;
-        case 1: this.commitValue("SetCompressorRatio", value); break;
-        case 2: this.commitValue("SetCompressorAttack", value); break;
-        case 3: this.commitValue("SetCompressorReleaseTime", value); break;
-        case 4: this.commitValue("SetCompressorMakeupGain", value); break;
+        case 0: {
+          this.commitValue("SetCompressorThreshold", value);
+          store.getActiveDevice().mic_status.compressor.threshold = value;
+          break;
+        }
+        case 1: {
+          this.commitValue("SetCompressorRatio", value);
+          store.getActiveDevice().mic_status.compressor.ratio = value;
+          break;
+        }
+        case 2: {
+          this.commitValue("SetCompressorAttack", value);
+          store.getActiveDevice().mic_status.compressor.attack = value;
+          break;
+        }
+        case 3: {
+          this.commitValue("SetCompressorReleaseTime", value);
+          store.getActiveDevice().mic_status.compressor.release = value;
+          break;
+        }
+        case 4: {
+          this.commitValue("SetCompressorMakeupGain", value);
+          store.getActiveDevice().mic_status.compressor.makeup_gain = value;
+          break;
+        }
       }
     },
 
@@ -62,6 +89,27 @@ export default {
       if (store.hasActiveDevice()) {
         return store.getActiveDevice().mic_status.compressor.threshold;
       }
+    },
+
+    getAmount() {
+      // Get the Threshold Value..
+      let threshold = this.getThresholdValue();
+      let value = 100 - Math.round((threshold + 40) / 40 * 100);
+      return value;
+    },
+
+    updateAmount(id, value) {
+      // Need to do the reverse of threshold, firstly, convert to a 'percent' of Threshold, then make it negative...
+      // This doesn't exactly match windows, because Windows uses a stepping of 5, and we don't :p
+      let threshold = Math.round((value / 100) * 40) * -1;
+
+      // Makeup Gain when in 'Simple' mode updated like this (Thanks Kenny!).. Note this can go to -6!
+      let makeup_gain = Math.round(-6 + threshold * -3 / 4);
+      if (value === 0) {
+        makeup_gain = 0;
+      }
+      this.setValue(0, threshold);
+      this.setValue(4, makeup_gain);
     },
 
     ratioValueMap() {
@@ -97,12 +145,27 @@ export default {
     },
 
     getGainValue() {
-      if (store.hasActiveDevice()) {
-        return store.getActiveDevice().mic_status.compressor.makeup_gain;
+      if (!store.hasActiveDevice()) {
+        return 0;
       }
+
+      let value = store.getActiveDevice().mic_status.compressor.makeup_gain;
+      if (value < 0) {
+        return 0;
+      }
+      return value;
     },
 
-    getStorePath: function(target) {
+    getAmountStorePath: function () {
+      // When editing 'Amount', we need to pause both threshold and makeup_gain...
+      let path = "/mixers/" + store.getActiveSerial() + "/mic_status/compressor/threshold";
+      path += ";"
+      path += "/mixers/" + store.getActiveSerial() + "/mic_status/compressor/makeup_gain"
+
+      return path;
+    },
+
+    getStorePath: function (target) {
       return "/mixers/" + store.getActiveSerial() + "/mic_status/compressor/" + target;
     }
   }
