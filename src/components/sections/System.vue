@@ -4,6 +4,10 @@
       <font-awesome-icon icon="fa-solid fa-microphone-lines" />
     </BigButton>
     <div style="margin-right: 30px"></div>
+    <BigButton title="Settings" @button-clicked="showSettingsModal = true">
+      <font-awesome-icon icon="fa-solid fa-circle-question" />
+    </BigButton>
+    <div style="margin-right: 30px"></div>
     <BigButton title="About" @button-clicked="showVersionModal = true">
       <font-awesome-icon icon="fa-solid fa-circle-question" />
     </BigButton>
@@ -102,8 +106,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</textarea>
     <template v-slot:footer>&nbsp;</template>
   </ModalBox>
+  <ModalBox width="680px" v-if="showSettingsModal" @close="showSettingsModal = false">
+    <template v-slot:title>Device Settings (NOT IMPLEMENTED)</template>
+    <div style="text-align: left">
+      <div style="padding: 12px">
+        <span style="display: inline-block; width: 300px">Mute Button Hold to Mute All Duration: </span>
+        <input type="number" min="0" max="2500" style="width: 120px" />ms
+      </div>
+      <div style="padding: 12px">
+        <span style="display: inline-block; width: 360px">Voice Chat Mute All Also Mutes Mic To Chat Mic:</span>
+        <input type="checkbox" />
+      </div>
+    </div>
+  </ModalBox>
 </template>
-
 
 <script>
 import ContentBox from "@/components/ContentBox";
@@ -121,6 +137,7 @@ export default {
       showMicModal: false,
       showVersionModal: false,
       showLicenseModal: false,
+      showSettingsModal: false,
       setupTitle: "Mic Setup"
     }
   },
