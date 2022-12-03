@@ -86,8 +86,8 @@ export const store = reactive({
         for (path of paths) {
             let index = this.pausedPaths.indexOf(path);
             if (index !== -1) {
-                console.log("Resuming Patching for " + path);
-                this.pausedPaths.slice(index, 1);
+                // We don't care about key organisation, just that the entry is gone!
+                delete this.pausedPaths[index];
             }
         }
     },
