@@ -37,6 +37,7 @@ export class Websocket {
     #connection_promise = [];
     #message_queue = []
     #websocket = undefined;
+    #command_index = 0;
 
     connect() {
         this.#websocket = new WebSocket(getWebsocketAddress());
@@ -45,11 +46,18 @@ export class Websocket {
         self.#websocket.addEventListener('message', function(event) {
             // A message can be one of two things, either a DaemonStatus, or an error..
             let json = JSON.parse(event.data);
-            if (json["Status"] !== undefined) {
-                store.replaceData(json);
-            } else if (json["Patch"] !== undefined) {
-                store.patchData(json);
+
+            let message_id = json.id;
+            let message_data = json.data;
+            if (message_data["Status"] !== undefined) {
+                self.#fulfill_promise(message_id, message_data, true);
+            } else if (message_data["Patch"] !== undefined) {
+                // Nothing ever requests patch data, so we can ignore this.
+                store.patchData(message_data);
+            } else if (message_data === "Ok") {
+                self.#fulfill_promise(message_id, message_data, true);
             } else {
+                self.#fulfill_promise(message_id, message_data, false);
                 console.log("Received Error from Websocket: " + event.data);
             }
         });
@@ -62,11 +70,6 @@ export class Websocket {
             self.#connection_promise[0] = resolve;
             self.#connection_promise[1] = reject;
         });
-    }
-
-    // Forces the daemon to re-read file directories..
-    invalidate_caches() {
-        return this.#sendRequest("InvalidateCaches");
     }
 
     get_status() {
@@ -92,7 +95,30 @@ export class Websocket {
     }
 
     #sendRequest(request) {
-        this.#websocket.send(JSON.stringify(request));
+        let id = this.#command_index++;
+
+        // Wrap this request with an ID
+        let final_request = {
+            id: id,
+            data: request,
+        }
+
+        this.#websocket.send(JSON.stringify(final_request));
+
+        // Create and return a response promise...
+        let self = this;
+        return new Promise((resolve, reject) => {
+            self.#message_queue[id] = [];
+            self.#message_queue[id][0] = resolve;
+            self.#message_queue[id][1] = reject;
+        });
+    }
+
+    #fulfill_promise(id, data, is_success) {
+        if (this.#message_queue[id] !== undefined) {
+            this.#message_queue[id][is_success ? 0 : 1](data);
+            delete this.#message_queue[id];
+        }
     }
 }
 export const websocket = new Websocket();

@@ -98,29 +98,16 @@ export default {
       return isDeviceMini();
     },
 
-    updateState() {
-      if (!store.isPaused()) {
-        websocket.get_status();
-      }
-    },
-
-    cancelUpdate() {
-      clearInterval(this.timer);
-    },
-
     isDeviceSet() {
       return store.hasActiveDevice();
     },
   },
 
   created() {
-    //this.timer = setInterval(this.updateState, 250);
-    this.updateState();
+    websocket.get_status().then((data) => {
+      store.replaceData(data);
+    });
   },
-
-  beforeUnmount() {
-    this.cancelUpdate();
-  }
 }
 </script>
 
