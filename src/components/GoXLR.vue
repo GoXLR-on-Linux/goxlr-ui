@@ -99,7 +99,7 @@ export default {
     },
 
     isDeviceSet() {
-      return store.hasActiveDevice();
+      return (store.hasActiveDevice() && store.isConnected());
     },
   },
 

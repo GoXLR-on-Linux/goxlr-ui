@@ -3,6 +3,7 @@ import {applyOperation} from "fast-json-patch";
 
 
 export const store = reactive({
+    has_disconnected: false,
     have_device: false,
     active: true,
     activeSerial: "",
@@ -13,6 +14,21 @@ export const store = reactive({
     status: {
         "mixers": {},
         "files": {}
+    },
+
+    socketDisconnected() {
+        this.has_disconnected = true;
+        this.activeSerial = "";
+        this.status = {
+            "mixers": {},
+            "files": {}
+        };
+
+        this.has_disconnected = true;
+    },
+
+    isConnected() {
+        return !this.has_disconnected;
     },
 
     getVersion() {
@@ -66,6 +82,7 @@ export const store = reactive({
         if (this.active) {
             Object.assign(this.status, json.Status);
             this.have_device = true;
+            this.validateActive();
         }
     },
 
@@ -103,6 +120,14 @@ export const store = reactive({
 
                 applyOperation(this.status, patch, true, true, false);
             }
+            this.validateActive();
+        }
+    },
+
+    validateActive() {
+        if (this.status.mixers[this.activeSerial] === undefined) {
+            // We've lost our device, stop being active.
+            this.activeSerial = "";
         }
     },
 

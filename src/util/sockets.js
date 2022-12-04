@@ -64,6 +64,23 @@ export class Websocket {
 
         self.#websocket.addEventListener('open', function() {
             self.#connection_promise[0]();
+            self.#connection_promise[0] = undefined;
+        });
+
+        self.#websocket.addEventListener('close', function() {
+            if (self.#connection_promise[0] !== undefined) {
+                self.#connection_promise[0]();
+                self.#connection_promise[0] = undefined;
+            }
+            store.socketDisconnected();
+        });
+
+        self.#websocket.addEventListener('error', function() {
+            if (self.#connection_promise[0] !== undefined) {
+                self.#connection_promise[0]();
+                self.#connection_promise[0] = undefined;
+            }
+            store.socketDisconnected();
         });
 
         return new Promise((resolve, reject) => {

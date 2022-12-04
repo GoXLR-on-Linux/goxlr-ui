@@ -2,11 +2,17 @@
   <div class="buttonList">
     <div>
       <div class="label">Select Device</div>
-      <div class="buttonHolder" v-if="deviceCount > 0">
-        <Button v-for="(device, key) in getMixers()" :key=key :button-id=key :is-active=false
-                :label="getLabel2(key, device)" @button-pressed="setDevice(key)"/>
+      <div v-if="!isConnected()">
+        <div class="no-device">Unable to connect to the GoXLR Utility.<br /><br /> Please ensure the utility is running and
+        refresh this page.</div>
       </div>
-      <div v-else class="no-device">No GoXLR Devices Found</div>
+      <div v-else>
+        <div class="buttonHolder" v-if="deviceCount > 0">
+          <Button v-for="(device, key) in getMixers()" :key=key :button-id=key :is-active=false
+                  :label="getLabel2(key, device)" @button-pressed="setDevice(key)"/>
+        </div>
+        <div v-else class="no-device">No GoXLR Devices Found</div>
+      </div>
     </div>
   </div>
 </template>
@@ -41,6 +47,10 @@ export default {
   },
 
   methods: {
+    isConnected() {
+      return store.isConnected();
+    },
+
     getMixers() {
       return store.status.mixers;
     },
