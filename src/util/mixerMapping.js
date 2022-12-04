@@ -35,8 +35,24 @@ export const MuteButtonNamesForFader = {
     "D": "Fader4Mute",
 }
 
-export const InputDevice = ["Microphone", "Chat", "Music", "Game", "Console", "LineIn", "System", "Samples"]
-export const OutputDevice = ["Headphones", "BroadcastMix", "LineOut", "ChatMic", "Sampler"]
+export const InputDevice = {
+    "Microphone": "Microphone",
+    "Chat": "Chat",
+    "Music": "Music",
+    "Game": "Game",
+    "Console": "Console",
+    "Line In": "LineIn",
+    "System": "System",
+    "Samples": "Samples"
+}
+
+export const OutputDevice = {
+    "Headphones": "Headphones",
+    "Broadcast Mix": "BroadcastMix",
+    "Line Out": "LineOut",
+    "Chat Mic": "ChatMic",
+    "Sampler": "Sampler",
+}
 
 export const ChannelName = [
     "Mic",

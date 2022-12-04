@@ -12,23 +12,19 @@
         <th v-for="input in inputs" :key="input">{{ input }}</th>
       </tr>
       </thead>
-
-      <tr v-for="output in outputs" :key="output">
-        <th v-if="getIndexForOutput(output) === 0" class="rotated" :rowspan="outputs.length"><span>Outputs</span></th>
+      <tr v-for="output in getOutputs()" :key="output">
+        <th v-if="output === 'Headphones'" class="rotated" :rowspan="outputs.length - 1"><span>Outputs</span></th>
         <th>{{ output }}</th>
-        <Cell v-for="input in inputs" :key="input"
-              :enabled="isEnabled(getIndexForOutput(output), getIndexForInput(input))"
-              :output="getIndexForOutput(output)" :input="getIndexForInput(input)" @clicked="handleClick"/>
+        <Cell v-for="input in inputs" :key="input" :enabled="isEnabled(output, input)" :output="output" :input="input" @clicked="handleClick"/>
       </tr>
-
       <tr>
         <td colspan="10" class="hidden" style="height: 10px"></td>
       </tr>
       <tr>
         <!-- Sampler is a little weird, it's on a line by itself because reasons? -->
         <th colspan="2">Sampler</th>
-        <Cell v-for="input in inputs" :key="input" :enabled="isEnabled(4, getIndexForInput(input))" :output="4"
-              :input="getIndexForInput(input)" @clicked="handleClick"/>
+        <Cell v-for="input in inputs" :key="input" :enabled="isEnabled('Sampler', input)" output="Sampler"
+              :input="input" @clicked="handleClick"/>
       </tr>
     </table>
   </ContentBox>
@@ -47,18 +43,19 @@ export default {
 
   data() {
     return {
-      inputs: ["Mic", "Chat", "Music", "Game", "Console", "Line In", "System", "Samples"],
-      outputs: ["Headphones", "Broadcast Mix", "Line Out", "Chat Mic"],
-    }
-  },
-
-  computed: {
-    inputCount() {
-      return this.inputs.length;
+      inputs: Object.keys(InputDevice),
+      outputs: Object.keys(OutputDevice),
     }
   },
 
   methods: {
+    getOutputs: function () {
+      let channels = Object.keys(OutputDevice);
+      channels.splice(channels.indexOf("Sampler"), 1);
+      return channels;
+    },
+
+
     handleClick: function (output, input) {
       let new_state = !this.isEnabled(output, input);
 
@@ -73,29 +70,14 @@ export default {
       websocket.send_command(store.getActiveSerial(), command);
     },
 
+    // eslint-disable-next-line no-unused-vars
     isEnabled: function (output, input) {
       if (store.hasActiveDevice()) {
-        return store.getActiveDevice().router_table[input][output];
+        return store.getActiveDevice().router[InputDevice[input]][OutputDevice[output]];
       }
 
       return false;
     },
-
-    getIndexForOutput(name) {
-      for (let i = 0; i < this.outputs.length; i++) {
-        if (name === this.outputs[i]) {
-          return i;
-        }
-      }
-    },
-
-    getIndexForInput(name) {
-      for (let i = 0; i < this.inputs.length; i++) {
-        if (name === this.inputs[i]) {
-          return i;
-        }
-      }
-    }
   }
 }
 </script>

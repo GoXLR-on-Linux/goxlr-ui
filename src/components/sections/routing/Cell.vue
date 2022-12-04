@@ -9,8 +9,8 @@ export default {
   name: "RoutingCell",
 
   props: {
-    input: Number,
-    output: Number,
+    input: String,
+    output: String,
     enabled: Boolean
   },
 
@@ -46,14 +46,4 @@ export default {
   td:hover {
     background-color: #49514e;
   }
-
-  /*
-  td.enabled {
-    background-color: #006F19;
-  }
-
-  td.enabled:hover {
-    background-color: #00A11A;
-  }
-  */
 </style>
