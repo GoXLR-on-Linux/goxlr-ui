@@ -40,7 +40,6 @@ export default {
 
   props: {
     id: {type: Number, default: -1},
-
     storePath: {type: String, required: true},
 
     title: {type: String, default: "UNSET"},

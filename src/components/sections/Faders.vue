@@ -1,15 +1,15 @@
 <template>
   <ContentBox title="Faders">
     <ButtonList title="Channel">
-      <Button label="Channel 1" buttonId="0" :is-active="isActiveChannel('A')" @button-pressed="channelPressed"/>
-      <Button label="Channel 2" buttonId="1" :is-active="isActiveChannel('B')" @button-pressed="channelPressed"/>
-      <Button label="Channel 3" buttonId="2" :is-active="isActiveChannel('C')" @button-pressed="channelPressed"/>
-      <Button label="Channel 4" buttonId="3" :is-active="isActiveChannel('D')" @button-pressed="channelPressed"/>
+      <Button label="Channel 1" buttonId="A" :is-active="isActiveChannel('A')" @button-pressed="channelPressed"/>
+      <Button label="Channel 2" buttonId="B" :is-active="isActiveChannel('B')" @button-pressed="channelPressed"/>
+      <Button label="Channel 3" buttonId="C" :is-active="isActiveChannel('C')" @button-pressed="channelPressed"/>
+      <Button label="Channel 4" buttonId="D" :is-active="isActiveChannel('D')" @button-pressed="channelPressed"/>
     </ButtonList>
 
     <ButtonList title="Source">
       <Button v-for="item in faderOrder" :key=item :label=getSourceLabel(item) :buttonId=getChannelName(item)
-              :is-active=isActiveSource(getChannelName(item)) @button-pressed="sourcePressed"/>
+              :is-active=isActiveSource(item) @button-pressed="sourcePressed"/>
     </ButtonList>
 
     <ButtonList title="Mute Behaviour">

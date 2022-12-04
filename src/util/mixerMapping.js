@@ -68,19 +68,19 @@ export const ChannelName = [
     "LineOut",
 ]
 
-export const ChannelNameReadable = [
-    "Mic",
-    "Line In",
-    "Console",
-    "System",
-    "Game",
-    "Voice Chat",
-    "Sample",
-    "Music",
-    "Headphones",
-    "Mic Monitor",
-    "Line Out",
-]
+export const ChannelNameReadable = {
+    "Mic": "Mic",
+    "LineIn": "Line In",
+    "Console": "Console",
+    "System": "System",
+    "Game": "Game",
+    "Chat": "Voice Chat",
+    "Sample": "Sample",
+    "Music": "Music",
+    "Headphones": "Headphones",
+    "MicMonitor": "Mic Monitor",
+    "LineOut": "Line Out",
+}
 
 export const EffectPresets = [
     "Preset1",
@@ -152,16 +152,16 @@ export const MicrophoneTypes = [
 
 // I'm using indexOf for the values in this array just for readability.
 export let FaderOrder = [
-    ChannelName.indexOf("Mic"),
-    ChannelName.indexOf("Chat"),
-    ChannelName.indexOf("Music"),
-    ChannelName.indexOf("Game"),
-    ChannelName.indexOf("Console"),
-    ChannelName.indexOf("LineIn"),
-    ChannelName.indexOf("System"),
-    ChannelName.indexOf("Sample"),
-    ChannelName.indexOf("Headphones"),
-    ChannelName.indexOf("LineOut")
+    "Mic",
+    "Chat",
+    "Music",
+    "Game",
+    "Console",
+    "LineIn",
+    "System",
+    "Sample",
+    "Headphones",
+    "LineOut"
 ]
 
 export let MixerOrder = [
