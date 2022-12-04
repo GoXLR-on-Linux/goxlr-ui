@@ -1,10 +1,10 @@
 <template>
   <ContentBox title="Faders">
     <ButtonList title="Channel">
-      <Button label="Channel 1" buttonId="0" :is-active="isActiveChannel(0)" @button-pressed="channelPressed"/>
-      <Button label="Channel 2" buttonId="1" :is-active="isActiveChannel(1)" @button-pressed="channelPressed"/>
-      <Button label="Channel 3" buttonId="2" :is-active="isActiveChannel(2)" @button-pressed="channelPressed"/>
-      <Button label="Channel 4" buttonId="3" :is-active="isActiveChannel(3)" @button-pressed="channelPressed"/>
+      <Button label="Channel 1" buttonId="0" :is-active="isActiveChannel('A')" @button-pressed="channelPressed"/>
+      <Button label="Channel 2" buttonId="1" :is-active="isActiveChannel('B')" @button-pressed="channelPressed"/>
+      <Button label="Channel 3" buttonId="2" :is-active="isActiveChannel('C')" @button-pressed="channelPressed"/>
+      <Button label="Channel 4" buttonId="3" :is-active="isActiveChannel('D')" @button-pressed="channelPressed"/>
     </ButtonList>
 
     <ButtonList title="Source">
@@ -26,7 +26,7 @@ import ButtonList from "../button_list/ButtonList";
 import Button from "../button_list/Button";
 import {
   ChannelName, ChannelNameReadable,
-  FaderName, FaderOrder,
+  FaderOrder,
   MuteFunctionReadable,
   MuteFunction
 } from "@/util/mixerMapping";
@@ -46,7 +46,7 @@ export default {
       faderOrder: FaderOrder,
       muteFunctions: MuteFunction,
 
-      activeChannel: 0,
+      activeChannel: "A",
     }
   },
 
@@ -64,14 +64,14 @@ export default {
     },
 
     channelPressed: function (id) {
-      this.activeChannel = parseInt(id); // parseInt required because javascript :D
+      this.activeChannel = id;
     },
 
     sourcePressed: function (channelName) {
       let self = this;
 
       let serial = store.getActiveSerial();
-      let fader = FaderName[this.activeChannel];
+      let fader = this.activeChannel;
 
       let command = {
         "SetFader": [fader, channelName]
@@ -87,7 +87,7 @@ export default {
 
     setMuteFunction: function (mute_function) {
       let serial = store.getActiveSerial();
-      let fader = FaderName[this.activeChannel];
+      let fader = this.activeChannel;
 
       // Build the Command..
       let command = {

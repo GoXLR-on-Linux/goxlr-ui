@@ -3,10 +3,10 @@
     <div style="padding: 40px 20px 40px 40px;">
       <ContentBox title="Faders">
         <ButtonList title="Channel">
-          <PushButton label="Channel 1" buttonId="0" :is-active="isActiveChannel(0)" @button-pressed="channelPressed"/>
-          <PushButton label="Channel 2" buttonId="1" :is-active="isActiveChannel(1)" @button-pressed="channelPressed"/>
-          <PushButton label="Channel 3" buttonId="2" :is-active="isActiveChannel(2)" @button-pressed="channelPressed"/>
-          <PushButton label="Channel 4" buttonId="3" :is-active="isActiveChannel(3)" @button-pressed="channelPressed"/>
+          <PushButton label="Channel 1" buttonId="0" :is-active="isActiveChannel('A')" @button-pressed="channelPressed"/>
+          <PushButton label="Channel 2" buttonId="1" :is-active="isActiveChannel('B')" @button-pressed="channelPressed"/>
+          <PushButton label="Channel 3" buttonId="2" :is-active="isActiveChannel('C')" @button-pressed="channelPressed"/>
+          <PushButton label="Channel 4" buttonId="3" :is-active="isActiveChannel('D')" @button-pressed="channelPressed"/>
         </ButtonList>
       </ContentBox>
     </div>
@@ -76,7 +76,7 @@ import PushButton from "@/components/button_list/Button";
 import ColourBox from "@/components/sections/lighting/ColourBox";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import {FaderName, MuteButtonNamesForFader, ScribbleNames} from "@/util/mixerMapping";
+import {MuteButtonNamesForFader, ScribbleNames} from "@/util/mixerMapping";
 import {isDeviceMini} from "@/util/util";
 
 export default {
@@ -85,7 +85,7 @@ export default {
 
   data() {
     return {
-      activeChannel: 0,
+      activeChannel: "A",
       textValue: null,
     }
   },
@@ -100,7 +100,7 @@ export default {
     },
 
     channelPressed(id) {
-      this.activeChannel = parseInt(id);
+      this.activeChannel = id;
       this.textValue = this.getBottomText();
     },
 
@@ -108,11 +108,11 @@ export default {
       if (!store.hasActiveDevice()) {
         return false;
       }
-      return store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].style.includes(match);
+      return store.getActiveDevice().lighting.faders[this.activeChannel].style.includes(match);
     },
 
     toggleGradient() {
-      let current = store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].style;
+      let current = store.getActiveDevice().lighting.faders[this.activeChannel].style;
       let newValue = "";
 
       switch (current) {
@@ -129,10 +129,10 @@ export default {
           newValue = "Meter";
           break;
       }
-      websocket.send_command(store.getActiveSerial(), {"SetFaderDisplayStyle": [FaderName[this.activeChannel], newValue]});
+      websocket.send_command(store.getActiveSerial(), {"SetFaderDisplayStyle": [this.activeChannel, newValue]});
     },
     toggleMeter() {
-      let current = store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].style;
+      let current = store.getActiveDevice().lighting.faders[this.activeChannel].style;
       let newValue = "";
 
       switch (current) {
@@ -149,7 +149,7 @@ export default {
           newValue = "Gradient";
           break;
       }
-      websocket.send_command(store.getActiveSerial(), {"SetFaderDisplayStyle": [FaderName[this.activeChannel], newValue]})
+      websocket.send_command(store.getActiveSerial(), {"SetFaderDisplayStyle": [this.activeChannel, newValue]})
     },
 
     getTopColour() {
@@ -157,14 +157,14 @@ export default {
         return "#000000";
       }
 
-      return "#" + store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].colours.colour_one;
+      return "#" + store.getActiveDevice().lighting.faders[this.activeChannel].colours.colour_one;
     },
 
     getBottomColour() {
       if (!store.hasActiveDevice()) {
         return "#000000";
       }
-      return "#" + store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].colours.colour_two;
+      return "#" + store.getActiveDevice().lighting.faders[this.activeChannel].colours.colour_two;
     },
 
     getScreenColour() {
@@ -190,7 +190,7 @@ export default {
     },
 
     setActiveIcon(value) {
-      websocket.send_command(store.getActiveSerial(), {"SetScribbleIcon": [FaderName[this.activeChannel], value]})
+      websocket.send_command(store.getActiveSerial(), {"SetScribbleIcon": [this.activeChannel, value]})
     },
 
     openIcons() {
@@ -210,7 +210,7 @@ export default {
 
     toggleShowNumber() {
       let value = this.isShowNumber() ? "" : this.activeChannel + 1;
-      websocket.send_command(store.getActiveSerial(), {"SetScribbleNumber": [FaderName[this.activeChannel], value.toString()]})
+      websocket.send_command(store.getActiveSerial(), {"SetScribbleNumber": [this.activeChannel, value.toString()]})
     },
 
     isInverted() {
@@ -223,7 +223,7 @@ export default {
 
     toggleInverted() {
       let value = !this.isInverted();
-      websocket.send_command(store.getActiveSerial(), {"SetScribbleInvert": [FaderName[this.activeChannel], value]})
+      websocket.send_command(store.getActiveSerial(), {"SetScribbleInvert": [this.activeChannel, value]})
     },
 
     getBottomText() {
@@ -246,7 +246,7 @@ export default {
 
     applyUpdate(event) {
       let value = event.target.value;
-      websocket.send_command(store.getActiveSerial(), {"SetScribbleText": [FaderName[this.activeChannel], value]})
+      websocket.send_command(store.getActiveSerial(), {"SetScribbleText": [this.activeChannel, value]})
     },
 
     getMuteActiveColour() {
@@ -272,15 +272,15 @@ export default {
     },
 
     onFaderColourChange(id, value) {
-      let top = store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].colours.colour_one;
-      let bottom = store.getActiveDevice().lighting.faders[FaderName[this.activeChannel]].colours.colour_two;
+      let top = store.getActiveDevice().lighting.faders[this.activeChannel].colours.colour_one;
+      let bottom = store.getActiveDevice().lighting.faders[this.activeChannel].colours.colour_two;
 
       if (id === "top") {
         top = value.substr(1, 6);
       } else {
         bottom = value.substr(1, 6);
       }
-      websocket.send_command(store.getActiveSerial(), {"SetFaderColours": [FaderName[this.activeChannel], top, bottom]})
+      websocket.send_command(store.getActiveSerial(), {"SetFaderColours": [this.activeChannel, top, bottom]})
     },
 
     onScreenColourChange(id, value) {

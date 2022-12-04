@@ -21,26 +21,19 @@ export let MuteFunctionReadable = [
     "Mute to Line Out"
 ]
 
-export const FaderName = [
-    "A",
-    "B",
-    "C",
-    "D"
-]
+export const ScribbleNames = {
+    "A": "Scribble1",
+    "B": "Scribble2",
+    "C": "Scribble3",
+    "D": "Scribble4",
+}
 
-export const ScribbleNames = [
-    "Scribble1",
-    "Scribble2",
-    "Scribble3",
-    "Scribble4",
-]
-
-export const MuteButtonNamesForFader = [
-    "Fader1Mute",
-    "Fader2Mute",
-    "Fader3Mute",
-    "Fader4Mute",
-]
+export const MuteButtonNamesForFader = {
+    "A": "Fader1Mute",
+    "B": "Fader2Mute",
+    "C": "Fader3Mute",
+    "D": "Fader4Mute",
+}
 
 export const InputDevice = ["Microphone", "Chat", "Music", "Game", "Console", "LineIn", "System", "Samples"]
 export const OutputDevice = ["Headphones", "BroadcastMix", "LineOut", "ChatMic", "Sampler"]
