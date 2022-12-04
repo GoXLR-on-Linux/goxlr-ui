@@ -54,6 +54,18 @@ export const OutputDevice = {
     "Sampler": "Sampler",
 }
 
+export const MixerChannelName = [
+    "Mic",
+    "LineIn",
+    "Console",
+    "System",
+    "Game",
+    "Chat",
+    "Sample",
+    "Music",
+    "LineOut",
+]
+
 export const ChannelName = [
     "Mic",
     "LineIn",
@@ -165,22 +177,22 @@ export let FaderOrder = [
 ]
 
 export let MixerOrder = [
-    ChannelName.indexOf("Mic"),
-    ChannelName.indexOf("Chat"),
-    ChannelName.indexOf("Music"),
-    ChannelName.indexOf("Game"),
-    ChannelName.indexOf("Console"),
-    ChannelName.indexOf("LineIn"),
-    ChannelName.indexOf("LineOut"),
-    ChannelName.indexOf("System"),
-    ChannelName.indexOf("Sample"),
+    "Mic",
+    "Chat",
+    "Music",
+    "Game",
+    "Console",
+    "LineIn",
+    "LineOut",
+    "System",
+    "Sample",
 ]
 
 export let HeadphoneMixerOrder = [
-    ChannelName.indexOf("Headphones"),
-    ChannelName.indexOf("MicMonitor"),
+    "Headphones",
+    "MicMonitor",
 ]
 
 export let HeadphoneMixerHidden = [
-    ChannelName.indexOf("MicMonitor")
+    "MicMonitor"
 ]
