@@ -111,11 +111,11 @@ SOFTWARE.</textarea>
     <div style="text-align: left">
       <div style="padding: 12px">
         <span style="display: inline-block; width: 300px">Mute Button Hold to Mute All Duration: </span>
-        <input type="number" min="0" max="2500" style="width: 120px" />ms
+        <SimpleNumberInput :min-value="0" :max-value="5000" @value-updated="updateHold" :current-text-value="getHold()" />
       </div>
       <div style="padding: 12px">
         <span style="display: inline-block; width: 360px">Voice Chat Mute All Also Mutes Mic To Chat Mic:</span>
-        <input type="checkbox" />
+        <input type="checkbox" :checked="get_vcmaammtcm()" @change="set_vcmaammtcm" />
       </div>
     </div>
   </ModalBox>
@@ -128,9 +128,11 @@ import SetupModel from "@/components/sections/mic/SetupModel";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ModalBox from "@/components/design/modal/ModalBox";
 import {store} from "@/store";
+import SimpleNumberInput from "@/components/design/SimpleNumberInput";
+import {websocket} from "@/util/sockets";
 export default {
   name: "SystemComponent",
-  components: {ModalBox, SetupModel, BigButton, ContentBox, FontAwesomeIcon},
+  components: {SimpleNumberInput, ModalBox, SetupModel, BigButton, ContentBox, FontAwesomeIcon},
 
   data() {
     return {
@@ -164,6 +166,30 @@ export default {
     getFPGACount() {
       return store.getActiveDevice().hardware.versions.fpga_count;
     },
+
+    getHold() {
+      if (!store.hasActiveDevice()) {
+        return 0;
+      }
+      return store.getActiveDevice().settings.mute_hold_duration;
+    },
+
+    updateHold(value) {
+      websocket.send_command(store.getActiveSerial(),  { "SetMuteHoldDuration": value });
+    },
+
+    get_vcmaammtcm() {
+      // I hate this name :D
+      if (!store.getActiveDevice()) {
+        return false;
+      }
+      return store.getActiveDevice().settings.vc_mute_also_mute_cm;
+    },
+
+    set_vcmaammtcm(event) {
+      console.log(event);
+      websocket.send_command(store.getActiveSerial(), {"SetVCMuteAlsoMuteCM": event.target.checked})
+    }
   }
 }
 </script>
