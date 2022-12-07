@@ -8,7 +8,7 @@
     </ButtonList>
 
     <ButtonList title="Source">
-      <Button v-for="item in faderOrder" :key=item :label=getSourceLabel(item) :buttonId=getChannelName(item)
+      <Button v-for="item in faderOrder" :key=item :label=getSourceLabel(item) :buttonId=item
               :is-active=isActiveSource(item) @button-pressed="sourcePressed"/>
     </ButtonList>
 
@@ -25,7 +25,7 @@ import ContentBox from "../ContentBox";
 import ButtonList from "../button_list/ButtonList";
 import Button from "../button_list/Button";
 import {
-  ChannelName, ChannelNameReadable,
+  ChannelNameReadable,
   FaderOrder,
   MuteFunctionReadable,
   MuteFunction
@@ -57,10 +57,6 @@ export default {
 
     getMuteLabel(id) {
       return MuteFunctionReadable[id];
-    },
-
-    getChannelName(id) {
-      return ChannelName[id];
     },
 
     channelPressed: function (id) {

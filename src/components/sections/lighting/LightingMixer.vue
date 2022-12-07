@@ -3,10 +3,10 @@
     <div style="padding: 40px 20px 40px 40px;">
       <ContentBox title="Faders">
         <ButtonList title="Channel">
-          <PushButton label="Channel 1" buttonId="0" :is-active="isActiveChannel('A')" @button-pressed="channelPressed"/>
-          <PushButton label="Channel 2" buttonId="1" :is-active="isActiveChannel('B')" @button-pressed="channelPressed"/>
-          <PushButton label="Channel 3" buttonId="2" :is-active="isActiveChannel('C')" @button-pressed="channelPressed"/>
-          <PushButton label="Channel 4" buttonId="3" :is-active="isActiveChannel('D')" @button-pressed="channelPressed"/>
+          <PushButton label="Channel 1" buttonId="A" :is-active="isActiveChannel('A')" @button-pressed="channelPressed"/>
+          <PushButton label="Channel 2" buttonId="B" :is-active="isActiveChannel('B')" @button-pressed="channelPressed"/>
+          <PushButton label="Channel 3" buttonId="C" :is-active="isActiveChannel('C')" @button-pressed="channelPressed"/>
+          <PushButton label="Channel 4" buttonId="D" :is-active="isActiveChannel('D')" @button-pressed="channelPressed"/>
         </ButtonList>
       </ContentBox>
     </div>
@@ -100,6 +100,7 @@ export default {
     },
 
     channelPressed(id) {
+      console.log(id);
       this.activeChannel = id;
       this.textValue = this.getBottomText();
     },

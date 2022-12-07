@@ -2,9 +2,9 @@
   <!-- Build the Modal -->
   <ContentBox>
     <ButtonList title="Mic Type">
-      <Button label="Dynamic" buttonId="0" :is-active=isMicTypeActive(0) @button-pressed="handleButtonPress"/>
-      <Button label="Condenser (+48V)" buttonId="1" :is-active=isMicTypeActive(1) @button-pressed="handleButtonPress"/>
-      <Button label="3.5mm" buttonId="2" :is-active=isMicTypeActive(2) @button-pressed="handleButtonPress"/>
+      <Button label="Dynamic" buttonId="0" :is-active="isMicTypeActive('Dynamic')" @button-pressed="handleButtonPress"/>
+      <Button label="Condenser (+48V)" buttonId="1" :is-active="isMicTypeActive('Condenser')" @button-pressed="handleButtonPress"/>
+      <Button label="3.5mm" buttonId="2" :is-active="isMicTypeActive('Jack')" @button-pressed="handleButtonPress"/>
     </ButtonList>
     <Slider title="Gain" :slider-min-value=0 :slider-max-value=72 text-suffix="dB"
             :slider-value=getGainValue() :store-path="getStorePath()" @value-changed="setGain" />
@@ -30,7 +30,7 @@ export default {
         return false;
       }
 
-      return MicrophoneTypes[id] === store.getActiveDevice().mic_status.mic_type
+      return id === store.getActiveDevice().mic_status.mic_type
     },
 
     getGainValue() {
@@ -38,7 +38,7 @@ export default {
         return 0;
       }
 
-      return store.getActiveDevice().mic_status.mic_gains[MicrophoneTypes.indexOf(store.getActiveDevice().mic_status.mic_type)];
+      return store.getActiveDevice().mic_status.mic_gains[store.getActiveDevice().mic_status.mic_type];
     },
 
     setGain(id, value) {

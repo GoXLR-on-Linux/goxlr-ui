@@ -54,18 +54,6 @@ export const OutputDevice = {
     "Sampler": "Sampler",
 }
 
-export const MixerChannelName = [
-    "Mic",
-    "LineIn",
-    "Console",
-    "System",
-    "Game",
-    "Chat",
-    "Sample",
-    "Music",
-    "LineOut",
-]
-
 export const ChannelName = [
     "Mic",
     "LineIn",
