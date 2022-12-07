@@ -107,7 +107,7 @@ SOFTWARE.</textarea>
     <template v-slot:footer>&nbsp;</template>
   </ModalBox>
   <ModalBox width="680px" v-if="showSettingsModal" @close="showSettingsModal = false">
-    <template v-slot:title>Device Settings (NOT IMPLEMENTED)</template>
+    <template v-slot:title>Device Settings (Work In Progress)</template>
     <div style="text-align: left">
       <div style="padding: 12px">
         <span style="display: inline-block; width: 300px">Mute Button Hold to Mute All Duration: </span>
