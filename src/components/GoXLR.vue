@@ -33,7 +33,7 @@
       <Tab name="Lighting" :left_align="false">
           <LightingTab />
       </Tab>
-      <Tab name="Router" :left_align="false">
+      <Tab name="Routing" :left_align="false">
         <MainTabContent>
           <Routing/>
         </MainTabContent>
