@@ -1,18 +1,18 @@
 <template>
   <div style="display: flex">
-    <div style="display: flex; height: 370px">
-      <LightingSection :is_selected="isActive(0)" @click="sectionClick(0)">Mixer</LightingSection>
-      <LightingSection :is_selected="isActive(1)" @click="sectionClick(1)">Cough / Bleep</LightingSection>
-      <LightingSection :is_selected="isActive(2)" @click="sectionClick(2)">Global</LightingSection>
-      <LightingSection v-show="!isDeviceMini()" :is_selected="isActive(3)" @click="sectionClick(3)">Effects</LightingSection>
-      <LightingSection v-show="!isDeviceMini()" :is_selected="isActive(4)" @click="sectionClick(4)">Sampler</LightingSection>
-    </div>
+      <div style="display: flex; height: 370px">
+          <LightingSection :is_selected="isActive(0)" @click="sectionClick(0)">Mixer</LightingSection>
+          <LightingSection v-show="!isDeviceMini()" :is_selected="isActive(1)" @click="sectionClick(1)">Effects</LightingSection>
+          <LightingSection v-show="!isDeviceMini()" :is_selected="isActive(2)" @click="sectionClick(2)">Sampler</LightingSection>
+          <LightingSection :is_selected="isActive(3)" @click="sectionClick(3)">Cough / Bleep</LightingSection>
+          <LightingSection :is_selected="isActive(4)" @click="sectionClick(4)">Global</LightingSection>
+      </div>
     <div>
       <LightingMixer v-show="activeTab === 0"/>
-      <LightingCough v-show="activeTab === 1"/>
-      <LightingGlobal v-show="activeTab === 2" />
-      <LightingEffects v-show="activeTab === 3" />
-      <LightingSampler v-show="activeTab === 4" />
+      <LightingEffects v-show="activeTab === 1"/>
+      <LightingSampler v-show="activeTab === 2" />
+      <LightingCough v-show="activeTab === 3" />
+      <LightingGlobal v-show="activeTab === 4" />
     </div>
   </div>
 </template>
