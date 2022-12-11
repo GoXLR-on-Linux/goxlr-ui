@@ -210,8 +210,9 @@ export default {
     },
 
     toggleShowNumber() {
-      let value = this.isShowNumber() ? "" : this.activeChannel + 1;
-      websocket.send_command(store.getActiveSerial(), {"SetScribbleNumber": [this.activeChannel, value.toString()]})
+      let channel = Object.keys(store.getActiveDevice().fader_status).indexOf(this.activeChannel) + 1;
+      let value = this.isShowNumber() ? "" : channel.toString();
+      websocket.send_command(store.getActiveSerial(), {"SetScribbleNumber": [this.activeChannel, value]})
     },
 
     isInverted() {
