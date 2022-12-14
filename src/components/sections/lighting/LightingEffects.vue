@@ -7,12 +7,12 @@
       </ButtonList>
       <ColourBox id="active" title="Active" :colour-value="getColour(true)" @colour-changed="onColourChange"/>
       <ButtonList title="Inactive Option">
-        <PushButton label="Dim Active Colour" :is-active="isPresetMuteInactiveState('Dimmed')"
-                    @click="setPresetMuteInactiveState('Dimmed')"/>
-        <PushButton label="Inactive Colour" :is-active="isPresetMuteInactiveState('Colour2')"
-                    @click="setPresetMuteInactiveState('Colour2')"/>
-        <PushButton label="Dim Inactive Colour" :is-active="isPresetMuteInactiveState('DimmedColour2')"
-                    @click="setPresetMuteInactiveState('DimmedColour2')"/>
+        <PushButton label="Dim Active Colour" :is-active="isPresetInactiveState('Dimmed')"
+                    @click="setPresetInactiveState('Dimmed')"/>
+        <PushButton label="Inactive Colour" :is-active="isPresetInactiveState('Colour2')"
+                    @click="setPresetInactiveState('Colour2')"/>
+        <PushButton label="Dim Inactive Colour" :is-active="isPresetInactiveState('DimmedColour2')"
+                    @click="setPresetInactiveState('DimmedColour2')"/>
       </ButtonList>
       <ColourBox id="inactive" title="Inactive" :colour-value="getColour(false)" @colour-changed="onColourChange"/>
     </ContentBox>
@@ -38,12 +38,12 @@
       </ButtonList>
       <ColourBox id="active" title="Active" :colour-value="getEffectColour(true)" @colour-changed="onEffectColourChange"/>
       <ButtonList title="Inactive Option">
-        <PushButton label="Dim Active Colour" :is-active="isEffectMuteInactiveState('Dimmed')"
-                    @click="setEffectMuteInactiveState('Dimmed')"/>
-        <PushButton label="Inactive Colour" :is-active="isEffectMuteInactiveState('Colour2')"
-                    @click="setEffectMuteInactiveState('Colour2')"/>
-        <PushButton label="Dim Inactive Colour" :is-active="isEffectMuteInactiveState('DimmedColour2')"
-                    @click="setEffectMuteInactiveState('DimmedColour2')"/>
+        <PushButton label="Dim Active Colour" :is-active="isEffectInactiveState('Dimmed')"
+                    @click="setEffectInactiveState('Dimmed')"/>
+        <PushButton label="Inactive Colour" :is-active="isEffectInactiveState('Colour2')"
+                    @click="setEffectInactiveState('Colour2')"/>
+        <PushButton label="Dim Inactive Colour" :is-active="isEffectInactiveState('DimmedColour2')"
+                    @click="setEffectInactiveState('DimmedColour2')"/>
       </ButtonList>
       <ColourBox id="inactive" title="Inactive" :colour-value="getEffectColour(false)"
                  @colour-changed="onEffectColourChange"/>
@@ -98,27 +98,27 @@ export default {
       return (id + 1).toString() + ": " + store.getActiveDevice().effects.preset_names[preset];
     },
 
-    isPresetMuteInactiveState(state) {
+    isPresetInactiveState(state) {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
+        return false;
+      }
+      return store.getActiveDevice().lighting.buttons[this.activePreset].off_style === state;
+    },
+
+    isEffectInactiveState(state) {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return false;
       }
       return store.getActiveDevice().lighting.buttons[this.activeEffect].off_style === state;
     },
 
-    isEffectMuteInactiveState(state) {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
-      }
-      return store.getActiveDevice().lighting.buttons[this.activeEffect].off_style === state;
-    },
-
-    setPresetMuteInactiveState(state) {
+    setPresetInactiveState(state) {
       let button = this.activePreset;
 
       websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [button, state]});
     },
 
-    setEffectMuteInactiveState(state) {
+    setEffectInactiveState(state) {
       websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [this.activeEffect, state]});
     },
 
