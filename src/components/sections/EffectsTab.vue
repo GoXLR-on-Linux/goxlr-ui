@@ -139,8 +139,6 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-
-      websocket.invalidate_caches();
     },
 
     optionClicked(event) {

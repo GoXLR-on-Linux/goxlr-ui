@@ -67,12 +67,10 @@ export default {
         "SaveMicProfileAs": name
       }
       sendHttpCommand(store.getActiveSerial(), command);
-      websocket.invalidate_caches();
     },
 
     deleteProfile(name) {
       sendHttpCommand(store.getActiveSerial(), { "DeleteMicProfile": name });
-      websocket.invalidate_caches();
     },
 
     openProfiles() {

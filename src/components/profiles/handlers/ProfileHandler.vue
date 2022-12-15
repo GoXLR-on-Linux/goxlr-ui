@@ -67,7 +67,6 @@ export default {
 
     newProfile(name) {
       sendHttpCommand(store.getActiveSerial(), {"NewProfile": name})
-      websocket.invalidate_caches();
     },
 
     saveProfile() {
@@ -81,12 +80,10 @@ export default {
         "SaveProfileAs": name
       }
       sendHttpCommand(store.getActiveSerial(), command);
-      websocket.invalidate_caches();
     },
 
     deleteProfile(name) {
       sendHttpCommand(store.getActiveSerial(), {"DeleteProfile": name});
-      websocket.invalidate_caches();
     },
 
     openProfiles() {
