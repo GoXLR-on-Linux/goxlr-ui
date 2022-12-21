@@ -1,6 +1,7 @@
 <template>
   <td @click="clicked">
-    <font-awesome-icon v-if="enabled" icon="fa-solid fa-circle-check" />
+    <input type="checkbox" aria-hidden="false" :aria-label="`Routing from ${input} to ${output}`" :checked="enabled" />
+    <!--font-awesome-icon v-if="enabled" icon="fa-solid fa-circle-check" /-->
   </td>
 </template>
 
@@ -41,6 +42,10 @@ export default {
     right: 0;
     margin: auto;
     text-align: center;
+  }
+
+  td:has(>input[type=checkbox]:focus) {
+    background-color: #49514e;
   }
 
   td:hover {
