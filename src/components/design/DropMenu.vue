@@ -1,11 +1,12 @@
 <template>
-  <div v-show="is_active">
-    <ul ref="menuList" class="context-menu" v-click-outside="onClickOutside">
-      <li v-for="(option, index) in options" :key="index" @click.stop="optionClicked(option)" class="item">
-        <span v-html="option.name"/>
-      </li>
-    </ul>
-  </div>
+  <ul @keydown.prevent="debugEvent" v-show="is_active" :aria-expanded="is_active" ref="menuList" role="menu"
+      :id="menu_id"
+ class="context-menu" v-click-outside="onClickOutside">
+    <li role="presentation" v-for="(option, index) in options" :key="index" @click.stop="optionClicked(option)"
+        class="item">
+      <a role="menuitem">{{ option.name }}</a>
+    </li>
+  </ul>
 </template>
 
 <script>
@@ -18,17 +19,22 @@ export default {
       type: Array,
       required: true,
     },
+    // TODO: These should be required!
+    menu_id: {type: String, required: false},
   },
 
   data() {
     return {
+      return_id: null,
       identifier: null,
       is_active: false,
+
+      focus_id: 0,
     };
   },
 
   methods: {
-    showMenu(event, identifier, scrollTop) {
+    showMenu(event, identifier, return_id, scrollTop) {
       if (scrollTop === undefined) {
         scrollTop = 0;
       }
@@ -56,6 +62,7 @@ export default {
 
 
       this.identifier = identifier;
+      this.return_id = return_id;
       const menu = this.$refs.menuList;
 
       let menuWidth = menu.offsetWidth;
@@ -79,11 +86,24 @@ export default {
 
       // Activate the Menu..
       this.is_active = true;
+
+      // Wait for the menu to render
+      let self = this;
+      this.$nextTick(() => {
+        self.setFocus(0);
+      });
     },
 
     hideContextMenu() {
-      this.is_active = false;
-      this.$emit('menu-closed');
+      // There are odd cases when this can trigger twice, don't do it if we're not here anymore.
+      if (this.is_active) {
+        this.$refs.menuList.children[this.focus_id].firstElementChild.tabIndex = -1;
+        this.is_active = false;
+
+        // Return focus to the opening button...
+        document.getElementById(this.return_id).focus();
+        this.$emit('menu-closed');
+      }
     },
 
     onClickOutside() {
@@ -97,6 +117,55 @@ export default {
         option: option,
       });
     },
+
+    setFocus(id) {
+      // Remove the TabIndex from the Old item..
+      this.$refs.menuList.children[this.focus_id].firstElementChild.tabIndex = -1;
+
+      // Set the focus on the new item and select..
+      this.$refs.menuList.children[id].firstElementChild.tabIndex = 0;
+      this.$refs.menuList.children[id].firstElementChild.focus();
+      this.focus_id = id;
+    },
+
+    debugEvent(e) {
+      let children = this.$refs.menuList.childElementCount;
+
+      // Ok, keydown, handle the key..
+      switch (e.key) {
+        case 'Esc':
+        case 'Escape':
+          this.hideContextMenu();
+          break;
+
+        case 'Up':
+        case 'ArrowUp': {
+          if (this.focus_id === 0 && children > 1) {
+            this.setFocus(children - 1);
+          } else if (children > 1) {
+            this.setFocus(this.focus_id - 1);
+          }
+          break;
+        }
+
+        case 'Down':
+        case 'ArrowDown': {
+          if ((this.focus_id === children - 1) && children > 1) {
+            this.setFocus(0);
+          } else if (children > 1) {
+            this.setFocus(this.focus_id + 1);
+          }
+          break;
+        }
+
+        case ' ':
+        case 'Enter': {
+          this.optionClicked(this.options[this.focus_id]);
+          break;
+        }
+      }
+      console.log(e);
+    }
   },
 }
 </script>
@@ -124,8 +193,17 @@ export default {
 }
 
 .context-menu .item:hover {
-  background-color: #59b1b6;
+  background-color: #59b1b6 !important;
   color: white;
+}
+
+.context-menu .item:focus-within {
+  background-color: #2d3230;
+  color: white;
+}
+
+.context-menu .item a:focus {
+  outline: none;
 }
 
 ul:first-child {

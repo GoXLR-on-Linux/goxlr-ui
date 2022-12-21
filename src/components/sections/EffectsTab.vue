@@ -11,9 +11,9 @@
               </div>
             </template>
             <template #right>
-              <div style="padding: 8px" @click.prevent.stop="menuPressed($event, value)">
+              <button :aria-label="`${value} Options`" :id="getButtonId(value)" aria-haspopup="menu" aria-controls="effects_menu" style="padding: 8px" @click.prevent.stop="menuPressed($event, getButtonId(value), value)">
                 <font-awesome-icon icon="fa-solid fa-ellipsis-vertical"/>
-              </div>
+              </button>
             </template>
           </PushButton>
         </ButtonList>
@@ -22,6 +22,7 @@
           :options="menu_options"
           ref="contextMenu"
           @option-clicked="optionClicked"
+          menu_id="effects_menu"
       >
       </DropMenu>
 
@@ -97,6 +98,10 @@ export default {
   },
 
   methods: {
+    getButtonId(preset_name) {
+      return preset_name.toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_") + "_profile_button";
+    },
+
     getLabel(id, key) {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return "";
@@ -117,12 +122,12 @@ export default {
       }
     },
 
-    menuPressed(event, item) {
+    menuPressed(event, return_id, item) {
       // If this wasn't on the active profile, load the selected one..
       if (!this.isActive(item)) {
         websocket.send_command(store.getActiveSerial(), {"SetActiveEffectPreset": item});
       }
-      this.$refs.contextMenu.showMenu(event, item, this.$refs.buttonList.getScrollTop());
+      this.$refs.contextMenu.showMenu(event, item, return_id, this.$refs.buttonList.getScrollTop());
     },
 
     renamePreset() {
@@ -158,5 +163,15 @@ export default {
 </script>
 
 <style scoped>
+button {
+  background-color: transparent;
+  color: #fff;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
 
+button:focus {
+  outline: none;
+}
 </style>

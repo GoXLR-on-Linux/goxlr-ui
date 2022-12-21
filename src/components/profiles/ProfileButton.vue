@@ -2,7 +2,7 @@
   <div class="button" style="display: flex" :class="{ selected: isSelected }" @click="handleClick">
     <div class="left_side">
       <span v-show="showCheck" style="width: 20px; display: inline-block; color: #59b1b6">
-        <font-awesome-icon v-show="isActive" icon="fa-solid fa-check"/>
+        <font-awesome-icon title="Active Profile" v-show="isActive" icon="fa-solid fa-check"/>
       </span>
       <span>{{ label }}</span>
     </div>

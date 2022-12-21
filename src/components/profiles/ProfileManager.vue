@@ -3,11 +3,12 @@
     <ProfileButton v-for="(name, index) in profileList" :key="index" :button-id="name"
                    :label="name" :is-selected="isSelectedProfile(name)" :is-active="isActiveProfile(name)"
                    @button-clicked="handleButtonPress"
-                   @button-double-clicked="handleDoubleClick">
+                   @button-double-clicked="handleDoubleClick"
+    >
       <template #right v-if="menuList.length > 0">
-        <div class="menu" @click.prevent.stop="menuPressed($event, name)">
+        <button :aria-label="`${name} Options`" :id="getButtonId(name)" aria-haspopup="menu" aria-controls="profile_menu" class="menu" @click.prevent.stop="menuPressed($event, getButtonId(name), name)">
           <font-awesome-icon icon="fa-solid fa-ellipsis-vertical"/>
-        </div>
+        </button>
       </template>
     </ProfileButton>
   </ProfileButtonList>
@@ -30,6 +31,7 @@
       :options="menuList"
       ref="contextMenu"
       @option-clicked="optionClicked"
+      menu_id="profile_menu"
   >
   </DropMenu>
 
@@ -110,6 +112,13 @@ export default {
   },
 
   methods: {
+    ariaProfileName(label) {
+      if (this.isActiveProfile(label)) {
+        label += " (Active)";
+      }
+      return label;
+    },
+
     isActiveProfile(label) {
       return label === this.activeProfile;
     },
@@ -134,6 +143,10 @@ export default {
       if (!this.isDeleteDisabled()) {
         this.showDeleteModal = true;
       }
+    },
+
+    getButtonId(profile_name) {
+      return profile_name.toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_") + "_profile_button";
     },
 
     displayNameModal() {
@@ -191,9 +204,9 @@ export default {
       this.$emit('delete-profile', this.selectedProfile);
     },
 
-    menuPressed(event, item) {
+    menuPressed(event, return_id, item) {
       this.handleButtonPress(item);
-      this.$refs.contextMenu.showMenu(event, item, this.$refs.buttonList.$refs.selectorList.scrollTop);
+      this.$refs.contextMenu.showMenu(event, item, return_id, this.$refs.buttonList.$refs.selectorList.scrollTop);
     },
 
     optionClicked(event) {
@@ -245,10 +258,23 @@ export default {
 .menu {
   padding-left: 4px;
   padding-right: 4px;
-
 }
 
 .menu:hover {
   cursor: pointer;
 }
+
+button {
+  background-color: transparent;
+  color: #fff;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+button:focus {
+  outline: none;
+}
+
+
 </style>
