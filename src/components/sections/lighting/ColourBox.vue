@@ -81,8 +81,6 @@ export default {
 
       const regex = /^#([a-fA-Z0-9]{6})\b$/
       if (value.match(regex)) {
-        //this.$refs.colourInput.value = value;
-        this.$emit('colour-changed', this.id, this.textValue);
         this.updateText(value);
       }
     }
