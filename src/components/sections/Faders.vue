@@ -1,13 +1,17 @@
 <template>
   <ContentBox title="Faders">
-    <ButtonList title="Channel">
-      <RadioItem id="A" text="Channel 1" group="channel" @radio-selected="channelChanged" selected/>
-      <RadioItem id="B" text="Channel 2" group="channel" @radio-selected="channelChanged"/>
-      <RadioItem id="C" text="Channel 3" group="channel" @radio-selected="channelChanged"/>
-      <RadioItem id="D" text="Channel 4" group="channel" @radio-selected="channelChanged"/>
+    <ButtonList title="Channel" role="radiogroup">
+      <RadioItem id="A" text="Channel 1" group="channel" @radio-selected="channelChanged"
+                 :selected="isActiveChannel('A')"/>
+      <RadioItem id="B" text="Channel 2" group="channel" @radio-selected="channelChanged"
+                 :selected="isActiveChannel('B')"/>
+      <RadioItem id="C" text="Channel 3" group="channel" @radio-selected="channelChanged"
+                 :selected="isActiveChannel('C')"/>
+      <RadioItem id="D" text="Channel 4" group="channel" @radio-selected="channelChanged"
+                 :selected="isActiveChannel('D')"/>
     </ButtonList>
 
-    <ButtonList title="Source">
+    <ButtonList title="Source" role="radiogroup">
       <RadioItem v-for="item in faderOrder" :key=item
                  group="source"
                  :id="item"
@@ -16,7 +20,7 @@
                  @radio-selected="sourceChanged"/>
     </ButtonList>
 
-    <ButtonList title="Mute Behaviour">
+    <ButtonList title="Mute Behaviour" role="radiogroup">
       <RadioItem v-for="(item, index) in muteFunctions" :key="item"
                  group="fader_mute_behaviour"
                  :id=item
@@ -102,6 +106,13 @@ export default {
       }
 
       websocket.send_command(serial, command);
+    },
+
+    isActiveChannel(channel) {
+      if (store.hasActiveDevice()) {
+        return this.activeChannel === channel;
+      }
+      return false;
     },
 
     isActiveSource: function (source) {

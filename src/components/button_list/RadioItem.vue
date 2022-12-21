@@ -1,7 +1,11 @@
 <template>
   <!-- Simply Create a Radio Item, and attach a label to it -->
-  <input :name=group :id=id type="radio" @change="change" :checked="selected" :disabled="disabled" />
-  <label :for=id>{{ text }}</label>
+  <div>
+    <label ref="label" :class="{ selected: selected }">
+      <input ref="check" :name=group :id=id type="radio" @change="change" :value=id :checked="selected" :disabled="disabled"/>
+      {{ text }}
+    </label>
+  </div>
 </template>
 
 <script>
@@ -14,29 +18,52 @@ export default {
     id: {type: String, required: true},
     group: {type: String, required: true},
 
-    selected: { type: Boolean, required: false, default: false },
-    disabled: { type: Boolean, required: false, default: false },
+    selected: {type: Boolean, required: false, default: false},
+    disabled: {type: Boolean, required: false, default: false},
 
     padding: {type: String, required: false, default: "8px"}
+  },
+
+  data: function() {
+    return {
+      local_selected: false,
+    }
   },
 
   methods: {
     change() {
       this.$emit('radio-selected', this.id);
+    },
+
+    isSelected() {
+      if (this.$refs.check === undefined) {
+        console.log("No Ref.");
+        return false;
+      }
+      return this.selected;
+      // console.log(this.$refs.check.id);
+      // console.log(this.$refs.check.checked);
+      // return this.$refs.check.checked;
     }
+  },
+  created() {
+    //this.isSelected();
   }
 }
 </script>
 
 <style scoped>
 /*
- We hide the actual Radio Item, but keep it visible enough that the label can still be used
- for navigation.
+Firefox doesn't support complete hiding of the radio button (it's pretty aggressive with detecting label and button
+attachment, so we do some tricks to make it 'seem' hidden, so that the screen reader can treat the radio correctly
+while it not being visibly visible!
  */
 input[type=radio] {
-  position: absolute;
   opacity: 0;
   width: 0;
+  border: 0;
+  height: 0;
+  margin: 0;
 }
 
 
@@ -48,28 +75,25 @@ label {
   width: calc(100% - 16px);
   margin: 8px;
   background-color: #3b413f;
-  padding: v-bind(padding);
+
+  /*
+   We sneak the padding 4 pixels to the left, because we can't completely hide the radio button..
+   */
+  padding: v-bind(padding) v-bind(padding) v-bind(padding) calc(v-bind(padding) - 4px);
   text-align: left;
   color: #fff;
-
-  cursor: default;
 }
 
-input[type="radio"]:checked+label {
+label.selected {
   background-color: #59b1b6;
   color: #353937;
 }
 
-input[type="radio"]:not(:checked):focus+label {
+label:not(.selected):focus-within {
   background-color: #49514e;
 }
 
-input[type="radio"]:disabled+label {
-  background-color: #383D3B;
-  color: #959796;
-}
-
-label:hover {
+label:not(.selected):hover {
   background-color: #49514e;
 }
 
