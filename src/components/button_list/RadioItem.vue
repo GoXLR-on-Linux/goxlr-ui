@@ -60,16 +60,16 @@ input[type="radio"]:checked+label {
   color: #353937;
 }
 
+input[type="radio"]:not(:checked):focus+label {
+  background-color: #49514e;
+}
+
 input[type="radio"]:disabled+label {
   background-color: #383D3B;
   color: #959796;
 }
 
 label:hover {
-  background-color: #49514e;
-}
-
-label:focus {
   background-color: #49514e;
 }
 
