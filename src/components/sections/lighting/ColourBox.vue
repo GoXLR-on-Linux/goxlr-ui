@@ -79,10 +79,11 @@ export default {
     updateColour(event) {
       let value = event.target.value;
 
-      const regex = /^#([a-f0-9]{6})\b$/
+      const regex = /^#([a-fA-Z0-9]{6})\b$/
       if (value.match(regex)) {
         //this.$refs.colourInput.value = value;
         this.$emit('colour-changed', this.id, this.textValue);
+        this.updateText(value);
       }
     }
   },
