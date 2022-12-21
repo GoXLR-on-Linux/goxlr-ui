@@ -1,5 +1,4 @@
 <template>
-  <!-- Simply Create a Radio Item, and attach a label to it -->
   <div>
     <label ref="label" :class="{ selected: selected }">
       <input ref="check" :name=group :id=id type="radio" @change="change" :value=id :checked="selected" :disabled="disabled"/>
