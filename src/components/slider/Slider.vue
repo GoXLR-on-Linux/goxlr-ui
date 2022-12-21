@@ -162,11 +162,17 @@ export default {
 
   computed: {
     minimumTextValue: function () {
-      return this.textMinValue || this.sliderMinValue;
+      if (this.textMinValue === undefined) {
+        return this.sliderMinValue;
+      }
+      return this.textMinValue;
     },
 
     maximumTextValue: function () {
-      return this.textMaxValue || this.sliderMaxValue;
+      if (this.textMaxValue === undefined) {
+        return this.sliderMaxValue;
+      }
+      return this.textMaxValue;
     },
 
     getValue() {
