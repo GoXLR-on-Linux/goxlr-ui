@@ -1,21 +1,29 @@
 <template>
   <ContentBox title="Faders">
     <ButtonList title="Channel">
-      <Button label="Channel 1" buttonId="A" :is-active="isActiveChannel('A')" @button-pressed="channelPressed"/>
-      <Button label="Channel 2" buttonId="B" :is-active="isActiveChannel('B')" @button-pressed="channelPressed"/>
-      <Button label="Channel 3" buttonId="C" :is-active="isActiveChannel('C')" @button-pressed="channelPressed"/>
-      <Button label="Channel 4" buttonId="D" :is-active="isActiveChannel('D')" @button-pressed="channelPressed"/>
+      <RadioItem id="A" text="Channel 1" group="channel" @radio-selected="channelChanged" selected/>
+      <RadioItem id="B" text="Channel 2" group="channel" @radio-selected="channelChanged"/>
+      <RadioItem id="C" text="Channel 3" group="channel" @radio-selected="channelChanged"/>
+      <RadioItem id="D" text="Channel 4" group="channel" @radio-selected="channelChanged"/>
     </ButtonList>
 
     <ButtonList title="Source">
-      <Button v-for="item in faderOrder" :key=item :label=getSourceLabel(item) :buttonId=item
-              :is-active=isActiveSource(item) @button-pressed="sourcePressed"/>
+      <RadioItem v-for="item in faderOrder" :key=item
+                 group="source"
+                 :id="item"
+                 :text="getSourceLabel(item)"
+                 :selected="isActiveSource(item)"
+                 @radio-selected="sourceChanged"/>
     </ButtonList>
 
     <ButtonList title="Mute Behaviour">
-      <Button v-for="(item, index) in muteFunctions" :key=item :label=getMuteLabel(index) :buttonId=item
-              :is-active=isActiveMuteFunction(item) :is-disabled=isMuteFunctionDisabled(item)
-              @button-pressed="setMuteFunction"/>
+      <RadioItem v-for="(item, index) in muteFunctions" :key="item"
+                 group="fader_mute_behaviour"
+                 :id=item
+                 :text="getMuteLabel(index)"
+                 :selected="isActiveMuteFunction(item)"
+                 :disabled="isMuteFunctionDisabled(item)"
+                 @radio-selected="muteFunctionChanged" />
     </ButtonList>
   </ContentBox>
 </template>
@@ -23,7 +31,6 @@
 <script>
 import ContentBox from "../ContentBox";
 import ButtonList from "../button_list/ButtonList";
-import Button from "../button_list/Button";
 import {
   ChannelNameReadable,
   FaderOrder,
@@ -32,13 +39,14 @@ import {
 } from "@/util/mixerMapping";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
+import RadioItem from "@/components/button_list/RadioItem";
 
 export default {
   /**
    * Everything here focuses around the 'Channel' input,
    */
 
-  components: {ContentBox, ButtonList, Button},
+  components: {RadioItem, ContentBox, ButtonList},
   name: "MicFaders",
 
   data() {
@@ -59,12 +67,12 @@ export default {
       return MuteFunctionReadable[id];
     },
 
-    channelPressed: function (id) {
+    channelChanged: function (id) {
       this.activeChannel = id;
     },
 
-    sourcePressed: function (channelName) {
-      let self = this;
+    sourceChanged: function (channelName) {
+      console.log(channelName);
 
       let serial = store.getActiveSerial();
       let fader = this.activeChannel;
@@ -76,12 +84,12 @@ export default {
       websocket.send_command(serial, command);
 
       // Double check mute function is valid..
-      if (self.isMuteFunctionDisabled(self.getActiveMuteFunction())) {
-        self.setMuteFunction("All")
+      if (this.isMuteFunctionDisabled(this.getActiveMuteFunction())) {
+        this.muteFunctionChanged("All")
       }
     },
 
-    setMuteFunction: function (mute_function) {
+    muteFunctionChanged(mute_function) {
       let serial = store.getActiveSerial();
       let fader = this.activeChannel;
 
@@ -94,10 +102,6 @@ export default {
       }
 
       websocket.send_command(serial, command);
-    },
-
-    isActiveChannel: function (id) {
-      return this.activeChannel === id;
     },
 
     isActiveSource: function (source) {
