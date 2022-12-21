@@ -3,7 +3,7 @@
     <div class="rotation">
       <input id="slider" type="range" v-bind:style="getCurrentStyle" v-bind:min="minValue"
              v-bind:max="maxValue" v-bind:value="localFieldValue" v-on:input="update"
-             v-on:mousedown="mouseDown" v-on:mouseup="mouseUp"/>
+             v-on:mousedown="mouseDown" v-on:mouseup="mouseUp" v-on:keydown="mouseDown" v-on:keyup="mouseUp" />
     </div>
   </div>
 </template>
