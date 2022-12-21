@@ -2,7 +2,7 @@
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container" v-click-outside="onClickOutside">
+        <div class="modal-container" role="dialog" aria-modal="true" v-click-outside="onClickOutside">
 
           <div class="modal-header">
             <div class="title"><slot name="title"></slot></div>
