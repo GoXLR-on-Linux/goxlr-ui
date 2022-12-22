@@ -101,6 +101,13 @@ export class Websocket {
         return this.#sendRequest(request);
     }
 
+    recover_defaults(type) {
+        let request = {
+            "RecoverDefaults": type
+        }
+        return this.#sendRequest(request);
+    }
+
     send_command(serial, command) {
         let request = {
             "Command": [

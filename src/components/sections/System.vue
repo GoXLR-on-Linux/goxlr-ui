@@ -117,6 +117,11 @@ SOFTWARE.</textarea>
         <span style="display: inline-block; width: 360px">Voice Chat Mute All Also Mutes Mic To Chat Mic:</span>
         <input type="checkbox" :checked="get_vcmaammtcm()" @change="set_vcmaammtcm" />
       </div>
+      <div style="padding: 12px">
+        <button style="margin: 3px" @click="recover_defaults('Profiles')">Recover Default Profiles</button>
+        <button style="margin: 3px" @click="recover_defaults('Icons')">Recover Default Icons</button>
+        <button style="margin: 3px" @click="recover_defaults('Presets')">Recover Default Presets</button>
+      </div>
     </div>
   </ModalBox>
 </template>
@@ -189,6 +194,10 @@ export default {
     set_vcmaammtcm(event) {
       console.log(event);
       websocket.send_command(store.getActiveSerial(), {"SetVCMuteAlsoMuteCM": event.target.checked})
+    },
+
+    recover_defaults(type) {
+      websocket.recover_defaults(type);
     }
   }
 }
