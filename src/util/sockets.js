@@ -108,6 +108,13 @@ export class Websocket {
         return this.#sendRequest(request);
     }
 
+    set_autostart(enabled) {
+        let request = {
+            "SetAutoStartEnabled": enabled
+        }
+        return this.#sendRequest(request);
+    }
+
     send_command(serial, command) {
         let request = {
             "Command": [

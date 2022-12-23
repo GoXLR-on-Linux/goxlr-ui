@@ -32,7 +32,11 @@ export const store = reactive({
     },
 
     getVersion() {
-        return this.status.daemon_version;
+        return this.status.config.daemon_version;
+    },
+
+    isAutostartEnabled() {
+        return this.status.config.autostart_enabled;
     },
 
     getDeviceCount() {

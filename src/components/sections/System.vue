@@ -118,6 +118,10 @@ SOFTWARE.</textarea>
         <input type="checkbox" :checked="get_vcmaammtcm()" @change="set_vcmaammtcm" />
       </div>
       <div style="padding: 12px">
+        <span style="display: inline-block; width: 360px">Autostart on Login:</span>
+        <input type="checkbox" :checked="isAutostart()" @change="setAutoStart" />
+      </div>
+      <div style="padding: 12px">
         <button style="margin: 3px" @click="recover_defaults('Profiles')">Recover Default Profiles</button>
         <button style="margin: 3px" @click="recover_defaults('Icons')">Recover Default Icons</button>
         <button style="margin: 3px" @click="recover_defaults('Presets')">Recover Default Presets</button>
@@ -194,6 +198,14 @@ export default {
     set_vcmaammtcm(event) {
       console.log(event);
       websocket.send_command(store.getActiveSerial(), {"SetVCMuteAlsoMuteCM": event.target.checked})
+    },
+
+    isAutostart() {
+      return store.isAutostartEnabled();
+    },
+
+    setAutoStart(event) {
+      websocket.set_autostart(event.target.checked);
     },
 
     recover_defaults(type) {
