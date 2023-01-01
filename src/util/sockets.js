@@ -115,6 +115,17 @@ export class Websocket {
         return this.#sendRequest(request);
     }
 
+    set_show_icon(enabled) {
+        let request = {
+            "SetShowTrayIcon": enabled
+        }
+        return this.#sendRequest(request);
+    }
+
+    send_shutdown() {
+        return this.#sendRequest("StopDaemon");
+    }
+
     send_command(serial, command) {
         let request = {
             "Command": [

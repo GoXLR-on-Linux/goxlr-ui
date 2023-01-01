@@ -39,6 +39,10 @@ export const store = reactive({
         return this.status.config.autostart_enabled;
     },
 
+    isShowIcon() {
+        return this.status.config.show_tray_icon;
+    },
+
     getDeviceCount() {
         return Object.keys(this.status.mixers).length;
     },

@@ -122,9 +122,16 @@ SOFTWARE.</textarea>
         <input type="checkbox" :checked="isAutostart()" @change="setAutoStart" />
       </div>
       <div style="padding: 12px">
+        <span style="display: inline-block; width: 360px">Show Tray Icon (requires restart):</span>
+        <input type="checkbox" :checked="isShowIcon()" @change="setShowIcon" />
+      </div>
+      <div style="padding: 12px">
         <button style="margin: 3px" @click="recover_defaults('Profiles')">Recover Default Profiles</button>
         <button style="margin: 3px" @click="recover_defaults('Icons')">Recover Default Icons</button>
         <button style="margin: 3px" @click="recover_defaults('Presets')">Recover Default Presets</button>
+      </div>
+      <div style="padding: 12px">
+        <button style="background-color: darkred; color: white" @click="shutdown_util()">Shutdown GoXLR Utility</button>
       </div>
     </div>
   </ModalBox>
@@ -208,8 +215,20 @@ export default {
       websocket.set_autostart(event.target.checked);
     },
 
+    isShowIcon() {
+      return store.isShowIcon();
+    },
+
+    setShowIcon(event) {
+      websocket.set_show_icon(event.target.checked);
+    },
+
     recover_defaults(type) {
       websocket.recover_defaults(type);
+    },
+
+    shutdown_util() {
+      websocket.send_shutdown();
     }
   }
 }
