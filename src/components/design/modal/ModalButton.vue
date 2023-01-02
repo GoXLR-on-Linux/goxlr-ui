@@ -1,10 +1,16 @@
 <template>
-  <button class="modal-button"><slot /></button>
+  <button ref="button" class="modal-button"><slot /></button>
 </template>
 
 <script>
 export default {
-  name: "ModalButton"
+  name: "ModalButton",
+
+  methods: {
+    focus() {
+      this.$refs.button.focus();
+    }
+  }
 }
 </script>
 
@@ -18,7 +24,7 @@ export default {
   width: 120px;
 }
 
-.modal-button:hover {
+.modal-button:hover, .modal-button:focus {
   background-color: #737775;
 }
 </style>

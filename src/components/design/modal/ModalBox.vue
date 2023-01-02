@@ -2,17 +2,14 @@
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container" role="dialog" aria-modal="true" v-click-outside="onClickOutside">
-
+        <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="label" aria-describedby="body" v-click-outside="onClickOutside">
           <div class="modal-header">
-            <div class="title"><slot name="title"></slot></div>
-            <div class="close-button" @click="$emit('close')">X</div>
+            <div id="label" class="title"><slot name="title"></slot></div>
+            <button class="close-button" @click="$emit('close')"><font-awesome-icon title="Close" icon="fa-solid fa-xmark" /></button>
           </div>
-
-          <div class="modal-body">
+          <div class="modal-body" id="body">
             <slot></slot>
           </div>
-
           <div class="modal-footer">
             <slot name="footer">
               <button class="modal-default-button" @click="$emit('close')">OK</button>
@@ -25,7 +22,11 @@
 </template>
 
 <script>
+// TODO: I'm recycling IDs here, not ideal..
+
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 export default {
+  components: {FontAwesomeIcon},
   emits: ['close'],
   name: "ModalBox",
 
@@ -65,7 +66,7 @@ export default {
 
 
   width: v-bind(width);
-  margin: 0px auto;
+  margin: 0 auto;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
@@ -89,9 +90,12 @@ export default {
 }
 
 .modal-header .close-button {
-  padding: 15px;
+  padding: 14px;
   float: right;
   cursor: pointer;
+  background-color: transparent;
+  color: #fff;
+  border: 0;
 }
 
 .modal-body {

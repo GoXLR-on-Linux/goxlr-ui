@@ -15,7 +15,7 @@ export default {
   },
 
   methods: {
-    focusInput() {
+    focus() {
       this.$refs.inputBox.focus();
     },
   }

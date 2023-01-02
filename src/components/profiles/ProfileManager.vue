@@ -1,4 +1,4 @@
-<template>
+<template xmlns:slot="http://www.w3.org/1999/html">
   <ProfileButtonList ref="buttonList">
     <ProfileButton v-for="(name, index) in profileList" :key="index" :button-id="name"
                    :label="name" :is-selected="isSelectedProfile(name)" :is-active="isActiveProfile(name)"
@@ -13,18 +13,18 @@
     </ProfileButton>
   </ProfileButtonList>
   <div class="buttonColumns">
-    <div class="actionButton" @click="showSaveModal = true">
+    <button ref="save" :title="`Save Profile ${selectedProfile}`" class="actionButton" @click="$refs.saveModal.openModal($refs.focusOk, $refs.save)">
       <font-awesome-icon icon="fa-solid fa-floppy-disk"/>
-    </div>
-    <div class="actionButton" @click="showNewModal = true">
+    </button>
+    <button ref="new" title="Create new Profile" class="actionButton" @click="$refs.newModal.openModal($refs.focusDefault, $refs.new)">
       <font-awesome-icon icon="fa-solid fa-file-circle-plus"/>
-    </div>
-    <div class="actionButton" :class="{ disabled: selectedProfile === '' }" @click="copyProfile()">
+    </button>
+    <button title="Copy Profile" class="actionButton" @click="copyProfile()" :disabled="selectedProfile === ''">
       <font-awesome-icon icon="fa-solid fa-copy"/>
-    </div>
-    <div class="actionButton" :class="{ disabled: isDeleteDisabled() }" @click="shouldShowDeleteModal()">
+    </button>
+    <button ref="del" :title="`Delete Profile ` + this.selectedProfile" class="actionButton" :disabled="isDeleteDisabled()" @click="$refs.deleteModal.openModal($refs.focusDelDefault, $refs.del)">
       <font-awesome-icon icon="fa-solid fa-trash"/>
-    </div>
+    </button>
   </div>
 
   <DropMenu
@@ -35,63 +35,61 @@
   >
   </DropMenu>
 
-  <!-- We have a few modals to potentially use here, this one for hitting the 'save' button.. -->
-  <ModalBox v-if="showSaveModal" @close="showSaveModal = false">
+  <AccessibleModal ref="saveModal" id="saveProfile" :show_close=false>
     <template v-slot:title>Overwrite Confirmation</template>
     <template v-slot:default>Are you sure you want to overwrite the profile {{ activeProfile }}?</template>
     <template v-slot:footer>
-      <ModalButton @click="showSaveModal = false; saveActiveProfile()">OK</ModalButton>
-      <ModalButton @click="showSaveModal = false">Cancel</ModalButton>
+      <ModalButton ref="focusOk" @click="saveActiveProfile(); $refs.saveModal.closeModal()">OK</ModalButton>
+      <ModalButton @click="$refs.saveModal.closeModal()">Cancel</ModalButton>
     </template>
-  </ModalBox>
+  </AccessibleModal>
 
-  <ModalBox v-if="showNewModal" @close="showNewModal = false">
+  <AccessibleModal ref="newModal" id="newProfile">
     <template v-slot:title>New Profile Source</template>
     <template v-slot:default>
       Would you like to create a new profile from the default, or current configuration?
     </template>
     <template v-slot:footer>
-      <ModalButton @click="showNewModal = false; createNewProfile = true; displayNameModal()">Default</ModalButton>
-      <ModalButton @click="showNewModal = false; createNewProfile = false; displayNameModal()">Current</ModalButton>
-      <ModalButton @click="showNewModal = false">Cancel</ModalButton>
+      <ModalButton ref="focusDefault" @click="createNewProfile = true; $refs.newModal.closeModal(); $refs.nameModal.openModal($refs.newName, $refs.new)">Default</ModalButton>
+      <ModalButton @click="createNewProfile = false; $refs.newModal.closeModal(); $refs.nameModal.openModal($refs.newName, $refs.new)">Current</ModalButton>
+      <ModalButton @click="$refs.newModal.closeModal()">Cancel</ModalButton>
     </template>
-  </ModalBox>
+  </AccessibleModal>
 
-  <ModalBox v-if="showDeleteModal" @close="showDeleteModal = false">
+  <AccessibleModal ref="deleteModal" id="delProfile">
     <template v-slot:title>Delete Confirmation</template>
     <template v-slot:default>Are you sure you want to delete the profile {{ selectedProfile }}?</template>
     <template v-slot:footer>
-      <ModalButton @click="showDeleteModal = false; deleteSelectedProfile()">Ok</ModalButton>
-      <ModalButton @click="showDeleteModal = false">Cancel</ModalButton>
+      <ModalButton @click="$refs.deleteModal.closeModal(); deleteSelectedProfile()">Ok</ModalButton>
+      <ModalButton ref="focusDelDefault" @click="$refs.deleteModal.closeModal()">Cancel</ModalButton>
     </template>
-  </ModalBox>
+  </AccessibleModal>
 
-  <ModalBox v-if="showNameModal" @close="showNameModal = false">
+  <AccessibleModal ref="nameModal" id="nameProfile">
     <template v-slot:title>Enter New Profile Name</template>
     <template v-slot:default>
-      <ModalInput ref="newName" v-model="newProfileName" placeholder="Profile Name"
-                  @on-enter="showNameModal = false; newProfile()"/>
+      <ModalInput ref="newName" v-model="newProfileName" placeholder="Profile Name" @on-enter="$refs.nameModal.closeModal(); newProfile(); newProfileName = ''"/>
     </template>
     <template v-slot:footer>
-      <ModalButton @click="showNameModal = false; newProfile()">Ok</ModalButton>
-      <ModalButton @click="showNameModal = false; newProfileName = ''">Cancel</ModalButton>
+      <ModalButton @click="$refs.nameModal.closeModal(); newProfile(); newProfileName = ''">Ok</ModalButton>
+      <ModalButton @click="$refs.nameModal.closeModal(); newProfileName = ''">Cancel</ModalButton>
     </template>
-  </ModalBox>
+  </AccessibleModal>
 </template>
 
 <script>
 import ProfileButtonList from "@/components/profiles/ProfileButtonList";
 import ProfileButton from "@/components/profiles/ProfileButton";
-import ModalBox from "@/components/design/modal/ModalBox";
 import ModalButton from "@/components/design/modal/ModalButton";
 import ModalInput from "@/components/design/modal/ModalInput";
 import DropMenu from "@/components/design/DropMenu";
+import AccessibleModal from "@/components/design/modal/AccessibleModal";
 
 export default {
   emits: ['new-profile', 'load-profile', 'save-profile', 'save-profile-as', 'delete-profile', 'menu-item-pressed'],
 
   name: "ProfileManager",
-  components: {DropMenu, ModalInput, ModalButton, ModalBox, ProfileButton, ProfileButtonList},
+  components: {AccessibleModal, DropMenu, ModalInput, ModalButton, ProfileButton, ProfileButtonList},
   props: {
     activeProfile: String,
     profileList: Array,
@@ -112,6 +110,10 @@ export default {
   },
 
   methods: {
+    openSaveModal() {
+      this.$refs.testModal.openModal(this.$refs.focusOk);
+    },
+
     ariaProfileName(label) {
       if (this.isActiveProfile(label)) {
         label += " (Active)";
@@ -235,9 +237,9 @@ export default {
   line-height: 40px;
 }
 
-.actionButton.disabled {
-  background-color: #2B2F2D;
-}
+/*.actionButton.disabled {*/
+/*  background-color: #2B2F2D;*/
+/*}*/
 
 .actionButton.disabled:hover {
   background-color: #2B2F2D;
@@ -255,6 +257,10 @@ export default {
   background-color: #49514e;
 }
 
+.actionButton:disabled {
+  background-color: #2B2F2D;
+}
+
 .menu {
   padding-left: 4px;
   padding-right: 4px;
@@ -270,6 +276,10 @@ button {
   border: 0;
   padding: 0;
   margin: 0;
+}
+
+button:focus {
+  background-color: #49514e;
 }
 
 button:focus {
