@@ -65,7 +65,7 @@ import FileTabs from "@/components/sections/files/FileTabs";
 import MainTabContent from "@/components/design/MainTabContent";
 import EffectsTab from "@/components/sections/EffectsTab";
 import {isDeviceMini} from "@/util/util";
-import LightingTab from "@/components/sections/LightingTab";
+import LightingTab from "@/components/sections/lighting/LightingTab";
 import SamplerTab from "@/components/sections/SamplerTab";
 
 export default {

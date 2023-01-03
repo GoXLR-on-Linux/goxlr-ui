@@ -1,36 +1,22 @@
-<template>
-  <MainTabContent :no-left-pad=false>
-    <ContentBox title="Cough/Bleep Buttons">
-      <ButtonList title="Buttons">
-        <PushButton label="Bleep" :is-active="!isCough" @click="setCough(false)"/>
-        <PushButton label="Cough" :is-active="isCough" @click="setCough(true)"/>
-      </ButtonList>
-      <ColourBox id="active" title="Active" :colour-value="getColour(true)" @colour-changed="onColourChange"/>
-      <ButtonList title="Inactive Option">
-        <PushButton label="Dim Active Colour" :is-active="isMuteInactiveState('Dimmed')"
-                    @click="setMuteInactiveState('Dimmed')"/>
-        <PushButton label="Inactive Colour" :is-active="isMuteInactiveState('Colour2')"
-                    @click="setMuteInactiveState('Colour2')"/>
-        <PushButton label="Dim Inactive Colour" :is-active="isMuteInactiveState('DimmedColour2')"
-                    @click="setMuteInactiveState('DimmedColour2')"/>
-      </ButtonList>
-      <ColourBox id="inactive" title="Inactive" :colour-value="getColour(false)" @colour-changed="onColourChange"/>
-    </ContentBox>
-  </MainTabContent>
-</template>
-
 <script>
 import MainTabContent from "@/components/design/MainTabContent";
 import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
-import ColourBox from "@/components/sections/lighting/ColourBox";
-import {store} from "@/store";
-import {websocket} from "@/util/sockets";
+import ColorPicker from "@/components/sections/lighting/ColorPicker";
+
+import { store } from "@/store";
+import { websocket } from "@/util/sockets";
 
 export default {
   name: "LightingCough",
-  components: {ColourBox, PushButton, ButtonList, ContentBox, MainTabContent},
+  components: {
+    ColorPicker,
+    PushButton,
+    ButtonList,
+    ContentBox,
+    MainTabContent
+  },
 
   data() {
     return {
@@ -81,6 +67,27 @@ export default {
   }
 }
 </script>
+
+<template>
+  <MainTabContent :no-left-pad=false>
+    <ContentBox title="Cough/Bleep Buttons">
+      <ButtonList title="Buttons">
+        <PushButton label="Bleep" :is-active="!isCough" @click="setCough(false)"/>
+        <PushButton label="Cough" :is-active="isCough" @click="setCough(true)"/>
+      </ButtonList>
+      <ColorPicker id="active" title="Active" :color-value="getColour(true)" @colour-changed="onColourChange"/>
+      <ButtonList title="Inactive Option">
+        <PushButton label="Dim Active Colour" :is-active="isMuteInactiveState('Dimmed')"
+                    @click="setMuteInactiveState('Dimmed')"/>
+        <PushButton label="Inactive Colour" :is-active="isMuteInactiveState('Colour2')"
+                    @click="setMuteInactiveState('Colour2')"/>
+        <PushButton label="Dim Inactive Colour" :is-active="isMuteInactiveState('DimmedColour2')"
+                    @click="setMuteInactiveState('DimmedColour2')"/>
+      </ButtonList>
+      <ColorPicker id="inactive" title="Inactive" :color-value="getColour(false)" @colour-changed="onColourChange"/>
+    </ContentBox>
+  </MainTabContent>
+</template>
 
 <style scoped>
 

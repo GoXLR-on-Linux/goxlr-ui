@@ -1,87 +1,24 @@
-<template>
-  <div style="display: flex">
-    <div style="padding: 40px 20px 40px 40px;">
-      <ContentBox title="Faders">
-        <ButtonList title="Channel">
-          <PushButton label="Channel 1" buttonId="A" :is-active="isActiveChannel('A')" @button-pressed="channelPressed"/>
-          <PushButton label="Channel 2" buttonId="B" :is-active="isActiveChannel('B')" @button-pressed="channelPressed"/>
-          <PushButton label="Channel 3" buttonId="C" :is-active="isActiveChannel('C')" @button-pressed="channelPressed"/>
-          <PushButton label="Channel 4" buttonId="D" :is-active="isActiveChannel('D')" @button-pressed="channelPressed"/>
-        </ButtonList>
-      </ContentBox>
-    </div>
-    <MainTabContent :no-left-pad=true>
-      <ContentBox title="Fader">
-        <ButtonList title="Style">
-          <PushButton label="Gradient" :is-active="styleContains('Gradient')" @button-pressed="toggleGradient"/>
-          <PushButton label="Meter" :is-active="styleContains('Meter')" @button-pressed="toggleMeter"/>
-        </ButtonList>
-        <ColourBox title="Bottom Colour" id="bottom" :colour-value="getBottomColour()"
-                   @colour-changed="onFaderColourChange"/>
-        <ColourBox title="Top Colour" id="top" :colour-value="getTopColour()" @colour-changed="onFaderColourChange"/>
-      </ContentBox>
-
-      <ContentBox v-show="!isDeviceMini()" title="Screen">
-        <ColourBox title="Background Colour" :colour-value="getScreenColour()" @colour-changed="onScreenColourChange"/>
-        <ButtonList title="Icon">
-          <template #title>
-            ICONS
-            <span class="openButton" @click="openIcons">
-              <font-awesome-icon icon="fa-solid fa-folder" />
-            </span>
-          </template>
-          <template #default>
-            <PushButton label="-- NONE --" button-id="" :is-active="isActiveIcon(null)"
-                        @button-pressed="setActiveIcon"/>
-            <PushButton v-for="item in getScreenIcons()" :key=item :label=item :buttonId=item
-                        :is-active=isActiveIcon(item) @button-pressed="setActiveIcon"/>
-          </template>
-        </ButtonList>
-
-        <ButtonList title="Options">
-          <PushButton label="Show Number" :is-active="isShowNumber()" @button-pressed="toggleShowNumber"/>
-          <PushButton label="Invert Display" :is-active="isInverted()" @button-pressed="toggleInverted"/>
-          <hr/>
-          <div style="color: #fff; text-align: left; padding-left: 10px; margin-top: 25px;">Text:</div>
-          <input type="text" v-model="textValue" @blur="applyUpdate"
-                 v-on:keyup.enter="applyUpdate"/>
-        </ButtonList>
-
-      </ContentBox>
-
-      <ContentBox title="Mute">
-        <ColourBox id="active" title="Active" :colour-value="getMuteActiveColour()"
-                   @colour-changed="onButtonColourChange"/>
-        <ButtonList title="Inactive Option">
-          <PushButton label="Dim Active Colour" :is-active="isMuteInactiveState('Dimmed')"
-                      @click="setMuteInactiveState('Dimmed')"/>
-          <PushButton label="Inactive Colour" :is-active="isMuteInactiveState('Colour2')"
-                      @click="setMuteInactiveState('Colour2')"/>
-          <PushButton label="Dim Inactive Colour" :is-active="isMuteInactiveState('DimmedColour2')"
-                      @click="setMuteInactiveState('DimmedColour2')"/>
-        </ButtonList>
-        <ColourBox id="inactive" title="Inactive" :colour-value="getMuteInactiveColour()"
-                   @colour-changed="onButtonColourChange"/>
-      </ContentBox>
-    </MainTabContent>
-
-  </div>
-</template>
-
 <script>
 import MainTabContent from "@/components/design/MainTabContent";
 import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
-import ColourBox from "@/components/sections/lighting/ColourBox";
-import {store} from "@/store";
-import {websocket} from "@/util/sockets";
-import {MuteButtonNamesForFader, ScribbleNames} from "@/util/mixerMapping";
-import {isDeviceMini} from "@/util/util";
+import ColorPicker from "@/components/sections/lighting/ColorPicker";
+
+import { store } from "@/store";
+import { websocket } from "@/util/sockets";
+import { MuteButtonNamesForFader, ScribbleNames } from "@/util/mixerMapping";
+import { isDeviceMini}  from "@/util/util";
 
 export default {
   name: "LightingMixer",
-  components: {ColourBox, PushButton, ButtonList, ContentBox, MainTabContent},
+  components: {
+    ColorPicker,
+    PushButton,
+    ButtonList,
+    ContentBox,
+    MainTabContent,
+  },
 
   data() {
     return {
@@ -310,6 +247,76 @@ export default {
   }
 }
 </script>
+
+<template>
+  <div style="display: flex">
+    <div style="padding: 40px 20px 40px 40px;">
+      <ContentBox title="Faders">
+        <ButtonList title="Channel">
+          <PushButton label="Channel 1" buttonId="A" :is-active="isActiveChannel('A')" @button-pressed="channelPressed"/>
+          <PushButton label="Channel 2" buttonId="B" :is-active="isActiveChannel('B')" @button-pressed="channelPressed"/>
+          <PushButton label="Channel 3" buttonId="C" :is-active="isActiveChannel('C')" @button-pressed="channelPressed"/>
+          <PushButton label="Channel 4" buttonId="D" :is-active="isActiveChannel('D')" @button-pressed="channelPressed"/>
+        </ButtonList>
+      </ContentBox>
+    </div>
+    <MainTabContent :no-left-pad=true>
+      <ContentBox title="Fader">
+        <ButtonList title="Style">
+          <PushButton label="Gradient" :is-active="styleContains('Gradient')" @button-pressed="toggleGradient"/>
+          <PushButton label="Meter" :is-active="styleContains('Meter')" @button-pressed="toggleMeter"/>
+        </ButtonList>
+        <ColorPicker title="Bottom Colour" id="bottom" :color-value="getBottomColour()"
+                   @colour-changed="onFaderColourChange"/>
+        <ColorPicker title="Top Colour" id="top" :color-value="getTopColour()" @colour-changed="onFaderColourChange"/>
+      </ContentBox>
+
+      <ContentBox v-show="!isDeviceMini()" title="Screen">
+        <ColorPicker title="Background Colour" :color-value="getScreenColour()" @colour-changed="onScreenColourChange"/>
+        <ButtonList title="Icon">
+          <template #title>
+            ICONS
+            <span class="openButton" @click="openIcons">
+              <font-awesome-icon icon="fa-solid fa-folder" />
+            </span>
+          </template>
+          <template #default>
+            <PushButton label="-- NONE --" button-id="" :is-active="isActiveIcon(null)"
+                        @button-pressed="setActiveIcon"/>
+            <PushButton v-for="item in getScreenIcons()" :key=item :label=item :buttonId=item
+                        :is-active=isActiveIcon(item) @button-pressed="setActiveIcon"/>
+          </template>
+        </ButtonList>
+
+        <ButtonList title="Options">
+          <PushButton label="Show Number" :is-active="isShowNumber()" @button-pressed="toggleShowNumber"/>
+          <PushButton label="Invert Display" :is-active="isInverted()" @button-pressed="toggleInverted"/>
+          <hr/>
+          <div style="color: #fff; text-align: left; padding-left: 10px; margin-top: 25px;">Text:</div>
+          <input type="text" v-model="textValue" @blur="applyUpdate"
+                 v-on:keyup.enter="applyUpdate"/>
+        </ButtonList>
+
+      </ContentBox>
+
+      <ContentBox title="Mute">
+        <ColorPicker id="active" title="Active" :color-value="getMuteActiveColour()"
+                   @colour-changed="onButtonColourChange"/>
+        <ButtonList title="Inactive Option">
+          <PushButton label="Dim Active Colour" :is-active="isMuteInactiveState('Dimmed')"
+                      @click="setMuteInactiveState('Dimmed')"/>
+          <PushButton label="Inactive Colour" :is-active="isMuteInactiveState('Colour2')"
+                      @click="setMuteInactiveState('Colour2')"/>
+          <PushButton label="Dim Inactive Colour" :is-active="isMuteInactiveState('DimmedColour2')"
+                      @click="setMuteInactiveState('DimmedColour2')"/>
+        </ButtonList>
+        <ColorPicker id="inactive" title="Inactive" :color-value="getMuteInactiveColour()"
+                   @colour-changed="onButtonColourChange"/>
+      </ContentBox>
+    </MainTabContent>
+
+  </div>
+</template>
 
 <style scoped>
 input[type=text] {

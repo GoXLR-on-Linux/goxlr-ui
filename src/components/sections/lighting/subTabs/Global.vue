@@ -1,26 +1,22 @@
-<template>
-  <MainTabContent :no-left-pad=false>
-    <ContentBox title="Areas">
-      <ButtonList title="Area">
-        <PushButton label="Accent" :is-active="isAccent" @click="isAccent = true" />
-        <PushButton label="Global" :is-active="!isAccent" :is-disabled=true />
-      </ButtonList>
-      <ColourBox title="Colour" :colour-value="getColour()" @colour-changed="onColourChange" />
-    </ContentBox>
-  </MainTabContent>
-</template>
-
 <script>
 import MainTabContent from "@/components/design/MainTabContent";
 import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
-import ColourBox from "@/components/sections/lighting/ColourBox";
-import {store} from "@/store";
-import {websocket} from "@/util/sockets";
+import ColorPicker from "@/components/sections/lighting/ColorPicker";
+
+import { store } from "@/store";
+import { websocket } from "@/util/sockets";
+
 export default {
   name: "LightingGlobal",
-  components: {ColourBox, PushButton, ButtonList, ContentBox, MainTabContent},
+  components: {
+    ColorPicker,
+    PushButton,
+    ButtonList,
+    ContentBox,
+    MainTabContent,
+  },
 
   data() {
     return {
@@ -44,6 +40,18 @@ export default {
   }
 }
 </script>
+
+<template>
+  <MainTabContent :no-left-pad=false>
+    <ContentBox title="Areas">
+      <ButtonList title="Area">
+        <PushButton label="Accent" :is-active="isAccent" @click="isAccent = true" />
+        <PushButton label="Global" :is-active="!isAccent" :is-disabled=true />
+      </ButtonList>
+      <ColorPicker title="Colour" :color-value="getColour()" @colour-changed="onColourChange" />
+    </ContentBox>
+  </MainTabContent>
+</template>
 
 <style scoped>
 
