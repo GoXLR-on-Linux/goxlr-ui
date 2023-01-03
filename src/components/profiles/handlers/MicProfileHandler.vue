@@ -12,10 +12,25 @@
       </div>
     </div>
     <div style="height: 205px">
-      <ProfileManager :profile-list="getProfileList()" :active-profile="getActiveProfile()" @new-profile="newProfile"
-                      @load-profile="loadProfile" @save-profile="saveProfile" @save-profile-as="saveProfileAs"
-                      @delete-profile="deleteProfile"/>
+      <ProfileManager ref="manager" :profile-list="getProfileList()" :active-profile="getActiveProfile()"
+                      :menu-list="menuList"
+                      @new-profile="newProfile" @load-profile="loadProfile" @save-profile="saveProfile"
+                      @save-profile-as="saveProfileAs" @menu-item-pressed="menuItemPressed" />
     </div>
+
+    <AccessibleModal ref="deleteMicModal" id="delMicProfile">
+      <template v-slot:title>Delete Confirmation</template>
+      <template v-slot:default>Are you sure you want to delete the microphone profile {{ selectedProfile }}?</template>
+      <template v-slot:footer>
+        <ModalButton @click="$refs.deleteMicModal.closeModal(); deleteProfile(this.selectedProfile)">Ok</ModalButton>
+        <ModalButton ref="focusDelDefault" @click="$refs.deleteMicModal.closeModal()">Cancel</ModalButton>
+      </template>
+    </AccessibleModal>
+
+    <AccessibleModal ref="noDelete" id="delMicProfile">
+      <template v-slot:title>Unable to Delete</template>
+      <template v-slot:default>It is not possible to delete the current active microphone profile.</template>
+    </AccessibleModal>
   </div>
 </template>
 
@@ -23,10 +38,24 @@
 import {store} from "@/store";
 import {sendHttpCommand, websocket} from "@/util/sockets";
 import ProfileManager from "@/components/profiles/ProfileManager";
+import AccessibleModal from "@/components/design/modal/AccessibleModal";
+import ModalButton from "@/components/design/modal/ModalButton";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 export default {
   name: "MicProfileHandler",
-  components: {ProfileManager},
+  components: {FontAwesomeIcon, ModalButton, AccessibleModal, ProfileManager},
+
+  data() {
+    return {
+      menuList: [
+        {name: 'Load Profile', slug: 'load'},
+        {name: 'Delete Profile', slug: 'delete'}
+      ],
+
+      selectedProfile: '',
+    }
+  },
 
   methods: {
     getProfileList() {
@@ -41,6 +70,21 @@ export default {
         return '';
       }
       return store.getActiveDevice().mic_profile_name;
+    },
+
+    menuItemPressed(event) {
+      if (event.option.slug === "load") {
+        this.loadProfile(event.item);
+      }
+
+      if (event.option.slug === "delete") {
+        if (event.item === this.getActiveProfile()) {
+          this.$refs.noDelete.openModal(this.$refs.focusDelDefault, this.$refs.manager.$refs[this.$refs.manager.getButtonId(event.item)][0]);
+        } else {
+          this.selectedProfile = event.item;
+          this.$refs.deleteMicModal.openModal(this.$refs.focusDelDefault, this.$refs.manager.$refs[this.$refs.manager.getButtonId(event.item)][0]);
+        }
+      }
     },
 
     loadProfile(label) {

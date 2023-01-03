@@ -9,8 +9,7 @@
   </div>
   <div style="height: 290px">
     <ProfileManager ref="manager" :profile-list="getProfileList()" :active-profile="getActiveProfile()" :menu-list="menuList" @new-profile="newProfile"
-                    @load-profile="loadProfile" @save-profile="saveProfile" @save-profile-as="saveProfileAs" @menu-item-pressed="menuItemPressed"
-                    @delete-profile="deleteProfile"/>
+                    @load-profile="loadProfile" @save-profile="saveProfile" @save-profile-as="saveProfileAs" @menu-item-pressed="menuItemPressed" />
   </div>
 
   <AccessibleModal ref="deleteModal" id="delProfile">

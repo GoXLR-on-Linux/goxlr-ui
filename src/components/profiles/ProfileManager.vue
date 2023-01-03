@@ -72,7 +72,7 @@ import AccessibleModal from "@/components/design/modal/AccessibleModal";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 export default {
-  emits: ['new-profile', 'load-profile', 'save-profile', 'save-profile-as', 'delete-profile', 'menu-item-pressed'],
+  emits: ['new-profile', 'load-profile', 'save-profile', 'save-profile-as', 'menu-item-pressed'],
 
   name: "ProfileManager",
   components: {FontAwesomeIcon, AccessibleModal, DropMenu, ModalInput, ModalButton, ProfileButton, ProfileButtonList},
@@ -85,10 +85,6 @@ export default {
   data() {
     return {
       selectedProfile: '',
-      showSaveModal: false,
-      showNewModal: false,
-      showDeleteModal: false,
-      showNameModal: false,
 
       createNewProfile: false,
       newProfileName: ''
@@ -116,21 +112,8 @@ export default {
       this.$emit("load-profile", label);
     },
 
-    shouldShowDeleteModal() {
-      if (!this.isDeleteDisabled()) {
-        this.showDeleteModal = true;
-      }
-    },
-
     getButtonId(profile_name) {
       return profile_name.toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_") + "_profile_button";
-    },
-
-    displayNameModal() {
-      this.showNameModal = true;
-      this.$nextTick(() => {
-        this.$refs.newName.focusInput();
-      })
     },
 
     newProfile() {
@@ -145,22 +128,7 @@ export default {
       }
 
       this.newProfileName = "";
-    },
-
-    copyProfile() {
-      // Per the Windows UI, copies the current settings into a new profile based on the name of the selected
-      // profile (It's a little counter-intuitive!)
-      let name = this.selectedProfile;
-
-      for (let i = 0; i < 10; i++) {
-        if (this.profileNameExists(name)) {
-          name = name + "_copy";
-        } else {
-          break;
-        }
-      }
-
-      this.$emit('save-profile-as', name);
+      this.createNewProfile = false;
     },
 
     profileNameExists(name) {
@@ -175,10 +143,6 @@ export default {
 
     saveActiveProfile() {
       this.$emit('save-profile');
-    },
-
-    deleteSelectedProfile() {
-      this.$emit('delete-profile', this.selectedProfile);
     },
 
     menuPressed(event, return_id, item) {
