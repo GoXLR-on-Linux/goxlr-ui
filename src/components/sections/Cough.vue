@@ -1,13 +1,16 @@
 <template>
   <ContentBox title="Cough Button Settings">
-    <ButtonList title="Behavior">
-      <Button label="Hold" :is-active="!isCoughToggle()" :button-id="'0'" @button-pressed="behaviorPressed"/>
-      <Button label="Toggle" :is-active="isCoughToggle()" :button-id="'1'" @button-pressed="behaviorPressed"/>
+    <ButtonList title="Behaviour" role="radiogroup">
+      <RadioItem id="hold" text="Hold" group="mute_behaviour" @radio-selected="behaviorPressed" :selected="!isCoughToggle()" />
+      <RadioItem id="toggle" text="Toggle" group="mute_behaviour" @radio-selected="behaviorPressed" :selected="isCoughToggle()" />
     </ButtonList>
-    <ButtonList title="Mute Option">
-      <Button v-for="(item, index) in muteBehaviours" :key=index :label="item.toString()"
-              :is-active="isActiveMuteFunction(index)"
-              @button-pressed="setActiveMuteFunction(index)" :buttonId="index.toString()"/>
+    <ButtonList title="Mute Behaviour" role="radiogroup">
+      <RadioItem v-for="(item, index) in muteBehaviours" :key="item"
+                 group="mic_mute_behaviour"
+                 :id=item
+                 :text="muteBehaviours[index]"
+                 :selected="isActiveMuteFunction(index)"
+                 @radio-selected="setActiveMuteFunction(index)" />
     </ButtonList>
   </ContentBox>
 </template>
@@ -15,14 +18,14 @@
 <script>
 import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
-import Button from "@/components/button_list/Button";
 import {MuteFunctionReadable, MuteFunction} from "@/util/mixerMapping";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
+import RadioItem from "@/components/button_list/RadioItem";
 
 export default {
   name: "CoughButtonSettings",
-  components: {ButtonList, ContentBox, Button},
+  components: {RadioItem, ButtonList, ContentBox},
 
   data() {
     return {
@@ -51,7 +54,7 @@ export default {
       this.updateDevice();
     },
     behaviorPressed: function (id) {
-      let coughHold = (parseInt(id) === 0);
+      let coughHold = (id === "hold");
       console.log(coughHold);
       let command = {
         "SetCoughIsHold": coughHold
