@@ -23,7 +23,10 @@ export default {
 
       this.hoverContainer.style.left = (event.pageX - hoverContainerCenterOffset) + "px";
       this.hoverContainer.style.top = (event.pageY - hoverContainerCenterOffset) + "px";
-      this.hoverContainer.style.backgroundColor = this.getHoveredColourFromArray(this.getPositionFrom(event));
+
+      const position = this.position(event)
+      const color = this.color(position[0], position[1])
+      this.hoverContainer.style.backgroundColor = color;
     },
 
     mouseLeave() {
@@ -32,7 +35,7 @@ export default {
     },
 
     mouseClick(event) {
-      const position = this.getPositionFrom(event)
+      const position = this.position(event)
       const color = this.color(position[0], position[1])
       this.updateText(color);
     },
@@ -47,7 +50,7 @@ export default {
 
     color(x, y) {
       let color = this.canvasContext.getImageData(x, y, 1, 1).data;
-      return "#" + ("000000" + this.rgbToHex(color[0], color[1], color[2])).slice(-6).toUpperCase();
+      return "#" + ("000000" + this.hexColor(color[0], color[1], color[2])).slice(-6).toUpperCase();
     },
 
     hexColor(r, g, b) {
