@@ -4,12 +4,12 @@
       <div ref="dialog" class="modal-container" role="dialog" aria-modal="true" :aria-labelledby="`${id}_label`" :aria-describedby="`${id}_body`" @keyup.esc.prevent="closeModal">
         <div class="modal-header">
           <div :id="`${id}_label`"><slot name="title"></slot></div>
-          <button v-show=close_visible ref="close" @click="closeModal()"><font-awesome-icon title="Close" icon="fa-solid fa-xmark" /></button>
+          <button v-show=show_close ref="close" @click="closeModal()"><font-awesome-icon title="Close" icon="fa-solid fa-xmark" /></button>
         </div>
         <div class="modal-body" :id="`${id}_body`">
           <slot></slot>
         </div>
-        <div class="modal-footer">
+        <div v-if="show_footer" class="modal-footer">
           <slot name="footer">
             <button ref="ok" class="modal-default-button" @click="closeModal()">OK</button>
           </slot>
@@ -29,6 +29,7 @@ export default {
   props: {
     id: {type: String, required: true},
     show_close: { type: Boolean, default: true },
+    show_footer: { byte: Boolean, default: true},
 
     bodyPadding: {type: String, default: "20px"},
     width: {type: String, default: "500px" }
@@ -39,20 +40,11 @@ export default {
       is_visible: false,
       returnFocus: undefined,
       trap: undefined,
-
-      close_visible: true,
     }
   },
 
   methods: {
     openModal(focusRef, returnFocus) {
-      // No idea why I need to do this, but the default isn't being set.
-      if (this.show_close === undefined) {
-        this.close_visible = true;
-      } else {
-        this.close_visible = this.show_close;
-      }
-
       this.returnFocus = returnFocus;
       this.is_visible = true;
 

@@ -40,14 +40,12 @@ export default {
         return false;
       }
       return this.selected;
-      // console.log(this.$refs.check.id);
-      // console.log(this.$refs.check.checked);
-      // return this.$refs.check.checked;
+    },
+
+    focus() {
+      this.$refs.label.focus();
     }
   },
-  created() {
-    //this.isSelected();
-  }
 }
 </script>
 

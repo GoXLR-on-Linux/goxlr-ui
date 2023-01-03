@@ -2,9 +2,9 @@
   <!-- Build the Modal -->
   <ContentBox>
     <ButtonList title="Mic Type" role="radiogroup">
-      <RadioItem id="Dynamic" text="Dynamic" group="mic_type" @radio-selected="handleButtonPress" :selected="isMicTypeActive('Dynamic')" />
-      <RadioItem id="Condenser" text="Condenser (+48V)" group="mic_type" @radio-selected="handleButtonPress" :selected="isMicTypeActive('Condenser')" />
-      <RadioItem id="Jack" text="3.5mm" group="mic_type" @radio-selected="handleButtonPress" :selected="isMicTypeActive('Jack')" />
+      <RadioItem ref="Dynamic" id="Dynamic" text="Dynamic" group="mic_type" @radio-selected="handleButtonPress" :selected="isMicTypeActive('Dynamic')" />
+      <RadioItem ref="Condenser" id="Condenser" text="Condenser (+48V)" group="mic_type" @radio-selected="handleButtonPress" :selected="isMicTypeActive('Condenser')" />
+      <RadioItem ref="Jack" id="Jack" text="3.5mm" group="mic_type" @radio-selected="handleButtonPress" :selected="isMicTypeActive('Jack')" />
     </ButtonList>
     <Slider title="Gain" :slider-min-value=0 :slider-max-value=72 text-suffix="dB"
             :slider-value=getGainValue() :store-path="getStorePath()" @value-changed="setGain" />
@@ -61,10 +61,16 @@ export default {
 
     getStorePath() {
       if (!store.hasActiveDevice()) {
-        return false;
+        return "";
       }
 
       return "/mixers/" + store.getActiveSerial() + "/mic_status/mic_gains/" + store.getActiveDevice().mic_status.mic_type;
+    },
+
+    focus() {
+        console.log(this.$refs["wat"]);
+        console.log(this.$refs[store.getActiveDevice().mic_status.mic_type]);
+        this.$refs[store.getActiveDevice().mic_status.mic_type].focus();
     }
   }
 }
