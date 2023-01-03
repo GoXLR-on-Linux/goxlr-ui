@@ -4,11 +4,9 @@
 
     <img src="wheel.png" draggable="false" @mousemove.stop="mouseMove" @mouseleave="mouseLeave" @click="mouseClick"/>
 
-    <div class="bottom" style="display: flex">
+    <div class="bottom">
       <div class="colourRef"></div>
-      <div style="text-align: left">
-        <input type="text" :value="textValue" @keyup="updateColour"/>
-      </div>
+      <input type="text" :value="textValue" @keyup="updateColour"/>
       <button class="clearColour" @click="clearColour"><font-awesome-icon title="Clear" icon="fa-solid fa-xmark" /></button>
     </div>
 
@@ -106,6 +104,11 @@ export default {
 
 <style scoped>
 .colourBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
   height: 220px;
   width: 200px;
 
@@ -118,29 +121,39 @@ export default {
 }
 
 .label {
-  padding: 10px;
+  width: 100%;
+  padding: 10px 0;
+
   color: #fff;
   background-color: #3b413f;
-
   text-transform: uppercase;
-  margin-bottom: 8px;
 }
 
 .bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  height: 35px;
+  width: 100%;
+
   background-color: #3b413f;
   color: #59b1b6;
-  box-sizing: border-box;
-  width: 100%;
-  margin-top: 10px;
 }
 
 .colourRef {
-  background-color: v-bind(textValue);
+  height: 100%;
   width: 35px;
+
+  background-color: v-bind(textValue);
 }
 
 .clearColour {
+  height: 100%;
   width: 35px;
+  
+  /** Remove default button styling */
   background-color: transparent;
   color: #fff;
   border: 0;
@@ -148,23 +161,25 @@ export default {
 }
 
 input[type=text] {
+  width: 6em;
+
   font-family: LeagueMonoCondensed, sans-serif;
+
+  /** Remove default input styling */
   background-color: #3b413f;
   color: #59b1b6;
-  box-sizing: border-box;
   text-align: center;
-
-  padding: 10px;
   border: none;
   background-image: none;
   box-shadow: none;
-  outline: none;
+  outline: none; 
 
   -moz-appearance: textfield;
-  width: calc(100%);
 }
 
 img {
+  height: 120px;
+  width: 120px;
   border-radius: 50%;
 }
 
