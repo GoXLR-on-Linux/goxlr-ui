@@ -20,13 +20,12 @@ export default {
   data() {
     return {
       currentTab: 'Mixer',
-      tabs: this.isDeviceMini() ? ['Mixer', 'Cough', 'Global'] : ['Mixer', 'Effects', 'Sampler', 'Cough', 'Global'],
     }
   },
 
   methods: {
-    isDeviceMini() {
-      isDeviceMini()
+    getTabs() {
+      return isDeviceMini() ? ['Mixer', 'Cough', 'Global'] : ['Mixer', 'Effects', 'Sampler', 'Cough', 'Global']
     }
   }
 }
@@ -34,7 +33,7 @@ export default {
 
 <template>
   <button
-    v-for="tab in tabs"
+    v-for="tab in getTabs()"
     :key="tab"
     :class="['button', { active: currentTab === tab }]"
     @click="currentTab = tab"
