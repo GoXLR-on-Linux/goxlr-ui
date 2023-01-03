@@ -68,8 +68,6 @@ export default {
     },
 
     focus() {
-        console.log(this.$refs["wat"]);
-        console.log(this.$refs[store.getActiveDevice().mic_status.mic_type]);
         this.$refs[store.getActiveDevice().mic_status.mic_type].focus();
     }
   }
