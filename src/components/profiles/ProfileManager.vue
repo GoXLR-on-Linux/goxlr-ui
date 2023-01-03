@@ -13,7 +13,7 @@
     </ProfileButton>
   </ProfileButtonList>
   <div class="buttonColumns">
-    <button ref="save" :title="`Save Profile ${selectedProfile}`" class="actionButton" @click="$refs.saveModal.openModal($refs.focusOk, $refs.save)">
+    <button ref="save" :title="`Save Profile ${activeProfile}`" class="actionButton" @click="$refs.saveModal.openModal($refs.focusOk, $refs.save)">
       <font-awesome-icon icon="fa-solid fa-floppy-disk"/>
     </button>
     <button ref="new" title="Create new Profile" class="actionButton" @click="$refs.newModal.openModal($refs.focusDefault, $refs.new)">
