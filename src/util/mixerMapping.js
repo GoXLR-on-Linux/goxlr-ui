@@ -144,12 +144,6 @@ export const EqFreqs = [
     "Equalizer16KHz",
 ]
 
-export const MicrophoneTypes = [
-    "Dynamic",
-    "Condenser",
-    "Jack",
-]
-
 // I'm using indexOf for the values in this array just for readability.
 export let FaderOrder = [
     "Mic",
@@ -181,6 +175,7 @@ export let HeadphoneMixerOrder = [
     "MicMonitor",
 ]
 
+/* Items in here are hidden behind the 'Expand' button */
 export let HeadphoneMixerHidden = [
     "MicMonitor"
 ]

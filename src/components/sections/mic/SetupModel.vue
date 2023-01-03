@@ -1,10 +1,10 @@
 <template>
   <!-- Build the Modal -->
   <ContentBox>
-    <ButtonList title="Mic Type">
-      <Button label="Dynamic" buttonId="0" :is-active="isMicTypeActive('Dynamic')" @button-pressed="handleButtonPress"/>
-      <Button label="Condenser (+48V)" buttonId="1" :is-active="isMicTypeActive('Condenser')" @button-pressed="handleButtonPress"/>
-      <Button label="3.5mm" buttonId="2" :is-active="isMicTypeActive('Jack')" @button-pressed="handleButtonPress"/>
+    <ButtonList title="Mic Type" role="radiogroup">
+      <RadioItem id="Dynamic" text="Dynamic" group="mic_type" @radio-selected="handleButtonPress" :selected="isMicTypeActive('Dynamic')" />
+      <RadioItem id="Condenser" text="Condenser (+48V)" group="mic_type" @radio-selected="handleButtonPress" :selected="isMicTypeActive('Condenser')" />
+      <RadioItem id="Jack" text="3.5mm" group="mic_type" @radio-selected="handleButtonPress" :selected="isMicTypeActive('Jack')" />
     </ButtonList>
     <Slider title="Gain" :slider-min-value=0 :slider-max-value=72 text-suffix="dB"
             :slider-value=getGainValue() :store-path="getStorePath()" @value-changed="setGain" />
@@ -14,15 +14,14 @@
 <script>
 import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
-import Button from "@/components/button_list/Button";
+import RadioItem from "@/components/button_list/RadioItem";
 import Slider from "@/components/slider/Slider";
 import {store} from "@/store";
-import {MicrophoneTypes} from "@/util/mixerMapping";
 import {websocket} from "@/util/sockets";
 
 export default {
   name: "SetupModel",
-  components: {ContentBox, ButtonList, Button, Slider},
+  components: {RadioItem, ContentBox, ButtonList, Slider},
 
   methods: {
     isMicTypeActive(id) {
@@ -42,9 +41,6 @@ export default {
     },
 
     setGain(id, value) {
-      console.log("ID: " + id + ", Value: " + value);
-      console.log(store.getActiveDevice());
-
       let command = {
         "SetMicrophoneGain": [
           store.getActiveDevice().mic_status.mic_type,
@@ -52,12 +48,12 @@ export default {
         ]
       };
       websocket.send_command(store.getActiveSerial(), command);
-      store.getActiveDevice().mic_status.mic_gains[MicrophoneTypes.indexOf(store.getActiveDevice().mic_status.mic_type)] = value;
+      store.getActiveDevice().mic_status.mic_gains[store.getActiveDevice().mic_status.mic_type] = value;
     },
 
     handleButtonPress(id) {
       let command = {
-        "SetMicrophoneType": MicrophoneTypes[id]
+        "SetMicrophoneType": id
       }
 
       websocket.send_command(store.getActiveSerial(), command);
@@ -68,7 +64,7 @@ export default {
         return false;
       }
 
-      return "/mixers/" + store.getActiveSerial() + "/mic_status/mic_gains/" + MicrophoneTypes.indexOf(store.getActiveDevice().mic_status.mic_type);
+      return "/mixers/" + store.getActiveSerial() + "/mic_status/mic_gains/" + store.getActiveDevice().mic_status.mic_type;
     }
   }
 }
