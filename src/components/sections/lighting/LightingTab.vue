@@ -44,6 +44,9 @@ export default {
   margin: 0 2px;
   padding: 10px 20px;
 
+  /** Tmporary top margin, removed after higher level tab refactoring */
+  margin-top: 40px;
+
   color: #ffffff;
   background-color: #2b2f2d;
   border: none;
