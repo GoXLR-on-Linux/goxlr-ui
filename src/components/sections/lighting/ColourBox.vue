@@ -9,6 +9,7 @@
       <div style="text-align: left">
         <input type="text" :value="textValue" @keyup="updateColour"/>
       </div>
+      <button class="clearColour" @click="clearColour"><font-awesome-icon title="Clear" icon="fa-solid fa-xmark" /></button>
     </div>
 
   </div>
@@ -83,6 +84,9 @@ export default {
       if (value.match(regex)) {
         this.updateText(value);
       }
+    },
+    clearColour() {
+      this.updateText("#000000");
     }
   },
 
@@ -135,6 +139,14 @@ export default {
   width: 35px;
 }
 
+.clearColour {
+  width: 35px;
+  background-color: transparent;
+  color: #fff;
+  border: 0;
+  cursor: pointer;
+}
+
 input[type=text] {
   font-family: LeagueMonoCondensed, sans-serif;
   background-color: #3b413f;
@@ -149,7 +161,7 @@ input[type=text] {
   outline: none;
 
   -moz-appearance: textfield;
-  width: calc(100% - 35px);
+  width: calc(100%);
 }
 
 img {
