@@ -6,7 +6,7 @@
       <Button label="Condenser (+48V)" buttonId="1" :is-active="isMicTypeActive('Condenser')" @button-pressed="handleButtonPress"/>
       <Button label="3.5mm" buttonId="2" :is-active="isMicTypeActive('Jack')" @button-pressed="handleButtonPress"/>
     </ButtonList>
-    <Slider title="Gain" :slider-min-value=0 :slider-max-value=72 :text-min-value=0 :text-max-value=72 text-suffix="dB"
+    <Slider title="Gain" :slider-min-value=0 :slider-max-value=72 text-suffix="dB"
             :slider-value=getGainValue() :store-path="getStorePath()" @value-changed="setGain" />
   </ContentBox>
 </template>
