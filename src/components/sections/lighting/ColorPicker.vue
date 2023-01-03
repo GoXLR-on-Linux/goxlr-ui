@@ -176,6 +176,7 @@ input[type=text] {
   background-color: #3b413f;
   border: none;
   font-family: LeagueMonoCondensed, sans-serif;
+  text-align: center;
 
   -moz-appearance: textfield;
 }
