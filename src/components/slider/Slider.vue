@@ -77,9 +77,20 @@ export default {
     },
 
     calculateTextValue() {
+      let maxTextValue = this.maximumTextValue;
+      let minTextValue = this.minimumTextValue;
+
+      if (minTextValue === undefined) {
+        minTextValue = this.sliderMinValue;
+      }
+
+      if (maxTextValue === undefined) {
+        maxTextValue = this.sliderMaxValue;
+      }
+
       // Get the distances between the slider, and text numbers..
       let sliderDistance = this.sliderMaxValue - this.sliderMinValue;
-      let textDistance = this.maximumTextValue - this.minimumTextValue;
+      let textDistance = maxTextValue - minTextValue;
 
       // Get the position of the slider in the range..
       let position = this.getPosition(parseInt(this.fieldValue), this.sliderMinValue, this.sliderMaxValue);
@@ -88,15 +99,26 @@ export default {
       let input = Math.round((position / sliderDistance) * textDistance);
 
       // Now set it..
-      this.textValue = this.minimumTextValue + input;
+      this.textValue = minTextValue + input;
     },
 
     calculateFieldValue() {
+      let maxTextValue = this.maximumTextValue;
+      let minTextValue = this.minimumTextValue;
+
+      if (minTextValue === undefined) {
+        minTextValue = this.sliderMinValue;
+      }
+
+      if (maxTextValue === undefined) {
+        maxTextValue = this.sliderMaxValue;
+      }
+
       // Same as above, although this can probably be abstracted..
       let sliderDistance = this.sliderMaxValue - this.sliderMinValue;
-      let textDistance = this.textMaxValue - this.textMinValue;
+      let textDistance = maxTextValue - minTextValue;
 
-      let position = this.getPosition(parseInt(this.textValue), this.textMinValue, this.textMaxValue);
+      let position = this.getPosition(parseInt(this.textValue), minTextValue, maxTextValue);
 
       // With the position known, we should be able to calculate the 'position' on the text range..
       let input = Math.round((position / textDistance) * sliderDistance);
