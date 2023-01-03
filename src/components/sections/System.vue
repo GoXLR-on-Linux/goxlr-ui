@@ -122,9 +122,11 @@ SOFTWARE.</textarea>
         <input type="checkbox" :checked="isShowIcon()" @change="setShowIcon"/>
       </div>
       <div style="padding: 12px">
-        <button style="margin: 3px" @click="recover_defaults('Profiles')">Recover Default Profiles</button>
-        <button style="margin: 3px" @click="recover_defaults('Icons')">Recover Default Icons</button>
-        <button style="margin: 3px" @click="recover_defaults('Presets')">Recover Default Presets</button>
+        Recover Defaults:<br />
+        <button style="margin: 3px" @click="recover_defaults('Profiles')">Profiles</button>
+        <button style="margin: 3px" @click="recover_defaults('MicProfiles')">Mic Profiles</button>
+        <button style="margin: 3px" @click="recover_defaults('Icons')">Icons</button>
+        <button style="margin: 3px" @click="recover_defaults('Presets')">Presets</button>
       </div>
       <div style="padding: 12px">
         <button style="background-color: darkred; color: white" @click="shutdown_util()">Shutdown GoXLR Utility</button>
