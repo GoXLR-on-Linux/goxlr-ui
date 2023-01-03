@@ -6,7 +6,7 @@
                    @button-double-clicked="handleDoubleClick"
     >
       <template #right v-if="menuList.length > 0">
-        <button :aria-label="`${name} Options`" :id="getButtonId(name)" aria-haspopup="menu" aria-controls="profile_menu" class="menu" @click.prevent.stop="menuPressed($event, getButtonId(name), name)">
+        <button :ref="getButtonId(name)" :aria-label="`${name} Options`" :id="getButtonId(name)" aria-haspopup="menu" aria-controls="profile_menu" class="menu" @click.prevent.stop="menuPressed($event, getButtonId(name), name)">
           <font-awesome-icon icon="fa-solid fa-ellipsis-vertical"/>
         </button>
       </template>
@@ -18,12 +18,6 @@
     </button>
     <button ref="new" title="Create new Profile" class="actionButton" @click="$refs.newModal.openModal($refs.focusDefault, $refs.new)">
       <font-awesome-icon icon="fa-solid fa-file-circle-plus"/>
-    </button>
-    <button title="Copy Profile" class="actionButton" @click="copyProfile()" :disabled="selectedProfile === ''">
-      <font-awesome-icon icon="fa-solid fa-copy"/>
-    </button>
-    <button ref="del" :title="`Delete Profile ` + this.selectedProfile" class="actionButton" :disabled="isDeleteDisabled()" @click="$refs.deleteModal.openModal($refs.focusDelDefault, $refs.del)">
-      <font-awesome-icon icon="fa-solid fa-trash"/>
     </button>
   </div>
 
@@ -56,15 +50,6 @@
     </template>
   </AccessibleModal>
 
-  <AccessibleModal ref="deleteModal" id="delProfile">
-    <template v-slot:title>Delete Confirmation</template>
-    <template v-slot:default>Are you sure you want to delete the profile {{ selectedProfile }}?</template>
-    <template v-slot:footer>
-      <ModalButton @click="$refs.deleteModal.closeModal(); deleteSelectedProfile()">Ok</ModalButton>
-      <ModalButton ref="focusDelDefault" @click="$refs.deleteModal.closeModal()">Cancel</ModalButton>
-    </template>
-  </AccessibleModal>
-
   <AccessibleModal ref="nameModal" id="nameProfile">
     <template v-slot:title>Enter New Profile Name</template>
     <template v-slot:default>
@@ -84,12 +69,13 @@ import ModalButton from "@/components/design/modal/ModalButton";
 import ModalInput from "@/components/design/modal/ModalInput";
 import DropMenu from "@/components/design/DropMenu";
 import AccessibleModal from "@/components/design/modal/AccessibleModal";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 export default {
   emits: ['new-profile', 'load-profile', 'save-profile', 'save-profile-as', 'delete-profile', 'menu-item-pressed'],
 
   name: "ProfileManager",
-  components: {AccessibleModal, DropMenu, ModalInput, ModalButton, ProfileButton, ProfileButtonList},
+  components: {FontAwesomeIcon, AccessibleModal, DropMenu, ModalInput, ModalButton, ProfileButton, ProfileButtonList},
   props: {
     activeProfile: String,
     profileList: Array,
@@ -110,17 +96,6 @@ export default {
   },
 
   methods: {
-    openSaveModal() {
-      this.$refs.testModal.openModal(this.$refs.focusOk);
-    },
-
-    ariaProfileName(label) {
-      if (this.isActiveProfile(label)) {
-        label += " (Active)";
-      }
-      return label;
-    },
-
     isActiveProfile(label) {
       return label === this.activeProfile;
     },
@@ -213,6 +188,10 @@ export default {
 
     optionClicked(event) {
       this.$emit('menu-item-pressed', event);
+    },
+
+    getMenuButton() {
+      return this.$refs.menuButton;
     }
   }
 }
