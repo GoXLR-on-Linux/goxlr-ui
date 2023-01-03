@@ -20,7 +20,6 @@ export default {
       this.$emit("button-clicked")
     }
   }
-
 }
 </script>
 

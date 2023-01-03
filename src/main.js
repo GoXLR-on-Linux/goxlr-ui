@@ -15,14 +15,16 @@ import vClickOutside from "click-outside-vue3";
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {
-    faMicrophoneLines,
-    faCircleQuestion,
-    faFloppyDisk,
-    faFileCirclePlus,
-    faCopy, faTrash, faCheckCircle, faCheck, faFolder, faEllipsisVertical, faPlay, faStop, faXmark, faGear, faBookOpen, faCircleInfo
+    faMicrophoneLines, faCircleQuestion, faFloppyDisk, faFileCirclePlus, faCopy, faTrash, faCheckCircle, faCheck,
+    faFolder, faEllipsisVertical, faPlay, faStop, faXmark, faGear, faBookOpen, faCircleInfo, faChevronLeft,
+    faChevronRight
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faMicrophoneLines, faCircleQuestion, faFloppyDisk, faEllipsisVertical, faFileCirclePlus, faCopy, faTrash, faCheckCircle, faCheck, faFolder, faTrash, faPlay, faStop, faXmark, faGear, faBookOpen, faCircleInfo);
+library.add(
+    faMicrophoneLines, faCircleQuestion, faFloppyDisk, faEllipsisVertical, faFileCirclePlus, faCopy, faTrash,
+    faCheckCircle, faCheck, faFolder, faTrash, faPlay, faStop, faXmark, faGear, faBookOpen, faCircleInfo,
+    faChevronLeft, faChevronRight
+);
 
 websocket.connect().then(() => {
     let app = createApp(App);
