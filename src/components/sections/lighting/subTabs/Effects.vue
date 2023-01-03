@@ -1,58 +1,3 @@
-<template>
-  <MainTabContent :no-left-pad=false>
-    <ContentBox title="Preset Buttons">
-      <ButtonList title="Preset">
-        <PushButton v-for="(value, id) in effectPresets" :key="id" :button-id="value"
-                    :is-active="activePreset === value" :label="getLabel(id, value)" @click="activePreset = value"/>
-      </ButtonList>
-      <ColourBox id="active" title="Active" :colour-value="getColour(true)" @colour-changed="onColourChange"/>
-      <ButtonList title="Inactive Option">
-        <PushButton label="Dim Active Colour" :is-active="isPresetInactiveState('Dimmed')"
-                    @click="setPresetInactiveState('Dimmed')"/>
-        <PushButton label="Inactive Colour" :is-active="isPresetInactiveState('Colour2')"
-                    @click="setPresetInactiveState('Colour2')"/>
-        <PushButton label="Dim Inactive Colour" :is-active="isPresetInactiveState('DimmedColour2')"
-                    @click="setPresetInactiveState('DimmedColour2')"/>
-      </ButtonList>
-      <ColourBox id="inactive" title="Inactive" :colour-value="getColour(false)" @colour-changed="onColourChange"/>
-    </ContentBox>
-
-    <ContentBox title="Encoders">
-      <ButtonList title="Encoder">
-        <PushButton v-for="(value, id) in encoderLighting" :key="id" :button-id="value"
-                    :is-active="activeEncoder === value" :label="value" @click="activeEncoder = value"/>
-      </ButtonList>
-      <ColourBox id="colour_two" title="Left Colour" :colour-value="getEncoderColour('colour_two')"
-                 @colour-changed="onEncoderColourChange"/>
-      <ColourBox id="colour_one" title="Right Colour" :colour-value="getEncoderColour('colour_one')"
-                 @colour-changed="onEncoderColourChange"/>
-      <ColourBox id="colour_three" title="Knob Colour" :colour-value="getEncoderColour('colour_three')"
-                 @colour-changed="onEncoderColourChange"/>
-    </ContentBox>
-
-    <ContentBox title="Effect Buttons">
-      <ButtonList title="Effect">
-        <PushButton v-for="(value, id) in effectButtons" :key="id" :button-id="value"
-                    :is-active="activeEffect === value" :label="effectButtonLabels[id]"
-                    @click="activeEffect = value"></PushButton>
-      </ButtonList>
-      <ColourBox id="active" title="Active" :colour-value="getEffectColour(true)" @colour-changed="onEffectColourChange"/>
-      <ButtonList title="Inactive Option">
-        <PushButton label="Dim Active Colour" :is-active="isEffectInactiveState('Dimmed')"
-                    @click="setEffectInactiveState('Dimmed')"/>
-        <PushButton label="Inactive Colour" :is-active="isEffectInactiveState('Colour2')"
-                    @click="setEffectInactiveState('Colour2')"/>
-        <PushButton label="Dim Inactive Colour" :is-active="isEffectInactiveState('DimmedColour2')"
-                    @click="setEffectInactiveState('DimmedColour2')"/>
-      </ButtonList>
-      <ColourBox id="inactive" title="Inactive" :colour-value="getEffectColour(false)"
-                 @colour-changed="onEffectColourChange"/>
-
-    </ContentBox>
-
-  </MainTabContent>
-</template>
-
 <script>
 /**
  * This file can *ABSOLUTELY* be trimmed down somewhat, initial revision will be a bit messy though, just to
@@ -62,20 +7,27 @@
 import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
+import ColourBox from "@/components/sections/lighting/ColourBox";
+import MainTabContent from "@/components/design/MainTabContent";
+
 import {
   EffectButtons,
   EffectButtonText, EffectLightingPresets, EffectPresets,
   EncoderLighting
 } from "@/util/mixerMapping";
-import {store} from "@/store";
-import {isDeviceMini} from "@/util/util";
-import {websocket} from "@/util/sockets";
-import ColourBox from "@/components/sections/lighting/ColourBox";
-import MainTabContent from "@/components/design/MainTabContent";
+import { store } from "@/store";
+import { isDeviceMini } from "@/util/util";
+import { websocket } from "@/util/sockets";
 
 export default {
   name: "LightingEffects",
-  components: {MainTabContent, ColourBox, PushButton, ButtonList, ContentBox},
+  components: {
+    MainTabContent,
+    ColourBox,
+    PushButton,
+    ButtonList,
+    ContentBox,
+  },
 
   data() {
     return {
@@ -195,6 +147,61 @@ export default {
 }
 </script>
 
-<style scoped>
+<template>
+  <MainTabContent :no-left-pad=false>
+    <ContentBox title="Preset Buttons">
+      <ButtonList title="Preset">
+        <PushButton v-for="(value, id) in effectPresets" :key="id" :button-id="value"
+                    :is-active="activePreset === value" :label="getLabel(id, value)" @click="activePreset = value"/>
+      </ButtonList>
+      <ColourBox id="active" title="Active" :colour-value="getColour(true)" @colour-changed="onColourChange"/>
+      <ButtonList title="Inactive Option">
+        <PushButton label="Dim Active Colour" :is-active="isPresetInactiveState('Dimmed')"
+                    @click="setPresetInactiveState('Dimmed')"/>
+        <PushButton label="Inactive Colour" :is-active="isPresetInactiveState('Colour2')"
+                    @click="setPresetInactiveState('Colour2')"/>
+        <PushButton label="Dim Inactive Colour" :is-active="isPresetInactiveState('DimmedColour2')"
+                    @click="setPresetInactiveState('DimmedColour2')"/>
+      </ButtonList>
+      <ColourBox id="inactive" title="Inactive" :colour-value="getColour(false)" @colour-changed="onColourChange"/>
+    </ContentBox>
+
+    <ContentBox title="Encoders">
+      <ButtonList title="Encoder">
+        <PushButton v-for="(value, id) in encoderLighting" :key="id" :button-id="value"
+                    :is-active="activeEncoder === value" :label="value" @click="activeEncoder = value"/>
+      </ButtonList>
+      <ColourBox id="colour_two" title="Left Colour" :colour-value="getEncoderColour('colour_two')"
+                 @colour-changed="onEncoderColourChange"/>
+      <ColourBox id="colour_one" title="Right Colour" :colour-value="getEncoderColour('colour_one')"
+                 @colour-changed="onEncoderColourChange"/>
+      <ColourBox id="colour_three" title="Knob Colour" :colour-value="getEncoderColour('colour_three')"
+                 @colour-changed="onEncoderColourChange"/>
+    </ContentBox>
+
+    <ContentBox title="Effect Buttons">
+      <ButtonList title="Effect">
+        <PushButton v-for="(value, id) in effectButtons" :key="id" :button-id="value"
+                    :is-active="activeEffect === value" :label="effectButtonLabels[id]"
+                    @click="activeEffect = value"></PushButton>
+      </ButtonList>
+      <ColourBox id="active" title="Active" :colour-value="getEffectColour(true)" @colour-changed="onEffectColourChange"/>
+      <ButtonList title="Inactive Option">
+        <PushButton label="Dim Active Colour" :is-active="isEffectInactiveState('Dimmed')"
+                    @click="setEffectInactiveState('Dimmed')"/>
+        <PushButton label="Inactive Colour" :is-active="isEffectInactiveState('Colour2')"
+                    @click="setEffectInactiveState('Colour2')"/>
+        <PushButton label="Dim Inactive Colour" :is-active="isEffectInactiveState('DimmedColour2')"
+                    @click="setEffectInactiveState('DimmedColour2')"/>
+      </ButtonList>
+      <ColourBox id="inactive" title="Inactive" :colour-value="getEffectColour(false)"
+                 @colour-changed="onEffectColourChange"/>
+
+    </ContentBox>
+
+  </MainTabContent>
+</template>
+
+<style>
 
 </style>

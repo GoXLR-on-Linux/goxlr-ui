@@ -1,9 +1,9 @@
 <script>
-import Mixer from "@/components/sections/lighting/LightingMixer";
-import Effects from "@/components/sections/lighting/LightingEffects";
-import Sampler from "@/components/sections/lighting/LightingSampler";
-import CoughBleep from "@/components/sections/lighting/LightingCough";
-import Global from "@/components/sections/lighting/LightingGlobal";
+import Mixer from "@/components/sections/lighting/subTabs/Mixer";
+import Effects from "@/components/sections/lighting/subTabs/Effects";
+import Sampler from "@/components/sections/lighting/subTabs/Sampler";
+import Cough from "@/components/sections/lighting/subTabs/Cough";
+import Global from "@/components/sections/lighting/subTabs/Global";
 
 import { isDeviceMini } from "@/util/util";
 
@@ -13,14 +13,14 @@ export default {
     Mixer,
     Effects,
     Sampler,
-    CoughBleep,
+    Cough,
     Global,
   },
 
   data() {
     return {
       currentTab: 'Mixer',
-      tabs: isDeviceMini() ? ['Mixer', 'CoughBleep', 'Global'] : ['Mixer', 'Effects', 'Sampler', 'CoughBleep', 'Global'],
+      tabs: isDeviceMini() ? ['Mixer', 'Cough', 'Global'] : ['Mixer', 'Effects', 'Sampler', 'Cough', 'Global'],
     }
   },
 }

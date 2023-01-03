@@ -1,18 +1,3 @@
-<template>
-  <div class="colourBox">
-    <div class="label">{{ title }}</div>
-
-    <img src="wheel.png" draggable="false" @mousemove.stop="mouseMove" @mouseleave="mouseLeave" @click="mouseClick"/>
-
-    <div class="bottom">
-      <div class="colourRef"></div>
-      <input type="text" :value="textValue" @keyup="updateColour"/>
-      <button class="clearColour" @click="clearColour"><font-awesome-icon title="Clear" icon="fa-solid fa-xmark" /></button>
-    </div>
-
-  </div>
-</template>
-
 <script>
 export default {
   name: "ColourBox",
@@ -101,6 +86,21 @@ export default {
   }
 }
 </script>
+
+<template>
+  <div class="colourBox">
+    <div class="label">{{ title }}</div>
+
+    <img src="wheel.png" draggable="false" @mousemove.stop="mouseMove" @mouseleave="mouseLeave" @click="mouseClick"/>
+
+    <div class="bottom">
+      <div class="colourRef"></div>
+      <input type="text" :value="textValue" @keyup="updateColour"/>
+      <button class="clearColour" @click="clearColour"><font-awesome-icon title="Clear" icon="fa-solid fa-xmark" /></button>
+    </div>
+
+  </div>
+</template>
 
 <style scoped>
 .colourBox {
