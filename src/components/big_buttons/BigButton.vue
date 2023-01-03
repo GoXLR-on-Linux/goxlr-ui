@@ -1,9 +1,9 @@
 <template>
-  <button role="button" aria-labelledby="button_title" class="content" @click="clicked">
+  <button role="button" :aria-labelledby="`button_title_${id}`" class="content" @click="clicked">
     <div class="img-section">
       <slot/>
     </div>
-    <div class="iconTitle"><span id="button_title" class="filler">{{ title }}</span></div>
+    <div class="iconTitle"><span :id="`button_title_${id}`" class="filler">{{ title }}</span></div>
   </button>
 </template>
 
@@ -12,6 +12,7 @@ export default {
   name: "BigButton",
 
   props: {
+    id: { type: String, required: true },
     title: String,
   },
 

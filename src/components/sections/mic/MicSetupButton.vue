@@ -1,5 +1,5 @@
 <template>
-  <BigButton :title="setupTitle" @button-clicked="$refs.micSetupModal.openModal($refs.setup)">
+  <BigButton id="mic_setup" :title="setupTitle" @button-clicked="$refs.micSetupModal.openModal($refs.setup)">
     <font-awesome-icon icon="fa-solid fa-microphone-lines" />
   </BigButton>
   <AccessibleModal ref="micSetupModal" id="mic_setup" body-padding="0px" :show_footer=false>
@@ -12,10 +12,11 @@
 import BigButton from "@/components/big_buttons/BigButton";
 import SetupModel from "@/components/sections/mic/SetupModel";
 import AccessibleModal from "@/components/design/modal/AccessibleModal";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 export default {
   name: "MicSetupButton",
-  components: {AccessibleModal, BigButton, SetupModel},
+  components: {FontAwesomeIcon, AccessibleModal, BigButton, SetupModel},
 
   data() {
     return {
