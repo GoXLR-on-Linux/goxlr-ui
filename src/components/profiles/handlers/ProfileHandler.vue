@@ -8,27 +8,46 @@
     </div>
   </div>
   <div style="height: 290px">
-    <ProfileManager :profile-list="getProfileList()" :active-profile="getActiveProfile()" :menu-list="menuList" @new-profile="newProfile"
-                    @load-profile="loadProfile" @save-profile="saveProfile" @save-profile-as="saveProfileAs" @menu-item-pressed="menuItemPressed"
-                    @delete-profile="deleteProfile"/>
+    <ProfileManager ref="manager" :profile-list="getProfileList()" :active-profile="getActiveProfile()" :menu-list="menuList" @new-profile="newProfile"
+                    @load-profile="loadProfile" @save-profile="saveProfile" @save-profile-as="saveProfileAs" @menu-item-pressed="menuItemPressed" />
   </div>
+
+  <AccessibleModal ref="deleteModal" id="delProfile">
+    <template v-slot:title>Delete Confirmation</template>
+    <template v-slot:default>Are you sure you want to delete the profile {{ selectedProfile }}?</template>
+    <template v-slot:footer>
+      <ModalButton @click="$refs.deleteModal.closeModal(); deleteProfile(this.selectedProfile)">Ok</ModalButton>
+      <ModalButton ref="focusDelDefault" @click="$refs.deleteModal.closeModal()">Cancel</ModalButton>
+    </template>
+  </AccessibleModal>
+
+  <AccessibleModal ref="noDelete" id="delProfile">
+    <template v-slot:title>Unable to Delete</template>
+    <template v-slot:default>It is not possible to delete the current active profile.</template>
+  </AccessibleModal>
+
 </template>
 
 <script>
 import {store} from "@/store";
 import {sendHttpCommand, websocket} from "@/util/sockets";
 import ProfileManager from "@/components/profiles/ProfileManager";
+import AccessibleModal from "@/components/design/modal/AccessibleModal";
+import ModalButton from "@/components/design/modal/ModalButton";
 
 export default {
   name: "ProfileHandler",
-  components: {ProfileManager},
+  components: {ModalButton, AccessibleModal, ProfileManager},
 
   data() {
     return {
       menuList: [
         {name: 'Load Profile', slug: 'load'},
-        {name: 'Load Colours Only', slug: 'colours'}
-      ]
+        {name: 'Load Colours Only', slug: 'colours'},
+        {name: 'Delete Profile', slug: 'delete'}
+      ],
+
+      selectedProfile: '',
     }
   },
 
@@ -54,6 +73,15 @@ export default {
 
       if (event.option.slug === "load") {
         this.loadProfile(event.item);
+      }
+
+      if (event.option.slug === "delete") {
+        if (event.item === this.getActiveProfile()) {
+          this.$refs.noDelete.openModal(this.$refs.focusDelDefault, this.$refs.manager.$refs[this.$refs.manager.getButtonId(event.item)][0]);
+        } else {
+          this.selectedProfile = event.item;
+          this.$refs.deleteModal.openModal(this.$refs.focusDelDefault, this.$refs.manager.$refs[this.$refs.manager.getButtonId(event.item)][0]);
+        }
       }
     },
 

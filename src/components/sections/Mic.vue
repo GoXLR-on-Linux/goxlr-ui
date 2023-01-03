@@ -4,7 +4,9 @@
       <MicProfileHandler/>
     </div>
     <MainTabContent :no-left-pad=true>
-      <SetupButton/>
+      <ContentBox>
+        <MicSetupButton />
+      </ContentBox>
       <Gate/>
       <Equaliser/>
       <Compressor/>
@@ -18,13 +20,14 @@ import Gate from "./mic/Gate";
 import Equaliser from "./mic/Equalizer";
 import Compressor from "./mic/Compressor";
 import MicExtra from "./mic/MicExtra";
-import SetupButton from "@/components/sections/mic/SetupMic";
 import MainTabContent from "@/components/design/MainTabContent";
 import MicProfileHandler from "@/components/profiles/handlers/MicProfileHandler";
+import MicSetupButton from "@/components/sections/mic/MicSetupButton";
+import ContentBox from "@/components/ContentBox";
 
 export default {
   name: "MicSections",
-  components: {MicProfileHandler, MainTabContent, SetupButton, MicExtra, Compressor, Equaliser, Gate},
+  components: {ContentBox, MicSetupButton, MicProfileHandler, MainTabContent, MicExtra, Compressor, Equaliser, Gate},
 }
 </script>
 
