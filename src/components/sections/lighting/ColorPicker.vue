@@ -1,10 +1,10 @@
 <script>
 export default {
-  name: "ColourBox",
+  name: "ColorPicker",
 
   data() {
     return {
-      textValue: "#ff0000",
+      hexString: "#000000",
       canvasContext: undefined,
       hoverContainer: undefined,
     }
@@ -13,14 +13,16 @@ export default {
   props: {
     id: String,
     title: String,
-    colourValue: String,
+    colorValue: String,
   },
 
   methods: {
 
     mouseMove(event) {
-      this.hoverContainer.style.left = (event.pageX - 12) + "px";
-      this.hoverContainer.style.top = (event.pageY - 12) + "px";
+      const hoverContainerCenterOffset = 12
+
+      this.hoverContainer.style.left = (event.pageX - hoverContainerCenterOffset) + "px";
+      this.hoverContainer.style.top = (event.pageY - hoverContainerCenterOffset) + "px";
       this.hoverContainer.style.backgroundColor = this.getHoveredColourFromArray(this.getPositionFrom(event));
     },
 
@@ -30,19 +32,12 @@ export default {
     },
 
     mouseClick(event) {
-      this.updateText(this.getHoveredColourFromArray(this.getPositionFrom(event)));
+      const position = this.getPositionFrom(event)
+      const color = this.color(position[0], position[1])
+      this.updateText(color);
     },
 
-    getHoveredColourFromArray(position) {
-      return this.getHoveredColour(position[0], position[1]);
-    },
-
-    getHoveredColour(x, y) {
-      let colour = this.canvasContext.getImageData(x, y, 1, 1).data;
-      return "#" + ("000000" + this.rgbToHex(colour[0], colour[1], colour[2])).slice(-6).toUpperCase();
-    },
-
-    getPositionFrom(event) {
+    position(event) {
       let rect = event.target.getBoundingClientRect();
       let x = Math.floor(event.clientX - rect.left);
       let y = Math.floor(event.clientY - rect.top);
@@ -50,16 +45,22 @@ export default {
       return [x, y];
     },
 
-    rgbToHex(r, g, b) {
+    color(x, y) {
+      let color = this.canvasContext.getImageData(x, y, 1, 1).data;
+      return "#" + ("000000" + this.rgbToHex(color[0], color[1], color[2])).slice(-6).toUpperCase();
+    },
+
+    hexColor(r, g, b) {
       if (r > 255 || g > 255 || b > 255)
         throw "Invalid color component";
       return ((r << 16) | (g << 8) | b).toString(16);
     },
 
     updateText(value) {
-      this.textValue = value;
-      this.$emit('colour-changed', this.id, this.textValue);
+      this.hexString = value;
+      this.$emit('colour-changed', this.id, this.hexString);
     },
+
     updateColour(event) {
       let value = event.target.value;
 
@@ -68,6 +69,7 @@ export default {
         this.updateText(value);
       }
     },
+
     clearColour() {
       this.updateText("#000000");
     }
@@ -76,34 +78,39 @@ export default {
   mounted() {
     this.canvasContext = document.getElementById('wheelCanvas').getContext("2d");
     this.hoverContainer = document.getElementById("colourHover");
-    this.textValue = this.colourValue;
+    this.hexString = this.colorValue;
   },
 
   watch: {
-    colourValue: function () {
-      this.textValue = this.colourValue;
+    colorValue: function () {
+      this.hexString = this.colorValue;
     }
   }
 }
 </script>
 
 <template>
-  <div class="colourBox">
-    <div class="label">{{ title }}</div>
-
-    <img src="wheel.png" draggable="false" @mousemove.stop="mouseMove" @mouseleave="mouseLeave" @click="mouseClick"/>
-
-    <div class="bottom">
-      <div class="colourRef"></div>
-      <input type="text" :value="textValue" @keyup="updateColour"/>
-      <button class="clearColour" @click="clearColour"><font-awesome-icon title="Clear" icon="fa-solid fa-xmark" /></button>
+  <div class="colorPicker">
+    <div class="title">
+      {{ title }}
     </div>
 
+    <img src="wheel.png" draggable="false" @mousemove.stop="mouseMove" @mouseleave="mouseLeave" @click="mouseClick" />
+
+    <div class="controls">
+      <div class="colorPreview"></div>
+
+      <input type="text" :value="hexString" @keyup="updateColour"/>
+
+      <button class="clearButton" @click="clearColour">
+        <font-awesome-icon title="Clear" icon="fa-solid fa-xmark" />
+      </button>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.colourBox {
+.colorPicker {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -116,20 +123,20 @@ export default {
   background-color: #353937;
 }
 
-.colourBox:not(:last-child) {
+.colorPicker:not(:last-child) {
   margin-right: 20px;
 }
 
-.label {
+.title {
   width: 100%;
   padding: 10px 0;
 
-  color: #fff;
+  color: #ffffff;
   background-color: #3b413f;
   text-transform: uppercase;
 }
 
-.bottom {
+.controls {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -142,37 +149,30 @@ export default {
   color: #59b1b6;
 }
 
-.colourRef {
+.colorPreview {
   height: 100%;
   width: 35px;
 
-  background-color: v-bind(textValue);
+  background-color: v-bind(hexString);
 }
 
-.clearColour {
+.clearButton {
   height: 100%;
   width: 35px;
   
-  /** Remove default button styling */
+  color: #ffffff;
   background-color: transparent;
-  color: #fff;
-  border: 0;
+  border: none;
   cursor: pointer;
 }
 
 input[type=text] {
   width: 6em;
 
-  font-family: LeagueMonoCondensed, sans-serif;
-
-  /** Remove default input styling */
-  background-color: #3b413f;
   color: #59b1b6;
-  text-align: center;
+  background-color: #3b413f;
   border: none;
-  background-image: none;
-  box-shadow: none;
-  outline: none; 
+  font-family: LeagueMonoCondensed, sans-serif;
 
   -moz-appearance: textfield;
 }

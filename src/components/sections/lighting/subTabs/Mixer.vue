@@ -3,7 +3,7 @@ import MainTabContent from "@/components/design/MainTabContent";
 import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
-import ColourBox from "@/components/sections/lighting/ColourBox";
+import ColorPicker from "@/components/sections/lighting/ColorPicker";
 
 import { store } from "@/store";
 import { websocket } from "@/util/sockets";
@@ -13,7 +13,7 @@ import { isDeviceMini}  from "@/util/util";
 export default {
   name: "LightingMixer",
   components: {
-    ColourBox,
+    ColorPicker,
     PushButton,
     ButtonList,
     ContentBox,
@@ -266,13 +266,13 @@ export default {
           <PushButton label="Gradient" :is-active="styleContains('Gradient')" @button-pressed="toggleGradient"/>
           <PushButton label="Meter" :is-active="styleContains('Meter')" @button-pressed="toggleMeter"/>
         </ButtonList>
-        <ColourBox title="Bottom Colour" id="bottom" :colour-value="getBottomColour()"
+        <ColorPicker title="Bottom Colour" id="bottom" :color-value="getBottomColour()"
                    @colour-changed="onFaderColourChange"/>
-        <ColourBox title="Top Colour" id="top" :colour-value="getTopColour()" @colour-changed="onFaderColourChange"/>
+        <ColorPicker title="Top Colour" id="top" :color-value="getTopColour()" @colour-changed="onFaderColourChange"/>
       </ContentBox>
 
       <ContentBox v-show="!isDeviceMini()" title="Screen">
-        <ColourBox title="Background Colour" :colour-value="getScreenColour()" @colour-changed="onScreenColourChange"/>
+        <ColorPicker title="Background Colour" :color-value="getScreenColour()" @colour-changed="onScreenColourChange"/>
         <ButtonList title="Icon">
           <template #title>
             ICONS
@@ -300,7 +300,7 @@ export default {
       </ContentBox>
 
       <ContentBox title="Mute">
-        <ColourBox id="active" title="Active" :colour-value="getMuteActiveColour()"
+        <ColorPicker id="active" title="Active" :color-value="getMuteActiveColour()"
                    @colour-changed="onButtonColourChange"/>
         <ButtonList title="Inactive Option">
           <PushButton label="Dim Active Colour" :is-active="isMuteInactiveState('Dimmed')"
@@ -310,7 +310,7 @@ export default {
           <PushButton label="Dim Inactive Colour" :is-active="isMuteInactiveState('DimmedColour2')"
                       @click="setMuteInactiveState('DimmedColour2')"/>
         </ButtonList>
-        <ColourBox id="inactive" title="Inactive" :colour-value="getMuteInactiveColour()"
+        <ColorPicker id="inactive" title="Inactive" :color-value="getMuteInactiveColour()"
                    @colour-changed="onButtonColourChange"/>
       </ContentBox>
     </MainTabContent>

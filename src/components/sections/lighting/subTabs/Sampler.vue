@@ -3,7 +3,7 @@ import MainTabContent from "@/components/design/MainTabContent";
 import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
-import ColourBox from "@/components/sections/lighting/ColourBox";
+import ColorPicker from "@/components/sections/lighting/ColorPicker";
 
 import { store } from "@/store";
 import { websocket } from "@/util/sockets";
@@ -12,7 +12,7 @@ import { isDeviceMini } from "@/util/util";
 export default {
   name: "LightingSampler",
   components: {
-    ColourBox,
+    ColorPicker,
     PushButton,
     ButtonList,
     ContentBox,
@@ -73,9 +73,9 @@ export default {
         <PushButton label="B" :is-active="activeBank === 'SamplerSelectB'" @click="activeBank = 'SamplerSelectB'"/>
         <PushButton label="C" :is-active="activeBank === 'SamplerSelectC'" @click="activeBank = 'SamplerSelectC'"/>
       </ButtonList>
-      <ColourBox id="colour_one" title="Active / Loaded" :colour-value="getColour('colour_one')"
+      <ColorPicker id="colour_one" title="Active / Loaded" :color-value="getColour('colour_one')"
                  @colour-changed="onColourChange"/>
-      <ColourBox id="colour_three" title="Sample Empty" :colour-value="getColour('colour_three')"
+      <ColorPicker id="colour_three" title="Sample Empty" :color-value="getColour('colour_three')"
                  @colour-changed="onColourChange"/>
       <ButtonList title="Inactive Bank">
         <PushButton label="Dim Active Colour" :is-active="isInactiveState('Dimmed')"
@@ -85,7 +85,7 @@ export default {
         <PushButton label="Dim Inactive Colour" :is-active="isInactiveState('DimmedColour2')"
                     @click="setInactiveState('DimmedColour2')"/>
       </ButtonList>
-      <ColourBox id="colour_two" title="Inactive Bank" :colour-value="getColour('colour_two')"
+      <ColorPicker id="colour_two" title="Inactive Bank" :color-value="getColour('colour_two')"
                  @colour-changed="onColourChange"/>
     </ContentBox>
   </MainTabContent>

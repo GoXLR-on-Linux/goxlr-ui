@@ -7,7 +7,7 @@
 import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
-import ColourBox from "@/components/sections/lighting/ColourBox";
+import ColorPicker from "@/components/sections/lighting/ColorPicker";
 import MainTabContent from "@/components/design/MainTabContent";
 
 import {
@@ -23,7 +23,7 @@ export default {
   name: "LightingEffects",
   components: {
     MainTabContent,
-    ColourBox,
+    ColorPicker,
     PushButton,
     ButtonList,
     ContentBox,
@@ -154,7 +154,7 @@ export default {
         <PushButton v-for="(value, id) in effectPresets" :key="id" :button-id="value"
                     :is-active="activePreset === value" :label="getLabel(id, value)" @click="activePreset = value"/>
       </ButtonList>
-      <ColourBox id="active" title="Active" :colour-value="getColour(true)" @colour-changed="onColourChange"/>
+      <ColorPicker id="active" title="Active" :color-value="getColour(true)" @colour-changed="onColourChange"/>
       <ButtonList title="Inactive Option">
         <PushButton label="Dim Active Colour" :is-active="isPresetInactiveState('Dimmed')"
                     @click="setPresetInactiveState('Dimmed')"/>
@@ -163,7 +163,7 @@ export default {
         <PushButton label="Dim Inactive Colour" :is-active="isPresetInactiveState('DimmedColour2')"
                     @click="setPresetInactiveState('DimmedColour2')"/>
       </ButtonList>
-      <ColourBox id="inactive" title="Inactive" :colour-value="getColour(false)" @colour-changed="onColourChange"/>
+      <ColorPicker id="inactive" title="Inactive" :color-value="getColour(false)" @colour-changed="onColourChange"/>
     </ContentBox>
 
     <ContentBox title="Encoders">
@@ -171,11 +171,11 @@ export default {
         <PushButton v-for="(value, id) in encoderLighting" :key="id" :button-id="value"
                     :is-active="activeEncoder === value" :label="value" @click="activeEncoder = value"/>
       </ButtonList>
-      <ColourBox id="colour_two" title="Left Colour" :colour-value="getEncoderColour('colour_two')"
+      <ColorPicker id="colour_two" title="Left Colour" :color-value="getEncoderColour('colour_two')"
                  @colour-changed="onEncoderColourChange"/>
-      <ColourBox id="colour_one" title="Right Colour" :colour-value="getEncoderColour('colour_one')"
+      <ColorPicker id="colour_one" title="Right Colour" :color-value="getEncoderColour('colour_one')"
                  @colour-changed="onEncoderColourChange"/>
-      <ColourBox id="colour_three" title="Knob Colour" :colour-value="getEncoderColour('colour_three')"
+      <ColorPicker id="colour_three" title="Knob Colour" :color-value="getEncoderColour('colour_three')"
                  @colour-changed="onEncoderColourChange"/>
     </ContentBox>
 
@@ -185,7 +185,7 @@ export default {
                     :is-active="activeEffect === value" :label="effectButtonLabels[id]"
                     @click="activeEffect = value"></PushButton>
       </ButtonList>
-      <ColourBox id="active" title="Active" :colour-value="getEffectColour(true)" @colour-changed="onEffectColourChange"/>
+      <ColorPicker id="active" title="Active" :color-value="getEffectColour(true)" @colour-changed="onEffectColourChange"/>
       <ButtonList title="Inactive Option">
         <PushButton label="Dim Active Colour" :is-active="isEffectInactiveState('Dimmed')"
                     @click="setEffectInactiveState('Dimmed')"/>
@@ -194,7 +194,7 @@ export default {
         <PushButton label="Dim Inactive Colour" :is-active="isEffectInactiveState('DimmedColour2')"
                     @click="setEffectInactiveState('DimmedColour2')"/>
       </ButtonList>
-      <ColourBox id="inactive" title="Inactive" :colour-value="getEffectColour(false)"
+      <ColorPicker id="inactive" title="Inactive" :color-value="getEffectColour(false)"
                  @colour-changed="onEffectColourChange"/>
 
     </ContentBox>

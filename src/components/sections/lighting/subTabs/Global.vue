@@ -3,7 +3,7 @@ import MainTabContent from "@/components/design/MainTabContent";
 import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
-import ColourBox from "@/components/sections/lighting/ColourBox";
+import ColorPicker from "@/components/sections/lighting/ColorPicker";
 
 import { store } from "@/store";
 import { websocket } from "@/util/sockets";
@@ -11,7 +11,7 @@ import { websocket } from "@/util/sockets";
 export default {
   name: "LightingGlobal",
   components: {
-    ColourBox,
+    ColorPicker,
     PushButton,
     ButtonList,
     ContentBox,
@@ -48,7 +48,7 @@ export default {
         <PushButton label="Accent" :is-active="isAccent" @click="isAccent = true" />
         <PushButton label="Global" :is-active="!isAccent" :is-disabled=true />
       </ButtonList>
-      <ColourBox title="Colour" :colour-value="getColour()" @colour-changed="onColourChange" />
+      <ColorPicker title="Colour" :color-value="getColour()" @colour-changed="onColourChange" />
     </ContentBox>
   </MainTabContent>
 </template>
