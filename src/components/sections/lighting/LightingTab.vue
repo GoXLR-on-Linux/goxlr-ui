@@ -20,9 +20,15 @@ export default {
   data() {
     return {
       currentTab: 'Mixer',
-      tabs: isDeviceMini() ? ['Mixer', 'Cough', 'Global'] : ['Mixer', 'Effects', 'Sampler', 'Cough', 'Global'],
+      tabs: this.isDeviceMini() ? ['Mixer', 'Cough', 'Global'] : ['Mixer', 'Effects', 'Sampler', 'Cough', 'Global'],
     }
   },
+
+  methods: {
+    isDeviceMini() {
+      isDeviceMini()
+    }
+  }
 }
 </script>
 
@@ -38,7 +44,7 @@ export default {
   <component :is="currentTab" />
 </template>
 
-<style>
+<style scoped>
 .button {
   min-width: 100px;
   margin: 0 2px;

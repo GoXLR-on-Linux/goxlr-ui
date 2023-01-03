@@ -53,6 +53,6 @@ export default {
   </MainTabContent>
 </template>
 
-<style>
+<style scoped>
 
 </style>

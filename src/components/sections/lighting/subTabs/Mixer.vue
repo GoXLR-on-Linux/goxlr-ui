@@ -318,7 +318,7 @@ export default {
   </div>
 </template>
 
-<style>
+<style scoped>
 input[type=text] {
   font-family: LeagueMonoCondensed, sans-serif;
   background-color: #3b413f;
