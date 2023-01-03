@@ -5,15 +5,15 @@
     </BigButton>
     <div style="margin-right: 30px"></div>
     <BigButton title="Settings" @button-clicked="showSettingsModal = true">
-      <font-awesome-icon icon="fa-solid fa-circle-question" />
+      <font-awesome-icon icon="fa-solid fa-gear" />
     </BigButton>
     <div style="margin-right: 30px"></div>
     <BigButton title="About" @button-clicked="showVersionModal = true">
-      <font-awesome-icon icon="fa-solid fa-circle-question" />
+      <font-awesome-icon icon="fa-solid fa-circle-info" />
     </BigButton>
     <div style="margin-right: 30px"></div>
     <BigButton title="License" @button-clicked="showLicenseModal = true">
-      <font-awesome-icon icon="fa-solid fa-circle-question" />
+      <font-awesome-icon icon="fa-solid fa-book-open" />
     </BigButton>
     <div style="margin-right: 30px"></div>
     <a :href="'https://discord.gg/Wbp3UxkX2j'">

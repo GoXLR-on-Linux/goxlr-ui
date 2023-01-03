@@ -19,10 +19,10 @@ import {
     faCircleQuestion,
     faFloppyDisk,
     faFileCirclePlus,
-    faCopy, faTrash, faCheckCircle, faCheck, faFolder, faEllipsisVertical, faPlay, faStop, faXmark
+    faCopy, faTrash, faCheckCircle, faCheck, faFolder, faEllipsisVertical, faPlay, faStop, faXmark, faGear, faBookOpen, faCircleInfo
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faMicrophoneLines, faCircleQuestion, faFloppyDisk, faEllipsisVertical, faFileCirclePlus, faCopy, faTrash, faCheckCircle, faCheck, faFolder, faTrash, faPlay, faStop, faXmark);
+library.add(faMicrophoneLines, faCircleQuestion, faFloppyDisk, faEllipsisVertical, faFileCirclePlus, faCopy, faTrash, faCheckCircle, faCheck, faFolder, faTrash, faPlay, faStop, faXmark, faGear, faBookOpen, faCircleInfo);
 
 websocket.connect().then(() => {
     let app = createApp(App);

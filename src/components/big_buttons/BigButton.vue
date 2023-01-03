@@ -1,10 +1,10 @@
 <template>
-  <div class="content" @click="clicked">
+  <button role="button" aria-labelledby="button_title" class="content" @click="clicked">
     <div class="img-section">
       <slot/>
     </div>
-    <div class="iconTitle"><span class="filler">{{ title }}</span></div>
-  </div>
+    <div class="iconTitle"><span id="button_title" class="filler">{{ title }}</span></div>
+  </button>
 </template>
 
 <script>
@@ -26,37 +26,46 @@ export default {
 
 <style scoped>
 
-.content{
-  display: inline-flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
+button.content {
+  width: 130px;
+  height: 170px;
   background: #252927;
-  padding: 15px;
-  align-items: center;
+  border: 0;
+  margin: 0;
+  padding: 0;
 }
 
-.img-section{
-  display: inline-flex;
-  flex-direction: row;
+button .img-section {
+  text-align: center;
+  height: 130px;
   font-size: 80px;
-  color: #6e7676;
+  color: #8C8F8E;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  display: -webkit-flex;
+  -webkit-align-items: center;
+  -webkit-justify-content: center;
+}
+button:hover .img-section {
+  color: #fff;
+  background-color: #49514E;
 }
 
-
-.iconTitle{
-  background-color: #2d3230;
+button .iconTitle {
+  height: 40px;
+  line-height: 40px;
+  background-color: #353937;
   color: #fff;
   font-family: LeagueMonoCondensed, sans-serif;
-  padding: 10px;
-  box-sizing: border-box;
   text-align: center;
-  width: 100%;
-  margin-top: 15px;
-  border:none;
-  background-image:none;
-  box-shadow: none;
-  outline: none;
-  -moz-appearance:textfield;
 }
+button:hover .iconTitle {
+  background-color: #6E7170;
+}
+
+
 
 </style>
