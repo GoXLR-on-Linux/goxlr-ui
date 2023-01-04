@@ -1,9 +1,7 @@
 <script>
-import MainTabContent from "@/components/design/MainTabContent";
-import ContentBox from "@/components/ContentBox";
-import ButtonList from "@/components/button_list/ButtonList";
-import PushButton from "@/components/button_list/Button";
-import ColorPicker from "@/components/sections/lighting/ColorPicker";
+import Container from "@/components/new/Container02";
+import ListSelection from "@/components/new/ListSelection";
+import ColourPicker from "@/components/new/ColourPicker";
 
 import { store } from "@/store";
 import { websocket } from "@/util/sockets";
@@ -11,84 +9,99 @@ import { websocket } from "@/util/sockets";
 export default {
   name: "LightingCough",
   components: {
-    ColorPicker,
-    PushButton,
-    ButtonList,
-    ContentBox,
-    MainTabContent
+    Container,
+    ListSelection,
+    ColourPicker
   },
 
   data() {
     return {
-      isCough: false
+      buttonOptions: ['Bleep', 'Cough'],
+      selectedButtonOption: 'Bleep',
+      inactiveOptions: ['Dim Active Colour', 'Inactive Colour', 'Dim Inactive Colour']
     }
   },
 
   methods: {
-    setCough(isCough) {
-      this.isCough = isCough;
-    },
-
-    isMuteInactiveState(state) {
-      if (!store.hasActiveDevice()) {
-        return false;
-      }
-      let button = (this.isCough) ? "Cough" : "Bleep";
-      return store.getActiveDevice().lighting.buttons[button].off_style === state;
-    },
-
-    setMuteInactiveState(state) {
-      let button = (this.isCough) ? "Cough" : "Bleep";
-      websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [button, state]});
-    },
-
-    getColour(active) {
+    activeColor() {
       if (!store.hasActiveDevice()) {
         return "#000000";
       }
-      let button = (this.isCough) ? "Cough" : "Bleep";
-      let colour = (active) ? "colour_one" : "colour_two";
-      return "#" + store.getActiveDevice().lighting.buttons[button].colours[colour];
+      return "#" + store.getActiveDevice().lighting.buttons[this.selectedButtonOption].colours["colour_one"];
     },
 
-    onColourChange(id, value) {
-      let button = (this.isCough) ? "Cough" : "Bleep";
-      let active = store.getActiveDevice().lighting.buttons[button].colours.colour_one;
-      let inactive = store.getActiveDevice().lighting.buttons[button].colours.colour_two;
-
-      if (id === "active") {
-        active = value.substr(1, 6);
-      } else {
-        inactive = value.substr(1, 6);
+    inactiveColor() {
+      if (!store.hasActiveDevice()) {
+        return "#000000";
       }
+      return "#" + store.getActiveDevice().lighting.buttons[this.selectedButtonOption].colours["colour_two"];
+    },
 
-      websocket.send_command(store.getActiveSerial(), {"SetButtonColours": [button, active, inactive]});
+    selectedInactiveOption() {
+      if (!store.hasActiveDevice()) {
+        return '';
+      }
+      const state = store.getActiveDevice().lighting.buttons[this.selectedButtonOption].off_style
+      return this.mapState(state)
+    },
+
+    mapState(state) {
+      switch (state) {
+        case 'Dimmed':
+          return this.inactiveOptions[0];
+        case 'Colour2':
+          return this.inactiveOptions[1];
+        case 'DimmedColour2':
+          return this.inactiveOptions[2];
+        default:
+          return '';
+      }
+    },
+
+    onButtonSelectionChange(option) {
+      this.selectedButtonOption = option
+    },
+
+    onInactiveSelectionChange(option) {
+      let state = this.mapInactiveOption(option)
+      websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [this.selectedButtonOption, state]});
+    },
+
+    mapInactiveOption(option) {
+      switch (option) {
+          case this.inactiveOptions[0]:
+            return 'Dimmed';
+          case this.inactiveOptions[1]:
+            return 'Colour2';
+          case this.inactiveOptions[2]:
+            return 'DimmedColour2';
+          default:
+            return
+        }
+    },
+
+    onActiveColourChange(value) {
+      let active = value.substr(1, 6);
+      let inactive = store.getActiveDevice().lighting.buttons[this.selectedButtonOption].colours.colour_two;
+
+      websocket.send_command(store.getActiveSerial(), {"SetButtonColours": [this.selectedButtonOption, active, inactive]});
+    },
+
+    onInactiveColourChange(value) {
+      let active = store.getActiveDevice().lighting.buttons[this.selectedButtonOption].colours.colour_one;
+      let inactive = value.substr(1, 6);
+
+      websocket.send_command(store.getActiveSerial(), {"SetButtonColours": [this.selectedButtonOption, active, inactive]});
     }
   }
 }
 </script>
 
 <template>
-  <MainTabContent :no-left-pad=false>
-    <ContentBox title="Cough/Bleep Buttons">
-      <ButtonList title="Buttons">
-        <PushButton label="Bleep" :is-active="!isCough" @click="setCough(false)"/>
-        <PushButton label="Cough" :is-active="isCough" @click="setCough(true)"/>
-      </ButtonList>
-      <ColorPicker id="active" title="Active" :color-value="getColour(true)" @colour-changed="onColourChange"/>
-      <ButtonList title="Inactive Option">
-        <PushButton label="Dim Active Colour" :is-active="isMuteInactiveState('Dimmed')"
-                    @click="setMuteInactiveState('Dimmed')"/>
-        <PushButton label="Inactive Colour" :is-active="isMuteInactiveState('Colour2')"
-                    @click="setMuteInactiveState('Colour2')"/>
-        <PushButton label="Dim Inactive Colour" :is-active="isMuteInactiveState('DimmedColour2')"
-                    @click="setMuteInactiveState('DimmedColour2')"/>
-      </ButtonList>
-      <ColorPicker id="inactive" title="Inactive" :color-value="getColour(false)" @colour-changed="onColourChange"/>
-    </ContentBox>
-  </MainTabContent>
+  <Container title="Cough/Bleep Buttons">
+    <ListSelection title="Buttons" :options="this.buttonOptions" :selected="this.selectedButtonOption" @selection-changed="onButtonSelectionChange"/>
+    <ColourPicker title="Active" :color-value="activeColor()" @colour-changed="onActiveColourChange" />
+    <ListSelection title="Inactive Options" :options="this.inactiveOptions" :selected="this.selectedInactiveOption()" @selection-changed="onInactiveSelectionChange" :leftMargin="true"/>
+    <ColourPicker title="Inactive" :color-value="inactiveColor()" @colour-changed="onInactiveColourChange" />
+  </Container>
 </template>
-
-<style scoped>
-
-</style>
