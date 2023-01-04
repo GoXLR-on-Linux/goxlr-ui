@@ -22,7 +22,7 @@ export default {
   },
 
   methods: {
-    getColour() {
+    color() {
       if (!store.hasActiveDevice()) {
         return "#000000";
       }
@@ -42,8 +42,8 @@ export default {
 
 <template>
     <Container title="Areas">
-      <ListSelection :options="this.options" :selected="this.selected" @selection-changed="onSelectionChange"/>
-      <ColourPicker title="Colour" :color-value="getColour()" @colour-changed="onColourChange" />
+      <ListSelection title="Area" :options="this.options" :selected="this.selected" @selection-changed="onSelectionChange"/>
+      <ColourPicker title="Colour" :color-value="color()" @colour-changed="onColourChange" />
     </Container>
 </template>
 
