@@ -21,12 +21,13 @@ export default {
 </script>
 
 <template>
-    <Container :leftMargin="false">
+    <Container :leftMargin="false" role="radiogroup">
         <button
             v-for="option in options"
             :key="option"
             :class="['button', { active: selected === option }]"
             @click="select(option)"
+            type="radio"
         >
             {{ option }}
         </button>
