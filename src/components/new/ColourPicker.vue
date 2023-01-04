@@ -97,7 +97,7 @@ export default {
 </script>
 
 <template>
-  <Container title="Colour">
+  <Container :title="title">
     <slot>
       <div class="spacer"></div>
       <img src="wheel.png" draggable="false" @mousemove.stop="mouseMove" @mouseleave="mouseLeave" @click="mouseClick" />
