@@ -1,9 +1,7 @@
 <script>
-import MainTabContent from "@/components/design/MainTabContent";
-import ContentBox from "@/components/ContentBox";
-import ButtonList from "@/components/button_list/ButtonList";
-import PushButton from "@/components/button_list/Button";
-import ColorPicker from "@/components/sections/lighting/ColorPicker";
+import Container from "@/components/new/Container02";
+import ListSelection from "@/components/new/ListSelection";
+import ColourPicker from "@/components/new/ColourPicker";
 
 import { store } from "@/store";
 import { websocket } from "@/util/sockets";
@@ -12,85 +10,127 @@ import { isDeviceMini } from "@/util/util";
 export default {
   name: "LightingSampler",
   components: {
-    ColorPicker,
-    PushButton,
-    ButtonList,
-    ContentBox,
-    MainTabContent,
+    Container,
+    ListSelection,
+    ColourPicker
   },
 
   data() {
     return {
-      activeBank: "SamplerSelectA",
+      buttonOptions: ['A', 'B', 'C'],
+      selectedButtonOption: 'A',
+      inactiveOptions: ['Dim Active Colour', 'Inactive Colour', 'Dim Inactive Colour']
     }
   },
 
   methods: {
-    isInactiveState(state) {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
-      }
-      return store.getActiveDevice().lighting.sampler[this.activeBank].off_style === state;
-    },
-    setInactiveState(state) {
-      websocket.send_command(store.getActiveSerial(), {"SetSampleOffStyle": [this.activeBank, state]});
-    },
-
-    getColour(element) {
+    activeColor() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return "#000000";
       }
-      return "#" + store.getActiveDevice().lighting.sampler[this.activeBank].colours[element];
+      return "#" + store.getActiveDevice().lighting.sampler["SampleSelect" + this.selectedButtonOption].colours["colour_one"];
     },
 
-    onColourChange(id, value) {
-      // As always, fetch the colours..
-      let colour_one = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_one;
+    emptyColor() {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
+        return "#000000";
+      }
+      return "#" + store.getActiveDevice().lighting.sampler["SampleSelect" + this.selectedButtonOption].colours["colour_three"];
+    },
+
+    inactiveColor() {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
+        return "#000000";
+      }
+      return "#" + store.getActiveDevice().lighting.sampler["SampleSelect" + this.selectedButtonOption].colours["colour_two"];
+    },
+
+    selectedInactiveOption() {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
+        return '';
+      }
+      const state = store.getActiveDevice().lighting.sampler["SampleSelect" + this.selectedButtonOption].off_style
+      return this.mapState(state)
+    },
+
+    mapState(state) {
+      switch (state) {
+        case 'Dimmed':
+          return this.inactiveOptions[0];
+        case 'Colour2':
+          return this.inactiveOptions[1];
+        case 'DimmedColour2':
+          return this.inactiveOptions[2];
+        default:
+          return '';
+      }
+    },
+
+    onButtonSelectionChange(option) {
+      if (isDeviceMini()) { return }
+
+      this.selectedButtonOption = option
+    },
+
+    onInactiveSelectionChange(option) {
+      if (isDeviceMini()) { return }
+
+      let state = this.mapInactiveOption(option)
+      websocket.send_command(store.getActiveSerial(), {"SetSampleOffStyle": ["SampleSelect" + this.selectedButtonOption, state]});
+    },
+
+    mapInactiveOption(option) {
+      switch (option) {
+          case this.inactiveOptions[0]:
+            return 'Dimmed';
+          case this.inactiveOptions[1]:
+            return 'Colour2';
+          case this.inactiveOptions[2]:
+            return 'DimmedColour2';
+          default:
+            return
+        }
+    },
+
+    onActiveColourChange(value) {
+      if (isDeviceMini()) { return }
+
+      let colour_one = value.substr(1, 6);
       let colour_two = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_two;
       let colour_three = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_three;
 
-      if (id === "colour_one") {
-        colour_one = value.substr(1, 6);
-      } else if (id === "colour_two") {
-        colour_two = value.substr(1, 6);
-      } else if (id === "colour_three") {
-        colour_three = value.substr(1, 6);
-      }
+      websocket.send_command(store.getActiveSerial(), {"SetSampleColour": [this.selectedButtonOption, colour_one, colour_two, colour_three]})
+    },
 
-      websocket.send_command(store.getActiveSerial(), {"SetSampleColour": [this.activeBank, colour_one, colour_two, colour_three]})
+    onEmptyColourChange(value) {
+      if (isDeviceMini()) { return }
 
-      console.log("Changing " + id + " to " + value);
+      let colour_one = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_one;
+      let colour_two = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_two;
+      let colour_three = value.substr(1, 6);
+
+      websocket.send_command(store.getActiveSerial(), {"SetSampleColour": [this.selectedButtonOption, colour_one, colour_two, colour_three]})
+    },
+
+    onInactiveColourChange(value) {
+      if (isDeviceMini()) { return }
+
+      let colour_one = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_one;
+      let colour_two = value.substr(1, 6);
+      let colour_three = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_three;
+
+      websocket.send_command(store.getActiveSerial(), {"SetSampleColour": [this.selectedButtonOption, colour_one, colour_two, colour_three]})
     }
   }
 }
 </script>
 
 <template>
-  <MainTabContent :no-left-pad=false>
-    <ContentBox title="Bank">
-      <ButtonList title="Buttons">
-        <PushButton label="A" :is-active="activeBank === 'SamplerSelectA'" @click="activeBank = 'SamplerSelectA'"/>
-        <PushButton label="B" :is-active="activeBank === 'SamplerSelectB'" @click="activeBank = 'SamplerSelectB'"/>
-        <PushButton label="C" :is-active="activeBank === 'SamplerSelectC'" @click="activeBank = 'SamplerSelectC'"/>
-      </ButtonList>
-      <ColorPicker id="colour_one" title="Active / Loaded" :color-value="getColour('colour_one')"
-                 @colour-changed="onColourChange"/>
-      <ColorPicker id="colour_three" title="Sample Empty" :color-value="getColour('colour_three')"
-                 @colour-changed="onColourChange"/>
-      <ButtonList title="Inactive Bank">
-        <PushButton label="Dim Active Colour" :is-active="isInactiveState('Dimmed')"
-                    @click="setInactiveState('Dimmed')"/>
-        <PushButton label="Inactive Colour" :is-active="isInactiveState('Colour2')"
-                    @click="setInactiveState('Colour2')"/>
-        <PushButton label="Dim Inactive Colour" :is-active="isInactiveState('DimmedColour2')"
-                    @click="setInactiveState('DimmedColour2')"/>
-      </ButtonList>
-      <ColorPicker id="colour_two" title="Inactive Bank" :color-value="getColour('colour_two')"
-                 @colour-changed="onColourChange"/>
-    </ContentBox>
-  </MainTabContent>
+  <Container title="Bank">
+    <ListSelection title="Buttons" :options="this.buttonOptions" :selected="this.selectedButtonOption" @selection-changed="onButtonSelectionChange"/>
+    <ColourPicker title="Active / Loaded" :color-value="activeColor()" @colour-changed="onActiveColourChange" />
+    <ColourPicker title="Sample Empty" :color-value="emptyColor()" @colour-changed="onEmptyColourChange" />
+    <ListSelection title="Inactive Bank" :options="this.inactiveOptions" :selected="this.selectedInactiveOption()" @selection-changed="onInactiveSelectionChange" :leftMargin="true"/>
+    <ColourPicker title="Inactive Bank" :color-value="inactiveColor()" @colour-changed="onInactiveColourChange" />
+  </Container>
 </template>
-
-<style scoped>
-
-</style>
