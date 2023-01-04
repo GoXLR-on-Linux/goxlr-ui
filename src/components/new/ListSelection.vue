@@ -8,6 +8,7 @@ export default {
     },
 
     props: {
+        group: String,
         options: Array,
         selected: String
     },
@@ -22,15 +23,15 @@ export default {
 
 <template>
     <Container :leftMargin="false" role="radiogroup">
-        <button
+        <span
             v-for="option in options"
             :key="option"
-            :class="['button', { active: selected === option }]"
+            :class="['span', { active: selected === option }]"
             @click="select(option)"
-            type="radio"
         >
-            {{ option }}
-        </button>
+            <input type="radio" :id="option" :name="group" :value="option">
+            <label :for="option">{{ option }}</label>
+        </span>
     </Container>
 </template>
 
@@ -40,8 +41,16 @@ export default {
     padding: 0;
 }
 
-button {
-    width: calc(100% - 16px);
+input[type=radio] {
+    opacity: 0;
+    width: 0;
+    border: 0;
+    height: 0;
+    margin: 0;
+}
+
+span {
+    width: 168px;
 
     margin-top: 8px;
     padding: 8px;
@@ -54,16 +63,16 @@ button {
     font-size: 13px;
 }
 
-button:hover:not(.active) {
+span:hover:not(.active) {
     background-color: #49514e;
 }
 
-button.active {
+span.active {
   color: #353937;
   background-color: #59b1b6;
 }
 
-button.disabled {
+span.disabled {
   color: #959796;
   background-color: #383D3B;
 }
