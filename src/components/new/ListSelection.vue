@@ -21,7 +21,7 @@ export default {
 </script>
 
 <template>
-    <Container title="Area" :leftMargin="false">
+    <Container :leftMargin="false">
         <button
             v-for="option in options"
             :key="option"
