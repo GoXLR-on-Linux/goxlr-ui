@@ -1,5 +1,6 @@
 <script>
-import Container from "@/components/new/Container02";
+import Container2 from "@/components/new/Container02";
+import Container3 from "@/components/new/Container03";
 import ListSelection from "@/components/new/ListSelection";
 import ColourPicker from "@/components/new/ColourPicker";
 
@@ -10,7 +11,8 @@ import { isDeviceMini } from "@/util/util";
 export default {
   name: "LightingSampler",
   components: {
-    Container,
+    Container2,
+    Container3,
     ListSelection,
     ColourPicker
   },
@@ -126,11 +128,13 @@ export default {
 </script>
 
 <template>
-  <Container title="Bank">
-    <ListSelection title="Buttons" group="lighting_sampler_buttons" :options="this.buttonOptions" :selected="this.selectedButtonOption" @selection-changed="onButtonSelectionChange"/>
-    <ColourPicker title="Active / Loaded" :color-value="activeColor()" @colour-changed="onActiveColourChange" />
-    <ColourPicker title="Sample Empty" :color-value="emptyColor()" @colour-changed="onEmptyColourChange" />
-    <ListSelection title="Inactive Bank" group="lighting_sampler_inactive_behaviour" :options="this.inactiveOptions" :selected="this.selectedInactiveOption()" @selection-changed="onInactiveSelectionChange" />
-    <ColourPicker title="Inactive Bank" :color-value="inactiveColor()" @colour-changed="onInactiveColourChange" />
-  </Container>
+  <Container3>
+    <Container2 title="Bank">
+      <ListSelection title="Buttons" group="lighting_sampler_buttons" :options="this.buttonOptions" :selected="this.selectedButtonOption" @selection-changed="onButtonSelectionChange"/>
+      <ColourPicker title="Active / Loaded" :color-value="activeColor()" @colour-changed="onActiveColourChange" />
+      <ColourPicker title="Sample Empty" :color-value="emptyColor()" @colour-changed="onEmptyColourChange" />
+      <ListSelection title="Inactive Bank" group="lighting_sampler_inactive_behaviour" :options="this.inactiveOptions" :selected="this.selectedInactiveOption()" @selection-changed="onInactiveSelectionChange" />
+      <ColourPicker title="Inactive Bank" :color-value="inactiveColor()" @colour-changed="onInactiveColourChange" />
+    </Container2>
+  </Container3>
 </template>

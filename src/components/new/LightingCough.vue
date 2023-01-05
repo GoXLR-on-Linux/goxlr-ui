@@ -1,5 +1,6 @@
 <script>
-import Container from "@/components/new/Container02";
+import Container2 from "@/components/new/Container02";
+import Container3 from "@/components/new/Container03";
 import ListSelection from "@/components/new/ListSelection";
 import ColourPicker from "@/components/new/ColourPicker";
 
@@ -9,7 +10,8 @@ import { websocket } from "@/util/sockets";
 export default {
   name: "LightingCough",
   components: {
-    Container,
+    Container2,
+    Container3,
     ListSelection,
     ColourPicker
   },
@@ -98,10 +100,12 @@ export default {
 </script>
 
 <template>
-  <Container title="Cough/Bleep Buttons">
-    <ListSelection title="Buttons" group="lighting_cough_buttons" :options="this.buttonOptions" :selected="this.selectedButtonOption" @selection-changed="onButtonSelectionChange"/>
-    <ColourPicker title="Active" :color-value="activeColor()" @colour-changed="onActiveColourChange" />
-    <ListSelection title="Inactive Options" group="lighting_cough_inactive_behaviour" :options="this.inactiveOptions" :selected="this.selectedInactiveOption()" @selection-changed="onInactiveSelectionChange"/>
-    <ColourPicker title="Inactive" :color-value="inactiveColor()" @colour-changed="onInactiveColourChange" />
-  </Container>
+  <Container3>
+    <Container2 title="Cough/Bleep Buttons">
+      <ListSelection title="Buttons" group="lighting_cough_buttons" :options="this.buttonOptions" :selected="this.selectedButtonOption" @selection-changed="onButtonSelectionChange"/>
+      <ColourPicker title="Active" :color-value="activeColor()" @colour-changed="onActiveColourChange" />
+      <ListSelection title="Inactive Options" group="lighting_cough_inactive_behaviour" :options="this.inactiveOptions" :selected="this.selectedInactiveOption()" @selection-changed="onInactiveSelectionChange"/>
+      <ColourPicker title="Inactive" :color-value="inactiveColor()" @colour-changed="onInactiveColourChange" />
+    </Container2>
+  </Container3>
 </template>

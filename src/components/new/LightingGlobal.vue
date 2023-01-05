@@ -1,5 +1,6 @@
 <script>
-import Container from "@/components/new/Container02";
+import Container2 from "@/components/new/Container02";
+import Container3 from "@/components/new/Container03";
 import ListSelection from "@/components/new/ListSelection";
 import ColourPicker from "@/components/new/ColourPicker";
 
@@ -9,10 +10,11 @@ import { websocket } from "@/util/sockets";
 export default {
   name: "LightingGlobal",
   components: {
-    Container,
+    Container2,
+    Container3,
     ListSelection,
     ColourPicker
-  },
+},
 
   data() {
     return {
@@ -41,10 +43,12 @@ export default {
 </script>
 
 <template>
-    <Container title="Areas">
+  <Container3>
+    <Container2 title="Areas">
       <ListSelection title="Area" group="lighting_global_areas" :options="this.options" :selected="this.selected" @selection-changed="onSelectionChange"/>
       <ColourPicker title="Colour" :color-value="color()" @colour-changed="onColourChange" />
-    </Container>
+    </Container2>
+  </Container3>
 </template>
 
 <style scoped>
