@@ -1,5 +1,5 @@
 <script>
-import Container2 from "@/components/new/Container03";
+import Container3 from "@/components/new/Container03";
 import Presets from "@/components/new/LightingEffectsPresets";
 import Encoders from "@/components/new/LightingEffectsEncoders.vue";
 import Effects from "@/components/new/LightingEffectsEffects.vue";
@@ -7,7 +7,7 @@ import Effects from "@/components/new/LightingEffectsEffects.vue";
 export default {
     name: "LightingEffects",
     components: {
-        Container2,
+        Container3,
         Presets,
         Encoders,
         Effects
@@ -16,9 +16,9 @@ export default {
 </script>
 
 <template>
-    <Container2>
+    <Container3>
         <Presets />
         <Encoders />
         <Effects />
-    </Container2>
+    </Container3>
 </template>
