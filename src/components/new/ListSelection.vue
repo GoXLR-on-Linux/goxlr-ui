@@ -23,15 +23,17 @@ export default {
 
 <template>
     <Container role="radiogroup">
-        <span
-            v-for="option in options"
-            :key="option.id"
-            :class="['span', { active: selected === option.id }]"
-            @click="select(option.id)"
-        >
-            <input type="radio" :id="option.id" :name="group" :value="option.label">
-            <label :for="option.id">{{ option.label }}</label>
-        </span>
+        <div class="scroll">
+            <span
+                v-for="option in options"
+                :key="option.id"
+                :class="['span', { active: selected === option.id }]"
+                @click="select(option.id)"
+            >
+                <input type="radio" :id="option.id" :name="group" :value="option.label">
+                <label :for="option.id">{{ option.label }}</label>
+            </span>
+        </div>
     </Container>
 </template>
 
@@ -39,6 +41,35 @@ export default {
 * {
     margin: 0;
     padding: 0;
+}
+
+.scroll {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 8px;
+
+    padding: 8px ;
+    padding-right: 2px;
+    box-sizing: border-box;
+    width: 100%;
+    
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.scroll::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+}
+
+.scroll::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    background-color: #dfdfdf;
+    border-radius: 3px;
 }
 
 input[type=radio] {
@@ -50,9 +81,6 @@ input[type=radio] {
 }
 
 span {
-    width: 168px;
-
-    margin-top: 8px;
     padding: 8px;
 
     color: #959796;
@@ -68,12 +96,12 @@ span:hover:not(.active) {
 }
 
 span.active {
-  color: #353937;
-  background-color: #59b1b6;
+    color: #353937;
+    background-color: #59b1b6;
 }
 
 span.disabled {
-  color: #959796;
-  background-color: #383D3B;
+    color: #959796;
+    background-color: #383D3B;
 }
 </style>
