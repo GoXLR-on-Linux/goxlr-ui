@@ -17,13 +17,27 @@ export default {
 }
 
 .container {
-    /* display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
 
-    width: fit-content;
-    padding: 20px;
+    padding: 40px;
 
-    background-color: #2D3230; */
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.container::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.container::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background-color: #dfdfdf;
+  border-radius: 3px;
 }
 </style>
