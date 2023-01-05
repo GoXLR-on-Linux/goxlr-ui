@@ -25,12 +25,12 @@ export default {
     <Container role="radiogroup">
         <span
             v-for="option in options"
-            :key="option"
-            :class="['span', { active: selected === option }]"
-            @click="select(option)"
+            :key="option.id"
+            :class="['span', { active: selected === option.id }]"
+            @click="select(option.id)"
         >
-            <input type="radio" :id="option" :name="group" :value="option">
-            <label :for="option">{{ option }}</label>
+            <input type="radio" :id="option.id" :name="group" :value="option.label">
+            <label :for="option.id">{{ option.label }}</label>
         </span>
     </Container>
 </template>

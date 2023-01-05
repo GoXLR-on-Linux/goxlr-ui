@@ -7,6 +7,7 @@ import ColourPicker from "@/components/new/ColourPicker";
 import { store } from "@/store";
 import { websocket } from "@/util/sockets";
 import { isDeviceMini } from "@/util/util";
+import { LightingInactiveOptions } from "@/util/mixerMapping";
 
 export default {
   name: "LightingSampler",
@@ -19,9 +20,22 @@ export default {
 
   data() {
     return {
-      buttonOptions: ['A', 'B', 'C'],
+      buttonOptions: [
+        {
+          id: 'A',
+          label: 'A'
+        },
+        {
+          id: 'B',
+          label: 'B'
+        },
+        {
+          id: 'C',
+          label: 'C'
+        }
+      ],
       selectedButtonOption: 'A',
-      inactiveOptions: ['Dim Active Colour', 'Inactive Colour', 'Dim Inactive Colour']
+      inactiveOptions: LightingInactiveOptions
     }
   },
 
@@ -48,50 +62,20 @@ export default {
     },
 
     selectedInactiveOption() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return '';
-      }
-      const state = store.getActiveDevice().lighting.sampler["SampleSelect" + this.selectedButtonOption].off_style
-      return this.mapState(state)
+      if (!store.hasActiveDevice() || isDeviceMini()) { return }
+      return store.getActiveDevice().lighting.sampler["SampleSelect" + this.selectedButtonOption].off_style
     },
 
-    mapState(state) {
-      switch (state) {
-        case 'Dimmed':
-          return this.inactiveOptions[0];
-        case 'Colour2':
-          return this.inactiveOptions[1];
-        case 'DimmedColour2':
-          return this.inactiveOptions[2];
-        default:
-          return '';
-      }
-    },
-
-    onButtonSelectionChange(option) {
+    onButtonSelectionChange(id) {
       if (isDeviceMini()) { return }
 
-      this.selectedButtonOption = option
+      this.selectedButtonOption = id
     },
 
-    onInactiveSelectionChange(option) {
+    onInactiveSelectionChange(id) {
       if (isDeviceMini()) { return }
 
-      let state = this.mapInactiveOption(option)
-      websocket.send_command(store.getActiveSerial(), {"SetSampleOffStyle": ["SampleSelect" + this.selectedButtonOption, state]});
-    },
-
-    mapInactiveOption(option) {
-      switch (option) {
-          case this.inactiveOptions[0]:
-            return 'Dimmed';
-          case this.inactiveOptions[1]:
-            return 'Colour2';
-          case this.inactiveOptions[2]:
-            return 'DimmedColour2';
-          default:
-            return
-        }
+      websocket.send_command(store.getActiveSerial(), {"SetSampleOffStyle": ["SampleSelect" + this.selectedButtonOption, id]});
     },
 
     onActiveColourChange(value) {

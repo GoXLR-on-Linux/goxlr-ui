@@ -6,6 +6,7 @@ import ColourPicker from "@/components/new/ColourPicker";
 
 import { store } from "@/store";
 import { websocket } from "@/util/sockets";
+import { LightingInactiveOptions } from "@/util/mixerMapping";
 
 export default {
   name: "LightingCough",
@@ -18,9 +19,18 @@ export default {
 
   data() {
     return {
-      buttonOptions: ['Bleep', 'Cough'],
+      buttonOptions: [
+        {
+          id: 'Bleep',
+          label: 'Bleep'
+        }, 
+        {
+          id: 'Cough',
+          label: 'Cough'
+        }
+      ],
       selectedButtonOption: 'Bleep',
-      inactiveOptions: ['Dim Active Colour', 'Inactive Colour', 'Dim Inactive Colour']
+      inactiveOptions: LightingInactiveOptions
     }
   },
 
@@ -40,46 +50,17 @@ export default {
     },
 
     selectedInactiveOption() {
-      if (!store.hasActiveDevice()) {
-        return '';
-      }
-      const state = store.getActiveDevice().lighting.buttons[this.selectedButtonOption].off_style
-      return this.mapState(state)
+      if (!store.hasActiveDevice()) { return }
+
+      return store.getActiveDevice().lighting.buttons[this.selectedButtonOption].off_style
     },
 
-    mapState(state) {
-      switch (state) {
-        case 'Dimmed':
-          return this.inactiveOptions[0];
-        case 'Colour2':
-          return this.inactiveOptions[1];
-        case 'DimmedColour2':
-          return this.inactiveOptions[2];
-        default:
-          return '';
-      }
+    onButtonSelectionChange(id) {
+      this.selectedButtonOption = id
     },
 
-    onButtonSelectionChange(option) {
-      this.selectedButtonOption = option
-    },
-
-    onInactiveSelectionChange(option) {
-      let state = this.mapInactiveOption(option)
-      websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [this.selectedButtonOption, state]});
-    },
-
-    mapInactiveOption(option) {
-      switch (option) {
-          case this.inactiveOptions[0]:
-            return 'Dimmed';
-          case this.inactiveOptions[1]:
-            return 'Colour2';
-          case this.inactiveOptions[2]:
-            return 'DimmedColour2';
-          default:
-            return
-        }
+    onInactiveSelectionChange(id) {
+      websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [this.selectedButtonOption, id]});
     },
 
     onActiveColourChange(value) {

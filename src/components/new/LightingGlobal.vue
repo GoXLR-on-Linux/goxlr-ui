@@ -18,7 +18,16 @@ export default {
 
   data() {
     return {
-      options: ['Accent', 'Global'],
+      options: [
+        {
+          id: 'Accent', 
+          label: 'Accent'
+        }, 
+        {
+          id: 'Global', 
+          label: 'Global'
+        }
+      ],
       selected: 'Accent'
     }
   },
@@ -50,7 +59,3 @@ export default {
     </Container2>
   </Container3>
 </template>
-
-<style scoped>
-
-</style>
