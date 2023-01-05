@@ -15,7 +15,8 @@ import Container from "@/components/new/Container02";
 import Container2 from "@/components/new/Container03";
 import ListSelection from "@/components/new/ListSelection";
 import ColourPicker from "@/components/new/ColourPicker";
-import Presets from "./LightingEffectsPresets";
+import Presets from "@/components/new/LightingEffectsPresets";
+import Encoders from "@/components/new/LightingEffectsEncoders.vue";
 
 import {
   EffectButtons,
@@ -39,7 +40,8 @@ export default {
     Container2,
     ListSelection,
     ColourPicker,
-    Presets
+    Presets,
+    Encoders
 },
 
   data() {
@@ -217,14 +219,7 @@ export default {
 
   <Container2>
     <Presets />
-  
-    <!-- TODO: Functionality, extract -->
-    <Container title="Encoders">
-      <ListSelection title="Encoder" group="lighting_effects_encoders"/>
-      <ColourPicker title="Left Colour"/>
-      <ColourPicker title="Right Colour"/>
-      <ColourPicker title="Knob Colour"/>
-    </Container>
+    <Encoders />
   
     <!-- TODO: Functionality, extract -->
     <Container title="Effect Buttons">
