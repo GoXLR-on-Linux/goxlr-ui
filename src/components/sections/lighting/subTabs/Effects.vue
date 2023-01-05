@@ -10,6 +10,13 @@ import PushButton from "@/components/button_list/Button";
 import ColorPicker from "@/components/sections/lighting/ColorPicker";
 import MainTabContent from "@/components/design/MainTabContent";
 
+// NEW
+import Container from "@/components/new/Container02";
+import Container2 from "@/components/new/Container03";
+import ListSelection from "@/components/new/ListSelection";
+import ColourPicker from "@/components/new/ColourPicker";
+import Presets from "./LightingEffectsPresets";
+
 import {
   EffectButtons,
   EffectButtonText, EffectLightingPresets, EffectPresets,
@@ -27,7 +34,13 @@ export default {
     PushButton,
     ButtonList,
     ContentBox,
-  },
+    //NEW
+    Container,
+    Container2,
+    ListSelection,
+    ColourPicker,
+    Presets
+},
 
   data() {
     return {
@@ -200,6 +213,27 @@ export default {
     </ContentBox>
 
   </MainTabContent>
+
+
+  <Container2>
+    <Presets />
+  
+    <!-- TODO: Functionality, extract -->
+    <Container title="Encoders">
+      <ListSelection title="Encoder" group="lighting_effects_encoders"/>
+      <ColourPicker title="Left Colour"/>
+      <ColourPicker title="Right Colour"/>
+      <ColourPicker title="Knob Colour"/>
+    </Container>
+  
+    <!-- TODO: Functionality, extract -->
+    <Container title="Effect Buttons">
+      <ListSelection title="Effect" group="lighting_effects_effect"/>
+      <ColourPicker title="Active"/>
+      <ListSelection title="Inactive Option" group="lighting_effects_preset_inactive_behaviour" />
+      <ColourPicker title="Inactive"/>
+    </Container>
+  </Container2>
 </template>
 
 <style scoped>

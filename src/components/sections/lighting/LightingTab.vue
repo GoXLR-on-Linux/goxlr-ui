@@ -1,9 +1,9 @@
 <script>
 import Mixer from "@/components/sections/lighting/subTabs/Mixer";
 import Effects from "@/components/sections/lighting/subTabs/Effects";
-import Sampler from "@/components/sections/lighting/subTabs/Sampler";
-import Cough from "@/components/sections/lighting/subTabs/Cough";
-import Global from "@/components/sections/lighting/subTabs/Global";
+import Sampler from "@/components/new/LightingSampler";
+import Cough from "@/components/new/LightingCough";
+import Global from "@/components/new/LightingGlobal";
 
 import { isDeviceMini } from "@/util/util";
 
