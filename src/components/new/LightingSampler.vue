@@ -67,19 +67,19 @@ export default {
     },
 
     onButtonSelectionChange(id) {
-      if (isDeviceMini()) { return }
+      if (!store.hasActiveDevice() || isDeviceMini()) { return }
 
       this.selectedButtonOption = id
     },
 
     onInactiveSelectionChange(id) {
-      if (isDeviceMini()) { return }
+      if (!store.hasActiveDevice() || isDeviceMini()) { return }
 
       websocket.send_command(store.getActiveSerial(), {"SetSampleOffStyle": ["SampleSelect" + this.selectedButtonOption, id]});
     },
 
     onActiveColourChange(value) {
-      if (isDeviceMini()) { return }
+      if (!store.hasActiveDevice() || isDeviceMini()) { return }
 
       let colour_one = value.substr(1, 6);
       let colour_two = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_two;
@@ -89,7 +89,7 @@ export default {
     },
 
     onEmptyColourChange(value) {
-      if (isDeviceMini()) { return }
+      if (!store.hasActiveDevice() || isDeviceMini()) { return }
 
       let colour_one = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_one;
       let colour_two = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_two;
@@ -99,7 +99,7 @@ export default {
     },
 
     onInactiveColourChange(value) {
-      if (isDeviceMini()) { return }
+      if (!store.hasActiveDevice() || isDeviceMini()) { return }
 
       let colour_one = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_one;
       let colour_two = value.substr(1, 6);
