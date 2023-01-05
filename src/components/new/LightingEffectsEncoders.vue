@@ -102,7 +102,6 @@ export default {
 
             websocket.send_command(store.getActiveSerial(), {"SetEncoderColour": [this.selectedEncoder, rightColour, leftColour, knobColour]})
         }
-
     }
 }
 </script>

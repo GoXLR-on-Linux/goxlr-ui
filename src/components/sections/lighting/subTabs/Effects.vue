@@ -11,12 +11,10 @@ import ColorPicker from "@/components/sections/lighting/ColorPicker";
 import MainTabContent from "@/components/design/MainTabContent";
 
 // NEW
-import Container from "@/components/new/Container02";
 import Container2 from "@/components/new/Container03";
-import ListSelection from "@/components/new/ListSelection";
-import ColourPicker from "@/components/new/ColourPicker";
 import Presets from "@/components/new/LightingEffectsPresets";
 import Encoders from "@/components/new/LightingEffectsEncoders.vue";
+import Effects from "@/components/new/LightingEffectsEffects.vue";
 
 import {
   EffectButtons,
@@ -36,12 +34,10 @@ export default {
     ButtonList,
     ContentBox,
     //NEW
-    Container,
     Container2,
-    ListSelection,
-    ColourPicker,
     Presets,
-    Encoders
+    Encoders,
+    Effects
 },
 
   data() {
@@ -220,14 +216,7 @@ export default {
   <Container2>
     <Presets />
     <Encoders />
-  
-    <!-- TODO: Functionality, extract -->
-    <Container title="Effect Buttons">
-      <ListSelection title="Effect" group="lighting_effects_effect"/>
-      <ColourPicker title="Active"/>
-      <ListSelection title="Inactive Option" group="lighting_effects_preset_inactive_behaviour" />
-      <ColourPicker title="Inactive"/>
-    </Container>
+    <Effects />
   </Container2>
 </template>
 
