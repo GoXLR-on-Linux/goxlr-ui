@@ -30,6 +30,7 @@ export default {
     align-items: center;
 
     width: fit-content;
+    margin: auto;
     padding: 24px;
 
     background-color: #2D3230;
