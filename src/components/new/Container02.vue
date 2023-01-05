@@ -45,6 +45,7 @@ export default {
 .content {
     display: flex;
     flex-direction: row;
+    gap: 24px;
 
     height: fit-content;
     width: fit-content;

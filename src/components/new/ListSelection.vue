@@ -22,7 +22,7 @@ export default {
 </script>
 
 <template>
-    <Container :leftMargin="false" role="radiogroup">
+    <Container role="radiogroup">
         <span
             v-for="option in options"
             :key="option"

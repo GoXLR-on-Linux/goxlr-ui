@@ -2,14 +2,13 @@
 export default {
     name: "Container-1",
     props: {
-        title: String,
-        leftMargin: {type: Boolean, required: false, default: true}
+        title: String
     }
 }
 </script>
 
 <template>
-    <div class="container" :class="{'left-margin': leftMargin}">
+    <div class="container">
         <p class="title">
             {{ title }}
         </p>
@@ -32,10 +31,6 @@ export default {
     width: 200px;
 
     background-color: #353937;
-}
-
-.left-margin {
-    margin-left: 24px;
 }
 
 .title {
