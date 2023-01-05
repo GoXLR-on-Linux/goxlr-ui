@@ -1,6 +1,6 @@
 <script>
 import Mixer from "@/components/sections/lighting/subTabs/Mixer";
-import Effects from "@/components/sections/lighting/subTabs/Effects";
+import Effects from "@/components/new/LightingEffects";
 import Sampler from "@/components/new/LightingSampler";
 import Cough from "@/components/new/LightingCough";
 import Global from "@/components/new/LightingGlobal";
