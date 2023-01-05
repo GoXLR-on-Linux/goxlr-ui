@@ -99,9 +99,9 @@ export default {
 
 <template>
   <Container title="Cough/Bleep Buttons">
-    <ListSelection title="Buttons" group="Buttons" :options="this.buttonOptions" :selected="this.selectedButtonOption" @selection-changed="onButtonSelectionChange"/>
+    <ListSelection title="Buttons" group="lighting_cough_buttons" :options="this.buttonOptions" :selected="this.selectedButtonOption" @selection-changed="onButtonSelectionChange"/>
     <ColourPicker title="Active" :color-value="activeColor()" @colour-changed="onActiveColourChange" />
-    <ListSelection title="Inactive Options" group="Inactive Options" :options="this.inactiveOptions" :selected="this.selectedInactiveOption()" @selection-changed="onInactiveSelectionChange" :leftMargin="true"/>
+    <ListSelection title="Inactive Options" group="lighting_cough_inactive_behaviour" :options="this.inactiveOptions" :selected="this.selectedInactiveOption()" @selection-changed="onInactiveSelectionChange" :leftMargin="true"/>
     <ColourPicker title="Inactive" :color-value="inactiveColor()" @colour-changed="onInactiveColourChange" />
   </Container>
 </template>

@@ -42,7 +42,7 @@ export default {
 
 <template>
     <Container title="Areas">
-      <ListSelection title="Area" group="Area" :options="this.options" :selected="this.selected" @selection-changed="onSelectionChange"/>
+      <ListSelection title="Area" group="lighting_global_areas" :options="this.options" :selected="this.selected" @selection-changed="onSelectionChange"/>
       <ColourPicker title="Colour" :color-value="color()" @colour-changed="onColourChange" />
     </Container>
 </template>
