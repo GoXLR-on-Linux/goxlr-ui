@@ -103,7 +103,7 @@ export default {
       <ListSelection
         title="Preset"
         group="lighting_effects_presets"
-        :options="this.effectPresets"
+        :options="presetLabels()"
         :selected="this.activePreset"
         @selection-changed="onButtonSelectionChange"
       />
