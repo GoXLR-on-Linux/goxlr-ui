@@ -44,26 +44,26 @@ export default {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return "#000000";
       }
-      return "#" + store.getActiveDevice().lighting.sampler["SampleSelect" + this.selectedButtonOption].colours["colour_one"];
+      return "#" + store.getActiveDevice().lighting.sampler["SamplerSelect" + this.selectedButtonOption].colours["colour_one"];
     },
 
     emptyColor() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return "#000000";
       }
-      return "#" + store.getActiveDevice().lighting.sampler["SampleSelect" + this.selectedButtonOption].colours["colour_three"];
+      return "#" + store.getActiveDevice().lighting.sampler["SamplerSelect" + this.selectedButtonOption].colours["colour_three"];
     },
 
     inactiveColor() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return "#000000";
       }
-      return "#" + store.getActiveDevice().lighting.sampler["SampleSelect" + this.selectedButtonOption].colours["colour_two"];
+      return "#" + store.getActiveDevice().lighting.sampler["SamplerSelect" + this.selectedButtonOption].colours["colour_two"];
     },
 
     selectedInactiveOption() {
       if (!store.hasActiveDevice() || isDeviceMini()) { return }
-      return store.getActiveDevice().lighting.sampler["SampleSelect" + this.selectedButtonOption].off_style
+      return store.getActiveDevice().lighting.sampler["SamplerSelect" + this.selectedButtonOption].off_style
     },
 
     onButtonSelectionChange(id) {
