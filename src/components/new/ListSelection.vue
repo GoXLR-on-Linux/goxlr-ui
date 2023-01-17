@@ -50,10 +50,9 @@ export default {
     gap: 8px;
 
     padding: 8px ;
-    padding-right: 2px;
     box-sizing: border-box;
     width: 100%;
-    
+
     overflow-x: hidden;
     overflow-y: scroll;
 }
