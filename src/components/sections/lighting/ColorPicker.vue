@@ -162,7 +162,7 @@ export default {
 .clearButton {
   height: 100%;
   width: 35px;
-  
+
   color: #ffffff;
   background-color: transparent;
   border: none;
@@ -171,6 +171,7 @@ export default {
 
 input[type=text] {
   width: 6em;
+  outline: none;
 
   color: #59b1b6;
   background-color: #3b413f;
