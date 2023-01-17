@@ -179,3 +179,18 @@ export let HeadphoneMixerOrder = [
 export let HeadphoneMixerHidden = [
     "MicMonitor"
 ]
+
+export const LightingInactiveOptions = [
+    {
+        id: 'Dimmed',
+        label: 'Dim Active Colour'
+    },
+    {
+        id: 'Colour2',
+        label: 'Inactive Colour'
+    },
+    {
+        id: 'DimmedColour2',
+        label: 'Dim Inactive Colour'
+    }
+]
