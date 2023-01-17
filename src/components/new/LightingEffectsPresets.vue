@@ -6,7 +6,7 @@ import ColourPicker from "@/components/new/ColourPicker";
 import {
   EffectLightingPresets,
   EffectPresets,
-LightingInactiveOptions,
+  LightingInactiveOptions,
 } from "@/util/mixerMapping";
 
 import { store } from "@/store";
@@ -43,6 +43,11 @@ export default {
             }
 
             return presetLabels
+        },
+
+        isActivePreset() {
+          // This needs to be mapped from the EffectPresets to the EffectLightingPresets..
+          return EffectPresets[EffectLightingPresets.indexOf(this.activePreset)];
         },
 
         activeColor() {
@@ -104,7 +109,7 @@ export default {
         title="Preset"
         group="lighting_effects_presets"
         :options="presetLabels()"
-        :selected="this.activePreset"
+        :selected="isActivePreset()"
         @selection-changed="onButtonSelectionChange"
       />
       <ColourPicker
