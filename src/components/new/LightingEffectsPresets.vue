@@ -4,7 +4,7 @@ import ListSelection from "@/components/new/ListSelection";
 import ColourPicker from "@/components/new/ColourPicker";
 
 import {
-  EffectLightingPresets, 
+  EffectLightingPresets,
   EffectPresets,
 LightingInactiveOptions,
 } from "@/util/mixerMapping";
@@ -37,7 +37,7 @@ export default {
 
             let presetLabels = []
 
-            for (const preset in EffectPresets) {
+            for (const preset of EffectPresets) {
                 const label = store.getActiveDevice().effects.preset_names[preset];
                 presetLabels.push({ id: preset, label: label })
             }
