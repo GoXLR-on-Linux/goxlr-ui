@@ -74,6 +74,10 @@ label {
   margin: auto;
   background-color: #3b413f;
 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
   /*
    We sneak the padding 4 pixels to the left, because we can't completely hide the radio button..
    */
