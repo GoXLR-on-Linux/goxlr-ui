@@ -41,6 +41,7 @@ export default {
           :disabled="option.disabled"
           @radio-selected="select(option.id)"
       />
+      <slot></slot>
     </div>
   </WidgetContainer>
 </template>
