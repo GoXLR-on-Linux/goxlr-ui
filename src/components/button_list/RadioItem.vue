@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label ref="label" :class="{ selected: selected }">
+    <label ref="label" :class="{ selected: selected, disabled: disabled }">
       <input ref="check" :name=group :id=id type="radio" @change="change" :value=id :checked="selected" :disabled="disabled"/>
       {{ text }}
     </label>
@@ -93,6 +93,11 @@ label:not(.selected):focus-within {
 
 label:not(.selected):hover {
   background-color: #49514e;
+}
+
+label.disabled {
+  background-color: #383D3B;
+  color: #959796;
 }
 
 </style>
