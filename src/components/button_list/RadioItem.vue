@@ -1,8 +1,8 @@
 <template>
   <div>
     <label ref="label" :class="{ selected: selected, disabled: disabled }">
-      <input ref="check" :name=group :id=id type="radio" @change="change" :value=id :checked="selected" :disabled="disabled"/>
-      {{ text }}
+      <input ref="check" :name=group :id=id type="radio" @change="change" :value=id :checked="selected"
+             :disabled="disabled"/>{{ text }}
     </label>
   </div>
 </template>
@@ -23,7 +23,7 @@ export default {
     padding: {type: String, required: false, default: "8px"}
   },
 
-  data: function() {
+  data: function () {
     return {
       local_selected: false,
     }
