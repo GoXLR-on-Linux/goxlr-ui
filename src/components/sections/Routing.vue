@@ -1,45 +1,48 @@
 <template>
   <!-- Lets just draw the table.. -->
-  <ContentBox title="Routing">
-    <table>
-      <thead>
-      <tr>
-        <th colspan="2" class="hidden"></th>
-        <th :colspan="inputs.length">Inputs</th>
-      </tr>
-      <tr class="subHeader">
-        <th colspan="2" class="hidden"></th>
-        <th v-for="input in inputs" :key="input">{{ input }}</th>
-      </tr>
-      </thead>
-      <tr v-for="output in getOutputs()" :key="output">
-        <th v-if="output === 'Headphones'" class="rotated" :rowspan="outputs.length - 1"><span>Outputs</span></th>
-        <th>{{ output }}</th>
-        <Cell v-for="input in inputs" :key="input" :enabled="isEnabled(output, input)" :output="output" :input="input" @clicked="handleClick"/>
-      </tr>
-      <tr>
-        <td colspan="10" class="hidden" style="height: 10px"></td>
-      </tr>
-      <tr>
-        <!-- Sampler is a little weird, it's on a line by itself because reasons? -->
-        <th colspan="2">Sampler</th>
-        <Cell v-for="input in inputs" :key="input" :enabled="isEnabled('Sampler', input)" output="Sampler"
-              :input="input" @clicked="handleClick"/>
-      </tr>
-    </table>
-  </ContentBox>
+  <CenteredContainer>
+    <GroupContainer title="Routing">
+      <table>
+        <thead>
+        <tr>
+          <th colspan="2" class="hidden"></th>
+          <th :colspan="inputs.length">Inputs</th>
+        </tr>
+        <tr class="subHeader">
+          <th colspan="2" class="hidden"></th>
+          <th v-for="input in inputs" :key="input">{{ input }}</th>
+        </tr>
+        </thead>
+        <tr v-for="output in getOutputs()" :key="output">
+          <th v-if="output === 'Headphones'" class="rotated" :rowspan="outputs.length - 1"><span>Outputs</span></th>
+          <th>{{ output }}</th>
+          <Cell v-for="input in inputs" :key="input" :enabled="isEnabled(output, input)" :output="output" :input="input" @clicked="handleClick"/>
+        </tr>
+        <tr>
+          <td colspan="10" class="hidden" style="height: 10px"></td>
+        </tr>
+        <tr>
+          <!-- Sampler is a little weird, it's on a line by itself because reasons? -->
+          <th colspan="2">Sampler</th>
+          <Cell v-for="input in inputs" :key="input" :enabled="isEnabled('Sampler', input)" output="Sampler"
+                :input="input" @clicked="handleClick"/>
+        </tr>
+      </table>
+    </GroupContainer>
+  </CenteredContainer>
 </template>
 
 <script>
-import ContentBox from "@/components/ContentBox";
 import Cell from "@/components/sections/routing/Cell";
 import {store} from "@/store";
 import {InputDevice, OutputDevice} from "@/util/mixerMapping";
 import {websocket} from "@/util/sockets";
+import CenteredContainer from "@/components/containers/CenteredContainer.vue";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
 
 export default {
   name: "RoutingTable",
-  components: {Cell, ContentBox},
+  components: {GroupContainer, CenteredContainer, Cell},
 
   data() {
     return {

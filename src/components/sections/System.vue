@@ -1,26 +1,27 @@
 <template>
-  <ContentBox :title="'System'">
-    <MicSetupButton/>
-    <div style="margin-right: 30px"></div>
-    <BigButton id="settings" title="Settings" @button-clicked="showSettingsModal = true">
-      <font-awesome-icon icon="fa-solid fa-gear"/>
-    </BigButton>
-    <div style="margin-right: 30px"></div>
-    <BigButton id="about" title="About" @button-clicked="showVersionModal = true">
-      <font-awesome-icon icon="fa-solid fa-circle-info"/>
-    </BigButton>
-    <div style="margin-right: 30px"></div>
-    <BigButton id="license" title="License" @button-clicked="showLicenseModal = true">
-      <font-awesome-icon icon="fa-solid fa-book-open"/>
-    </BigButton>
-    <div style="margin-right: 30px"></div>
-    <a :href="'https://discord.gg/Wbp3UxkX2j'">
-      <BigButton id="help" :title="'Help'">
-        <font-awesome-icon icon="fa-solid fa-circle-question"/>
+  <CenteredContainer>
+    <GroupContainer :title="'System'">
+      <MicSetupButton/>
+      <div style="margin-right: 30px"></div>
+      <BigButton id="settings" title="Settings" @button-clicked="showSettingsModal = true">
+        <font-awesome-icon icon="fa-solid fa-gear"/>
       </BigButton>
-    </a>
-
-  </ContentBox>
+      <div style="margin-right: 30px"></div>
+      <BigButton id="about" title="About" @button-clicked="showVersionModal = true">
+        <font-awesome-icon icon="fa-solid fa-circle-info"/>
+      </BigButton>
+      <div style="margin-right: 30px"></div>
+      <BigButton id="license" title="License" @button-clicked="showLicenseModal = true">
+        <font-awesome-icon icon="fa-solid fa-book-open"/>
+      </BigButton>
+      <div style="margin-right: 30px"></div>
+      <a :href="'https://discord.gg/Wbp3UxkX2j'">
+        <BigButton id="help" :title="'Help'">
+          <font-awesome-icon icon="fa-solid fa-circle-question"/>
+        </BigButton>
+      </a>
+    </GroupContainer>
+  </CenteredContainer>
 
   <ModalBox v-if="showVersionModal" @close="showVersionModal = false">
     <template v-slot:title>About GoXLR</template>
@@ -136,7 +137,6 @@ SOFTWARE.</textarea>
 </template>
 
 <script>
-import ContentBox from "@/components/ContentBox";
 import BigButton from "@/components/big_buttons/BigButton";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ModalBox from "@/components/design/modal/ModalBox";
@@ -144,11 +144,15 @@ import {store} from "@/store";
 import SimpleNumberInput from "@/components/design/SimpleNumberInput";
 import {websocket} from "@/util/sockets";
 import MicSetupButton from "@/components/sections/mic/MicSetupButton";
+import CenteredContainer from "@/components/containers/CenteredContainer.vue";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
 
 export default {
   name: "SystemComponent",
   components: {
-    MicSetupButton, SimpleNumberInput, ModalBox, BigButton, ContentBox, FontAwesomeIcon
+    GroupContainer,
+    CenteredContainer,
+    MicSetupButton, SimpleNumberInput, ModalBox, BigButton, FontAwesomeIcon
   },
 
   data() {

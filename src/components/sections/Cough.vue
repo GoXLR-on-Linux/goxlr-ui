@@ -1,8 +1,10 @@
 <template>
-  <GroupContainer title="Cough Button Settings">
-    <ListSelection title="Button Behaviour" :options="button_behaviour" group="cough_button_behaviour" @selection-changed="behaviorPressed" :selected="getCough()" />
-    <ListSelection title="Mute Behaviour" :options="mute_behaviour" group="cough_mute_behaviour" @selection-changed="setActiveMuteFunction" :selected="getActiveMute()" />
-  </GroupContainer>
+  <CenteredContainer>
+    <GroupContainer title="Cough Button Settings">
+      <ListSelection title="Button Behaviour" :options="button_behaviour" group="cough_button_behaviour" @selection-changed="behaviorPressed" :selected="getCough()" />
+      <ListSelection title="Mute Behaviour" :options="mute_behaviour" group="cough_mute_behaviour" @selection-changed="setActiveMuteFunction" :selected="getActiveMute()" />
+    </GroupContainer>
+  </CenteredContainer>
 </template>
 
 <script>
@@ -10,10 +12,11 @@ import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import ListSelection from "@/components/button_list/ListSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
+import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
   name: "CoughButtonSettings",
-  components: {GroupContainer, ListSelection},
+  components: {CenteredContainer, GroupContainer, ListSelection},
 
   data() {
     return {

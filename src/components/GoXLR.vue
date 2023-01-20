@@ -26,22 +26,22 @@
         </MainTabContent>
       </Tab>
       <Tab name="Cough">
-        <MainTabContent>
+        <ContentContainer>
           <Cough/>
-        </MainTabContent>
+        </ContentContainer>
       </Tab>
       <Tab name="Lighting">
           <LightingTab />
       </Tab>
       <Tab name="Routing">
-        <MainTabContent>
+        <ContentContainer>
           <Routing/>
-        </MainTabContent>
+        </ContentContainer>
       </Tab>
       <Tab name="System">
-        <MainTabContent>
+        <ContentContainer>
           <SystemComponent/>
-        </MainTabContent>
+        </ContentContainer>
       </Tab>
     </Tabs>
   </div>

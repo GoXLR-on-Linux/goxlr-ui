@@ -25,6 +25,7 @@ export default {
 
 <style scoped>
   td {
+    text-align: center;
     font-size: 18px;
     color: #59b1b6;
     background-color: #3b413f;

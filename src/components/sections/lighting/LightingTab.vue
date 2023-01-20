@@ -6,10 +6,12 @@ import Cough from "@/components/sections/lighting/subTabs/LightingCough.vue";
 import Global from "@/components/sections/lighting/subTabs/LightingGlobal.vue";
 
 import { isDeviceMini } from "@/util/util";
+import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
   name: "LightingTab",
   components: {
+    CenteredContainer,
     Mixer,
     Effects,
     Sampler,
@@ -32,14 +34,16 @@ export default {
 </script>
 
 <template>
-  <button
-    v-for="tab in getTabs()"
-    :key="tab"
-    :class="['button', { active: currentTab === tab }]"
-    @click="currentTab = tab"
-  >
-    {{ tab }}
-  </button>
+  <CenteredContainer>
+    <button
+      v-for="tab in getTabs()"
+      :key="tab"
+      :class="['button', { active: currentTab === tab }]"
+      @click="currentTab = tab"
+    >
+      {{ tab }}
+    </button>
+  </CenteredContainer>
   <component :is="currentTab" />
 </template>
 
