@@ -1,5 +1,5 @@
 <template>
-  <GroupContainer title="Hard Tune" gap="3px">
+  <ExpandoGroupContainer title="Hard Tune" gap="3px" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
     <ListSelection title="Style" group="effects_hardtune_style" :options="hard_tune_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" :store-path="getStorePath('amount')" v-show="is_expanded" @value-changed="setAmountValue" />
@@ -7,22 +7,20 @@
     <SliderInput title="Window" :slider-min-value=0 :slider-max-value=600 :slider-value="getWindowValue()" :store-path="getStorePath('window')" v-show="is_expanded" @value-changed="setWindowValue" />
 
     <ListSelection title="Style" group="effects_hardtune_source" :options="hard_tune_source" :selected="getActiveSource()" @selection-changed="sourcePressed"/>
-  </GroupContainer>
-  <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
+  </ExpandoGroupContainer>
 </template>
 
 <script>
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
-import ExpandoBox from "@/components/design/ExpandoBox";
 import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
-import GroupContainer from "@/components/containers/GroupContainer.vue";
 import ListSelection from "@/components/button_list/ListSelection.vue";
+import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "HardTuneEffect",
-  components: {ListSelection, GroupContainer, ExpandoBox, SliderInput},
+  components: {ExpandoGroupContainer, ListSelection, SliderInput},
   data() {
     return {
       is_expanded: false,
@@ -43,9 +41,6 @@ export default {
   },
 
   methods: {
-    toggleExpando() {
-      this.is_expanded = !this.is_expanded;
-    },
     getActiveStyle() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return "";

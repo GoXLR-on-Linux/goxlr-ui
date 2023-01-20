@@ -1,5 +1,5 @@
 <template>
-  <GroupContainer title="Reverb" gap="3px">
+  <ExpandoGroupContainer title="Reverb" gap="3px" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
     <ListSelection title="Style" group="effects_reverb_style" :options="reverb_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()"
@@ -28,23 +28,21 @@
     <SliderInput title="ModDepth" :slider-min-value=-25 :slider-max-value=25 :slider-value="getModDepthValue()"
                  :store-path="getStorePath('mod_depth')" v-show="is_expanded" @value-changed="setModDepthValue"/>
 
-  </GroupContainer>
-  <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
+  </ExpandoGroupContainer>
 </template>
 
 <script>
 
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
-import ExpandoBox from "@/components/design/ExpandoBox";
 import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
-import GroupContainer from "@/components/containers/GroupContainer.vue";
 import ListSelection from "@/components/button_list/ListSelection.vue";
+import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "ReverbEffect",
-  components: {ListSelection, GroupContainer, ExpandoBox, SliderInput },
+  components: {ExpandoGroupContainer, ListSelection, SliderInput },
 
   data() {
     return {
@@ -57,16 +55,12 @@ export default {
         {id: "MusicClub", label: "Music Club"},
         {id: "RealPlate", label: "Real Plate"},
         {id: "Chapel", label: "Chapel"},
-        {id: "HockeyArena", label: "Hockey Arena"},
+        {id: "HockeyArena", label: "Hockey Arena"}
       ],
     }
   },
 
   methods: {
-    toggleExpando() {
-      this.is_expanded = !this.is_expanded;
-    },
-
     getActiveStyle() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return "";

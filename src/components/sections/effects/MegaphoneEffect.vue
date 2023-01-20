@@ -1,27 +1,25 @@
 <template>
-  <GroupContainer title="Megaphone" gap="3px">
+  <ExpandoGroupContainer title="Megaphone" gap="3px" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
     <ListSelection title="Style" group="effects_megaphone_style" :options="megaphone_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 text-suffix="%"
                  :slider-value="getAmountValue()" :store-path="getStorePath('amount')" v-show="is_expanded" @value-changed="setAmountValue"/>
     <SliderInput title="Post Gain" :slider-min-value=-20 :slider-max-value=20 text-suffix="dB"
                  :slider-value="getPostGainValue()" :store-path="getStorePath('post_gain')" v-show="is_expanded" @value-changed="setPostGainValue"/>
-  </GroupContainer>
-  <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
+  </ExpandoGroupContainer>
 </template>
 
 <script>
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
-import ExpandoBox from "@/components/design/ExpandoBox";
 import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
 import ListSelection from "@/components/button_list/ListSelection.vue";
-import GroupContainer from "@/components/containers/GroupContainer.vue";
+import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "MegaphoneEffect",
-  components: {GroupContainer, ListSelection, ExpandoBox, SliderInput},
+  components: {ExpandoGroupContainer, ListSelection, SliderInput},
   data() {
     return {
       is_expanded: false,
@@ -32,16 +30,12 @@ export default {
         {id: "OnThePhone", label: "On The Phone"},
         {id: "Overdrive", label: "Overdrive"},
         {id: "BuzzCutt", label: "Buzz Cutt"},
-        {id: "Tweed", label: "Tweed"},
+        {id: "Tweed", label: "Tweed"}
       ],
     }
   },
 
   methods: {
-    toggleExpando() {
-      this.is_expanded = !this.is_expanded;
-    },
-
     getActiveStyle() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return "";

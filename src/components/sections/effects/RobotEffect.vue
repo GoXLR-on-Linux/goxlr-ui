@@ -1,5 +1,5 @@
 <template>
-  <GroupContainer title="Robot">
+  <ExpandoGroupContainer title="Robot" gap="3px" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
     <ListSelection title="Style" group="effects_robot_style" :options="robot_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Low Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
@@ -37,22 +37,20 @@
     <SliderInput title="Dry Mix" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB"
                  :slider-value="getDryMixValue()" :store-path="getStorePath('dry_mix')" v-show="is_expanded"
                  @value-changed="setDryMixValue"/>
-  </GroupContainer>
-  <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
+  </ExpandoGroupContainer>
 </template>
 
 <script>
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
-import ExpandoBox from "@/components/design/ExpandoBox";
 import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
-import GroupContainer from "@/components/containers/GroupContainer.vue";
 import ListSelection from "@/components/button_list/ListSelection.vue";
+import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "RobotEffect",
-  components: {ListSelection, GroupContainer, ExpandoBox, SliderInput},
+  components: {ExpandoGroupContainer, ListSelection, SliderInput},
 
   data() {
     return {
@@ -67,10 +65,6 @@ export default {
   },
 
   methods: {
-    toggleExpando() {
-      this.is_expanded = !this.is_expanded;
-    },
-
     getActiveStyle() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return "";

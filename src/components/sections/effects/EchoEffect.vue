@@ -1,5 +1,5 @@
 <template>
-  <GroupContainer title="Echo" gap="3px">
+  <ExpandoGroupContainer title="Echo" gap="3px" :expanded="is_expanded" @expando-clicked="is_expanded = !is_expanded">
     <ListSelection title="Style" group="effects_echo_style" :options="echo_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />
@@ -11,22 +11,20 @@
     <SliderInput title="XFB L to R" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getXFBLtoRValue()" :store-path="getStorePath('feedback_xfb_l_to_r')" v-show="is_expanded" @value-changed="setXFBLtoRValue"/>
     <SliderInput title="Feedback R" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackRValue()" :store-path="getStorePath('feedback_right')" v-show="is_expanded" @value-changed="setFeedbackRValue"/>
     <SliderInput title="XFB R to L" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getXFBRtoLValue()" v-show="is_expanded" :store-path="getStorePath('feedback_xfb_r_to_l')" @value-changed="setXFBRtoLValue"/>
-  </GroupContainer>
-  <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
+  </ExpandoGroupContainer>
 </template>
 
 <script>
 import {store} from "@/store";
 import SliderInput from "@/components/slider/Slider";
-import ExpandoBox from "@/components/design/ExpandoBox";
 import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
-import GroupContainer from "@/components/containers/GroupContainer.vue";
 import ListSelection from "@/components/button_list/ListSelection.vue";
+import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "EchoEffect",
-  components: {ListSelection, GroupContainer, ExpandoBox, SliderInput},
+  components: {ExpandoGroupContainer, ListSelection, SliderInput},
   data() {
     return {
       is_expanded: false,
@@ -43,10 +41,6 @@ export default {
   },
 
   methods: {
-    toggleExpando() {
-      this.is_expanded = !this.is_expanded;
-    },
-
     getActiveStyle() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
         return "";

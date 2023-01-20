@@ -39,7 +39,7 @@
       </ModalBox>
 
     </div>
-    <ContentContainer>
+    <ContentContainer :no-left-pad="true">
       <ReverbEffect/>
       <EchoEffect/>
       <PitchEffect/>
