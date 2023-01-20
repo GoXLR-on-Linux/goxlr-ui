@@ -1,41 +1,44 @@
 <template>
-  <ContentBox title="Hard Tune">
-    <ButtonList title="Style">
-      <PushButton label="Natural" buttonId="Natural" :is-active="isActiveStyle('Natural')" @button-pressed="stylePressed"/>
-      <PushButton label="Medium" buttonId="Medium" :is-active="isActiveStyle('Medium')" @button-pressed="stylePressed"/>
-      <PushButton label="Hard" buttonId="Hard" :is-active="isActiveStyle('Hard')" @button-pressed="stylePressed"/>
-    </ButtonList>
+  <GroupContainer title="Hard Tune" gap="3px">
+    <ListSelection title="Style" group="effects_hardtune_style" :options="hard_tune_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" :store-path="getStorePath('amount')" v-show="is_expanded" @value-changed="setAmountValue" />
     <SliderInput title="Rate" :slider-min-value=0 :slider-max-value=100 :slider-value="getRateValue()" :store-path="getStorePath('rate')"  v-show="is_expanded" @value-changed="setRateValue" />
     <SliderInput title="Window" :slider-min-value=0 :slider-max-value=600 :slider-value="getWindowValue()" :store-path="getStorePath('window')" v-show="is_expanded" @value-changed="setWindowValue" />
 
-    <ButtonList title="Hardtune Source">
-      <PushButton label="All" buttonId="All" :is-active="isActiveSource('All')" @button-pressed="sourcePressed"/>
-      <PushButton label="Music" buttonId="Music" :is-active="isActiveSource('Music')" @button-pressed="sourcePressed"/>
-      <PushButton label="Line In" buttonId="LineIn" :is-active="isActiveSource('LineIn')" @button-pressed="sourcePressed"/>
-      <PushButton label="System" buttonId="System" :is-active="isActiveSource('System')" @button-pressed="sourcePressed"/>
-    </ButtonList>
-
-  </ContentBox>
+    <ListSelection title="Style" group="effects_hardtune_source" :options="hard_tune_source" :selected="getActiveSource()" @selection-changed="sourcePressed"/>
+  </GroupContainer>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
 </template>
 
 <script>
-import ContentBox from "@/components/ContentBox";
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
 import ExpandoBox from "@/components/design/ExpandoBox";
-import ButtonList from "@/components/button_list/ButtonList";
-import PushButton from "@/components/button_list/Button";
 import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
+import ListSelection from "@/components/button_list/ListSelection.vue";
+
 export default {
   name: "HardTuneEffect",
-  components: {PushButton, ButtonList, ExpandoBox, SliderInput, ContentBox},
+  components: {ListSelection, GroupContainer, ExpandoBox, SliderInput},
   data() {
     return {
       is_expanded: false,
+
+      hard_tune_style: [
+        {id: "Natural", label: "Natural"},
+        {id: "Medium", label: "Medium"},
+        {id: "Hard", label: "Hard"},
+      ],
+
+      hard_tune_source: [
+        {id: "All", label: "All"},
+        {id: "Music", label: "Music"},
+        {id: "LineIn", label: "Line In"},
+        {id: "System", label: "System"},
+      ],
     }
   },
 
@@ -43,24 +46,22 @@ export default {
     toggleExpando() {
       this.is_expanded = !this.is_expanded;
     },
-
-    isActiveStyle(buttonName) {
+    getActiveStyle() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
+        return "";
       }
-      return buttonName === store.getActiveDevice().effects.current.hard_tune.style;
+      return store.getActiveDevice().effects.current.hard_tune.style;
     },
 
     stylePressed(button) {
       websocket.send_command(store.getActiveSerial(), { "SetHardTuneStyle": button });
     },
 
-
-    isActiveSource(buttonName) {
+    getActiveSource() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
+        return "";
       }
-      return buttonName === store.getActiveDevice().effects.current.hard_tune.source;
+      return store.getActiveDevice().effects.current.hard_tune.source;
     },
 
     sourcePressed(button) {

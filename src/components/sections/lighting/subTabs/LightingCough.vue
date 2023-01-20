@@ -1,7 +1,7 @@
 <script>
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
-import ListSelection from "@/components/new/ListSelection.vue";
+import ListSelection from "@/components/button_list/ListSelection.vue";
 import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
 
 import { store } from "@/store";

@@ -12,7 +12,7 @@
 <script>
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import ListSelection from "@/components/new/ListSelection.vue";
+import ListSelection from "@/components/button_list/ListSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 
 export default {

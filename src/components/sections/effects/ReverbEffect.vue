@@ -1,18 +1,6 @@
 <template>
-  <ContentBox title="Reverb">
-    <ButtonList title="Style">
-      <PushButton label="Library" buttonId="Library" :is-active="isActiveStyle('Library')"
-                  @button-pressed="stylePressed"/>
-      <PushButton label="Dark Bloom" buttonId="DarkBloom" :is-active="isActiveStyle('DarkBloom')"
-                  @button-pressed="stylePressed"/>
-      <PushButton label="Music Club" buttonId="MusicClub" :is-active="isActiveStyle('MusicClub')"
-                  @button-pressed="stylePressed"/>
-      <PushButton label="Real Plate" buttonId="RealPlate" :is-active="isActiveStyle('RealPlate')"
-                  @button-pressed="stylePressed"/>
-      <PushButton label="Chapel" buttonId="Chapel" :is-active="isActiveStyle('Chapel')" @button-pressed="stylePressed"/>
-      <PushButton label="Hockey Arena" buttonId="HockeyArena" :is-active="isActiveStyle('HockeyArena')"
-                  @button-pressed="stylePressed"/>
-    </ButtonList>
+  <GroupContainer title="Reverb" gap="3px">
+    <ListSelection title="Style" group="effects_reverb_style" :options="reverb_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()"
                  :store-path="getStorePath('amount')" @value-changed="setAmountValue"/>
@@ -40,29 +28,37 @@
     <SliderInput title="ModDepth" :slider-min-value=-25 :slider-max-value=25 :slider-value="getModDepthValue()"
                  :store-path="getStorePath('mod_depth')" v-show="is_expanded" @value-changed="setModDepthValue"/>
 
-  </ContentBox>
+  </GroupContainer>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
 </template>
 
 <script>
 
-import ContentBox from "@/components/ContentBox";
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
-import ButtonList from "@/components/button_list/ButtonList";
-import PushButton from "@/components/button_list/Button";
 import ExpandoBox from "@/components/design/ExpandoBox";
 import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
+import ListSelection from "@/components/button_list/ListSelection.vue";
 
 export default {
   name: "ReverbEffect",
-  components: {ExpandoBox, PushButton, ButtonList, SliderInput, ContentBox},
+  components: {ListSelection, GroupContainer, ExpandoBox, SliderInput },
 
   data() {
     return {
       decay_map: [],
       is_expanded: false,
+
+      reverb_style: [
+        {id: "Library", label: "Library"},
+        {id: "DarkBloom", label: "Dark Bloom"},
+        {id: "MusicClub", label: "Music Club"},
+        {id: "RealPlate", label: "Real Plate"},
+        {id: "Chapel", label: "Chapel"},
+        {id: "HockeyArena", label: "Hockey Arena"},
+      ],
     }
   },
 
@@ -71,17 +67,16 @@ export default {
       this.is_expanded = !this.is_expanded;
     },
 
-    isActiveStyle(buttonName) {
+    getActiveStyle() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
+        return "";
       }
-      return buttonName === store.getActiveDevice().effects.current.reverb.style;
+      return store.getActiveDevice().effects.current.reverb.style;
     },
 
     stylePressed(button) {
       websocket.send_command(store.getActiveSerial(), {"SetReverbStyle": button})
     },
-
 
     getAmountValue() {
       if (!store.hasActiveDevice() || isDeviceMini()) {

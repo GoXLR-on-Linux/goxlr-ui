@@ -2,7 +2,8 @@
 export default {
     name: "GroupContainer",
     props: {
-        title: String
+        title: String,
+        gap: { type: String, default: "24px" }
     }
 }
 </script>
@@ -46,7 +47,7 @@ export default {
 .content {
     display: flex;
     flex-direction: row;
-    gap: 24px;
+    gap: v-bind(gap);
 
     height: fit-content;
     width: fit-content;

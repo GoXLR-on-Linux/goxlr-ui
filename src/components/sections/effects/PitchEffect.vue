@@ -1,32 +1,33 @@
 <template>
-  <ContentBox title="Pitch">
-    <ButtonList title="Style">
-      <PushButton label="Narrow" buttonId="Narrow" :is-active="isActiveStyle('Narrow')" @button-pressed="stylePressed"/>
-      <PushButton label="Wide" buttonId="Wide" :is-active="isActiveStyle('Wide')" @button-pressed="stylePressed"/>
-    </ButtonList>
-
+  <GroupContainer title="Pitch" gap="3px">
+    <ListSelection title="Style" group="effects_pitch_style" :options="pitch_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :value-map="getValueMap()" :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />
     <SliderInput title="Character" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getCharacterValue()" :store-path="getStorePath('character')" v-show="is_expanded" @value-changed="setCharacterValue" />
-  </ContentBox>
+  </GroupContainer>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
 </template>
 
 <script>
-import ContentBox from "@/components/ContentBox";
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
 import ExpandoBox from "@/components/design/ExpandoBox";
-import ButtonList from "@/components/button_list/ButtonList";
-import PushButton from "@/components/button_list/Button";
 import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
+import ListSelection from "@/components/button_list/ListSelection.vue";
+
 export default {
   name: "PitchEffect",
-  components: {PushButton, ButtonList, ExpandoBox, SliderInput, ContentBox},
+  components: {ListSelection, GroupContainer, ExpandoBox, SliderInput},
   data() {
     return {
       is_expanded: false,
+
+      pitch_style: [
+        {id: "Narrow", label: "Narrow"},
+        {id: "Wide", label: "Wide"},
+      ],
     }
   },
 
@@ -35,11 +36,11 @@ export default {
       this.is_expanded = !this.is_expanded;
     },
 
-    isActiveStyle(buttonName) {
+    getActiveStyle() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
+        return "";
       }
-      return buttonName === store.getActiveDevice().effects.current.pitch.style;
+      return store.getActiveDevice().effects.current.pitch.style;
     },
 
     stylePressed(button) {

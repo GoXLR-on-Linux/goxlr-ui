@@ -39,7 +39,7 @@
       </ModalBox>
 
     </div>
-    <MainTabContent :no-left-pad="true">
+    <ContentContainer>
       <ReverbEffect/>
       <EchoEffect/>
       <PitchEffect/>
@@ -47,12 +47,11 @@
       <MegaphoneEffect/>
       <RobotEffect/>
       <HardTuneEffect/>
-    </MainTabContent>
+    </ContentContainer>
   </div>
 </template>
 
 <script>
-import MainTabContent from "@/components/design/MainTabContent";
 import ReverbEffect from "@/components/sections/effects/ReverbEffect";
 import EchoEffect from "@/components/sections/effects/EchoEffect";
 import PitchEffect from "@/components/sections/effects/PitchEffect";
@@ -71,10 +70,12 @@ import {sendHttpCommand, websocket} from "@/util/sockets";
 import ModalBox from "@/components/design/modal/ModalBox";
 import ModalButton from "@/components/design/modal/ModalButton";
 import ModalInput from "@/components/design/modal/ModalInput";
+import ContentContainer from "@/components/containers/ContentContainer.vue";
 
 export default {
   name: "EffectsTab",
   components: {
+    ContentContainer,
     ModalInput,
     ModalButton,
     ModalBox,
@@ -83,7 +84,7 @@ export default {
     PushButton,
     ContentBox,
     HardTuneEffect,
-    RobotEffect, MegaphoneEffect, GenderEffect, PitchEffect, EchoEffect, ReverbEffect, MainTabContent
+    RobotEffect, MegaphoneEffect, GenderEffect, PitchEffect, EchoEffect, ReverbEffect,
   },
 
   data() {

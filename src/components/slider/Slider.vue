@@ -218,7 +218,6 @@ export default {
 
 <style scoped>
 #sliderBox {
-  margin: 3px;
   width: 90px;
   background-color: #353937;
 }

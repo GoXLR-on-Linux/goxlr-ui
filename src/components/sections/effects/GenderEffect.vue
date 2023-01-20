@@ -1,39 +1,41 @@
 <template>
-  <ContentBox title="Gender">
-    <ButtonList title="Style">
-      <PushButton label="Narrow" buttonId="Narrow" :is-active="isActiveStyle('Narrow')" @button-pressed="stylePressed"/>
-      <PushButton label="Medium" buttonId="Medium" :is-active="isActiveStyle('Medium')" @button-pressed="stylePressed"/>
-      <PushButton label="Wide" buttonId="Wide" :is-active="isActiveStyle('Wide')" @button-pressed="stylePressed"/>
-    </ButtonList>
+  <GroupContainer title="Gender" gap="3px">
+    <ListSelection title="Style" group="effects_gender_style" :options="gender_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value="getSliderValue(true)" :slider-max-value="getSliderValue(false)" :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />
-  </ContentBox>
+  </GroupContainer>
 </template>
 
 <script>
-import ContentBox from "@/components/ContentBox";
 import {store} from "@/store";
 import SliderInput from "@/components/slider/Slider";
-import ButtonList from "@/components/button_list/ButtonList";
-import PushButton from "@/components/button_list/Button";
 import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
+import ListSelection from "@/components/button_list/ListSelection.vue";
+
 export default {
   name: "GenderEffect",
-  components: {PushButton, ButtonList, SliderInput, ContentBox},
+  components: {ListSelection, GroupContainer, SliderInput},
 
   data() {
     return {
       amount: 0,
+
+      gender_style: [
+        {id: "Narrow", label: "Narrow"},
+        {id: "Medium", label: "Medium"},
+        {id: "Wide", label: "Wide"},
+      ],
     }
   },
 
   methods: {
-    isActiveStyle(buttonName) {
+    getActiveStyle() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
+        return "";
       }
-      return buttonName === store.getActiveDevice().effects.current.gender.style;
+      return store.getActiveDevice().effects.current.gender.style;
     },
 
     getSliderValue(isMin) {

@@ -1,13 +1,6 @@
 <template>
-  <ContentBox title="Robot">
-    <ButtonList title="Style">
-      <PushButton label="Robot 1" buttonId="Robot1" :is-active="isActiveStyle('Robot1')"
-                  @button-pressed="stylePressed"/>
-      <PushButton label="Robot 2" buttonId="Robot2" :is-active="isActiveStyle('Robot2')"
-                  @button-pressed="stylePressed"/>
-      <PushButton label="Robot 3" buttonId="Robot3" :is-active="isActiveStyle('Robot3')"
-                  @button-pressed="stylePressed"/>
-    </ButtonList>
+  <GroupContainer title="Robot">
+    <ListSelection title="Style" group="effects_robot_style" :options="robot_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Low Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
                  :slider-value="getLowGainValue()" :store-path="getStorePath('low_gain')" v-show="is_expanded"
@@ -44,27 +37,32 @@
     <SliderInput title="Dry Mix" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB"
                  :slider-value="getDryMixValue()" :store-path="getStorePath('dry_mix')" v-show="is_expanded"
                  @value-changed="setDryMixValue"/>
-  </ContentBox>
+  </GroupContainer>
   <ExpandoBox @expando-clicked="toggleExpando" :expanded="is_expanded"/>
 </template>
 
 <script>
-import ContentBox from "@/components/ContentBox";
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
 import ExpandoBox from "@/components/design/ExpandoBox";
-import ButtonList from "@/components/button_list/ButtonList";
-import PushButton from "@/components/button_list/Button";
 import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
+import ListSelection from "@/components/button_list/ListSelection.vue";
 
 export default {
   name: "RobotEffect",
-  components: {PushButton, ButtonList, ExpandoBox, SliderInput, ContentBox},
+  components: {ListSelection, GroupContainer, ExpandoBox, SliderInput},
 
   data() {
     return {
       is_expanded: false,
+
+      robot_style: [
+        {id: "Robot1", label: "Robot 1"},
+        {id: "Robot2", label: "Robot 2"},
+        {id: "Robot3", label: "Robot 3"},
+      ],
     }
   },
 
@@ -73,16 +71,17 @@ export default {
       this.is_expanded = !this.is_expanded;
     },
 
+    getActiveStyle() {
+      if (!store.hasActiveDevice() || isDeviceMini()) {
+        return "";
+      }
+      return store.getActiveDevice().effects.current.robot.style;
+    },
+
     stylePressed(button) {
       websocket.send_command(store.getActiveSerial(), { "SetRobotStyle": button });
     },
 
-    isActiveStyle(buttonName) {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
-      }
-      return buttonName === store.getActiveDevice().effects.current.robot.style;
-    },
 
     // TODO: Freq and Width need some work, they represent differently in the UI, and are both curves..
     getLowGainValue() {
