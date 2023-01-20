@@ -1,25 +1,22 @@
 <template>
-  <ContentBox title="Mixer">
+  <GroupContainer title="Mixer">
     <Slider v-for="item in mixerOrder" :key=item :id=channelNames.indexOf(item) :title="channelNamesReadable[item]" :slider-min-value=0
             :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%" :slider-value="getValue(item)"
             :store-path="getStorePath(item)" @value-changed="valueChange"
     />
-  </ContentBox>
+  </GroupContainer>
 
-  <ContentBox title="Headphones">
+  <ExpandoGroupContainer title="Headphones" @expando-clicked="isVisible = !isVisible" :expanded="isVisible">
     <Slider v-for="item in headphoneOrder" :key=item :id=channelNames.indexOf(item) :title="channelNamesReadable[item]" :slider-min-value=0
             :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%" :slider-value="getValue(item)"
             :store-path="getStorePath(item)" @value-changed="valueChange"
             v-show="(!hpHide.includes(item) || (hpHide.includes(item) && isVisible))"
     />
-  </ContentBox>
-  <ExpandoBox @expando-clicked="toggleExpando" :expanded="isVisible"/>
+  </ExpandoGroupContainer>
 </template>
 
 <script>
 import Slider from "../slider/Slider";
-import ContentBox from "../ContentBox";
-import ExpandoBox from "../design/ExpandoBox";
 import {
   ChannelName,
   ChannelNameReadable,
@@ -29,10 +26,12 @@ import {
 } from "@/util/mixerMapping";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
+import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "MixerTop",
-  components: {ExpandoBox, ContentBox, Slider},
+  components: {ExpandoGroupContainer, GroupContainer, Slider},
 
   data() {
     return {
@@ -78,10 +77,6 @@ export default {
         }
         return store.getActiveDevice().levels.volumes[id];
       }
-    },
-
-    toggleExpando() {
-      this.isVisible = !this.isVisible;
     },
 
     getStorePath(id) {

@@ -29,8 +29,6 @@ export default {
     flex-direction: column;
     align-items: center;
 
-    width: fit-content;
-    margin: auto;
     padding: 24px;
 
     background-color: #2D3230;

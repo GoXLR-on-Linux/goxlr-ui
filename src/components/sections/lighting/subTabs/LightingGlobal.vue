@@ -6,10 +6,12 @@ import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.v
 
 import { store } from "@/store";
 import { websocket } from "@/util/sockets";
+import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
   name: "LightingGlobal",
   components: {
+    CenteredContainer,
     ContentContainer,
     GroupContainer,
     ListSelection,
@@ -53,10 +55,12 @@ export default {
 </script>
 
 <template>
-  <ContentContainer>
-    <GroupContainer title="Areas">
-      <ListSelection title="Area" group="lighting_global_areas" :options="this.options" :selected="this.selected" @selection-changed="onSelectionChange"/>
-      <ColourPicker title="Colour" :color-value="color()" @colour-changed="onColourChange" />
-    </GroupContainer>
-  </ContentContainer>
+  <CenteredContainer>
+    <ContentContainer>
+      <GroupContainer title="Areas">
+        <ListSelection title="Area" group="lighting_global_areas" :options="this.options" :selected="this.selected" @selection-changed="onSelectionChange"/>
+        <ColourPicker title="Colour" :color-value="color()" @colour-changed="onColourChange" />
+      </GroupContainer>
+    </ContentContainer>
+  </CenteredContainer>
 </template>

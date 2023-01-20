@@ -8,10 +8,12 @@ import { store } from "@/store";
 import { websocket } from "@/util/sockets";
 import { isDeviceMini } from "@/util/util";
 import { LightingInactiveOptions } from "@/util/mixerMapping";
+import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
   name: "LightingSampler",
   components: {
+    CenteredContainer,
     ContentContainer,
     GroupContainer,
     ListSelection,
@@ -112,13 +114,15 @@ export default {
 </script>
 
 <template>
-  <ContentContainer>
-    <GroupContainer title="Bank">
-      <ListSelection title="Buttons" group="lighting_sampler_buttons" :options="this.buttonOptions" :selected="this.selectedButtonOption" @selection-changed="onButtonSelectionChange"/>
-      <ColourPicker title="Active / Loaded" :color-value="activeColor()" @colour-changed="onActiveColourChange" />
-      <ColourPicker title="Sample Empty" :color-value="emptyColor()" @colour-changed="onEmptyColourChange" />
-      <ListSelection title="Inactive Bank" group="lighting_sampler_inactive_behaviour" :options="this.inactiveOptions" :selected="this.selectedInactiveOption()" @selection-changed="onInactiveSelectionChange" />
-      <ColourPicker title="Inactive Bank" :color-value="inactiveColor()" @colour-changed="onInactiveColourChange" />
-    </GroupContainer>
-  </ContentContainer>
+  <CenteredContainer>
+    <ContentContainer>
+      <GroupContainer title="Bank">
+        <ListSelection title="Buttons" group="lighting_sampler_buttons" :options="this.buttonOptions" :selected="this.selectedButtonOption" @selection-changed="onButtonSelectionChange"/>
+        <ColourPicker title="Active / Loaded" :color-value="activeColor()" @colour-changed="onActiveColourChange" />
+        <ColourPicker title="Sample Empty" :color-value="emptyColor()" @colour-changed="onEmptyColourChange" />
+        <ListSelection title="Inactive Bank" group="lighting_sampler_inactive_behaviour" :options="this.inactiveOptions" :selected="this.selectedInactiveOption()" @selection-changed="onInactiveSelectionChange" />
+        <ColourPicker title="Inactive Bank" :color-value="inactiveColor()" @colour-changed="onInactiveColourChange" />
+      </GroupContainer>
+    </ContentContainer>
+  </CenteredContainer>
 </template>
