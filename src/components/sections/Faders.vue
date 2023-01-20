@@ -1,76 +1,66 @@
 <template>
-  <ContentBox title="Faders">
-    <ButtonList title="Channel" role="radiogroup">
-      <RadioItem id="A" text="Channel 1" group="channel" @radio-selected="channelChanged"
-                 :selected="isActiveChannel('A')"/>
-      <RadioItem id="B" text="Channel 2" group="channel" @radio-selected="channelChanged"
-                 :selected="isActiveChannel('B')"/>
-      <RadioItem id="C" text="Channel 3" group="channel" @radio-selected="channelChanged"
-                 :selected="isActiveChannel('C')"/>
-      <RadioItem id="D" text="Channel 4" group="channel" @radio-selected="channelChanged"
-                 :selected="isActiveChannel('D')"/>
-    </ButtonList>
-
-    <ButtonList title="Source" role="radiogroup">
-      <RadioItem v-for="item in faderOrder" :key=item
-                 group="source"
-                 :id="item"
-                 :text="getSourceLabel(item)"
-                 :selected="isActiveSource(item)"
-                 @radio-selected="sourceChanged"/>
-    </ButtonList>
-
-    <ButtonList title="Mute Behaviour" role="radiogroup">
-      <RadioItem v-for="(item, index) in muteFunctions" :key="item"
-                 group="fader_mute_behaviour"
-                 :id=item
-                 :text="getMuteLabel(index)"
-                 :selected="isActiveMuteFunction(item)"
-                 :disabled="isMuteFunctionDisabled(item)"
-                 @radio-selected="muteFunctionChanged" />
-    </ButtonList>
-  </ContentBox>
+  <GroupContainer title="Faders">
+    <ListSelection title="Channel" group="faders_channel" :options="fader_options" :selected="activeChannel" @selection-changed="channelChanged"/>
+    <ListSelection title="Source" group="faders_source" :options="source_options" :selected="getActiveSource()" @selection-changed="sourceChanged" />
+    <ListSelection title="Mute Behaviour" group="faders_mute" :options="mute_options" :selected="getActiveMuteFunction()" @selection-changed="muteFunctionChanged" />
+  </GroupContainer>
 </template>
 
 <script>
-import ContentBox from "../ContentBox";
-import ButtonList from "../button_list/ButtonList";
 import {
-  ChannelNameReadable,
   FaderOrder,
-  MuteFunctionReadable,
   MuteFunction
 } from "@/util/mixerMapping";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import RadioItem from "@/components/button_list/RadioItem";
+import ListSelection from "@/components/new/ListSelection.vue";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
 
 export default {
   /**
    * Everything here focuses around the 'Channel' input,
    */
 
-  components: {RadioItem, ContentBox, ButtonList},
+  components: {GroupContainer, ListSelection},
   name: "MicFaders",
 
   data() {
     return {
       faderOrder: FaderOrder,
       muteFunctions: MuteFunction,
-
       activeChannel: "A",
+
+      fader_options: [
+        { id: "A", label: "A" },
+        { id: "B", label: "B" },
+        { id: "C", label: "C" },
+        { id: "D", label: "D" }
+      ],
+
+      source_options: [
+        { id: "Mic", label: "Mic" },
+        { id: "Chat", label: "Voice Chat" },
+        { id: "Music", label: "Music" },
+        { id: "Game", label: "Game" },
+        { id: "Console", label: "Console" },
+        { id: "LineIn", label: "Line In" },
+        { id: "System", label: "System" },
+        { id: "Sample", label: "Sample" },
+        { id: "Headphones", label: "Headphones" },
+        { id: "LineOut", label: "Line Out" }
+      ],
+
+      mute_options: [
+        { id: "All", label:"Mute All" },
+        { id: "ToStream", label:"Mute to Stream" },
+        { id: "ToVoiceChat", label:"Mute to Voice Chat" },
+        { id: "ToPhones", label:"Mute to Phones" },
+        { id: "ToLineOut", label:"Mute to Line Out" },
+      ]
     }
   },
 
   methods: {
-    getSourceLabel(id) {
-      return ChannelNameReadable[id];
-    },
-
-    getMuteLabel(id) {
-      return MuteFunctionReadable[id];
-    },
-
     channelChanged: function (id) {
       this.activeChannel = id;
     },
@@ -108,28 +98,6 @@ export default {
       websocket.send_command(serial, command);
     },
 
-    isActiveChannel(channel) {
-      if (store.hasActiveDevice()) {
-        return this.activeChannel === channel;
-      }
-      return false;
-    },
-
-    isActiveSource: function (source) {
-      if (store.hasActiveDevice()) {
-        return this.getActiveSource() === source;
-      }
-
-      return false;
-    },
-
-    isActiveMuteFunction: function (id) {
-      if (store.hasActiveDevice()) {
-        return store.getActiveDevice().fader_status[this.activeChannel].mute_type === id;
-      }
-      return false;
-    },
-
     isMuteFunctionDisabled: function (muteFunction) {
       // According to the GoXLR UI, The Voice Chat mute button can't mute to voice chat..
       if (this.getActiveSource() === "Chat") {
@@ -150,7 +118,7 @@ export default {
       if (store.hasActiveDevice()) {
         return store.getActiveDevice().fader_status[this.activeChannel].channel;
       }
-      return 0;
+      return "Mic";
     },
 
     getActiveMuteFunction: function () {
@@ -164,7 +132,4 @@ export default {
 </script>
 
 <style scoped>
-.hidden {
-  display: none;
-}
 </style>
