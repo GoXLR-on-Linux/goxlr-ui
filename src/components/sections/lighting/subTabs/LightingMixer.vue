@@ -1,23 +1,23 @@
 <script>
-import MainTabContent from "@/components/design/MainTabContent";
 import ContentBox from "@/components/ContentBox";
 import ButtonList from "@/components/button_list/ButtonList";
 import PushButton from "@/components/button_list/Button";
 import ColorPicker from "@/components/sections/lighting/ColorPicker";
 
-import { store } from "@/store";
-import { websocket } from "@/util/sockets";
-import { MuteButtonNamesForFader, ScribbleNames } from "@/util/mixerMapping";
-import { isDeviceMini}  from "@/util/util";
+import {store} from "@/store";
+import {websocket} from "@/util/sockets";
+import {MuteButtonNamesForFader, ScribbleNames} from "@/util/mixerMapping";
+import {isDeviceMini} from "@/util/util";
+import ContentContainer from "@/components/containers/ContentContainer.vue";
 
 export default {
   name: "LightingMixer",
   components: {
+    ContentContainer,
     ColorPicker,
     PushButton,
     ButtonList,
     ContentBox,
-    MainTabContent,
   },
 
   data() {
@@ -178,9 +178,7 @@ export default {
     },
 
     updateText(event) {
-      console.log(store.getActiveDevice().fader_status[this.activeChannel].scribble.bottom_text);
-      let value = event.target.value;
-      store.getActiveDevice().fader_status[this.activeChannel].scribble.bottom_text = value;
+      store.getActiveDevice().fader_status[this.activeChannel].scribble.bottom_text = event.target.value;
     },
 
     applyUpdate(event) {
@@ -260,7 +258,7 @@ export default {
         </ButtonList>
       </ContentBox>
     </div>
-    <MainTabContent :no-left-pad=true>
+    <ContentContainer :no-left-pad=true>
       <ContentBox title="Fader">
         <ButtonList title="Style">
           <PushButton label="Gradient" :is-active="styleContains('Gradient')" @button-pressed="toggleGradient"/>
@@ -313,7 +311,7 @@ export default {
         <ColorPicker id="inactive" title="Inactive" :color-value="getMuteInactiveColour()"
                    @colour-changed="onButtonColourChange"/>
       </ContentBox>
-    </MainTabContent>
+    </ContentContainer>
 
   </div>
 </template>

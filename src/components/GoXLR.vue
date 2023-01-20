@@ -21,9 +21,9 @@
         <EffectsTab />
       </Tab>
       <Tab name="Sampler" :hidden="isDeviceMini()">
-        <MainTabContent>
+        <ContentContainer>
           <SamplerTab />
-        </MainTabContent>
+        </ContentContainer>
       </Tab>
       <Tab name="Cough">
         <ContentContainer>
@@ -62,7 +62,6 @@ import Cough from "@/components/sections/Cough";
 import {websocket} from "@/util/sockets";
 import SystemComponent from "@/components/sections/System";
 import FileTabs from "@/components/sections/files/FileTabs";
-import MainTabContent from "@/components/design/MainTabContent";
 import EffectsTab from "@/components/sections/EffectsTab";
 import {isDeviceMini} from "@/util/util";
 import LightingTab from "@/components/sections/lighting/LightingTab";
@@ -76,7 +75,6 @@ export default {
     SamplerTab,
     LightingTab,
     EffectsTab,
-    MainTabContent,
     FileTabs,
     SystemComponent,
     Cough,
