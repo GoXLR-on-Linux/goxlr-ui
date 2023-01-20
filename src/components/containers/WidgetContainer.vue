@@ -40,5 +40,6 @@ export default {
     color: #ffffff;
     background-color: #3b413f;
     text-transform: uppercase;
+    text-align: center;
 }
 </style>

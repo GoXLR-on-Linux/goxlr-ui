@@ -1,5 +1,5 @@
 <template>
-  <div id="labelText">
+  <div class="labelText">
     {{ title }}
   </div>
 </template>
@@ -15,7 +15,7 @@ export default {
 </script>
 
 <style scoped>
-  #labelText {
+  .labelText {
     padding: 10px 0px;
     color: #fff;
 
@@ -23,6 +23,7 @@ export default {
     font-size: 10pt;
 
     text-transform: uppercase;
+    text-align: center;
     font-stretch: condensed;
   }
 </style>

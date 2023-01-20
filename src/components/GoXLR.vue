@@ -12,10 +12,10 @@
           <Mic/>
       </Tab>
       <Tab name="Mixer" selected>
-        <MainTabContent>
-          <Faders/>
-          <Mixer/>
-        </MainTabContent>
+          <ContentContainer>
+            <Faders/>
+            <Mixer/>
+          </ContentContainer>
       </Tab>
       <Tab name="Effects" :hidden="isDeviceMini()" :left_align="false" >
         <EffectsTab />
@@ -67,10 +67,12 @@ import EffectsTab from "@/components/sections/EffectsTab";
 import {isDeviceMini} from "@/util/util";
 import LightingTab from "@/components/sections/lighting/LightingTab";
 import SamplerTab from "@/components/sections/SamplerTab";
+import ContentContainer from "@/components/containers/ContentContainer.vue";
 
 export default {
   name: 'GoXLR',
   components: {
+    ContentContainer,
     SamplerTab,
     LightingTab,
     EffectsTab,

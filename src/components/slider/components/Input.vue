@@ -105,6 +105,7 @@ export default {
 
   box-sizing: border-box;
 
+  text-align: center;
   margin-top: 15px;
   padding: 10px;
   width: 100%;
