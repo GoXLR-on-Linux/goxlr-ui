@@ -6,7 +6,7 @@
     <SliderInput title="Rate" :slider-min-value=0 :slider-max-value=100 :slider-value="getRateValue()" :store-path="getStorePath('rate')"  v-show="is_expanded" @value-changed="setRateValue" />
     <SliderInput title="Window" :slider-min-value=0 :slider-max-value=600 :slider-value="getWindowValue()" :store-path="getStorePath('window')" v-show="is_expanded" @value-changed="setWindowValue" />
 
-    <ListSelection title="Style" group="effects_hardtune_source" :options="hard_tune_source" :selected="getActiveSource()" @selection-changed="sourcePressed"/>
+    <ListSelection title="Sorce" group="effects_hardtune_source" :options="hard_tune_source" :selected="getActiveSource()" @selection-changed="sourcePressed"/>
   </ExpandoGroupContainer>
 </template>
 
