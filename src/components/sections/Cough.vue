@@ -1,75 +1,60 @@
 <template>
-  <ContentBox title="Cough Button Settings">
-    <ButtonList title="Behaviour" role="radiogroup">
-      <RadioItem id="hold" text="Hold" group="mute_behaviour" @radio-selected="behaviorPressed" :selected="!isCoughToggle()" />
-      <RadioItem id="toggle" text="Toggle" group="mute_behaviour" @radio-selected="behaviorPressed" :selected="isCoughToggle()" />
-    </ButtonList>
-    <ButtonList title="Mute Behaviour" role="radiogroup">
-      <RadioItem v-for="(item, index) in muteBehaviours" :key="item"
-                 group="mic_mute_behaviour"
-                 :id=item
-                 :text="muteBehaviours[index]"
-                 :selected="isActiveMuteFunction(index)"
-                 @radio-selected="setActiveMuteFunction(index)" />
-    </ButtonList>
-  </ContentBox>
+  <GroupContainer title="Cough Button Settings">
+    <ListSelection title="Button Behaviour" :options="button_behaviour" group="cough_button_behaviour" @selection-changed="behaviorPressed" :selected="getCough()" />
+    <ListSelection title="Mute Behaviour" :options="mute_behaviour" group="cough_mute_behaviour" @selection-changed="setActiveMuteFunction" :selected="getActiveMute()" />
+  </GroupContainer>
 </template>
 
 <script>
-import ContentBox from "@/components/ContentBox";
-import ButtonList from "@/components/button_list/ButtonList";
-import {MuteFunctionReadable, MuteFunction} from "@/util/mixerMapping";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import RadioItem from "@/components/button_list/RadioItem";
+import ListSelection from "@/components/button_list/ListSelection.vue";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
 
 export default {
   name: "CoughButtonSettings",
-  components: {RadioItem, ButtonList, ContentBox},
+  components: {GroupContainer, ListSelection},
 
   data() {
     return {
-      muteBehaviours: MuteFunctionReadable,
+      button_behaviour: [
+        {id: "hold", label: "Hold"},
+        {id: "toggle", label: "Toggle"}
+      ],
+
+      mute_behaviour: [
+        {id: "All", label: "Mute All"},
+        {id: "ToStream", label: "Mute to Stream"},
+        {id: "ToVoiceChat", label: "Mute to Voice Chat"},
+        {id: "ToPhones", label: "Mute to Phones"},
+        {id: "ToLineOut", label: "Mute to Line Out"},
+      ]
     }
   },
 
   methods: {
-    isCoughToggle() {
-      return (store.hasActiveDevice()) ? store.getActiveDevice().cough_button.is_toggle : false;
+    getCough() {
+      return (store.hasActiveDevice() && store.getActiveDevice().cough_button.is_toggle) ? "toggle" : "hold";
     },
 
     getActiveMute() {
-      if (!store.hasActiveDevice()) {
-        return false;
-      }
-
-      return MuteFunction.indexOf(store.getActiveDevice().cough_button.mute_type);
+      return (!store.hasActiveDevice()) ? "" : store.getActiveDevice().cough_button.mute_type;
     },
 
-    isActiveMuteFunction: function (id) {
-      return this.getActiveMute() === id;
-    },
     setActiveMuteFunction: function (id) {
-      this.activeMuteFunction = id;
-      this.updateDevice();
+      let command = {
+        "SetCoughMuteFunction": id
+      }
+      websocket.send_command(store.getActiveSerial(), command);
     },
+
     behaviorPressed: function (id) {
       let coughHold = (id === "hold");
-      console.log(coughHold);
       let command = {
         "SetCoughIsHold": coughHold
       }
       websocket.send_command(store.getActiveSerial(), command);
     },
-    updateDevice: function () {
-      let serial = store.getActiveSerial();
-      let coughMuteFunction = MuteFunction[this.activeMuteFunction];
-
-      let command = {
-        "SetCoughMuteFunction": coughMuteFunction
-      }
-      websocket.send_command(serial, command);
-    }
   },
 }
 </script>
