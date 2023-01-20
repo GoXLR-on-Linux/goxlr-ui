@@ -47,16 +47,6 @@ export default {
   },
 
   methods: {
-    getBaseChannels() {
-      let channels = MixerOrder;
-      return channels;
-    },
-
-    getMicChannels() {
-      return ["Headphones", "MicMonitor"];
-    },
-
-
     valueChange(id, volume) {
       let str_id = this.channelNames[id];
       let command = undefined;

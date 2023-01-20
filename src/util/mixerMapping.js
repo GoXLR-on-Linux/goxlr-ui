@@ -5,22 +5,6 @@
  * representation can happen it's more efficient than constantly bouncing back and forward between array indexes.
  */
 
-export const MuteFunction = [
-    "All",
-    "ToStream",
-    "ToVoiceChat",
-    "ToPhones",
-    "ToLineOut",
-]
-
-export let MuteFunctionReadable = [
-    "Mute All",
-    "Mute to Stream",
-    "Mute to Voice Chat",
-    "Mute to Phones",
-    "Mute to Line Out"
-]
-
 export const ScribbleNames = {
     "A": "Scribble1",
     "B": "Scribble2",
@@ -100,28 +84,6 @@ export const EffectLightingPresets = [
     "EffectSelect6",
 ]
 
-export const EncoderLighting = [
-    "Reverb",
-    "Echo",
-    "Pitch",
-    "Gender",
-]
-
-export const EffectButtons = [
-    "EffectMegaphone",
-    "EffectRobot",
-    "EffectHardTune",
-    "EffectFx",
-]
-
-export const EffectButtonText = [
-    "Megaphone",
-    "Robot",
-    "Hardtune",
-    "Fx",
-]
-
-
 export const EqMiniFreqs = [
     "Equalizer90Hz",
     "Equalizer250Hz",
@@ -142,20 +104,6 @@ export const EqFreqs = [
     "Equalizer4KHz",
     "Equalizer8KHz",
     "Equalizer16KHz",
-]
-
-// I'm using indexOf for the values in this array just for readability.
-export let FaderOrder = [
-    "Mic",
-    "Chat",
-    "Music",
-    "Game",
-    "Console",
-    "LineIn",
-    "System",
-    "Sample",
-    "Headphones",
-    "LineOut"
 ]
 
 export let MixerOrder = [
