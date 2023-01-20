@@ -2,15 +2,15 @@
   <div class="contextBox">
     <div class="label">Waveform</div>
     <div class="content">
-      <div class="vertical_button" v-bind:class="{enabled: (activeSample !== -1)}" @click="playActiveSample()"><font-awesome-icon :icon="getPlaybackButton()"></font-awesome-icon></div>
+      <div class="vertical_button" style="text-align: center" v-bind:class="{enabled: (activeSample !== -1)}" @click="playActiveSample()"><font-awesome-icon :icon="getPlaybackButton()"></font-awesome-icon></div>
 
       <div ref="wrapper" style="position: relative; width: 500px">
-        <div class="drag_handle left" ref="left" v-bind:class="{enabled: (activeSample !== -1)}" @mousedown.stop="mouseDownLeft">|</div>
-        <div class="drag_handle right" ref="right" v-bind:class="{enabled: (activeSample !== -1)}" @mousedown.stop="mouseDownRight">|</div>
-        <div style="color: white; height: 170px; line-height: 85px">Waveform Coming Soon!<br/>&lt;-- Position Sliders Supported --&gt;</div>
+        <div class="drag_handle left" style="text-align: center" ref="left" v-bind:class="{enabled: (activeSample !== -1)}" @mousedown.stop="mouseDownLeft">|</div>
+        <div class="drag_handle right" ref="right" style="text-align: center" v-bind:class="{enabled: (activeSample !== -1)}" @mousedown.stop="mouseDownRight">|</div>
+        <div style="color: white; height: 170px; line-height: 85px; text-align: center">Waveform Coming Soon!<br/>&lt;-- Position Sliders Supported --&gt;</div>
       </div>
 
-      <div class="vertical_button" v-bind:class="{enabled: (activeSample !== -1)}" @click="deleteActiveSample()"><font-awesome-icon icon="fa-solid fa-trash"></font-awesome-icon></div>
+      <div class="vertical_button" style="text-align: center" v-bind:class="{enabled: (activeSample !== -1)}" @click="deleteActiveSample()"><font-awesome-icon icon="fa-solid fa-trash"></font-awesome-icon></div>
     </div>
   </div>
 </template>
@@ -47,6 +47,10 @@ export default {
 
   methods: {
     playActiveSample() {
+      if (this.activeSample === -1) {
+        return;
+      }
+
       if (store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].is_playing) {
         websocket.send_command(store.getActiveSerial(), {"StopSamplePlayback": [this.activeBank, this.activeButton]});
       } else {
@@ -65,6 +69,10 @@ export default {
     },
 
     deleteActiveSample() {
+      if (this.activeSample === -1) {
+        return;
+      }
+
       websocket.send_command(store.getActiveSerial(), {"RemoveSampleByIndex": [this.activeBank, this.activeButton, this.activeSample]})
       this.$emit("deselect-sample");
     },
