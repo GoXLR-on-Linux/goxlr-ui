@@ -17,28 +17,28 @@
             <Mixer/>
           </ContentContainer>
       </Tab>
-      <Tab name="Effects" :hidden="isDeviceMini()" :left_align="false" >
+      <Tab name="Effects" :hidden="isDeviceMini()">
         <EffectsTab />
       </Tab>
-      <Tab name="Sampler" :hidden="isDeviceMini()" :left_align="true" >
+      <Tab name="Sampler" :hidden="isDeviceMini()">
         <MainTabContent>
           <SamplerTab />
         </MainTabContent>
       </Tab>
-      <Tab name="Cough" :left_align="false">
+      <Tab name="Cough">
         <MainTabContent>
           <Cough/>
         </MainTabContent>
       </Tab>
-      <Tab name="Lighting" :left_align="false">
+      <Tab name="Lighting">
           <LightingTab />
       </Tab>
-      <Tab name="Routing" :left_align="false">
+      <Tab name="Routing">
         <MainTabContent>
           <Routing/>
         </MainTabContent>
       </Tab>
-      <Tab name="System" :left_align="false">
+      <Tab name="System">
         <MainTabContent>
           <SystemComponent/>
         </MainTabContent>

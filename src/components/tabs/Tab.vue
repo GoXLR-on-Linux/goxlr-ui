@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ leftAlign: left_align }" v-show='isActive'>
+  <div v-show='isActive'>
     <slot></slot>
   </div>
 </template>
@@ -10,7 +10,6 @@ export default {
   props: {
     name: {type: String, required: true},
     selected: {type: Boolean, default: false},
-    left_align: {type: Boolean, default: true},
     hidden: {type: Boolean, default: false}
   },
   data() {
@@ -37,7 +36,4 @@ export default {
 </script>
 
 <style scoped>
-div.leftAlign {
-  text-align: left;
-}
 </style>
