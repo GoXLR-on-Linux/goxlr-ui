@@ -14,7 +14,7 @@
             </PushButton>
     </ListSelection>
 
-    <AudioVisualiser :active-bank="activeBank" :active-button="activeButton" :active-sample="activeSample" @deselect-sample="activeSample = -1" />
+    <AudioVisualiser :active-bank="activeBank" :active-button="activeButton" :active-sample="parseInt(activeSample)" @deselect-sample="activeSample = '-1'" />
   </GroupContainer>
 
   <ModalBox v-if="showAddModal" @close="showAddModal = false">
