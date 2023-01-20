@@ -1,45 +1,21 @@
 <template>
-  <ContentBox title="Bank">
-    <ButtonList title="Bank">
-      <PushButton label="A" :is-active="activeBank === 'A'" @click="activeBank = 'A'; activeSample = -1;"/>
-      <PushButton label="B" :is-active="activeBank === 'B'" @click="activeBank = 'B'; activeSample = -1;"/>
-      <PushButton label="C" :is-active="activeBank === 'C'" @click="activeBank = 'C'; activeSample = -1;"/>
-    </ButtonList>
-
-    <ButtonList title="Button">
-      <PushButton label="Top Left" :is-active="activeButton === 'TopLeft'" @click="activeButton = 'TopLeft'; activeSample = -1;"/>
-      <PushButton label="Top Right" :is-active="activeButton === 'TopRight'" @click="activeButton = 'TopRight'; activeSample = -1;"/>
-      <PushButton label="Bottom Left" :is-active="activeButton === 'BottomLeft'" @click="activeButton = 'BottomLeft'; activeSample = -1;"/>
-      <PushButton label="Bottom Right" :is-active="activeButton === 'BottomRight'"
-                  @click="activeButton = 'BottomRight'; activeSample = -1;"/>
-    </ButtonList>
-
-    <ButtonList title="Function">
-      <PushButton label="Play-Next" :is-active="isActiveFunction('PlayNext')" @click="setActiveFunction('PlayNext')"/>
-      <PushButton label="Play-Stop" :is-active="isActiveFunction('PlayStop')" @click="setActiveFunction('PlayStop')"/>
-      <PushButton label="Play-Fade" :is-active="isActiveFunction('PlayFade')" @click="setActiveFunction('PlayFade')"/>
-      <PushButton label="Stop on Release" :is-active="isActiveFunction('StopOnRelease')" @click="setActiveFunction('StopOnRelease')"/>
-      <PushButton label="Fade on Release" :is-active="isActiveFunction('FadeOnRelease')" @click="setActiveFunction('FadeOnRelease')"/>
-      <PushButton label="Loop" :is-active="isActiveFunction('Loop')" @click="setActiveFunction('Loop')"/>
-    </ButtonList>
-
-    <ButtonList title="Play Order">
-      <PushButton label="Sequential" :is-active="isActiveOrder('Sequential')" @click="setActiveOrder('Sequential')"/>
-      <PushButton label="Random" :is-active="isActiveOrder('Random')" @click="setActiveOrder('Random')"/>
-    </ButtonList>
-  </ContentBox>
-  <ContentBox title="Sampler">
-    <ButtonList title="Samples">
-      <PushButton v-for="(sample, index) in getSamples()" :key="index" :is-active="activeSample === index" @click="activeSample = index" :label="sample.name"/>
-      <PushButton @click="showAddModal = true">
-        <template #left>
-          <div style="text-align: center">+</div>
-        </template>
-      </PushButton>
-    </ButtonList>
+  <GroupContainer title="Bank">
+    <ListSelection title="Bank" group="sampler_bank" :options="bank_options" :selected="activeBank" @selection-changed="setActiveBank" />
+    <ListSelection title="Button" group="sampler_button" :options="button_options" :selected="activeButton" @selection-changed="setActiveButton" />
+    <ListSelection title="Function" group="sampler_function" :options="function_options" :selected="getActiveFunction()" @selection-changed="setActiveFunction" />
+    <ListSelection title="Play Order" group="sampler_order" :options="order_options" :selected="getActiveOrder()" @selection-changed="setActiveOrder" />
+  </GroupContainer>
+  <GroupContainer title="Sampler">
+    <ListSelection title="Samples" group="sampler_samples" :options="getSampleOptions()" :selected="activeSample" @selection-changed="setActiveSample">
+            <PushButton @click="showAddModal = true">
+              <template #left>
+                <div style="text-align: center">+</div>
+              </template>
+            </PushButton>
+    </ListSelection>
 
     <AudioVisualiser :active-bank="activeBank" :active-button="activeButton" :active-sample="activeSample" @deselect-sample="activeSample = -1" />
-  </ContentBox>
+  </GroupContainer>
 
   <ModalBox v-if="showAddModal" @close="showAddModal = false">
     <template v-slot:title>Add Sample (Double Click) - WIP</template>
@@ -59,47 +35,96 @@
 </template>
 
 <script>
-import ContentBox from "@/components/ContentBox";
-import ButtonList from "@/components/button_list/ButtonList";
-import PushButton from "@/components/button_list/Button";
 import {store} from "@/store";
 import {sendHttpCommand, websocket} from "@/util/sockets";
 import AudioVisualiser from "@/components/sections/sampler/AudioVisualiser";
 import SampleHandler from "@/components/sections/files/SampleHandler";
 import ModalBox from "@/components/design/modal/ModalBox";
 import {isDeviceMini} from "@/util/util";
+import ListSelection from "@/components/button_list/ListSelection.vue";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
+import PushButton from "@/components/button_list/Button.vue";
 
 export default {
   name: "SamplerTab",
-  components: {ModalBox, SampleHandler, AudioVisualiser, PushButton, ButtonList, ContentBox},
+  components: {
+    PushButton,
+    GroupContainer,
+    ListSelection, ModalBox, SampleHandler, AudioVisualiser},
 
   data() {
     return {
       activeBank: "A",
       activeButton: "TopLeft",
-      activeSample: -1,
+      activeSample: "-1",
 
       showAddModal: false,
       waitModal: false,
+
+
+      bank_options: [
+        {id: "A", label: "A"},
+        {id: "B", label: "B"},
+        {id: "C", label: "C"}
+      ],
+
+      button_options: [
+        {id: "TopLeft", label: "Top Left"},
+        {id: "TopRight", label: "Top Right"},
+        {id: "BottomLeft", label: "Bottom Left"},
+        {id: "BottomRight", label: "Bottom Right"}
+      ],
+
+      function_options: [
+        {id: "PlayNext", label: "Play-Next"},
+        {id: "PlayStop", label: "Play-Stop"},
+        {id: "PlayFade", label: "Play-Fade"},
+        {id: "StopOnRelease", label: "Stop on Release"},
+        {id: "FadeOnRelease", label: "Fade on Release"},
+        {id: "Loop", label: "Loop"}
+      ],
+
+      order_options: [
+        {id: "Sequential", label: "Sequential"},
+        {id: "Random", label: "Random"}
+      ]
     }
   },
 
   methods: {
-    isActiveFunction(sampleFunction) {
+    getSampleOptions() {
+       let samples = [];
+       this.getSamples().forEach((sample, index) => {
+         samples.push({id: index.toString(), label: sample.name});
+       });
+       return samples;
+    },
+
+    setActiveBank(bank) {
+      this.activeBank = bank;
+      this.activeSample = -1;
+    },
+
+    setActiveButton(button) {
+      this.activeButton = button;
+      this.activeSample = -1;
+    },
+
+
+    getActiveFunction() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
+        return "";
       }
-      return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].function === sampleFunction;
+      return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].function;
     },
     setActiveFunction(sampleFunction) {
       websocket.send_command(store.getActiveSerial(), {"SetSamplerFunction": [this.activeBank, this.activeButton, sampleFunction]});
     },
-
-    isActiveOrder(order) {
+    getActiveOrder() {
       if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
+        return "";
       }
-      return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].order === order;
+      return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].order;
     },
     setActiveOrder(sampleOrder) {
       websocket.send_command(store.getActiveSerial(), {"SetSamplerOrder": [this.activeBank, this.activeButton, sampleOrder]});
@@ -110,6 +135,9 @@ export default {
         return [];
       }
       return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].samples;
+    },
+    setActiveSample(id) {
+      this.activeSample = id;
     },
 
     addSample(name) {
