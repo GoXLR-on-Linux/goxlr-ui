@@ -3,10 +3,10 @@
     <Tab name="Profiles" :selected="true">
       <ProfileHandler/>
     </Tab>
-    <Tab name="Samples" :left_align="false">
+    <Tab :hidden="isDeviceMini()" name="Samples">
       <SampleHandler/>
     </Tab>
-    <Tab name="Presets" :left_align="false">
+    <Tab :hidden="isDeviceMini()" name="Presets">
       <PresetHandler/>
     </Tab>
   </Tabs>
@@ -18,9 +18,16 @@ import Tab from "@/components/tabs/Tab";
 import ProfileHandler from "@/components/profiles/handlers/ProfileHandler";
 import PresetHandler from "@/components/sections/files/PresetHandler";
 import SampleHandler from "@/components/sections/files/SampleHandler";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "FileTabs",
+  methods: {
+
+    isDeviceMini() {
+      return isDeviceMini();
+    }
+  },
   components: {SampleHandler, PresetHandler, ProfileHandler, Tabs, Tab},
 
   props: {
