@@ -1,16 +1,15 @@
 <template>
   <GroupContainer title="Faders">
-    <ListSelection title="Channel" group="faders_channel" :options="fader_options" :selected="activeChannel" @selection-changed="channelChanged"/>
-    <ListSelection title="Source" group="faders_source" :options="source_options" :selected="getActiveSource()" @selection-changed="sourceChanged" />
-    <ListSelection title="Mute Behaviour" group="faders_mute" :options="mute_options" :selected="getActiveMuteFunction()" @selection-changed="muteFunctionChanged" />
+    <ListSelection title="Channel" group="faders_channel" :options="fader_options" :selected="activeChannel"
+                   @selection-changed="channelChanged"/>
+    <ListSelection title="Source" group="faders_source" :options="source_options" :selected="getActiveSource()"
+                   @selection-changed="sourceChanged"/>
+    <ListSelection title="Mute Behaviour" group="faders_mute" :options="mute_options"
+                   :selected="getActiveMuteFunction()" @selection-changed="muteFunctionChanged"/>
   </GroupContainer>
 </template>
 
 <script>
-import {
-  FaderOrder,
-  MuteFunction
-} from "@/util/mixerMapping";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import ListSelection from "@/components/new/ListSelection.vue";
@@ -26,36 +25,34 @@ export default {
 
   data() {
     return {
-      faderOrder: FaderOrder,
-      muteFunctions: MuteFunction,
       activeChannel: "A",
 
       fader_options: [
-        { id: "A", label: "A" },
-        { id: "B", label: "B" },
-        { id: "C", label: "C" },
-        { id: "D", label: "D" }
+        {id: "A", label: "A"},
+        {id: "B", label: "B"},
+        {id: "C", label: "C"},
+        {id: "D", label: "D"}
       ],
 
       source_options: [
-        { id: "Mic", label: "Mic" },
-        { id: "Chat", label: "Voice Chat" },
-        { id: "Music", label: "Music" },
-        { id: "Game", label: "Game" },
-        { id: "Console", label: "Console" },
-        { id: "LineIn", label: "Line In" },
-        { id: "System", label: "System" },
-        { id: "Sample", label: "Sample" },
-        { id: "Headphones", label: "Headphones" },
-        { id: "LineOut", label: "Line Out" }
+        {id: "Mic", label: "Mic"},
+        {id: "Chat", label: "Voice Chat"},
+        {id: "Music", label: "Music"},
+        {id: "Game", label: "Game"},
+        {id: "Console", label: "Console"},
+        {id: "LineIn", label: "Line In"},
+        {id: "System", label: "System"},
+        {id: "Sample", label: "Sample"},
+        {id: "Headphones", label: "Headphones"},
+        {id: "LineOut", label: "Line Out"}
       ],
 
       mute_options: [
-        { id: "All", label:"Mute All" },
-        { id: "ToStream", label:"Mute to Stream" },
-        { id: "ToVoiceChat", label:"Mute to Voice Chat" },
-        { id: "ToPhones", label:"Mute to Phones" },
-        { id: "ToLineOut", label:"Mute to Line Out" },
+        {id: "All", label: "Mute All"},
+        {id: "ToStream", label: "Mute to Stream"},
+        {id: "ToVoiceChat", label: "Mute to Voice Chat"},
+        {id: "ToPhones", label: "Mute to Phones"},
+        {id: "ToLineOut", label: "Mute to Line Out"},
       ]
     }
   },
@@ -76,16 +73,20 @@ export default {
       }
 
       websocket.send_command(serial, command);
+      store.getActiveDevice().fader_status[this.activeChannel].channel = channelName;
 
-      // Double check mute function is valid..
       if (this.isMuteFunctionDisabled(this.getActiveMuteFunction())) {
         this.muteFunctionChanged("All")
       }
+      this.updateDisabledMuteFunctions(channelName);
     },
 
     muteFunctionChanged(mute_function) {
       let serial = store.getActiveSerial();
       let fader = this.activeChannel;
+
+      // Check the make sure this combination is allowed..
+
 
       // Build the Command..
       let command = {
@@ -96,6 +97,21 @@ export default {
       }
 
       websocket.send_command(serial, command);
+    },
+
+    updateDisabledMuteFunctions(source) {
+      for (let mute_option of this.mute_options) {
+        if (source === "Chat" && mute_option.id === "ToVoiceChat") {
+          mute_option.disabled = true;
+          continue;
+        }
+
+        if ((source === "Headphones" || source === "LineOut") && (mute_option.id !== "All")) {
+          mute_option.disabled = true;
+          continue;
+        }
+        mute_option.disabled = false;
+      }
     },
 
     isMuteFunctionDisabled: function (muteFunction) {
@@ -125,7 +141,7 @@ export default {
       if (store.hasActiveDevice()) {
         return store.getActiveDevice().fader_status[this.activeChannel].mute_type;
       }
-      return 0;
+      return "All";
     }
   },
 }
