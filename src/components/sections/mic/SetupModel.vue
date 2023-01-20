@@ -1,35 +1,43 @@
 <template>
   <!-- Build the Modal -->
-  <ContentBox>
-    <ButtonList title="Mic Type" role="radiogroup">
-      <RadioItem ref="Dynamic" id="Dynamic" text="Dynamic" group="mic_type" @radio-selected="handleButtonPress" :selected="isMicTypeActive('Dynamic')" />
-      <RadioItem ref="Condenser" id="Condenser" text="Condenser (+48V)" group="mic_type" @radio-selected="handleButtonPress" :selected="isMicTypeActive('Condenser')" />
-      <RadioItem ref="Jack" id="Jack" text="3.5mm" group="mic_type" @radio-selected="handleButtonPress" :selected="isMicTypeActive('Jack')" />
-    </ButtonList>
-    <Slider title="Gain" :slider-min-value=0 :slider-max-value=72 text-suffix="dB"
-            :slider-value=getGainValue() :store-path="getStorePath()" @value-changed="setGain" />
-  </ContentBox>
+  <CenteredContainer>
+    <ContentContainer>
+      <ListSelection title="Mic Type" group="mic_type" :options="microphone_options" :selected="getActiveMicType()" @selection-changed="handleButtonPress" />
+
+      <Slider title="Gain" :slider-min-value=0 :slider-max-value=72 text-suffix="dB"
+              :slider-value=getGainValue() :store-path="getStorePath()" @value-changed="setGain" />
+    </ContentContainer>
+  </CenteredContainer>
 </template>
 
 <script>
-import ContentBox from "@/components/ContentBox";
-import ButtonList from "@/components/button_list/ButtonList";
-import RadioItem from "@/components/button_list/RadioItem";
 import Slider from "@/components/slider/Slider";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
+import ListSelection from "@/components/button_list/ListSelection.vue";
+import ContentContainer from "@/components/containers/ContentContainer.vue";
+import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
   name: "SetupModel",
-  components: {RadioItem, ContentBox, ButtonList, Slider},
+  components: {CenteredContainer, ContentContainer, ListSelection, Slider},
+  data: function() {
+    return {
+      microphone_options: [
+        {id: "Dynamic", label: "Dynamic"},
+        {id: "Condenser", label: "Condenser (+48V)"},
+        {id: "Jack", label: "3.5mm"}
+      ]
+    }
+  },
 
   methods: {
-    isMicTypeActive(id) {
+    getActiveMicType() {
       if (!store.hasActiveDevice()) {
-        return false;
+        return "";
       }
 
-      return id === store.getActiveDevice().mic_status.mic_type
+      return store.getActiveDevice().mic_status.mic_type
     },
 
     getGainValue() {
