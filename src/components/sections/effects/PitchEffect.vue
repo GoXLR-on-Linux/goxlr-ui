@@ -1,5 +1,5 @@
 <template>
-  <ExpandoGroupContainer title="Pitch" gap="3px" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
+  <ExpandoGroupContainer title="Pitch" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
     <ListSelection title="Style" group="effects_pitch_style" :options="pitch_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :value-map="getValueMap()" :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />

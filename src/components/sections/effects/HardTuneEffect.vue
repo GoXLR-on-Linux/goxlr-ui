@@ -1,5 +1,5 @@
 <template>
-  <ExpandoGroupContainer title="Hard Tune" gap="3px" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
+  <ExpandoGroupContainer title="Hard Tune" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
     <ListSelection title="Style" group="effects_hardtune_style" :options="hard_tune_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" :store-path="getStorePath('amount')" v-show="is_expanded" @value-changed="setAmountValue" />

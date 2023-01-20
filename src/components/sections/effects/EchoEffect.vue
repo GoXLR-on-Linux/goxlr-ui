@@ -1,5 +1,5 @@
 <template>
-  <ExpandoGroupContainer title="Echo" gap="3px" :expanded="is_expanded" @expando-clicked="is_expanded = !is_expanded">
+  <ExpandoGroupContainer title="Echo" :expanded="is_expanded" @expando-clicked="is_expanded = !is_expanded">
     <ListSelection title="Style" group="effects_echo_style" :options="echo_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />

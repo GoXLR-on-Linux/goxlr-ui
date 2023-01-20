@@ -1,5 +1,5 @@
 <template>
-  <GroupContainer title="Gender" gap="3px">
+  <GroupContainer title="Gender">
     <ListSelection title="Style" group="effects_gender_style" :options="gender_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value="getSliderValue(true)" :slider-max-value="getSliderValue(false)" :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />

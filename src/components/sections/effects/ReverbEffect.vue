@@ -1,5 +1,5 @@
 <template>
-  <ExpandoGroupContainer title="Reverb" gap="3px" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
+  <ExpandoGroupContainer title="Reverb" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
     <ListSelection title="Style" group="effects_reverb_style" :options="reverb_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()"

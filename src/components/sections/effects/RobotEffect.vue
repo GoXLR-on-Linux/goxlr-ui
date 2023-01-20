@@ -1,5 +1,5 @@
 <template>
-  <ExpandoGroupContainer title="Robot" gap="3px" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
+  <ExpandoGroupContainer title="Robot" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
     <ListSelection title="Style" group="effects_robot_style" :options="robot_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Low Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
