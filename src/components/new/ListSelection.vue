@@ -1,10 +1,11 @@
 <script>
-import Container from "@/components/new/Container01";
+import WidgetContainer from "@/components/containers/WidgetContainer.vue";
 
 export default {
     name: "ListSelection",
+    emits: [ 'selection-changed' ],
     components: {
-        Container
+        WidgetContainer
     },
 
     props: {
@@ -16,13 +17,17 @@ export default {
     methods: {
         select(option) {
             this.$emit('selection-changed', option);
+        },
+
+        getUniqueId(name) {
+          return this.group + "_" + name;
         }
     }
 }
 </script>
 
 <template>
-    <Container role="radiogroup">
+    <WidgetContainer role="radiogroup">
         <div class="scroll">
             <span
                 v-for="option in options"
@@ -30,11 +35,11 @@ export default {
                 :class="['span', { active: selected === option.id }]"
                 @click="select(option.id)"
             >
-                <input type="radio" :id="option.id" :name="group" :value="option.label">
-                <label :for="option.id">{{ option.label }}</label>
+                <input type="radio" :id="getUniqueId(option.id)" :name="group" :value="option.label">
+                <label :for="getUniqueId(option.id)">{{ option.label }}</label>
             </span>
         </div>
-    </Container>
+    </WidgetContainer>
 </template>
 
 <style scoped>
