@@ -28,10 +28,10 @@ export default {
       activeChannel: "A",
 
       fader_options: [
-        {id: "A", label: "A"},
-        {id: "B", label: "B"},
-        {id: "C", label: "C"},
-        {id: "D", label: "D"}
+        {id: "A", label: "Channel 1"},
+        {id: "B", label: "Channel 2"},
+        {id: "C", label: "Channel 3"},
+        {id: "D", label: "Channel 4"}
       ],
 
       source_options: [
