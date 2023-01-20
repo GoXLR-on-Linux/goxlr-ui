@@ -23,10 +23,11 @@ export default {
           id: 'Accent',
           label: 'Accent'
         },
-        // {
-        //   id: 'Global',
-        //   label: 'Global'
-        // }
+        {
+          id: 'Global',
+          label: 'Global',
+          disabled: true
+        }
       ],
       selected: 'Accent'
     }

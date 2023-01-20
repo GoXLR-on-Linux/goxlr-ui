@@ -69,8 +69,9 @@ label {
   display: block;
   box-sizing: border-box;
 
-  width: calc(100% - 16px);
-  margin: 8px;
+  width: calc(100% - 12px);
+  /*margin: 8px;*/
+  margin: auto;
   background-color: #3b413f;
 
   /*
