@@ -1,4 +1,4 @@
-<template xmlns:slot="http://www.w3.org/1999/html">
+<template>
   <ProfileButtonList ref="buttonList">
     <ProfileButton v-for="(name, index) in profileList" :key="index" :button-id="name"
                    :label="name" :is-selected="isSelectedProfile(name)" :is-active="isActiveProfile(name)"
