@@ -4,7 +4,7 @@
                    @selection-changed="channelChanged"/>
     <ListSelection title="Source" group="faders_source" :options="source_options" :selected="getActiveSource()"
                    @selection-changed="sourceChanged"/>
-    <ListSelection title="Mute Behaviour" group="faders_mute" :options="mute_options"
+    <ListSelection title="Mute Behaviour" group="faders_mute" :options="getMuteFunctions()"
                    :selected="getActiveMuteFunction()" @selection-changed="muteFunctionChanged"/>
   </GroupContainer>
 </template>
@@ -63,8 +63,6 @@ export default {
     },
 
     sourceChanged: function (channelName) {
-      console.log(channelName);
-
       let serial = store.getActiveSerial();
       let fader = this.activeChannel;
 
@@ -78,7 +76,6 @@ export default {
       if (this.isMuteFunctionDisabled(this.getActiveMuteFunction())) {
         this.muteFunctionChanged("All")
       }
-      this.updateDisabledMuteFunctions(channelName);
     },
 
     muteFunctionChanged(mute_function) {
@@ -142,6 +139,11 @@ export default {
         return store.getActiveDevice().fader_status[this.activeChannel].mute_type;
       }
       return "All";
+    },
+
+    getMuteFunctions: function () {
+      this.updateDisabledMuteFunctions(this.getActiveSource());
+      return this.mute_options;
     }
   },
 }
