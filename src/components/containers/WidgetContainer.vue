@@ -1,6 +1,6 @@
 <script>
 export default {
-    name: "Container-1",
+    name: "WidgetContainer",
     props: {
         title: String
     }

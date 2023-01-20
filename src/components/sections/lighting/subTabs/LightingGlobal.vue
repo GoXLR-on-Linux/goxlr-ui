@@ -1,8 +1,8 @@
 <script>
-import Container2 from "@/components/new/Container02";
-import Container3 from "@/components/new/Container03";
-import ListSelection from "@/components/new/ListSelection";
-import ColourPicker from "@/components/new/ColourPicker";
+import ContentContainer from "@/components/containers/ContentContainer.vue";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
+import ListSelection from "@/components/new/ListSelection.vue";
+import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
 
 import { store } from "@/store";
 import { websocket } from "@/util/sockets";
@@ -10,8 +10,8 @@ import { websocket } from "@/util/sockets";
 export default {
   name: "LightingGlobal",
   components: {
-    Container2,
-    Container3,
+    ContentContainer,
+    GroupContainer,
     ListSelection,
     ColourPicker
 },
@@ -20,13 +20,13 @@ export default {
     return {
       options: [
         {
-          id: 'Accent', 
+          id: 'Accent',
           label: 'Accent'
-        }, 
-        {
-          id: 'Global', 
-          label: 'Global'
-        }
+        },
+        // {
+        //   id: 'Global',
+        //   label: 'Global'
+        // }
       ],
       selected: 'Accent'
     }
@@ -52,10 +52,10 @@ export default {
 </script>
 
 <template>
-  <Container3>
-    <Container2 title="Areas">
+  <ContentContainer>
+    <GroupContainer title="Areas">
       <ListSelection title="Area" group="lighting_global_areas" :options="this.options" :selected="this.selected" @selection-changed="onSelectionChange"/>
       <ColourPicker title="Colour" :color-value="color()" @colour-changed="onColourChange" />
-    </Container2>
-  </Container3>
+    </GroupContainer>
+  </ContentContainer>
 </template>

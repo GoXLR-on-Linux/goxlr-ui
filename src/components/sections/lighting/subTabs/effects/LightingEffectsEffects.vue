@@ -1,7 +1,7 @@
 <script>
-import Container2 from "@/components/new/Container02";
-import ListSelection from "@/components/new/ListSelection";
-import ColourPicker from "@/components/new/ColourPicker";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
+import ListSelection from "@/components/new/ListSelection.vue";
+import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
 
 import { store } from "@/store";
 import { isDeviceMini } from "@/util/util";
@@ -11,7 +11,7 @@ import { LightingInactiveOptions } from "@/util/mixerMapping";
 export default {
     name: "LightingEffectsEffects",
     components: {
-        Container2,
+        GroupContainer,
         ListSelection,
         ColourPicker
     },
@@ -58,7 +58,6 @@ export default {
 
         selectedInactiveOption() {
             if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
             return store.getActiveDevice().lighting.buttons[this.selectedEffect].off_style
         },
 
@@ -69,6 +68,7 @@ export default {
         onInactiveSelectionChange(id) {
             if (!store.hasActiveDevice() || isDeviceMini()) { return }
 
+            console.log("Here? " + this.selectedEffect);
             websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [this.selectedEffect, id]});
         },
 
@@ -94,12 +94,12 @@ export default {
 </script>
 
 <template>
-    <Container2 title="Effect Buttons">
+    <GroupContainer title="Effect Buttons">
       <ListSelection
         title="Effect"
         group="lighting_effects_effects"
-        :options="this.effectOptions"
-        :selected="this.selectedEffect"
+        :options="effectOptions"
+        :selected="selectedEffect"
         @selection-changed="onButtonSelectionChange"
       />
       <ColourPicker
@@ -110,8 +110,8 @@ export default {
       <ListSelection
         title="Inactive Option"
         group="lighting_effects_effects_inactive_behaviour"
-        :options="this.inactiveOptions"
-        :selected="this.selectedInactiveOption()"
+        :options="inactiveOptions"
+        :selected="selectedInactiveOption()"
         @selection-changed="onInactiveSelectionChange"
       />
       <ColourPicker
@@ -119,5 +119,5 @@ export default {
         :color-value="inactiveColor()"
         @colour-changed="onInactiveColourChange"
       />
-    </Container2>
+    </GroupContainer>
 </template>

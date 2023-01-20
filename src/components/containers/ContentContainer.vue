@@ -1,6 +1,6 @@
 <script>
 export default {
-    name: "Container-3",
+    name: "ContentContainer",
 }
 </script>
 

@@ -1,6 +1,6 @@
 <script>
 export default {
-    name: "Container-2",
+    name: "GroupContainer",
     props: {
         title: String
     }
@@ -9,7 +9,7 @@ export default {
 
 <template>
     <div class="container">
-        <p class="title">
+        <p v-if="title !== ''" class="title">
             {{ title }}
         </p>
         <div class="content">

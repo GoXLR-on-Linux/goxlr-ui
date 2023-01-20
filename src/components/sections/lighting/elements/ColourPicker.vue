@@ -1,10 +1,10 @@
 <script>
-import Container from "@/components/new/Container01";
+import WidgetContainer from "@/components/containers/WidgetContainer.vue";
 
 export default {
   name: "ColourPicker",
   components: {
-    Container
+    WidgetContainer
   },
 
   data() {
@@ -97,7 +97,7 @@ export default {
 </script>
 
 <template>
-  <Container :title="title">
+  <WidgetContainer :title="title">
     <slot>
       <div class="spacer"></div>
       <img src="wheel.png" draggable="false" @mousemove.stop="mouseMove" @mouseleave="mouseLeave" @click="mouseClick" />
@@ -112,7 +112,7 @@ export default {
         </button>
       </div>
     </slot>
-  </Container>
+  </WidgetContainer>
 </template>
 
 <style scoped>
@@ -148,7 +148,7 @@ export default {
 button {
   height: 100%;
   width: 35px;
-  
+
   color: #ffffff;
   background-color: transparent;
   border: none;

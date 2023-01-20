@@ -1,7 +1,7 @@
 <script>
-import Container2 from "@/components/new/Container02";
-import ListSelection from "@/components/new/ListSelection";
-import ColourPicker from "@/components/new/ColourPicker";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
+import ListSelection from "@/components/new/ListSelection.vue";
+import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
 
 import { store } from "@/store";
 import { isDeviceMini } from "@/util/util";
@@ -11,7 +11,7 @@ import { LightingInactiveOptions } from "@/util/mixerMapping";
 export default {
     name: "LightingEffectsEncoders",
     components: {
-        Container2,
+        GroupContainer,
         ListSelection,
         ColourPicker
     },
@@ -107,7 +107,7 @@ export default {
 </script>
 
 <template>
-    <Container2 title="Encoders">
+    <GroupContainer title="Encoders">
       <ListSelection
         title="Encoder"
         group="lighting_effects_encoders"
@@ -130,5 +130,5 @@ export default {
         :color-value="knobColour()"
         @colour-changed="onKnobColourChange"
       />
-    </Container2>
+    </GroupContainer>
 </template>

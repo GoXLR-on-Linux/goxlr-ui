@@ -1,7 +1,7 @@
 <script>
-import Container2 from "@/components/new/Container02";
-import ListSelection from "@/components/new/ListSelection";
-import ColourPicker from "@/components/new/ColourPicker";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
+import ListSelection from "@/components/new/ListSelection.vue";
+import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
 
 import {
   EffectLightingPresets,
@@ -16,7 +16,7 @@ import { websocket } from "@/util/sockets";
 export default {
     name: "LightingEffectsPresets",
     components: {
-        Container2,
+        GroupContainer,
         ListSelection,
         ColourPicker
     },
@@ -45,7 +45,7 @@ export default {
             return presetLabels
         },
 
-        isActivePreset() {
+        getActivePreset() {
           // This needs to be mapped from the EffectPresets to the EffectLightingPresets..
           return EffectPresets[EffectLightingPresets.indexOf(this.activePreset)];
         },
@@ -73,12 +73,13 @@ export default {
         onButtonSelectionChange(id) {
             if (!store.hasActiveDevice() || isDeviceMini()) { return }
 
-            this.activePreset = id
+            this.activePreset = EffectLightingPresets[EffectPresets.indexOf(id)];
         },
 
         onInactiveSelectionChange(id) {
             if (!store.hasActiveDevice() || isDeviceMini()) { return }
 
+          console.log("Preset Inactive Selection");
             websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [this.activePreset, id]});
         },
 
@@ -88,7 +89,8 @@ export default {
             const active = value.substr(1, 6);
             const inactive = store.getActiveDevice().lighting.buttons[this.activePreset].colours.colour_two;
 
-            websocket.send_command(store.getActiveSerial(), {"SetButtonColours": [this.selectedButtonOption, active, inactive]});
+          console.log("Preset Active");
+            websocket.send_command(store.getActiveSerial(), {"SetButtonColours": [this.activePreset, active, inactive]});
         },
 
         onInactiveColourChange(value) {
@@ -97,19 +99,20 @@ export default {
             const active = store.getActiveDevice().lighting.buttons[this.activePreset].colours.colour_one;
             const inactive = value.substr(1, 6);
 
-            websocket.send_command(store.getActiveSerial(), {"SetButtonColours": [this.selectedButtonOption, active, inactive]});
+            console.log("Preset Inactive");
+            websocket.send_command(store.getActiveSerial(), {"SetButtonColours": [this.activePreset, active, inactive]});
         }
     }
 }
 </script>
 
 <template>
-    <Container2 title="Preset Buttons">
+    <GroupContainer title="Preset Buttons">
       <ListSelection
         title="Preset"
         group="lighting_effects_presets"
         :options="presetLabels()"
-        :selected="isActivePreset()"
+        :selected="getActivePreset()"
         @selection-changed="onButtonSelectionChange"
       />
       <ColourPicker
@@ -120,8 +123,8 @@ export default {
       <ListSelection
         title="Inactive Option"
         group="lighting_effects_preset_inactive_behaviour"
-        :options="this.inactiveOptions"
-        :selected="this.selectedInactiveOption()"
+        :options="inactiveOptions"
+        :selected="selectedInactiveOption()"
         @selection-changed="onInactiveSelectionChange"
       />
       <ColourPicker
@@ -129,5 +132,5 @@ export default {
         :color-value="inactiveColor()"
         @colour-changed="onInactiveColourChange"
       />
-    </Container2>
+    </GroupContainer>
 </template>

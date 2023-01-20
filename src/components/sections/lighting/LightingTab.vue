@@ -1,9 +1,9 @@
 <script>
-import Mixer from "@/components/sections/lighting/subTabs/Mixer";
-import Effects from "@/components/new/LightingEffects";
-import Sampler from "@/components/new/LightingSampler";
-import Cough from "@/components/new/LightingCough";
-import Global from "@/components/new/LightingGlobal";
+import Mixer from "@/components/sections/lighting/subTabs/LightingMixer.vue";
+import Effects from "@/components/sections/lighting/subTabs/LightingEffects.vue";
+import Sampler from "@/components/sections/lighting/subTabs/LightingSampler.vue";
+import Cough from "@/components/sections/lighting/subTabs/LightingCough.vue";
+import Global from "@/components/sections/lighting/subTabs/LightingGlobal.vue";
 
 import { isDeviceMini } from "@/util/util";
 
