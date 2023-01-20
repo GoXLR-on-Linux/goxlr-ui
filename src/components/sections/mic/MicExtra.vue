@@ -1,19 +1,19 @@
 <template>
-  <ContentBox title="Extras">
+  <GroupContainer title="Extras">
       <Slider v-show="!isDeviceMini()" title="De-Esser" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getDeEssValue()" :store-path="getStorePath('deess')" @value-changed="deEssValueChanged" />
       <Slider title="Bleep" :text-min-value=0 :text-max-value=100 :slider-min-value=-36 :slider-max-value=0 text-suffix="%" :slider-value="getBleepValue()" :store-path="getStorePath('bleep')" @value-changed="bleepValueChanged" />
-  </ContentBox>
+  </GroupContainer>
 </template>
 
 <script>
-import ContentBox from "../../ContentBox";
 import Slider from "../../slider/Slider";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import {isDeviceMini} from "@/util/util";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
 export default {
   name: "MicExtra",
-  components: {Slider, ContentBox},
+  components: {GroupContainer, Slider},
 
 
   methods: {

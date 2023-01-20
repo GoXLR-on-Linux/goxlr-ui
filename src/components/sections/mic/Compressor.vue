@@ -1,37 +1,33 @@
 <template>
-  <ContentBox title="Compressor">
-    <div class="rowContent" v-show="!isAdvanced()">
-      <Slider title="Amount" :slider-min-value=0 :slider-max-value=100 text-suffix="" :slider-value="getAmount()"
-              @value-changed="updateAmount" :store-path="getAmountStorePath()"/>
-    </div>
-    <div class="rowContent" v-show="isAdvanced()">
-      <Slider title="Threshold" :id=0 :slider-min-value=-40 :slider-max-value=0 text-suffix="dB"
-              :slider-value="getThresholdValue()" :store-path="getStorePath('threshold')" @value-changed="setValue"/>
-      <Slider title="Ratio" :id=1 :slider-min-value=1 :slider-max-value=64 text-suffix=":1" :value-map="ratioValueMap()"
-              :slider-value="getRatioValue()" :store-path="getStorePath('ratio')" @value-changed="setValue"/>
-      <Slider title="Attack" :id=2 :slider-min-value=0 :slider-max-value=40 text-suffix="ms"
-              :value-map="attackValueMap()" :slider-value="getAttackValue()" :store-path="getStorePath('attack')"
-              @value-changed="setValue"/>
-      <Slider title="Release" :id=3 :slider-min-value=0 :slider-max-value=3000 text-suffix="ms"
-              :value-map="releaseValueMap()" :slider-value="getReleaseValue()" :store-path="getStorePath('release')"
-              @value-changed="setValue"/>
-      <Slider title="Make-up Gain" :id=4 :slider-min-value=0 :slider-max-value=24 text-suffix="dB"
-              :slider-value="getGainValue()" :store-path="getStorePath('makeup_gain')" @value-changed="setValue"/>
-    </div>
-  </ContentBox>
-  <ExpandoBox @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()"/>
+  <ExpandoGroupContainer title="Compressor" @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()">
+    <Slider v-show="!isAdvanced()" title="Amount" :slider-min-value=0 :slider-max-value=100 text-suffix=""
+            :slider-value="getAmount()" @value-changed="updateAmount" :store-path="getAmountStorePath()"/>
+
+    <Slider v-show="isAdvanced()" title="Threshold" :id=0 :slider-min-value=-40 :slider-max-value=0 text-suffix="dB"
+            :slider-value="getThresholdValue()" :store-path="getStorePath('threshold')" @value-changed="setValue"/>
+    <Slider v-show="isAdvanced()" title="Ratio" :id=1 :slider-min-value=1 :slider-max-value=64 text-suffix=":1"
+            :value-map="ratioValueMap()"
+            :slider-value="getRatioValue()" :store-path="getStorePath('ratio')" @value-changed="setValue"/>
+    <Slider v-show="isAdvanced()" title="Attack" :id=2 :slider-min-value=0 :slider-max-value=40 text-suffix="ms"
+            :value-map="attackValueMap()" :slider-value="getAttackValue()" :store-path="getStorePath('attack')"
+            @value-changed="setValue"/>
+    <Slider v-show="isAdvanced()" title="Release" :id=3 :slider-min-value=0 :slider-max-value=3000 text-suffix="ms"
+            :value-map="releaseValueMap()" :slider-value="getReleaseValue()" :store-path="getStorePath('release')"
+            @value-changed="setValue"/>
+    <Slider v-show="isAdvanced()" title="Make-up Gain" :id=4 :slider-min-value=0 :slider-max-value=24 text-suffix="dB"
+            :slider-value="getGainValue()" :store-path="getStorePath('makeup_gain')" @value-changed="setValue"/>
+  </ExpandoGroupContainer>
 </template>
 
 <script>
-import ExpandoBox from "../../design/ExpandoBox";
-import ContentBox from "../../ContentBox";
 import Slider from "../../slider/Slider";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
+import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "MicCompressor",
-  components: {Slider, ContentBox, ExpandoBox},
+  components: {ExpandoGroupContainer, Slider},
 
   methods: {
     isAdvanced() {
@@ -173,14 +169,4 @@ export default {
 </script>
 
 <style scoped>
-.hidden {
-  visibility: hidden;
-  display: none !important;
-}
-
-.rowContent {
-  display: inline-flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-}
 </style>

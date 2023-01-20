@@ -1,35 +1,30 @@
 <template>
-  <ContentBox title="Gate">
-    <div class="rowContent" v-show="!isAdvanced()">
-      <Slider title="Amount" :id=0 :slider-min-value=0 :slider-max-value=100 text-suffix="" :slider-value=getAmount()
-              @value-changed="setValue" :store-path="getStorePath('threshold')"/>
-    </div>
-    <div class="rowContent" v-show="isAdvanced()">
-      <Slider title="Threshold" :id=1 :slider-min-value=-59 :slider-max-value=0 text-suffix="dB"
+  <ExpandoGroupContainer title="Gate" @expando-clicked="toggleAdvanced" :expanded="isAdvanced()">
+      <Slider v-show="!isAdvanced()" title="Amount" :id=0 :slider-min-value=0 :slider-max-value=100 text-suffix=""
+              :slider-value=getAmount() @value-changed="setValue" :store-path="getStorePath('threshold')"/>
+
+      <Slider v-show="isAdvanced()" title="Threshold" :id=1 :slider-min-value=-59 :slider-max-value=0 text-suffix="dB"
               :slider-value=getThreshold() @value-changed="setValue" :store-path="getStorePath('threshold')"/>
-      <Slider title="Attenuation" :id=2 :slider-min-value=0 :slider-max-value=100 text-suffix="%"
+      <Slider v-show="isAdvanced()" title="Attenuation" :id=2 :slider-min-value=0 :slider-max-value=100 text-suffix="%"
               :slider-value=getAttenuation() @value-changed="setValue" :store-path="getStorePath('attenuation')"/>
-      <Slider title="Attack" :id=3 :slider-min-value=10 :slider-max-value=2000 text-suffix="ms"
+      <Slider v-show="isAdvanced()" title="Attack" :id=3 :slider-min-value=10 :slider-max-value=2000 text-suffix="ms"
               :value-map="getGateValueMap()" :slider-value=getAttack() @value-changed="setValue"
               :store-path="getStorePath('attack')"/>
-      <Slider title="Release" :id=4 :slider-min-value=10 :slider-max-value=2000 text-suffix="ms"
+      <Slider v-show="isAdvanced()" title="Release" :id=4 :slider-min-value=10 :slider-max-value=2000 text-suffix="ms"
               :value-map="getGateValueMap()" :slider-value=getRelease() @value-changed="setValue"
               :store-path="getStorePath('release')"/>
-    </div>
-  </ContentBox>
-  <ExpandoBox @expando-clicked="toggleAdvanced" :expanded="isAdvanced()"/>
+  </ExpandoGroupContainer>
 </template>
 
 <script>
-import ContentBox from "../../ContentBox";
-import ExpandoBox from "../../design/ExpandoBox";
 import Slider from "../../slider/Slider";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
+import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "MicGate",
-  components: {Slider, ExpandoBox, ContentBox},
+  components: {ExpandoGroupContainer, Slider },
 
   methods: {
     getAmount() {

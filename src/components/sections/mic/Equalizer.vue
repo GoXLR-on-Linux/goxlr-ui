@@ -1,38 +1,32 @@
 <template>
-  <ContentBox title="Equalizer">
-    <div class="rowContent" v-show="!isAdvanced()">
-      <Slider :id=0 title="Bass" :slider-min-value=-9 :slider-max-value=9 text-suffix="" :slider-value=getBassValue()
-              :store-path="getAggregateStorePaths(0)" @value-changed=aggregateChanged />
-      <Slider :id=1 title="Mid" :slider-min-value=-9 :slider-max-value=9 text-suffix="" :slider-value=getMidValue()
-              :store-path="getAggregateStorePaths(1)" @value-changed=aggregateChanged />
-      <Slider :id=2 title="Treble" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
-              :store-path="getAggregateStorePaths(2)" :slider-value=getTrebleValue()
-              @value-changed=aggregateChanged />
-    </div>
+  <ExpandoGroupContainer title="Equalizer" @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()">
+    <Slider v-show="!isAdvanced()" :id=0 title="Bass" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
+            :slider-value=getBassValue() :store-path="getAggregateStorePaths(0)" @value-changed="aggregateChanged"/>
+    <Slider v-show="!isAdvanced()" :id=1 title="Mid" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
+            :slider-value=getMidValue() :store-path="getAggregateStorePaths(1)" @value-changed="aggregateChanged"/>
+    <Slider v-show="!isAdvanced()" :id=2 title="Treble" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
+            :store-path="getAggregateStorePaths(2)" :slider-value=getTrebleValue() @value-changed="aggregateChanged"/>
 
-    <div class="rowContent" v-show="isAdvanced()">
-      <Slider v-for="index in this.getElementCount()" :id=index :key=index :slider-min-value=-9
-              :slider-max-value=9
-              :text-min-value=-9 :text-max-value=9 text-suffix="" :slider-value="getValue(index)"
-              :title=getTitle(index) :store-path="getStorePath(index)" @value-changed=valueChange />
-    </div>
 
-  </ContentBox>
-  <ExpandoBox @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()"/>
+    <Slider v-show="isAdvanced()" v-for="index in this.getElementCount()" :id=index :key=index :slider-min-value=-9
+            :slider-max-value=9
+            :text-min-value=-9 :text-max-value=9 text-suffix="" :slider-value="getValue(index)"
+            :title=getTitle(index) :store-path="getStorePath(index)" @value-changed="valueChange"/>
+
+  </ExpandoGroupContainer>
 </template>
 
 <script>
-import ContentBox from "../../ContentBox";
 import Slider from "../../slider/Slider";
-import ExpandoBox from "../../design/ExpandoBox";
 import {store} from "@/store";
 import {EqFreqs, EqMiniFreqs} from "@/util/mixerMapping";
 import {websocket} from "@/util/sockets";
 import {isDeviceMini} from "@/util/util";
+import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "MicEqualiser",
-  components: {ExpandoBox, Slider, ContentBox},
+  components: {ExpandoGroupContainer, Slider},
 
   data() {
     return {

@@ -1,9 +1,9 @@
 <template>
   <div style="display: flex">
     <div style="padding: 40px 20px 40px 40px;">
-      <MicProfileHandler/>
+      <MicProfileHandler />
     </div>
-    <MainTabContent :no-left-pad=true>
+    <ContentContainer :no-left-pad="true">
       <ContentBox>
         <MicSetupButton />
       </ContentBox>
@@ -11,7 +11,7 @@
       <Equaliser/>
       <Compressor/>
       <MicExtra />
-    </MainTabContent>
+    </ContentContainer>
   </div>
 </template>
 
@@ -20,14 +20,16 @@ import Gate from "./mic/Gate";
 import Equaliser from "./mic/Equalizer";
 import Compressor from "./mic/Compressor";
 import MicExtra from "./mic/MicExtra";
-import MainTabContent from "@/components/design/MainTabContent";
 import MicProfileHandler from "@/components/profiles/handlers/MicProfileHandler";
 import MicSetupButton from "@/components/sections/mic/MicSetupButton";
 import ContentBox from "@/components/ContentBox";
+import ContentContainer from "@/components/containers/ContentContainer.vue";
 
 export default {
   name: "MicSections",
-  components: {ContentBox, MicSetupButton, MicProfileHandler, MainTabContent, MicExtra, Compressor, Equaliser, Gate},
+  components: {
+    ContentContainer,
+    ContentBox, MicSetupButton, MicProfileHandler, MicExtra, Compressor, Equaliser, Gate},
 }
 </script>
 
