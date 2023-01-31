@@ -4,7 +4,6 @@ import ListSelection from "@/components/button_list/ListSelection.vue";
 import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
 
 import { store } from "@/store";
-import { isDeviceMini } from "@/util/util";
 import { websocket } from "@/util/sockets";
 import { LightingInactiveOptions } from "@/util/mixerMapping";
 
@@ -43,21 +42,14 @@ export default {
 
     methods: {
         activeColor() {
-            if (!store.hasActiveDevice() || isDeviceMini()) {
-                return "#000000";
-            }
             return "#" + store.getActiveDevice().lighting.buttons[this.selectedEffect].colours["colour_one"];
         },
 
         inactiveColor() {
-            if (!store.hasActiveDevice() || isDeviceMini()) {
-                return "#000000";
-            }
             return "#" + store.getActiveDevice().lighting.buttons[this.selectedEffect].colours["colour_two"];
         },
 
         selectedInactiveOption() {
-            if (!store.hasActiveDevice() || isDeviceMini()) { return }
             return store.getActiveDevice().lighting.buttons[this.selectedEffect].off_style
         },
 
@@ -66,15 +58,11 @@ export default {
         },
 
         onInactiveSelectionChange(id) {
-            if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
             console.log("Here? " + this.selectedEffect);
             websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [this.selectedEffect, id]});
         },
 
         onActiveColourChange(value) {
-            if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
             const active = value.substr(1, 6);
             const inactive = store.getActiveDevice().lighting.buttons[this.selectedEffect].colours.colour_two;
 
@@ -82,8 +70,6 @@ export default {
         },
 
         onInactiveColourChange(value) {
-            if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
             const active = store.getActiveDevice().lighting.buttons[this.selectedEffect].colours.colour_one;
             const inactive = value.substr(1, 6);
 

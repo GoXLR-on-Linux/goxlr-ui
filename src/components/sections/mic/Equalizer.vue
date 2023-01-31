@@ -36,9 +36,6 @@ export default {
 
   methods: {
     isAdvanced() {
-      if (!store.hasActiveDevice()) {
-        return false;
-      }
       return store.getActiveDevice().settings.display.equaliser === "Advanced";
     },
 
@@ -58,9 +55,6 @@ export default {
       // Vue counts from 1 instead of 0 which we need for positioning..
       id -= 1;
 
-      if (!store.hasActiveDevice()) {
-        return "";
-      }
       // Probably a better way to do this
       let freq = undefined;
       if (isDeviceMini()) {
@@ -119,9 +113,6 @@ export default {
     getValue(id) {
       id -= 1;
 
-      if (!store.hasActiveDevice()) {
-        return 0;
-      }
       if (isDeviceMini()) {
         return parseInt(store.getActiveDevice().mic_status.equaliser_mini.gain[EqMiniFreqs[id]]);
       } else {
@@ -130,10 +121,6 @@ export default {
     },
 
     getBassValue() {
-      if (!store.hasActiveDevice()) {
-        return 0;
-      }
-
       let bass = 0;
       if (!isDeviceMini()) {
         let gain = store.getActiveDevice().mic_status.equaliser.gain;
@@ -146,10 +133,6 @@ export default {
     },
 
     getMidValue() {
-      if (!store.hasActiveDevice()) {
-        return 0;
-      }
-
       let mid = 0;
       if (!isDeviceMini()) {
         let gain = store.getActiveDevice().mic_status.equaliser.gain;
@@ -162,10 +145,6 @@ export default {
     },
 
     getTrebleValue() {
-      if (!store.hasActiveDevice()) {
-        return 0;
-      }
-
       let treble = 0;
       if (!isDeviceMini()) {
         let gain = store.getActiveDevice().mic_status.equaliser.gain;
@@ -178,10 +157,6 @@ export default {
     },
 
     getStorePath(id) {
-      if (!store.hasActiveDevice()) {
-        return "/";
-      }
-
       id -= 1;
       let path = isDeviceMini() ? "equaliser_mini" : "equaliser";
       let title = isDeviceMini() ? EqMiniFreqs[id] : EqFreqs[id];
@@ -189,10 +164,6 @@ export default {
     },
 
     getAggregateStorePaths(id) {
-      if (!store.hasActiveDevice()) {
-        return "/";
-      }
-
       // This is ugly :(
       if (id === 0) {
         return (isDeviceMini()) ?

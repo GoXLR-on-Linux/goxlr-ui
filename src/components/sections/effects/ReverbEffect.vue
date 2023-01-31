@@ -35,7 +35,6 @@
 
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
-import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
 import ListSelection from "@/components/button_list/ListSelection.vue";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
@@ -62,9 +61,6 @@ export default {
 
   methods: {
     getActiveStyle() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "";
-      }
       return store.getActiveDevice().effects.current.reverb.style;
     },
 
@@ -73,9 +69,6 @@ export default {
     },
 
     getAmountValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.reverb.amount;
     },
     setAmountValue(id, value) {
@@ -83,10 +76,6 @@ export default {
     },
 
     getDecayValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
-
       let decay = store.getActiveDevice().effects.current.reverb.decay;
 
       // The follow code only really applies for values of less than a second..
@@ -105,9 +94,6 @@ export default {
     },
 
     getEarlyLevelValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.reverb.early_level;
     },
     setEarlyLevelValue(id, value) {
@@ -115,9 +101,6 @@ export default {
     },
 
     getTailLevelValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.reverb.tail_level;
     },
     setTailLevelValue(id, value) {
@@ -125,9 +108,6 @@ export default {
     },
 
     getPreDelayValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.reverb.pre_delay;
     },
     setPreDelayValue(id, value) {
@@ -135,9 +115,6 @@ export default {
     },
 
     getLowColourValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.reverb.lo_colour;
     },
     setLowColourValue(id, value) {
@@ -146,9 +123,6 @@ export default {
 
 
     getHighColourValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.reverb.hi_colour;
     },
     setHighColourValue(id, value) {
@@ -156,9 +130,6 @@ export default {
     },
 
     getHighFactorValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.reverb.hi_factor;
     },
     setHighFactorValue(id, value) {
@@ -166,9 +137,6 @@ export default {
     },
 
     getDiffuseValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.reverb.diffuse;
     },
     setDiffuseValue(id, value) {
@@ -176,9 +144,6 @@ export default {
     },
 
     getModSpeedValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.reverb.mod_speed;
     },
     setModSpeedValue(id, value) {
@@ -186,9 +151,6 @@ export default {
     },
 
     getModDepthValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.reverb.mod_depth;
     },
     setModDepthValue(id, value) {

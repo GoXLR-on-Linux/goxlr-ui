@@ -38,22 +38,14 @@ export default {
 
   methods: {
     activeColor() {
-      if (!store.hasActiveDevice()) {
-        return "#000000";
-      }
       return "#" + store.getActiveDevice().lighting.buttons[this.selectedButtonOption].colours["colour_one"];
     },
 
     inactiveColor() {
-      if (!store.hasActiveDevice()) {
-        return "#000000";
-      }
       return "#" + store.getActiveDevice().lighting.buttons[this.selectedButtonOption].colours["colour_two"];
     },
 
     selectedInactiveOption() {
-      if (!store.hasActiveDevice()) { return }
-
       return store.getActiveDevice().lighting.buttons[this.selectedButtonOption].off_style
     },
 

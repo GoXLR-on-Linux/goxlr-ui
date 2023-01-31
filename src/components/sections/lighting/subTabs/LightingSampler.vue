@@ -6,7 +6,6 @@ import ColourPicker from "@/components/sections/lighting/elements/ColourPicker";
 
 import { store } from "@/store";
 import { websocket } from "@/util/sockets";
-import { isDeviceMini } from "@/util/util";
 import { LightingInactiveOptions } from "@/util/mixerMapping";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
@@ -43,46 +42,30 @@ export default {
 
   methods: {
     activeColor() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "#000000";
-      }
       return "#" + store.getActiveDevice().lighting.sampler["SamplerSelect" + this.selectedButtonOption].colours["colour_one"];
     },
 
     emptyColor() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "#000000";
-      }
       return "#" + store.getActiveDevice().lighting.sampler["SamplerSelect" + this.selectedButtonOption].colours["colour_three"];
     },
 
     inactiveColor() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "#000000";
-      }
       return "#" + store.getActiveDevice().lighting.sampler["SamplerSelect" + this.selectedButtonOption].colours["colour_two"];
     },
 
     selectedInactiveOption() {
-      if (!store.hasActiveDevice() || isDeviceMini()) { return }
       return store.getActiveDevice().lighting.sampler["SamplerSelect" + this.selectedButtonOption].off_style
     },
 
     onButtonSelectionChange(id) {
-      if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
       this.selectedButtonOption = id
     },
 
     onInactiveSelectionChange(id) {
-      if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
       websocket.send_command(store.getActiveSerial(), {"SetSampleOffStyle": ["SampleSelect" + this.selectedButtonOption, id]});
     },
 
     onActiveColourChange(value) {
-      if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
       let colour_one = value.substr(1, 6);
       let colour_two = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_two;
       let colour_three = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_three;
@@ -91,8 +74,6 @@ export default {
     },
 
     onEmptyColourChange(value) {
-      if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
       let colour_one = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_one;
       let colour_two = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_two;
       let colour_three = value.substr(1, 6);
@@ -101,8 +82,6 @@ export default {
     },
 
     onInactiveColourChange(value) {
-      if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
       let colour_one = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_one;
       let colour_two = value.substr(1, 6);
       let colour_three = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_three;

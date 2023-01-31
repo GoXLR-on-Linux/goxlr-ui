@@ -61,12 +61,10 @@ export default {
     },
 
     getValue(id) {
-      if (store.hasActiveDevice()) {
-        if (id === 11) {
-          return store.getActiveDevice().levels.bleep;
-        }
-        return store.getActiveDevice().levels.volumes[id];
+      if (id === 11) {
+        return store.getActiveDevice().levels.bleep;
       }
+      return store.getActiveDevice().levels.volumes[id];
     },
 
     getStorePath(id) {

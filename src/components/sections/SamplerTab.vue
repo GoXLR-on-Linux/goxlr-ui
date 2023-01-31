@@ -40,7 +40,6 @@ import {sendHttpCommand, websocket} from "@/util/sockets";
 import AudioVisualiser from "@/components/sections/sampler/AudioVisualiser";
 import SampleHandler from "@/components/sections/files/SampleHandler";
 import ModalBox from "@/components/design/modal/ModalBox";
-import {isDeviceMini} from "@/util/util";
 import ListSelection from "@/components/button_list/ListSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import PushButton from "@/components/button_list/Button.vue";
@@ -112,18 +111,12 @@ export default {
 
 
     getActiveFunction() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "";
-      }
       return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].function;
     },
     setActiveFunction(sampleFunction) {
       websocket.send_command(store.getActiveSerial(), {"SetSamplerFunction": [this.activeBank, this.activeButton, sampleFunction]});
     },
     getActiveOrder() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "";
-      }
       return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].order;
     },
     setActiveOrder(sampleOrder) {
@@ -131,9 +124,6 @@ export default {
     },
 
     getSamples() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return [];
-      }
       return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].samples;
     },
     setActiveSample(id) {

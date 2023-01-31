@@ -31,9 +31,6 @@ export default {
 
   methods: {
     isAdvanced() {
-      if (!store.hasActiveDevice()) {
-        return false;
-      }
       return store.getActiveDevice().settings.display.compressor === "Advanced";
     },
 
@@ -82,9 +79,7 @@ export default {
     },
 
     getThresholdValue() {
-      if (store.hasActiveDevice()) {
-        return store.getActiveDevice().mic_status.compressor.threshold;
-      }
+      return store.getActiveDevice().mic_status.compressor.threshold;
     },
 
     getAmount() {
@@ -113,9 +108,7 @@ export default {
     },
 
     getRatioValue() {
-      if (store.hasActiveDevice()) {
-        return store.getActiveDevice().mic_status.compressor.ratio;
-      }
+      return store.getActiveDevice().mic_status.compressor.ratio;
     },
 
     attackValueMap() {
@@ -124,9 +117,7 @@ export default {
     },
 
     getAttackValue() {
-      if (store.hasActiveDevice()) {
-        return store.getActiveDevice().mic_status.compressor.attack;
-      }
+      return store.getActiveDevice().mic_status.compressor.attack;
     },
 
     releaseValueMap() {
@@ -135,16 +126,10 @@ export default {
     },
 
     getReleaseValue() {
-      if (store.hasActiveDevice()) {
-        return store.getActiveDevice().mic_status.compressor.release;
-      }
+      return store.getActiveDevice().mic_status.compressor.release;
     },
 
     getGainValue() {
-      if (!store.hasActiveDevice()) {
-        return 0;
-      }
-
       let value = store.getActiveDevice().mic_status.compressor.makeup_gain;
       if (value < 0) {
         return 0;

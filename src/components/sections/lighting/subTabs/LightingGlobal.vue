@@ -37,9 +37,6 @@ export default {
 
   methods: {
     color() {
-      if (!store.hasActiveDevice()) {
-        return "#000000";
-      }
       return "#" + store.getActiveDevice().lighting.simple[this.selected].colour_one;
     },
 

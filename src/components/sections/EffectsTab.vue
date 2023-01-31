@@ -63,7 +63,6 @@ import ContentBox from "@/components/ContentBox";
 import PushButton from "@/components/button_list/Button";
 import ButtonList from "@/components/button_list/ButtonList";
 import {EffectPresets} from "@/util/mixerMapping";
-import {isDeviceMini} from "@/util/util";
 import {store} from "@/store";
 import DropMenu from "@/components/design/DropMenu";
 import {sendHttpCommand, websocket} from "@/util/sockets";
@@ -104,16 +103,10 @@ export default {
     },
 
     getLabel(id, key) {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "";
-      }
       return (id + 1).toString() + ": " + store.getActiveDevice().effects.preset_names[key];
     },
 
     isActive(key) {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
-      }
       return store.getActiveDevice().effects.active_preset === key;
     },
 

@@ -4,7 +4,6 @@ import ListSelection from "@/components/button_list/ListSelection.vue";
 import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
 
 import { store } from "@/store";
-import { isDeviceMini } from "@/util/util";
 import { websocket } from "@/util/sockets";
 import { LightingInactiveOptions } from "@/util/mixerMapping";
 
@@ -43,23 +42,14 @@ export default {
 
     methods: {
         leftColour() {
-            if (!store.hasActiveDevice() || isDeviceMini()) {
-                return "#000000";
-            }
             return "#" + store.getActiveDevice().lighting.encoders[this.selectedEncoder]["colour_two"]
         },
 
         rightColour() {
-            if (!store.hasActiveDevice() || isDeviceMini()) {
-                return "#000000";
-            }
             return "#" + store.getActiveDevice().lighting.encoders[this.selectedEncoder]["colour_one"]
         },
 
         knobColour() {
-            if (!store.hasActiveDevice() || isDeviceMini()) {
-                return "#000000";
-            }
             return "#" + store.getActiveDevice().lighting.encoders[this.selectedEncoder]["colour_three"]
         },
 
@@ -68,8 +58,6 @@ export default {
         },
 
         onLeftColourChange(value) {
-            if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
             const encoder = store.getActiveDevice().lighting.encoders[this.selectedEncoder];
 
             const leftColour = value.substr(1, 6);
@@ -80,8 +68,6 @@ export default {
         },
 
         onRightColourChange(value) {
-            if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
             const encoder = store.getActiveDevice().lighting.encoders[this.selectedEncoder];
 
             const leftColour = encoder.colour_two;
@@ -92,8 +78,6 @@ export default {
         },
 
         onKnobColourChange(value) {
-            if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
             const encoder = store.getActiveDevice().lighting.encoders[this.selectedEncoder];
 
             const leftColour = encoder.colour_two;

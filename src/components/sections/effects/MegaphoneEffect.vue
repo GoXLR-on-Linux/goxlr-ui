@@ -12,7 +12,6 @@
 <script>
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
-import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
 import ListSelection from "@/components/button_list/ListSelection.vue";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
@@ -37,9 +36,6 @@ export default {
 
   methods: {
     getActiveStyle() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "";
-      }
       return store.getActiveDevice().effects.current.megaphone.style;
     },
 
@@ -48,9 +44,6 @@ export default {
     },
 
     getAmountValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       // TODO, the values can change depending on the style :D
       return store.getActiveDevice().effects.current.megaphone.amount;
     },
@@ -59,9 +52,6 @@ export default {
     },
 
     getPostGainValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.megaphone.post_gain;
     },
     setPostGainValue(id, value) {

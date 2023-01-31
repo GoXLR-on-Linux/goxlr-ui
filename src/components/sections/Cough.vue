@@ -37,11 +37,11 @@ export default {
 
   methods: {
     getCough() {
-      return (store.hasActiveDevice() && store.getActiveDevice().cough_button.is_toggle) ? "toggle" : "hold";
+      return (store.getActiveDevice().cough_button.is_toggle) ? "toggle" : "hold";
     },
 
     getActiveMute() {
-      return (!store.hasActiveDevice()) ? "" : store.getActiveDevice().cough_button.mute_type;
+      return store.getActiveDevice().cough_button.mute_type;
     },
 
     setActiveMuteFunction: function (id) {

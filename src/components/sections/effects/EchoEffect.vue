@@ -17,7 +17,6 @@
 <script>
 import {store} from "@/store";
 import SliderInput from "@/components/slider/Slider";
-import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
 import ListSelection from "@/components/button_list/ListSelection.vue";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
@@ -42,9 +41,6 @@ export default {
 
   methods: {
     getActiveStyle() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "";
-      }
       return store.getActiveDevice().effects.current.echo.style;
     },
 
@@ -53,9 +49,6 @@ export default {
     },
 
     getAmountValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.echo.amount;
     },
     setAmountValue(id, value) {
@@ -63,9 +56,6 @@ export default {
     },
 
     getFeedbackValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.echo.feedback;
     },
     setFeedbackValue(id, value) {
@@ -73,9 +63,6 @@ export default {
     },
 
     getTempoValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.echo.tempo;
     },
     setTempoValue(id, value) {
@@ -84,9 +71,6 @@ export default {
 
 
     getDelayLValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.echo.delay_left;
     },
     setDelayLValue(id, value) {
@@ -94,9 +78,6 @@ export default {
     },
 
     getDelayRValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.echo.delay_right;
     },
     setDelayRValue(id, value) {
@@ -104,9 +85,6 @@ export default {
     },
 
     getFeedbackLValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.echo.feedback_left;
     },
     setFeedbackLValue(id, value) {
@@ -114,9 +92,6 @@ export default {
     },
 
     getFeedbackRValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.echo.feedback_right;
     },
     setFeedbackRValue(id, value) {
@@ -124,9 +99,6 @@ export default {
     },
 
     getXFBLtoRValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.echo.feedback_xfb_l_to_r;
     },
     setXFBLtoRValue(id, value) {
@@ -134,9 +106,6 @@ export default {
     },
 
     getXFBRtoLValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.echo.feedback_xfb_r_to_l;
     },
     setXFBRtoLValue(id, value) {

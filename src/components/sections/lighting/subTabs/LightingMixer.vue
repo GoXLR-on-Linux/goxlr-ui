@@ -9,10 +9,12 @@ import {websocket} from "@/util/sockets";
 import {MuteButtonNamesForFader, ScribbleNames} from "@/util/mixerMapping";
 import {isDeviceMini} from "@/util/util";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
 
 export default {
   name: "LightingMixer",
   components: {
+    GroupContainer,
     ContentContainer,
     ColorPicker,
     PushButton,
@@ -28,9 +30,7 @@ export default {
   },
 
   methods: {
-    isDeviceMini() {
-      return isDeviceMini();
-    },
+    isDeviceMini,
 
     isActiveChannel: function (id) {
       return this.activeChannel === id;
@@ -43,9 +43,6 @@ export default {
     },
 
     styleContains(match) {
-      if (!store.hasActiveDevice()) {
-        return false;
-      }
       return store.getActiveDevice().lighting.faders[this.activeChannel].style.includes(match);
     },
 
@@ -91,39 +88,22 @@ export default {
     },
 
     getTopColour() {
-      if (!store.hasActiveDevice()) {
-        return "#000000";
-      }
-
       return "#" + store.getActiveDevice().lighting.faders[this.activeChannel].colours.colour_one;
     },
 
     getBottomColour() {
-      if (!store.hasActiveDevice()) {
-        return "#000000";
-      }
       return "#" + store.getActiveDevice().lighting.faders[this.activeChannel].colours.colour_two;
     },
 
     getScreenColour() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "#000000";
-      }
       return "#" + store.getActiveDevice().lighting.simple[ScribbleNames[this.activeChannel]].colour_one;
     },
 
     getScreenIcons() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return [];
-      }
-
       return store.getIconFiles().sort();
     },
 
     isActiveIcon(file_name) {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
-      }
       return store.getActiveDevice().fader_status[this.activeChannel].scribble.file_name === file_name;
     },
 
@@ -136,9 +116,6 @@ export default {
     },
 
     isShowNumber() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
-      }
       if (this.textValue === null) {
         this.textValue = this.getBottomText();
       }
@@ -153,10 +130,6 @@ export default {
     },
 
     isInverted() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
-      }
-
       return store.getActiveDevice().fader_status[this.activeChannel].scribble.inverted;
     },
 
@@ -166,9 +139,6 @@ export default {
     },
 
     getBottomText() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return false;
-      }
       let text = store.getActiveDevice().fader_status[this.activeChannel].scribble.bottom_text;
       if (text == null) {
         return "";
@@ -187,24 +157,14 @@ export default {
     },
 
     getMuteActiveColour() {
-      if (!store.hasActiveDevice()) {
-        return "#000000";
-      }
       return "#" + store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[this.activeChannel]].colours.colour_one;
     },
 
     getMuteInactiveColour() {
-      if (!store.hasActiveDevice()) {
-        return "#000000";
-      }
       return "#" + store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[this.activeChannel]].colours.colour_two;
     },
 
     isMuteInactiveState(state) {
-      if (!store.hasActiveDevice()) {
-        return false;
-      }
-
       return store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[this.activeChannel]].off_style === state;
     },
 
@@ -248,16 +208,18 @@ export default {
 
 <template>
   <div style="display: flex">
-    <div style="padding: 40px 20px 40px 40px;">
-      <ContentBox title="Faders">
+    <ContentContainer style="padding: 0px">
+
+      <GroupContainer title="Faders">
         <ButtonList title="Channel">
           <PushButton label="Channel 1" buttonId="A" :is-active="isActiveChannel('A')" @button-pressed="channelPressed"/>
           <PushButton label="Channel 2" buttonId="B" :is-active="isActiveChannel('B')" @button-pressed="channelPressed"/>
           <PushButton label="Channel 3" buttonId="C" :is-active="isActiveChannel('C')" @button-pressed="channelPressed"/>
           <PushButton label="Channel 4" buttonId="D" :is-active="isActiveChannel('D')" @button-pressed="channelPressed"/>
         </ButtonList>
-      </ContentBox>
-    </div>
+      </GroupContainer>
+
+    </ContentContainer>
     <ContentContainer :no-left-pad=true>
       <ContentBox title="Fader">
         <ButtonList title="Style">

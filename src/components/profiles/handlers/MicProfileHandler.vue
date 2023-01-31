@@ -59,16 +59,10 @@ export default {
 
   methods: {
     getProfileList() {
-      if (!store.hasActiveDevice()) {
-        return [];
-      }
       return store.getMicProfileFiles().sort();
     },
 
     getActiveProfile() {
-      if (!store.hasActiveDevice()) {
-        return '';
-      }
       return store.getActiveDevice().mic_profile_name;
     },
 

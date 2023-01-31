@@ -13,7 +13,6 @@
 <script>
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
-import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
 import ListSelection from "@/components/button_list/ListSelection.vue";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
@@ -42,9 +41,6 @@ export default {
 
   methods: {
     getActiveStyle() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "";
-      }
       return store.getActiveDevice().effects.current.hard_tune.style;
     },
 
@@ -53,9 +49,6 @@ export default {
     },
 
     getActiveSource() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "";
-      }
       return store.getActiveDevice().effects.current.hard_tune.source;
     },
 
@@ -64,27 +57,18 @@ export default {
     },
 
     getAmountValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.hard_tune.amount;
     },
     setAmountValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetHardTuneAmount": value });
     },
     getRateValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.hard_tune.rate;
     },
     setRateValue(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetHardTuneRate": value });
     },
     getWindowValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.hard_tune.window;
     },
     setWindowValue(id, value) {

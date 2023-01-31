@@ -75,11 +75,7 @@ export default {
 
     // eslint-disable-next-line no-unused-vars
     isEnabled: function (output, input) {
-      if (store.hasActiveDevice()) {
-        return store.getActiveDevice().router[InputDevice[input]][OutputDevice[output]];
-      }
-
-      return false;
+      return store.getActiveDevice().router[InputDevice[input]][OutputDevice[output]];
     },
   }
 }

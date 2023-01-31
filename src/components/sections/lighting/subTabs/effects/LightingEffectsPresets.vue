@@ -10,7 +10,6 @@ import {
 } from "@/util/mixerMapping";
 
 import { store } from "@/store";
-import { isDeviceMini } from "@/util/util";
 import { websocket } from "@/util/sockets";
 
 export default {
@@ -31,10 +30,6 @@ export default {
 
     methods: {
         presetLabels() {
-            if (!store.hasActiveDevice() || isDeviceMini()) {
-                return;
-            }
-
             let presetLabels = []
 
             for (const preset of EffectPresets) {
@@ -51,51 +46,33 @@ export default {
         },
 
         activeColor() {
-            if (!store.hasActiveDevice() || isDeviceMini()) {
-                return "#000000";
-            }
             return "#" + store.getActiveDevice().lighting.buttons[this.activePreset].colours["colour_one"];
         },
 
         inactiveColor() {
-            if (!store.hasActiveDevice() || isDeviceMini()) {
-                return "#000000";
-            }
             return "#" + store.getActiveDevice().lighting.buttons[this.activePreset].colours["colour_two"];
         },
 
         selectedInactiveOption() {
-            if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
             return store.getActiveDevice().lighting.buttons[this.activePreset].off_style
         },
 
         onButtonSelectionChange(id) {
-            if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
             this.activePreset = EffectLightingPresets[EffectPresets.indexOf(id)];
         },
 
         onInactiveSelectionChange(id) {
-            if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
-          console.log("Preset Inactive Selection");
             websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [this.activePreset, id]});
         },
 
         onActiveColourChange(value) {
-            if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
             const active = value.substr(1, 6);
             const inactive = store.getActiveDevice().lighting.buttons[this.activePreset].colours.colour_two;
 
-          console.log("Preset Active");
             websocket.send_command(store.getActiveSerial(), {"SetButtonColours": [this.activePreset, active, inactive]});
         },
 
         onInactiveColourChange(value) {
-            if (!store.hasActiveDevice() || isDeviceMini()) { return }
-
             const active = store.getActiveDevice().lighting.buttons[this.activePreset].colours.colour_one;
             const inactive = value.substr(1, 6);
 

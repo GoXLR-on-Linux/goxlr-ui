@@ -188,9 +188,6 @@ export default {
     },
 
     getHold() {
-      if (!store.hasActiveDevice()) {
-        return 0;
-      }
       return store.getActiveDevice().settings.mute_hold_duration;
     },
 

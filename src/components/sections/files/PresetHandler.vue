@@ -36,9 +36,6 @@ export default {
     },
 
     fileList() {
-      if (!store.hasActiveDevice()) {
-        return [];
-      }
       return store.getPresetFiles().sort();
     },
 

@@ -37,10 +37,6 @@ export default {
     },
 
     fileList() {
-      if (!store.hasActiveDevice()) {
-        return [];
-      }
-
       // We need to do work here :D
       return Object.keys(store.getSampleFiles()).sort();
     },

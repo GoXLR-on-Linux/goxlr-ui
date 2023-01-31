@@ -43,7 +43,6 @@
 <script>
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
-import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
 import ListSelection from "@/components/button_list/ListSelection.vue";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
@@ -66,9 +65,6 @@ export default {
 
   methods: {
     getActiveStyle() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "";
-      }
       return store.getActiveDevice().effects.current.robot.style;
     },
 
@@ -79,9 +75,6 @@ export default {
 
     // TODO: Freq and Width need some work, they represent differently in the UI, and are both curves..
     getLowGainValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.robot.low_gain;
     },
     setLowGainValue(id, value) {
@@ -89,10 +82,6 @@ export default {
     },
 
     getLowFreqValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
-
       // We need to correctly calculate Low Frequency, this is crazy, but it's how the GoXLR expects
       // values on the low end. This is likely due to rounding errors on the low curve...
       let freq = store.getActiveDevice().effects.current.robot.low_freq;
@@ -125,9 +114,6 @@ export default {
     },
 
     getLowWidthValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.robot.low_width;
     },
     setLowWidthValue(id, value) {
@@ -135,9 +121,6 @@ export default {
     },
 
     getMidGainValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.robot.mid_gain;
     },
     setMidGainValue(id, value) {
@@ -145,9 +128,6 @@ export default {
     },
 
     getMidFreqValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.robot.mid_freq  - 86;
     },
     setMidFreqValue(id, value) {
@@ -155,9 +135,6 @@ export default {
     },
 
     getMidWidthValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.robot.mid_width;
     },
     setMidWidthValue(id, value) {
@@ -166,9 +143,6 @@ export default {
 
 
     getHighGainValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.robot.high_gain;
     },
     setHighGainValue(id, value) {
@@ -176,9 +150,6 @@ export default {
     },
 
     getHighFreqValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.robot.high_freq - 182;
     },
     setHighFreqValue(id, value) {
@@ -186,9 +157,6 @@ export default {
     },
 
     getHighWidthValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.robot.high_width;
     },
     setHighWidthValue(id, value) {
@@ -196,9 +164,6 @@ export default {
     },
 
     getWaveformValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.robot.waveform;
     },
     setWaveformValue(id, value) {
@@ -206,9 +171,6 @@ export default {
     },
 
     getPulseWidthValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.robot.pulse_width;
     },
     setPulseWidthValue(id, value) {
@@ -216,9 +178,6 @@ export default {
     },
 
     getThresholdValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.robot.threshold;
     },
     setThresholdValue(id, value) {
@@ -226,9 +185,6 @@ export default {
     },
 
     getDryMixValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.robot.dry_mix;
     },
     setDryMixValue(id, value) {

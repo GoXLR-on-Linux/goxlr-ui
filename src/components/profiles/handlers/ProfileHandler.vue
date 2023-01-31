@@ -53,16 +53,10 @@ export default {
 
   methods: {
     getProfileList() {
-      if (!store.hasActiveDevice()) {
-        return [];
-      }
       return store.getProfileFiles().sort();
     },
 
     getActiveProfile() {
-      if (!store.hasActiveDevice()) {
-        return '';
-      }
       return store.getActiveDevice().profile_name;
     },
 

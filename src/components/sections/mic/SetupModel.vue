@@ -33,18 +33,10 @@ export default {
 
   methods: {
     getActiveMicType() {
-      if (!store.hasActiveDevice()) {
-        return "";
-      }
-
       return store.getActiveDevice().mic_status.mic_type
     },
 
     getGainValue() {
-      if (!store.hasActiveDevice()) {
-        return 0;
-      }
-
       return store.getActiveDevice().mic_status.mic_gains[store.getActiveDevice().mic_status.mic_type];
     },
 
@@ -68,10 +60,6 @@ export default {
     },
 
     getStorePath() {
-      if (!store.hasActiveDevice()) {
-        return "";
-      }
-
       return "/mixers/" + store.getActiveSerial() + "/mic_status/mic_gains/" + store.getActiveDevice().mic_status.mic_type;
     },
 

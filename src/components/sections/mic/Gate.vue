@@ -32,39 +32,22 @@ export default {
     },
 
     getThreshold() {
-      if (!store.hasActiveDevice()) {
-        return 0;
-      }
       return store.getActiveDevice().mic_status.noise_gate.threshold;
     },
 
     getAttack() {
-      if (!store.hasActiveDevice()) {
-        return 0;
-      }
       return store.getActiveDevice().mic_status.noise_gate.attack;
     },
 
     getRelease() {
-      if (!store.hasActiveDevice()) {
-        return 0;
-      }
       return store.getActiveDevice().mic_status.noise_gate.release;
     },
 
     getAttenuation() {
-      if (!store.hasActiveDevice()) {
-        return 0;
-      }
-
       return store.getActiveDevice().mic_status.noise_gate.attenuation;
     },
 
     isAdvanced() {
-      if (!store.hasActiveDevice()) {
-        return false;
-      }
-
       return store.getActiveDevice().settings.display.gate === "Advanced";
     },
 

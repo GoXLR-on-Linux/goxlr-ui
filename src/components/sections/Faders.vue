@@ -128,17 +128,11 @@ export default {
     },
 
     getActiveSource: function () {
-      if (store.hasActiveDevice()) {
-        return store.getActiveDevice().fader_status[this.activeChannel].channel;
-      }
-      return "Mic";
+      return store.getActiveDevice().fader_status[this.activeChannel].channel;
     },
 
     getActiveMuteFunction: function () {
-      if (store.hasActiveDevice()) {
-        return store.getActiveDevice().fader_status[this.activeChannel].mute_type;
-      }
-      return "All";
+      return store.getActiveDevice().fader_status[this.activeChannel].mute_type;
     },
 
     getMuteFunctions: function () {

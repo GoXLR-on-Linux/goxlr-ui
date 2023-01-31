@@ -9,7 +9,6 @@
 <script>
 import {store} from "@/store";
 import SliderInput from "@/components/slider/Slider";
-import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import ListSelection from "@/components/button_list/ListSelection.vue";
@@ -32,16 +31,10 @@ export default {
 
   methods: {
     getActiveStyle() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "";
-      }
       return store.getActiveDevice().effects.current.gender.style;
     },
 
     getSliderValue(isMin) {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       let multiplier = (isMin)? -1 : 1;
       let style = store.getActiveDevice().effects.current.gender.style;
       switch (style) {
@@ -57,9 +50,6 @@ export default {
     },
 
     getAmountValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.gender.amount;
     },
     setAmountValue(id, value) {

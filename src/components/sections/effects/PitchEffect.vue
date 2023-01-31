@@ -10,7 +10,6 @@
 <script>
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
-import {isDeviceMini} from "@/util/util";
 import {websocket} from "@/util/sockets";
 import ListSelection from "@/components/button_list/ListSelection.vue";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
@@ -31,9 +30,6 @@ export default {
 
   methods: {
     getActiveStyle() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return "";
-      }
       return store.getActiveDevice().effects.current.pitch.style;
     },
 
@@ -42,10 +38,6 @@ export default {
     },
 
     getValueMap() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return ["0"];
-      }
-
       let hardtune_enabled = store.getActiveDevice().effects.current.hard_tune.is_enabled;
       let pitch_style = store.getActiveDevice().effects.current.pitch.style;
       if (hardtune_enabled) {
@@ -65,9 +57,6 @@ export default {
     },
 
     getAmountValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       let hardtune_enabled = store.getActiveDevice().effects.current.hard_tune.is_enabled;
       let pitch_style = store.getActiveDevice().effects.current.pitch.style;
       let base_value = store.getActiveDevice().effects.current.pitch.amount;
@@ -107,9 +96,6 @@ export default {
     },
 
     getCharacterValue() {
-      if (!store.hasActiveDevice() || isDeviceMini()) {
-        return 0;
-      }
       return store.getActiveDevice().effects.current.pitch.character;
     },
     setCharacterValue(id, value) {
