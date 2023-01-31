@@ -1,5 +1,5 @@
 <template>
-  <Tabs v-show="deviceSet" style="width: 480px">
+  <Tabs style="width: 480px">
     <Tab name="Profiles" :selected="true">
       <ProfileHandler/>
     </Tab>
@@ -23,16 +23,9 @@ import {isDeviceMini} from "@/util/util";
 export default {
   name: "FileTabs",
   methods: {
-
-    isDeviceMini() {
-      return isDeviceMini();
-    }
+    isDeviceMini
   },
   components: {SampleHandler, PresetHandler, ProfileHandler, Tabs, Tab},
-
-  props: {
-    deviceSet: Boolean
-  }
 }
 </script>
 

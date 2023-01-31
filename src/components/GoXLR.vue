@@ -1,49 +1,51 @@
 <template>
 
   <div id="main">
-    <DeviceSelector v-show="!isDeviceSet()"/>
+    <DeviceSelector v-if="!isDeviceSet()"/>
 
-    <FileTabs :device-set="isDeviceSet()"/>
+    <template v-if="isDeviceSet()">
+      <FileTabs :device-set="isDeviceSet()"/>
 
-    <div v-show="isDeviceSet()" style="height: 25px; background-color: #3b413f"/>
+      <div style="height: 25px; background-color: #3b413f"/>
 
-    <Tabs v-show="isDeviceSet()">
-      <Tab name="Mic">
-          <Mic/>
-      </Tab>
-      <Tab name="Mixer" selected>
+      <Tabs>
+        <Tab name="Mic">
+            <Mic/>
+        </Tab>
+        <Tab name="Mixer" selected>
+            <ContentContainer>
+              <Faders/>
+              <Mixer/>
+            </ContentContainer>
+        </Tab>
+        <Tab name="Effects" :hidden="isDeviceMini()">
+          <EffectsTab />
+        </Tab>
+        <Tab name="Sampler" :hidden="isDeviceMini()">
           <ContentContainer>
-            <Faders/>
-            <Mixer/>
+            <SamplerTab />
           </ContentContainer>
-      </Tab>
-      <Tab name="Effects" :hidden="isDeviceMini()">
-        <EffectsTab />
-      </Tab>
-      <Tab name="Sampler" :hidden="isDeviceMini()">
-        <ContentContainer>
-          <SamplerTab />
-        </ContentContainer>
-      </Tab>
-      <Tab name="Cough">
-        <ContentContainer>
-          <Cough/>
-        </ContentContainer>
-      </Tab>
-      <Tab name="Lighting">
-          <LightingTab />
-      </Tab>
-      <Tab name="Routing">
-        <ContentContainer>
-          <Routing/>
-        </ContentContainer>
-      </Tab>
-      <Tab name="System">
-        <ContentContainer>
-          <SystemComponent/>
-        </ContentContainer>
-      </Tab>
-    </Tabs>
+        </Tab>
+        <Tab name="Cough">
+          <ContentContainer>
+            <Cough/>
+          </ContentContainer>
+        </Tab>
+        <Tab name="Lighting">
+            <LightingTab />
+        </Tab>
+        <Tab name="Routing">
+          <ContentContainer>
+            <Routing/>
+          </ContentContainer>
+        </Tab>
+        <Tab name="System">
+          <ContentContainer>
+            <SystemComponent/>
+          </ContentContainer>
+        </Tab>
+      </Tabs>
+    </template>
   </div>
 
 </template>
@@ -87,16 +89,8 @@ export default {
     Mic
   },
 
-  data() {
-    return {
-      timer: ''
-    }
-  },
-
   methods: {
-    isDeviceMini() {
-      return isDeviceMini();
-    },
+    isDeviceMini,
 
     isDeviceSet() {
       return (store.hasActiveDevice() && store.isConnected());
