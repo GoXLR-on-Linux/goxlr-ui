@@ -3,10 +3,10 @@
     <Tab name="Profiles" :selected="true">
       <ProfileHandler/>
     </Tab>
-    <Tab :hidden="isDeviceMini()" name="Samples">
+    <Tab v-if="!isDeviceMini()" name="Samples">
       <SampleHandler/>
     </Tab>
-    <Tab :hidden="isDeviceMini()" name="Presets">
+    <Tab v-if="!isDeviceMini()" name="Presets">
       <PresetHandler/>
     </Tab>
   </Tabs>

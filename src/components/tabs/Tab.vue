@@ -1,5 +1,5 @@
 <template>
-  <div v-show='isActive'>
+  <div v-if='isActive'>
     <slot></slot>
   </div>
 </template>
@@ -10,7 +10,6 @@ export default {
   props: {
     name: {type: String, required: true},
     selected: {type: Boolean, default: false},
-    hidden: {type: Boolean, default: false}
   },
   data() {
     return {
@@ -31,7 +30,6 @@ export default {
   created() {
     this.$parent.tabs.push(this);
   }
-
 }
 </script>
 

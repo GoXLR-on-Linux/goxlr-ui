@@ -4,7 +4,7 @@
     <DeviceSelector v-if="!isDeviceSet()"/>
 
     <template v-if="isDeviceSet()">
-      <FileTabs :device-set="isDeviceSet()"/>
+      <FileTabs />
 
       <div style="height: 25px; background-color: #3b413f"/>
 
@@ -18,10 +18,10 @@
               <Mixer/>
             </ContentContainer>
         </Tab>
-        <Tab name="Effects" :hidden="isDeviceMini()">
+        <Tab v-if="!isDeviceMini()" name="Effects">
           <EffectsTab />
         </Tab>
-        <Tab name="Sampler" :hidden="isDeviceMini()">
+        <Tab v-if="!isDeviceMini()" name="Sampler">
           <ContentContainer>
             <SamplerTab />
           </ContentContainer>
