@@ -1,6 +1,6 @@
 <template>
   <ExpandoGroupContainer title="Megaphone" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
-    <ListSelection title="Style" group="effects_megaphone_style" :options="megaphone_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+    <RadioSelection title="Style" group="effects_megaphone_style" :options="megaphone_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 text-suffix="%"
                  :slider-value="getAmountValue()" :store-path="getStorePath('amount')" v-show="is_expanded" @value-changed="setAmountValue"/>
@@ -13,12 +13,12 @@
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import ListSelection from "@/components/button_list/ListSelection.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "MegaphoneEffect",
-  components: {ExpandoGroupContainer, ListSelection, SliderInput},
+  components: {ExpandoGroupContainer, RadioSelection, SliderInput},
   data() {
     return {
       is_expanded: false,

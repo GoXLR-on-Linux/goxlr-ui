@@ -1,10 +1,10 @@
 <template>
   <GroupContainer title="Faders">
-    <ListSelection title="Channel" group="faders_channel" :options="fader_options" :selected="activeChannel"
+    <RadioSelection title="Channel" group="faders_channel" :options="fader_options" :selected="activeChannel"
                    @selection-changed="channelChanged"/>
-    <ListSelection title="Source" group="faders_source" :options="source_options" :selected="getActiveSource()"
+    <RadioSelection title="Source" group="faders_source" :options="source_options" :selected="getActiveSource()"
                    @selection-changed="sourceChanged"/>
-    <ListSelection title="Mute Behaviour" group="faders_mute" :options="getMuteFunctions()"
+    <RadioSelection title="Mute Behaviour" group="faders_mute" :options="getMuteFunctions()"
                    :selected="getActiveMuteFunction()" @selection-changed="muteFunctionChanged"/>
   </GroupContainer>
 </template>
@@ -12,7 +12,7 @@
 <script>
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import ListSelection from "@/components/button_list/ListSelection.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 
 export default {
@@ -20,7 +20,7 @@ export default {
    * Everything here focuses around the 'Channel' input,
    */
 
-  components: {GroupContainer, ListSelection},
+  components: {GroupContainer, RadioSelection},
   name: "MicFaders",
 
   data() {

@@ -1,21 +1,19 @@
 <template>
   <div>
-    <label ref="label" :class="{ selected: this.selected, disabled: this.disabled }">
-      <input ref="check" :name=group :id=id type="radio" @change="change" :value=id :checked="selected"
-             :disabled="disabled"/>{{ text }}
+    <label ref="label" :class="{ selected: selected, disabled: disabled }">
+      <input ref="check" :id=id type="checkbox" @change="change" :value=id :checked="selected" :disabled="disabled"/>{{ text }}
     </label>
   </div>
 </template>
 
 <script>
 export default {
-  emits: ["radio-selected"],
-  name: "RadioItem",
+  emits: ["check-changed"],
+  name: "CheckItem",
 
   props: {
     text: {type: String, required: true},
     id: {type: String, required: true},
-    group: {type: String, required: true},
 
     selected: {type: Boolean, required: false, default: false},
     disabled: {type: Boolean, required: false, default: false},
@@ -23,15 +21,9 @@ export default {
     padding: {type: String, required: false, default: "8px"}
   },
 
-  data: function () {
-    return {
-      local_selected: false,
-    }
-  },
-
   methods: {
     change() {
-      this.$emit('radio-selected', this.id);
+      this.$emit('check-changed', this.id, this.isSelected());
     },
 
     isSelected() {
@@ -39,7 +31,7 @@ export default {
         console.log("No Ref.");
         return false;
       }
-      return this.selected;
+      return this.$refs.check.checked;
     },
 
     focus() {
@@ -55,7 +47,7 @@ Firefox doesn't support complete hiding of the radio button (it's pretty aggress
 attachment, so we do some tricks to make it 'seem' hidden, so that the screen reader can treat the radio correctly
 while it not being visibly visible!
  */
-input[type=radio] {
+input[type=checkbox] {
   opacity: 0;
   width: 0;
   border: 0;

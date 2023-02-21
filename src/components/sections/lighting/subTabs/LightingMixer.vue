@@ -1,150 +1,234 @@
 <script>
-import ContentBox from "@/components/ContentBox";
-import ButtonList from "@/components/button_list/ButtonList";
-import PushButton from "@/components/button_list/Button";
-import ColorPicker from "@/components/sections/lighting/ColorPicker";
-
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import {MuteButtonNamesForFader, ScribbleNames} from "@/util/mixerMapping";
+import {LightingInactiveOptions, MuteButtonNamesForFader, ScribbleNames} from "@/util/mixerMapping";
 import {isDeviceMini} from "@/util/util";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
+import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
+import CheckSelection from "@/components/button_list/CheckSelection.vue";
 
 export default {
   name: "LightingMixer",
   components: {
+    CheckSelection,
+    ColourPicker,
+    RadioSelection,
     GroupContainer,
     ContentContainer,
-    ColorPicker,
-    PushButton,
-    ButtonList,
-    ContentBox,
   },
 
   data() {
     return {
+      buttonOptions: [
+        {
+          id: 'A',
+          label: 'Channel 1'
+        },
+        {
+          id: 'B',
+          label: 'Channel 2'
+        },
+        {
+          id: 'C',
+          label: 'Channel 3'
+        },
+        {
+          id: 'D',
+          label: 'Channel 4'
+        },
+      ],
+
       activeChannel: "A",
       textValue: null,
+
+      inactiveOptions: LightingInactiveOptions
     }
   },
 
   methods: {
     isDeviceMini,
 
-    isActiveChannel: function (id) {
-      return this.activeChannel === id;
+    /* Channel Selection */
+    selectedChannel: function() {
+      return this.activeChannel;
     },
 
-    channelPressed(id) {
-      console.log(id);
+    onChannelSelectionChange: function(id) {
       this.activeChannel = id;
       this.textValue = this.getBottomText();
     },
 
+    /***************************/
+
+    /* Fader Colour Common */
+    onFaderColourChange(top, bottom) {
+      websocket.send_command(store.getActiveSerial(), {"SetFaderColours": [this.activeChannel, top, bottom]});
+    },
+
+    /* Fader Top Colour */
+    getFaderTopColour() {
+      return "#" + store.getActiveDevice().lighting.faders[this.activeChannel].colours.colour_one;
+    },
+
+    onFaderTopColourChange(value) {
+      let top = value.substr(1, 6);
+      let bottom = store.getActiveDevice().lighting.faders[this.activeChannel].colours.colour_two;
+
+      this.onFaderColourChange(top, bottom);
+    },
+
+    /* Fader Bottom Colour */
+    getFaderBottomColour() {
+      return "#" + store.getActiveDevice().lighting.faders[this.activeChannel].colours.colour_two;
+    },
+
+    onFaderBottomColourChange(value) {
+      let top = store.getActiveDevice().lighting.faders[this.activeChannel].colours.colour_one;
+      let bottom = value.substr(1, 6);
+
+      this.onFaderColourChange(top, bottom);
+    },
+
+    // Style..
     styleContains(match) {
       return store.getActiveDevice().lighting.faders[this.activeChannel].style.includes(match);
     },
 
-    toggleGradient() {
-      let current = store.getActiveDevice().lighting.faders[this.activeChannel].style;
-      let newValue = "";
+    getStyleOptions() {
+      return [
+        {
+          id: 'StyleGradient',
+          label: 'Gradient',
+          selected: this.styleContains('Gradient')
+        },
+        {
+          id: 'StyleMeter',
+          label: 'Meter',
+          selected: this.styleContains('Meter')
+        },
+      ];
+    },
 
-      switch (current) {
-        case "TwoColour":
-          newValue = "Gradient";
-          break;
-        case "Gradient":
-          newValue = "TwoColour";
-          break;
-        case "Meter":
-          newValue = "GradientMeter";
-          break;
-        default:
-          newValue = "Meter";
-          break;
+    onStyleSelectionChanged(id, value) {
+      let gradient = this.styleContains('Gradient');
+      let meter = this.styleContains('Meter');
+
+      if (id === 'StyleGradient') {
+        gradient = value;
       }
-      websocket.send_command(store.getActiveSerial(), {"SetFaderDisplayStyle": [this.activeChannel, newValue]});
-    },
-    toggleMeter() {
-      let current = store.getActiveDevice().lighting.faders[this.activeChannel].style;
-      let newValue = "";
 
-      switch (current) {
-        case "TwoColour":
-          newValue = "Meter";
-          break;
-        case "Gradient":
-          newValue = "GradientMeter";
-          break;
-        case "Meter":
-          newValue = "TwoColour";
-          break;
-        default:
-          newValue = "Gradient";
-          break;
+      if (id === 'StyleMeter') {
+        meter = value;
       }
-      websocket.send_command(store.getActiveSerial(), {"SetFaderDisplayStyle": [this.activeChannel, newValue]})
+
+      this.setStyle(gradient, meter);
     },
 
-    getTopColour() {
-      return "#" + store.getActiveDevice().lighting.faders[this.activeChannel].colours.colour_one;
+    setStyle(gradient, meter) {
+      let type = "TwoColour";
+      // Go through the possible options..
+      if (gradient && meter) {
+        type = "GradientMeter";
+      } else if (gradient && !meter) {
+        type = "Gradient"
+      } else if (!gradient && meter) {
+        type = "Meter"
+      }
+
+      websocket.send_command(store.getActiveSerial(), {"SetFaderDisplayStyle": [this.activeChannel, type]});
     },
 
-    getBottomColour() {
-      return "#" + store.getActiveDevice().lighting.faders[this.activeChannel].colours.colour_two;
-    },
+    /***************************/
 
+    /* Screen Colour */
     getScreenColour() {
       return "#" + store.getActiveDevice().lighting.simple[ScribbleNames[this.activeChannel]].colour_one;
     },
 
-    getScreenIcons() {
-      return store.getIconFiles().sort();
+    onScreenColourChange(value) {
+      value = value.substr(1, 6);
+      websocket.send_command(store.getActiveSerial(), {"SetSimpleColour": [ScribbleNames[this.activeChannel], value]});
     },
 
-    isActiveIcon(file_name) {
-      return store.getActiveDevice().fader_status[this.activeChannel].scribble.file_name === file_name;
-    },
-
-    setActiveIcon(value) {
-      websocket.send_command(store.getActiveSerial(), {"SetScribbleIcon": [this.activeChannel, value]})
-    },
-
+    /* Icons */
     openIcons() {
       websocket.open_path("Icons");
     },
 
-    isShowNumber() {
-      if (this.textValue === null) {
-        this.textValue = this.getBottomText();
+    getIconOptions() {
+      let options = [
+        {
+          id: null,
+          label: "-- NONE --"
+        }
+      ];
+
+      store.getIconFiles().sort().forEach(item => {
+        options.push({
+          id: item,
+          label: item
+        });
+      });
+
+      return options;
+    },
+
+    getSelectedIcon() {
+      return store.getActiveDevice().fader_status[this.activeChannel].scribble.file_name;
+    },
+
+    onIconSelectionChange(value) {
+      websocket.send_command(store.getActiveSerial(), {"SetScribbleIcon": [this.activeChannel, value]})
+    },
+
+    /* Display Options */
+    getDisplayOptions() {
+      return [
+        {
+          id: 'lighting-mixer-screen-show-number',
+          label: 'Show Number',
+          selected: this.isScreenNumberShow()
+        },
+        {
+          id: 'lighting-mixer-screen-invert-display',
+          label: 'Invert Display',
+          selected: this.isScreenInverted()
+        },
+      ];
+    },
+
+    onDisplayOptionsChanged(id, value) {
+      if (id === 'lighting-mixer-screen-show-number') {
+        this.setScreenNumberShow(value);
+      } else if (id === 'lighting-mixer-screen-invert-display') {
+        this.setScreenInverted(value);
       }
-
-      return store.getActiveDevice().fader_status[this.activeChannel].scribble.left_text !== null;
     },
 
-    toggleShowNumber() {
-      let channel = Object.keys(store.getActiveDevice().fader_status).indexOf(this.activeChannel) + 1;
-      let value = this.isShowNumber() ? "" : channel.toString();
-      websocket.send_command(store.getActiveSerial(), {"SetScribbleNumber": [this.activeChannel, value]})
-    },
-
-    isInverted() {
+    isScreenInverted() {
       return store.getActiveDevice().fader_status[this.activeChannel].scribble.inverted;
     },
 
-    toggleInverted() {
-      let value = !this.isInverted();
-      websocket.send_command(store.getActiveSerial(), {"SetScribbleInvert": [this.activeChannel, value]})
+    isScreenNumberShow() {
+      return store.getActiveDevice().fader_status[this.activeChannel].scribble.left_text !== null;
     },
 
+    setScreenInverted(inverted) {
+      websocket.send_command(store.getActiveSerial(), {"SetScribbleInvert": [this.activeChannel, inverted]});
+    },
+
+    setScreenNumberShow(show) {
+      let channel = Object.keys(store.getActiveDevice().fader_status).indexOf(this.activeChannel) + 1;
+      let value = show ? channel.toString() : "";
+      websocket.send_command(store.getActiveSerial(), {"SetScribbleNumber": [this.activeChannel, value]})
+    },
+
+    /* Text Field */
     getBottomText() {
       let text = store.getActiveDevice().fader_status[this.activeChannel].scribble.bottom_text;
-      if (text == null) {
-        return "";
-      }
-
-      return text;
+      return (text == null) ? "" : text;
     },
 
     updateText(event) {
@@ -156,6 +240,8 @@ export default {
       websocket.send_command(store.getActiveSerial(), {"SetScribbleText": [this.activeChannel, value]})
     },
 
+
+    /***************************/
     getMuteActiveColour() {
       return "#" + store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[this.activeChannel]].colours.colour_one;
     },
@@ -164,117 +250,98 @@ export default {
       return "#" + store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[this.activeChannel]].colours.colour_two;
     },
 
-    isMuteInactiveState(state) {
-      return store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[this.activeChannel]].off_style === state;
-    },
-
-    onFaderColourChange(id, value) {
-      let top = store.getActiveDevice().lighting.faders[this.activeChannel].colours.colour_one;
-      let bottom = store.getActiveDevice().lighting.faders[this.activeChannel].colours.colour_two;
-
-      if (id === "top") {
-        top = value.substr(1, 6);
-      } else {
-        bottom = value.substr(1, 6);
-      }
-      websocket.send_command(store.getActiveSerial(), {"SetFaderColours": [this.activeChannel, top, bottom]})
-    },
-
-    onScreenColourChange(id, value) {
-      value = value.substr(1, 6);
-
-      websocket.send_command(store.getActiveSerial(), {"SetSimpleColour": [ScribbleNames[this.activeChannel], value]});
-    },
-
-    onButtonColourChange(id, value) {
-      let active = store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[this.activeChannel]].colours.colour_one;
+    onMuteActiveColourChanged(value) {
+      let active = value.substr(1, 6);
       let inactive = store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[this.activeChannel]].colours.colour_two;
 
-      if (id === "active") {
-        active = value.substr(1, 6);
-      } else {
-        inactive = value.substr(1, 6);
-      }
+      this.setMuteColourValues(active, inactive);
+    },
 
+    onMuteInactiveColourChanged(value) {
+      let active = store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[this.activeChannel]].colours.colour_one;
+      let inactive = value.substr(1, 6);
+
+      this.setMuteColourValues(active, inactive);
+    },
+
+    setMuteColourValues(active, inactive) {
       websocket.send_command(store.getActiveSerial(), {"SetButtonColours": [MuteButtonNamesForFader[this.activeChannel], active, inactive]});
     },
 
-    setMuteInactiveState(state) {
-      websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [MuteButtonNamesForFader[this.activeChannel], state]});
-    }
+    selectedMuteInactiveOption() {
+      return store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[this.activeChannel]].off_style;
+    },
+
+    onMuteInactiveSelectionChange(id) {
+      websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [MuteButtonNamesForFader[this.activeChannel], id]});
+    },
+  },
+
+  mounted() {
+    this.textValue = this.getBottomText();
   }
 }
 </script>
 
 <template>
   <div style="display: flex">
-    <ContentContainer style="padding: 0px">
-
+    <ContentContainer>
       <GroupContainer title="Faders">
-        <ButtonList title="Channel">
-          <PushButton label="Channel 1" buttonId="A" :is-active="isActiveChannel('A')" @button-pressed="channelPressed"/>
-          <PushButton label="Channel 2" buttonId="B" :is-active="isActiveChannel('B')" @button-pressed="channelPressed"/>
-          <PushButton label="Channel 3" buttonId="C" :is-active="isActiveChannel('C')" @button-pressed="channelPressed"/>
-          <PushButton label="Channel 4" buttonId="D" :is-active="isActiveChannel('D')" @button-pressed="channelPressed"/>
-        </ButtonList>
+        <RadioSelection title="Channel"
+          group="lighting_mixer_channel_select"
+          :options="buttonOptions"
+          :selected="selectedChannel()"
+          @selection-changed="onChannelSelectionChange"
+        />
       </GroupContainer>
 
-    </ContentContainer>
-    <ContentContainer :no-left-pad=true>
-      <ContentBox title="Fader">
-        <ButtonList title="Style">
-          <PushButton label="Gradient" :is-active="styleContains('Gradient')" @button-pressed="toggleGradient"/>
-          <PushButton label="Meter" :is-active="styleContains('Meter')" @button-pressed="toggleMeter"/>
-        </ButtonList>
-        <ColorPicker title="Bottom Colour" id="bottom" :color-value="getBottomColour()"
-                   @colour-changed="onFaderColourChange"/>
-        <ColorPicker title="Top Colour" id="top" :color-value="getTopColour()" @colour-changed="onFaderColourChange"/>
-      </ContentBox>
+      <GroupContainer title="Fader">
+        <CheckSelection title="Style" :options="getStyleOptions()" @selection-changed="onStyleSelectionChanged" />
+        <ColourPicker title="Bottom Colour" :color-value="getFaderBottomColour()" @colour-changed="onFaderBottomColourChange" />
+        <ColourPicker title="Top Colour" :color-value="getFaderTopColour()" @colour-changed="onFaderTopColourChange" />
+      </GroupContainer>
 
-      <ContentBox v-show="!isDeviceMini()" title="Screen">
-        <ColorPicker title="Background Colour" :color-value="getScreenColour()" @colour-changed="onScreenColourChange"/>
-        <ButtonList title="Icon">
+      <GroupContainer v-show="!isDeviceMini()" title="Screen">
+        <ColourPicker title="Background Colour" :color-value="getScreenColour()" @colour-changed="onScreenColourChange" />
+        <RadioSelection
+          title="Icon"
+          group="lighting_mixer_icon_select"
+          :options="getIconOptions()"
+          :selected="getSelectedIcon()"
+          @selection-changed="onIconSelectionChange"
+        >
           <template #title>
-            ICONS
-            <span class="openButton" @click="openIcons">
-              <font-awesome-icon icon="fa-solid fa-folder" />
-            </span>
+            <div>
+              <span style="padding-right: 14px">Icons</span>
+              <button class="openButton" @click="openIcons">
+                <font-awesome-icon icon="fa-solid fa-folder" />
+              </button>
+            </div>
           </template>
-          <template #default>
-            <PushButton label="-- NONE --" button-id="" :is-active="isActiveIcon(null)"
-                        @button-pressed="setActiveIcon"/>
-            <PushButton v-for="item in getScreenIcons()" :key=item :label=item :buttonId=item
-                        :is-active=isActiveIcon(item) @button-pressed="setActiveIcon"/>
-          </template>
-        </ButtonList>
+        </RadioSelection>
 
-        <ButtonList title="Options">
-          <PushButton label="Show Number" :is-active="isShowNumber()" @button-pressed="toggleShowNumber"/>
-          <PushButton label="Invert Display" :is-active="isInverted()" @button-pressed="toggleInverted"/>
-          <hr/>
-          <div style="color: #fff; text-align: left; padding-left: 10px; margin-top: 25px;">Text:</div>
-          <input type="text" v-model="textValue" @blur="applyUpdate"
-                 v-on:keyup.enter="applyUpdate"/>
-        </ButtonList>
 
-      </ContentBox>
+        <CheckSelection title="Options" :options="getDisplayOptions()" @selection-changed="onDisplayOptionsChanged">
+          <div style="text-align: center">
+            <hr style="margin-top: 14px"/>
+            <div style="color: #fff; text-align: left; padding-left: 8px; margin-top: 16px;">Text:</div>
+            <input type="text" v-model="textValue" @blur="applyUpdate" v-on:keyup.enter="applyUpdate"/>
+          </div>
+        </CheckSelection>
+      </GroupContainer>
 
-      <ContentBox title="Mute">
-        <ColorPicker id="active" title="Active" :color-value="getMuteActiveColour()"
-                   @colour-changed="onButtonColourChange"/>
-        <ButtonList title="Inactive Option">
-          <PushButton label="Dim Active Colour" :is-active="isMuteInactiveState('Dimmed')"
-                      @click="setMuteInactiveState('Dimmed')"/>
-          <PushButton label="Inactive Colour" :is-active="isMuteInactiveState('Colour2')"
-                      @click="setMuteInactiveState('Colour2')"/>
-          <PushButton label="Dim Inactive Colour" :is-active="isMuteInactiveState('DimmedColour2')"
-                      @click="setMuteInactiveState('DimmedColour2')"/>
-        </ButtonList>
-        <ColorPicker id="inactive" title="Inactive" :color-value="getMuteInactiveColour()"
-                   @colour-changed="onButtonColourChange"/>
-      </ContentBox>
+      <GroupContainer title="Mute">
+        <ColourPicker title="Active" :color-value="getMuteActiveColour()" @colour-changed="onMuteActiveColourChanged" />
+        <RadioSelection
+            title="Inactive Option"
+            group="lighting_mixer_mute_inactive_behaviour"
+            :options="inactiveOptions"
+            :selected="selectedMuteInactiveOption()"
+            @selection-changed="onMuteInactiveSelectionChange"
+        />
+        <ColourPicker title="Inactive" :color-value="getMuteInactiveColour()" @colour-changed="onMuteInactiveColourChanged" />
+      </GroupContainer>
     </ContentContainer>
-
   </div>
 </template>
 
@@ -293,6 +360,13 @@ input[type=text] {
   outline: none;
 
   -moz-appearance: textfield;
+}
+
+button {
+  border: 0;
+  background-color: transparent;
+  padding: 0;
+  margin: -4px;
 }
 
 .openButton {

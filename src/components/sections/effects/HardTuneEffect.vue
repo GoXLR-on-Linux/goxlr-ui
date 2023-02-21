@@ -1,12 +1,12 @@
 <template>
   <ExpandoGroupContainer title="Hard Tune" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
-    <ListSelection title="Style" group="effects_hardtune_style" :options="hard_tune_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+    <RadioSelection title="Style" group="effects_hardtune_style" :options="hard_tune_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" :store-path="getStorePath('amount')" v-show="is_expanded" @value-changed="setAmountValue" />
     <SliderInput title="Rate" :slider-min-value=0 :slider-max-value=100 :slider-value="getRateValue()" :store-path="getStorePath('rate')"  v-show="is_expanded" @value-changed="setRateValue" />
     <SliderInput title="Window" :slider-min-value=0 :slider-max-value=600 :slider-value="getWindowValue()" :store-path="getStorePath('window')" v-show="is_expanded" @value-changed="setWindowValue" />
 
-    <ListSelection title="Sorce" group="effects_hardtune_source" :options="hard_tune_source" :selected="getActiveSource()" @selection-changed="sourcePressed"/>
+    <RadioSelection title="Sorce" group="effects_hardtune_source" :options="hard_tune_source" :selected="getActiveSource()" @selection-changed="sourcePressed"/>
   </ExpandoGroupContainer>
 </template>
 
@@ -14,12 +14,12 @@
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import ListSelection from "@/components/button_list/ListSelection.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "HardTuneEffect",
-  components: {ExpandoGroupContainer, ListSelection, SliderInput},
+  components: {ExpandoGroupContainer, RadioSelection, SliderInput},
   data() {
     return {
       is_expanded: false,

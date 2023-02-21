@@ -1,18 +1,18 @@
 <template>
   <GroupContainer title="Bank">
-    <ListSelection title="Bank" group="sampler_bank" :options="bank_options" :selected="activeBank" @selection-changed="setActiveBank" />
-    <ListSelection title="Button" group="sampler_button" :options="button_options" :selected="activeButton" @selection-changed="setActiveButton" />
-    <ListSelection title="Function" group="sampler_function" :options="function_options" :selected="getActiveFunction()" @selection-changed="setActiveFunction" />
-    <ListSelection title="Play Order" group="sampler_order" :options="order_options" :selected="getActiveOrder()" @selection-changed="setActiveOrder" />
+    <RadioSelection title="Bank" group="sampler_bank" :options="bank_options" :selected="activeBank" @selection-changed="setActiveBank" />
+    <RadioSelection title="Button" group="sampler_button" :options="button_options" :selected="activeButton" @selection-changed="setActiveButton" />
+    <RadioSelection title="Function" group="sampler_function" :options="function_options" :selected="getActiveFunction()" @selection-changed="setActiveFunction" />
+    <RadioSelection title="Play Order" group="sampler_order" :options="order_options" :selected="getActiveOrder()" @selection-changed="setActiveOrder" />
   </GroupContainer>
   <GroupContainer title="Sampler">
-    <ListSelection title="Samples" group="sampler_samples" :options="getSampleOptions()" :selected="activeSample" @selection-changed="setActiveSample">
+    <RadioSelection title="Samples" group="sampler_samples" :options="getSampleOptions()" :selected="activeSample" @selection-changed="setActiveSample">
             <PushButton @click="showAddModal = true">
               <template #left>
                 <div style="text-align: center">+</div>
               </template>
             </PushButton>
-    </ListSelection>
+    </RadioSelection>
 
     <AudioVisualiser :active-bank="activeBank" :active-button="activeButton" :active-sample="parseInt(activeSample)" @deselect-sample="activeSample = '-1'" />
   </GroupContainer>
@@ -40,7 +40,7 @@ import {sendHttpCommand, websocket} from "@/util/sockets";
 import AudioVisualiser from "@/components/sections/sampler/AudioVisualiser";
 import SampleHandler from "@/components/sections/files/SampleHandler";
 import ModalBox from "@/components/design/modal/ModalBox";
-import ListSelection from "@/components/button_list/ListSelection.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import PushButton from "@/components/button_list/Button.vue";
 
@@ -49,7 +49,7 @@ export default {
   components: {
     PushButton,
     GroupContainer,
-    ListSelection, ModalBox, SampleHandler, AudioVisualiser},
+    RadioSelection, ModalBox, SampleHandler, AudioVisualiser},
 
   data() {
     return {

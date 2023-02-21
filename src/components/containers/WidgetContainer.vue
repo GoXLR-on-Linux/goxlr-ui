@@ -10,7 +10,7 @@ export default {
 <template>
     <div class="container">
         <p class="title">
-            {{ title }}
+            <slot name="title">{{ title }}</slot>
         </p>
         <slot></slot>
     </div>

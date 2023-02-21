@@ -1,6 +1,6 @@
 <script>
 import GroupContainer from "@/components/containers/GroupContainer.vue";
-import ListSelection from "@/components/button_list/ListSelection.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
 
 import {
@@ -16,7 +16,7 @@ export default {
     name: "LightingEffectsPresets",
     components: {
         GroupContainer,
-        ListSelection,
+        RadioSelection,
         ColourPicker
     },
 
@@ -85,7 +85,7 @@ export default {
 
 <template>
     <GroupContainer title="Preset Buttons">
-      <ListSelection
+      <RadioSelection
         title="Preset"
         group="lighting_effects_presets"
         :options="presetLabels()"
@@ -97,7 +97,7 @@ export default {
         :color-value="activeColor()"
         @colour-changed="onActiveColourChange"
       />
-      <ListSelection
+      <RadioSelection
         title="Inactive Option"
         group="lighting_effects_preset_inactive_behaviour"
         :options="inactiveOptions"

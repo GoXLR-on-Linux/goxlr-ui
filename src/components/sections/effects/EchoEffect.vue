@@ -1,6 +1,6 @@
 <template>
   <ExpandoGroupContainer title="Echo" :expanded="is_expanded" @expando-clicked="is_expanded = !is_expanded">
-    <ListSelection title="Style" group="effects_echo_style" :options="echo_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+    <RadioSelection title="Style" group="effects_echo_style" :options="echo_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />
     <SliderInput title="Feedback" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackValue()" :store-path="getStorePath('feedback')" v-show="is_expanded" @value-changed="setFeedbackValue" />
@@ -18,12 +18,12 @@
 import {store} from "@/store";
 import SliderInput from "@/components/slider/Slider";
 import {websocket} from "@/util/sockets";
-import ListSelection from "@/components/button_list/ListSelection.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "EchoEffect",
-  components: {ExpandoGroupContainer, ListSelection, SliderInput},
+  components: {ExpandoGroupContainer, RadioSelection, SliderInput},
   data() {
     return {
       is_expanded: false,

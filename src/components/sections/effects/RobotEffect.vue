@@ -1,6 +1,6 @@
 <template>
   <ExpandoGroupContainer title="Robot" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
-    <ListSelection title="Style" group="effects_robot_style" :options="robot_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+    <RadioSelection title="Style" group="effects_robot_style" :options="robot_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Low Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
                  :slider-value="getLowGainValue()" :store-path="getStorePath('low_gain')" v-show="is_expanded"
@@ -44,12 +44,12 @@
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import ListSelection from "@/components/button_list/ListSelection.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "RobotEffect",
-  components: {ExpandoGroupContainer, ListSelection, SliderInput},
+  components: {ExpandoGroupContainer, RadioSelection, SliderInput},
 
   data() {
     return {

@@ -1,6 +1,6 @@
 <script>
 import GroupContainer from "@/components/containers/GroupContainer.vue";
-import ListSelection from "@/components/button_list/ListSelection.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
 
 import { store } from "@/store";
@@ -11,7 +11,7 @@ export default {
     name: "LightingEffectsEffects",
     components: {
         GroupContainer,
-        ListSelection,
+        RadioSelection,
         ColourPicker
     },
 
@@ -81,7 +81,7 @@ export default {
 
 <template>
     <GroupContainer title="Effect Buttons">
-      <ListSelection
+      <RadioSelection
         title="Effect"
         group="lighting_effects_effects"
         :options="effectOptions"
@@ -93,7 +93,7 @@ export default {
         :color-value="activeColor()"
         @colour-changed="onActiveColourChange"
       />
-      <ListSelection
+      <RadioSelection
         title="Inactive Option"
         group="lighting_effects_effects_inactive_behaviour"
         :options="inactiveOptions"

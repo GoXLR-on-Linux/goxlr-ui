@@ -1,6 +1,6 @@
 <script>
 import GroupContainer from "@/components/containers/GroupContainer.vue";
-import ListSelection from "@/components/button_list/ListSelection.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
 
 import { store } from "@/store";
@@ -11,7 +11,7 @@ export default {
     name: "LightingEffectsEncoders",
     components: {
         GroupContainer,
-        ListSelection,
+        RadioSelection,
         ColourPicker
     },
 
@@ -92,7 +92,7 @@ export default {
 
 <template>
     <GroupContainer title="Encoders">
-      <ListSelection
+      <RadioSelection
         title="Encoder"
         group="lighting_effects_encoders"
         :options="this.encoderOptions"

@@ -1,6 +1,6 @@
 <template>
   <GroupContainer title="Gender">
-    <ListSelection title="Style" group="effects_gender_style" :options="gender_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+    <RadioSelection title="Style" group="effects_gender_style" :options="gender_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value="getSliderValue(true)" :slider-max-value="getSliderValue(false)" :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />
   </GroupContainer>
@@ -11,11 +11,11 @@ import {store} from "@/store";
 import SliderInput from "@/components/slider/Slider";
 import {websocket} from "@/util/sockets";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
-import ListSelection from "@/components/button_list/ListSelection.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 
 export default {
   name: "GenderEffect",
-  components: {ListSelection, GroupContainer, SliderInput},
+  components: {RadioSelection, GroupContainer, SliderInput},
 
   data() {
     return {

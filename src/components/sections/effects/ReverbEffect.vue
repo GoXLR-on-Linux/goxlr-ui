@@ -1,6 +1,6 @@
 <template>
   <ExpandoGroupContainer title="Reverb" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
-    <ListSelection title="Style" group="effects_reverb_style" :options="reverb_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+    <RadioSelection title="Style" group="effects_reverb_style" :options="reverb_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()"
                  :store-path="getStorePath('amount')" @value-changed="setAmountValue"/>
@@ -36,12 +36,12 @@
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import ListSelection from "@/components/button_list/ListSelection.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "ReverbEffect",
-  components: {ExpandoGroupContainer, ListSelection, SliderInput },
+  components: {ExpandoGroupContainer, RadioSelection, SliderInput },
 
   data() {
     return {

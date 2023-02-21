@@ -2,7 +2,7 @@
   <!-- Build the Modal -->
   <CenteredContainer>
     <ContentContainer>
-      <ListSelection title="Mic Type" group="mic_type" :options="microphone_options" :selected="getActiveMicType()" @selection-changed="handleButtonPress" />
+      <RadioSelection title="Mic Type" group="mic_type" :options="microphone_options" :selected="getActiveMicType()" @selection-changed="handleButtonPress" />
 
       <Slider title="Gain" :slider-min-value=0 :slider-max-value=72 text-suffix="dB"
               :slider-value=getGainValue() :store-path="getStorePath()" @value-changed="setGain" />
@@ -14,13 +14,13 @@
 import Slider from "@/components/slider/Slider";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import ListSelection from "@/components/button_list/ListSelection.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
   name: "SetupModel",
-  components: {CenteredContainer, ContentContainer, ListSelection, Slider},
+  components: {CenteredContainer, ContentContainer, RadioSelection, Slider},
   data: function() {
     return {
       microphone_options: [

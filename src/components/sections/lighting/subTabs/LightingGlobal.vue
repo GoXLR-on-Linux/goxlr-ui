@@ -1,7 +1,7 @@
 <script>
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
-import ListSelection from "@/components/button_list/ListSelection.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
 
 import { store } from "@/store";
@@ -14,7 +14,7 @@ export default {
     CenteredContainer,
     ContentContainer,
     GroupContainer,
-    ListSelection,
+    RadioSelection,
     ColourPicker
 },
 
@@ -55,7 +55,7 @@ export default {
   <CenteredContainer>
     <ContentContainer>
       <GroupContainer title="Areas">
-        <ListSelection title="Area" group="lighting_global_areas" :options="this.options" :selected="this.selected" @selection-changed="onSelectionChange"/>
+        <RadioSelection title="Area" group="lighting_global_areas" :options="this.options" :selected="this.selected" @selection-changed="onSelectionChange"/>
         <ColourPicker title="Colour" :color-value="color()" @colour-changed="onColourChange" />
       </GroupContainer>
     </ContentContainer>

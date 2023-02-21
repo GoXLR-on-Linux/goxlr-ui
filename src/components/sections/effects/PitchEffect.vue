@@ -1,6 +1,6 @@
 <template>
   <ExpandoGroupContainer title="Pitch" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
-    <ListSelection title="Style" group="effects_pitch_style" :options="pitch_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+    <RadioSelection title="Style" group="effects_pitch_style" :options="pitch_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput title="Amount" :value-map="getValueMap()" :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />
     <SliderInput title="Character" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getCharacterValue()" :store-path="getStorePath('character')" v-show="is_expanded" @value-changed="setCharacterValue" />
@@ -11,12 +11,12 @@
 import SliderInput from "@/components/slider/Slider";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import ListSelection from "@/components/button_list/ListSelection.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 
 export default {
   name: "PitchEffect",
-  components: {ExpandoGroupContainer, ListSelection, SliderInput},
+  components: {ExpandoGroupContainer, RadioSelection, SliderInput},
   data() {
     return {
       is_expanded: false,
