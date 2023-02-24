@@ -115,6 +115,7 @@ export default {
       this.$emit('option-clicked', {
         item: this.identifier,
         option: option,
+        return_id: this.return_id
       });
     },
 
