@@ -105,6 +105,14 @@ label {
   color: #fff;
 }
 
+:slotted(.right_side > *) {
+  color: #fff;
+}
+
+:slotted(.right_side.selected > *) {
+  color: #353937;
+}
+
 .right_side.selected {
   background-color: #59b1b6;
   color: #353937;
