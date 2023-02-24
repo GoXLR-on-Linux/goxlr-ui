@@ -1,11 +1,19 @@
 <script>
 export default {
-  name: "VerticalScrollingContainer"
+  name: "VerticalScrollingContainer",
+
+  methods: {
+    getMainRef() {
+      return this.$refs.scrollRef;
+    }
+  }
 }
+
+
 </script>
 
 <template>
-  <div class="scroll">
+  <div class="scroll" ref="scrollRef">
     <slot></slot>
   </div>
 </template>
