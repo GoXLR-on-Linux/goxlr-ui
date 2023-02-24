@@ -15,17 +15,16 @@
         />
       </GroupContainer>
 
-      <ModalBox v-if="showRenameModal" @close="showRenameModal = false">
+      <AccessibleModal ref="renamePresetModal" id="renameEffect" :show_close="false">
         <template v-slot:title>Enter New Preset Name</template>
         <template v-slot:default>
-          <ModalInput ref="newName" v-model="newPresetName" placeholder="New Preset Name"
-                      @on-enter="showRenameModal = false; renamePreset()"/>
+          <ModalInput ref="newName" v-model="newPresetName" placeholder="New Preset Name" @on-enter="$refs.renamePresetModal.closeModal(); renamePreset(); this.newPresetName = ''"/>
         </template>
         <template v-slot:footer>
-          <ModalButton @click="showRenameModal = false; renamePreset()">Ok</ModalButton>
-          <ModalButton @click="showRenameModal = false; newPresetName = ''">Cancel</ModalButton>
+          <ModalButton ref="focusOk" @click="renamePreset(); $refs.renamePresetModal.closeModal(); this.newPresetName = ''">OK</ModalButton>
+          <ModalButton @click="$refs.renamePresetModal.closeModal(); this.newPresetName = ''">Cancel</ModalButton>
         </template>
-      </ModalBox>
+      </AccessibleModal>
 
     </div>
     <ContentContainer :no-left-pad="true">
@@ -51,22 +50,22 @@ import HardTuneEffect from "@/components/sections/effects/HardTuneEffect";
 import {EffectPresets} from "@/util/mixerMapping";
 import {store} from "@/store";
 import {sendHttpCommand, websocket} from "@/util/sockets";
-import ModalBox from "@/components/design/modal/ModalBox";
 import ModalButton from "@/components/design/modal/ModalButton";
 import ModalInput from "@/components/design/modal/ModalInput";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import RadioSelection from "@/components/button_list/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
+import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 
 export default {
   name: "EffectsTab",
   components: {
+    AccessibleModal,
     GroupContainer,
     RadioSelection,
     ContentContainer,
     ModalInput,
     ModalButton,
-    ModalBox,
     HardTuneEffect,
     RobotEffect, MegaphoneEffect, GenderEffect, PitchEffect, EchoEffect, ReverbEffect,
   },
@@ -125,9 +124,7 @@ export default {
     },
 
     menuOpened(event, return_id, item) {
-      console.log(item);
       if (!this.isActive(item)) {
-        console.log("Err?");
         websocket.send_command(store.getActiveSerial(), {"SetActiveEffectPreset": item});
       }
     },
@@ -141,12 +138,14 @@ export default {
     },
 
     renamePreset() {
+      if (this.newPresetName === undefined || this.newPresetName === "") {
+        return;
+      }
+
       let command = {"RenameActivePreset": this.newPresetName}
 
-      sendHttpCommand(store.getActiveSerial(), command)
-          .catch((error) => {
-            console.log(error);
-          });
+      sendHttpCommand(store.getActiveSerial(), command);
+      this.newPresetName = "";
     },
 
     saveActivePreset() {
@@ -158,10 +157,8 @@ export default {
 
     optionClicked(event) {
       if (event.option.slug === "rename") {
-        this.showRenameModal = true;
-        this.$nextTick(() => {
-          this.$refs.newName.focusInput();
-        })
+        let element = document.getElementById(event.return_id);
+        this.$refs.renamePresetModal.openModal(this.$refs.newName, element);
       }
 
       if (event.option.slug === "save") {
