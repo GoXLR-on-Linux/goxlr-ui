@@ -1,7 +1,7 @@
 <template>
   <div style="display: flex">
     <div style="padding: 40px 20px 40px 40px;">
-      <ContentBox title="Preset">
+      <GroupContainer title="Preset">
         <RadioSelection
             title="Group"
             group="lighting_mixer_icon_select"
@@ -13,8 +13,7 @@
             @menu-selected="optionClicked"
             @selection-changed="onEffectSelectionChange"
         />
-
-      </ContentBox>
+      </GroupContainer>
 
       <ModalBox v-if="showRenameModal" @close="showRenameModal = false">
         <template v-slot:title>Enter New Preset Name</template>
@@ -49,7 +48,6 @@ import GenderEffect from "@/components/sections/effects/GenderEffect";
 import MegaphoneEffect from "@/components/sections/effects/MegaphoneEffect";
 import RobotEffect from "@/components/sections/effects/RobotEffect";
 import HardTuneEffect from "@/components/sections/effects/HardTuneEffect";
-import ContentBox from "@/components/ContentBox";
 import {EffectPresets} from "@/util/mixerMapping";
 import {store} from "@/store";
 import {sendHttpCommand, websocket} from "@/util/sockets";
@@ -58,16 +56,17 @@ import ModalButton from "@/components/design/modal/ModalButton";
 import ModalInput from "@/components/design/modal/ModalInput";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import RadioSelection from "@/components/button_list/RadioSelection.vue";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
 
 export default {
   name: "EffectsTab",
   components: {
+    GroupContainer,
     RadioSelection,
     ContentContainer,
     ModalInput,
     ModalButton,
     ModalBox,
-    ContentBox,
     HardTuneEffect,
     RobotEffect, MegaphoneEffect, GenderEffect, PitchEffect, EchoEffect, ReverbEffect,
   },
