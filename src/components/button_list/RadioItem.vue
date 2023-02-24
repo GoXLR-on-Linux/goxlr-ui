@@ -102,10 +102,6 @@ label {
 .right_side {
   background-color: #3b413f;
   margin-right: auto;
-  padding-top: v-bind(padding);
-  padding-bottom: v-bind(padding);
-  padding-right: 8px;
-
   color: #fff;
 }
 
