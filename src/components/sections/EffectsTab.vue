@@ -2,29 +2,19 @@
   <div style="display: flex">
     <div style="padding: 40px 20px 40px 40px;">
       <ContentBox title="Preset">
-        <ButtonList ref="buttonList" title="Group">
-          <PushButton v-for="(value, id) in effectPresets" :key="id" :padding="'0'" :button-id="value"
-                      :is-active="isActive(value)" @click="buttonPressed(value)">
-            <template #left>
-              <div style="padding: 8px; overflow: hidden; text-overflow: ellipsis">
-                {{ getLabel(id, value) }}
-              </div>
-            </template>
-            <template #right>
-              <button :aria-label="`${value} Options`" :id="getButtonId(value)" aria-haspopup="menu" aria-controls="effects_menu" style="padding: 8px" @click.prevent.stop="menuPressed($event, getButtonId(value), value)">
-                <font-awesome-icon icon="fa-solid fa-ellipsis-vertical"/>
-              </button>
-            </template>
-          </PushButton>
-        </ButtonList>
+        <RadioSelection
+            title="Group"
+            group="lighting_mixer_icon_select"
+            :options="getEffectOptions()"
+            :selected="getSelectedEffectOption()"
+            :menu="menu_options"
+            menu_id="profile_buttons"
+            @menu-opened="menuOpened"
+            @menu-selected="optionClicked"
+            @selection-changed="onEffectSelectionChange"
+        />
+
       </ContentBox>
-      <DropMenu
-          :options="menu_options"
-          ref="contextMenu"
-          @option-clicked="optionClicked"
-          menu_id="effects_menu"
-      >
-      </DropMenu>
 
       <ModalBox v-if="showRenameModal" @close="showRenameModal = false">
         <template v-slot:title>Enter New Preset Name</template>
@@ -60,27 +50,23 @@ import MegaphoneEffect from "@/components/sections/effects/MegaphoneEffect";
 import RobotEffect from "@/components/sections/effects/RobotEffect";
 import HardTuneEffect from "@/components/sections/effects/HardTuneEffect";
 import ContentBox from "@/components/ContentBox";
-import PushButton from "@/components/button_list/Button";
-import ButtonList from "@/components/button_list/ButtonList";
 import {EffectPresets} from "@/util/mixerMapping";
 import {store} from "@/store";
-import DropMenu from "@/components/design/DropMenu";
 import {sendHttpCommand, websocket} from "@/util/sockets";
 import ModalBox from "@/components/design/modal/ModalBox";
 import ModalButton from "@/components/design/modal/ModalButton";
 import ModalInput from "@/components/design/modal/ModalInput";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
+import RadioSelection from "@/components/button_list/RadioSelection.vue";
 
 export default {
   name: "EffectsTab",
   components: {
+    RadioSelection,
     ContentContainer,
     ModalInput,
     ModalButton,
     ModalBox,
-    DropMenu,
-    ButtonList,
-    PushButton,
     ContentBox,
     HardTuneEffect,
     RobotEffect, MegaphoneEffect, GenderEffect, PitchEffect, EchoEffect, ReverbEffect,
@@ -98,6 +84,29 @@ export default {
   },
 
   methods: {
+    getEffectOptions() {
+      // We need to build the list from existing effects..
+      let effects = [];
+      for (let i = 0; i < this.effectPresets.length; i++) {
+        effects.push({
+          id: this.effectPresets[i],
+          label: this.getLabel(i, this.effectPresets[i]),
+        })
+      }
+
+      return effects;
+    },
+
+    onEffectSelectionChange(id) {
+      if (!this.isActive(id)) {
+        websocket.send_command(store.getActiveSerial(), {"SetActiveEffectPreset": id});
+      }
+    },
+
+    getSelectedEffectOption() {
+      return store.getActiveDevice().effects.active_preset;
+    },
+
     getButtonId(preset_name) {
       return preset_name.toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_") + "_profile_button";
     },
@@ -113,6 +122,14 @@ export default {
     buttonPressed(id) {
       if (!this.isActive(id)) {
         websocket.send_command(store.getActiveSerial(), {"SetActiveEffectPreset": id});
+      }
+    },
+
+    menuOpened(event, return_id, item) {
+      console.log(item);
+      if (!this.isActive(item)) {
+        console.log("Err?");
+        websocket.send_command(store.getActiveSerial(), {"SetActiveEffectPreset": item});
       }
     },
 
@@ -134,7 +151,7 @@ export default {
     },
 
     saveActivePreset() {
-      sendHttpCommand(store.getActiveSerial(),{ "SaveActivePreset": [] })
+      sendHttpCommand(store.getActiveSerial(), {"SaveActivePreset": []})
           .catch((error) => {
             console.log(error);
           });
