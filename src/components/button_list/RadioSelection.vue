@@ -74,7 +74,6 @@ export default {
           :text="option.label"
           :selected="selected === option.id"
           :disabled="option.disabled"
-          :has_menu_item="this.menu !== undefined"
           @radio-selected="select(option.id)"
       >
         <template v-if="this.menu !== undefined" #right>
