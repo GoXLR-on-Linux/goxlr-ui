@@ -1,4 +1,4 @@
-<template>
+<template xmlns:slot="http://www.w3.org/1999/html">
   <GroupContainer title="Bank">
     <RadioSelection title="Bank" group="sampler_bank" :options="bank_options" :selected="activeBank" @selection-changed="setActiveBank" />
     <RadioSelection title="Button" group="sampler_button" :options="button_options" :selected="activeButton" @selection-changed="setActiveButton" />
@@ -7,15 +7,16 @@
   </GroupContainer>
   <GroupContainer title="Sampler">
     <RadioSelection title="Samples" group="sampler_samples" :options="getSampleOptions()" :selected="activeSample" @selection-changed="setActiveSample">
-            <PushButton @click="showAddModal = true">
-              <template #left>
-                <div style="text-align: center">+</div>
-              </template>
-            </PushButton>
+      <ButtonItem id="add_sample" ref="add_sample_button" text="+" label="Add Sample" :centered="true" @click="$refs.add_sample_modal.openModal(undefined, $refs.add_sample_button)" />
     </RadioSelection>
 
     <AudioVisualiser :active-bank="activeBank" :active-button="activeButton" :active-sample="parseInt(activeSample)" @deselect-sample="activeSample = '-1'" />
   </GroupContainer>
+
+  <AccessibleModal ref="add_sample_modal" id="add_sample" :show_footer="false">
+    <template v-slot:title>Add Sample</template>
+    <RadioSelection title="Hi"></RadioSelection>
+  </AccessibleModal>
 
   <ModalBox v-if="showAddModal" @close="showAddModal = false">
     <template v-slot:title>Add Sample (Double Click) - WIP</template>
@@ -42,12 +43,14 @@ import SampleHandler from "@/components/sections/files/SampleHandler";
 import ModalBox from "@/components/design/modal/ModalBox";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
-import PushButton from "@/components/buttons/Button.vue";
+import ButtonItem from "@/components/lists/ButtonItem.vue";
+import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 
 export default {
   name: "SamplerTab",
   components: {
-    PushButton,
+    AccessibleModal,
+    ButtonItem,
     GroupContainer,
     RadioSelection, ModalBox, SampleHandler, AudioVisualiser},
 
