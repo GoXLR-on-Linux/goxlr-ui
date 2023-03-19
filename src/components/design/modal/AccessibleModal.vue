@@ -89,6 +89,8 @@ export default {
       if (this.returnFocus !== undefined) {
         this.returnFocus.focus();
       }
+
+      this.$emit('modal-close');
     }
   }
 }
