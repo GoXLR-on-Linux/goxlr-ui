@@ -7,8 +7,6 @@ export default {
   emits: ['selection-changed', 'menu-opened', 'menu-selected'],
   components: {
     ScrollingRadioList,
-    // VerticalScrollingContainer,
-    // RadioItem,
     WidgetContainer
   },
 
@@ -51,8 +49,7 @@ export default {
     </template>
     <ScrollingRadioList ref="list" :group="group" :options="options" :selected="selected" :menu="menu"
                         :menu_id="menu_id" @selection-changed="select" @menu-opened="menuOpened"
-                        @menu-selected="menuOptionClicked"
-    />
+                        @menu-selected="menuOptionClicked"><slot>{{}}</slot></ScrollingRadioList>
   </WidgetContainer>
 </template>
 
