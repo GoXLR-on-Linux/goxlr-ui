@@ -1,5 +1,5 @@
 <template>
-  <BigButton id="mic_setup" :title="setupTitle" @button-clicked="$refs.micSetupModal.openModal($refs.setup)">
+  <BigButton id="mic_setup" ref="mic_setup_button" :title="setupTitle" @button-clicked="$refs.micSetupModal.openModal($refs.setup, $refs.mic_setup_button)">
     <font-awesome-icon icon="fa-solid fa-microphone-lines" />
   </BigButton>
   <AccessibleModal ref="micSetupModal" id="mic_setup" body-padding="0px" :show_footer=false>
