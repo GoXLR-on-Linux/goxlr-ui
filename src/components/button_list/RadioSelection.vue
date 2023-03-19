@@ -38,6 +38,10 @@ export default {
       return this.group + "_" + name;
     },
 
+    getButtonByRef(name) {
+      return this.$refs[this.getUniqueId(name)][0];
+    },
+
     menuOpened(event, return_id, item) {
       // Trigger an event so anything upstream can handle the behaviour..
       this.$emit('menu-opened', event, return_id, item);
@@ -70,6 +74,7 @@ export default {
           v-for="option in options"
           :key="option.id"
           :id="getUniqueId(option.id)"
+          :ref="getUniqueId(option.id)"
           :group="group"
           :text="option.label"
           :selected="selected === option.id"
