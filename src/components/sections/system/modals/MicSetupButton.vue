@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import BigButton from "@/components/big_buttons/BigButton";
-import SetupModel from "@/components/sections/mic/SetupModel";
-import AccessibleModal from "@/components/design/modal/AccessibleModal";
+import BigButton from "@/components/big_buttons/BigButton.vue";
+import SetupModel from "@/components/sections/mic/SetupModel.vue";
+import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 export default {

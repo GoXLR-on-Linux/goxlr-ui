@@ -21,7 +21,7 @@ import Equaliser from "./mic/Equalizer";
 import Compressor from "./mic/Compressor";
 import MicExtra from "./mic/MicExtra";
 import MicProfileHandler from "@/components/profiles/handlers/MicProfileHandler";
-import MicSetupButton from "@/components/sections/mic/MicSetupButton";
+import MicSetupButton from "@/components/sections/system/modals/MicSetupButton.vue";
 import ContentBox from "@/components/ContentBox";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 

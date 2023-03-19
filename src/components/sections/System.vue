@@ -143,7 +143,7 @@ import ModalBox from "@/components/design/modal/ModalBox";
 import {store} from "@/store";
 import SimpleNumberInput from "@/components/design/SimpleNumberInput";
 import {websocket} from "@/util/sockets";
-import MicSetupButton from "@/components/sections/mic/MicSetupButton";
+import MicSetupButton from "@/components/sections/system/modals/MicSetupButton.vue";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 
