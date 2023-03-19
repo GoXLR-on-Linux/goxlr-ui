@@ -1,10 +1,14 @@
 <template>
-  <button ref="button" class="modal-button"><slot /></button>
+  <button ref="button" class="modal-button" :class="{ enabled: enabled }" :disabled="!enabled"><slot /></button>
 </template>
 
 <script>
 export default {
   name: "ModalButton",
+
+  props: {
+    enabled: { type: Boolean, default: true }
+  },
 
   methods: {
     focus() {
@@ -24,7 +28,11 @@ export default {
   width: 120px;
 }
 
-.modal-button:hover, .modal-button:focus {
+.modal-button:disabled {
+  background-color: #2B2F2D;
+}
+
+.modal-button:not(:disabled):hover, .modal-button:not(:disabled):focus {
   background-color: #737775;
 }
 </style>

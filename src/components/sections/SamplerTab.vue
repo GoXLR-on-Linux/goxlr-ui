@@ -13,46 +13,42 @@
     <AudioVisualiser :active-bank="activeBank" :active-button="activeButton" :active-sample="parseInt(activeSample)" @deselect-sample="activeSample = '-1'" />
   </GroupContainer>
 
-  <AccessibleModal ref="add_sample_modal" id="add_sample" :show_footer="false">
+  <AccessibleModal ref="add_sample_modal" id="add_sample" :show_footer="true">
     <template v-slot:title>Add Sample</template>
-    <RadioSelection title="Hi"></RadioSelection>
+    <ScrollingRadioList max_height="300px" group="sample_list" :options="getSampleList()" :selected="getSelectedAddSample()" @selection-changed="selectAddSample" />
+    <template v-slot:footer>
+      <ModalButton ref="ok" class="modal-default-button" :enabled="selectedAddSample !== undefined" @click="addSample">Add</ModalButton>
+    </template>
   </AccessibleModal>
 
-  <ModalBox v-if="showAddModal" @close="showAddModal = false">
-    <template v-slot:title>Add Sample (Double Click) - WIP</template>
-    <div style="overflow: auto; height: 230px">
-      <SampleHandler @sample-clicked="addSample"/>
-    </div>
-    <template #footer>&nbsp;</template>
-  </ModalBox>
-
-  <ModalBox v-if="waitModal">
-    <template v-slot:title>Add Sample</template>
-      <div>Please wait, sample being analysed.<br />
-        This process may take a couple of minutes.<br />
+  <AccessibleModal ref="add_sample_wait" id="add_sample_wait" :show_footer="false" :show_close="false" :prevent_esc="true">
+    <template v-slot:title>Please wait, analysing sample.</template>
+    <div tabindex="0">Please wait, sample being analysed.<br />
+      This process may take a couple of minutes.<br />
       Your GoXLR <b>WILL</b> be Unresponsive during this time.</div>
-    <template #footer>&nbsp;</template>
-  </ModalBox>
+  </AccessibleModal>
 </template>
 
 <script>
 import {store} from "@/store";
-import {sendHttpCommand, websocket} from "@/util/sockets";
 import AudioVisualiser from "@/components/sections/sampler/AudioVisualiser";
-import SampleHandler from "@/components/sections/files/SampleHandler";
-import ModalBox from "@/components/design/modal/ModalBox";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import ButtonItem from "@/components/lists/ButtonItem.vue";
 import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
+import ScrollingRadioList from "@/components/lists/ScrollingRadioList.vue";
+import ModalButton from "@/components/design/modal/ModalButton.vue";
+import {websocket} from "@/util/sockets";
 
 export default {
   name: "SamplerTab",
   components: {
+    ModalButton,
+    ScrollingRadioList,
     AccessibleModal,
     ButtonItem,
     GroupContainer,
-    RadioSelection, ModalBox, SampleHandler, AudioVisualiser},
+    RadioSelection, AudioVisualiser},
 
   data() {
     return {
@@ -60,9 +56,10 @@ export default {
       activeButton: "TopLeft",
       activeSample: "-1",
 
+      selectedAddSample: undefined,
+
       showAddModal: false,
       waitModal: false,
-
 
       bank_options: [
         {id: "A", label: "A"},
@@ -129,18 +126,44 @@ export default {
     getSamples() {
       return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].samples;
     },
+
+    getSampleList() {
+      let samples = [];
+      for (let sample of Object.keys(store.getSampleFiles()).sort()) {
+        samples.push({
+          id: sample,
+          label: sample
+        });
+      }
+      return samples;
+    },
+
+    selectAddSample(sample) {
+      this.selectedAddSample = sample;
+    },
+
+    getSelectedAddSample() {
+      return this.selectedAddSample;
+    },
+
     setActiveSample(id) {
       this.activeSample = id;
     },
 
-    addSample(name) {
-      this.waitModal = true;
-      this.showAddModal = false;
+    addSample() {
+      let name = store.getSampleFiles()[this.getSelectedAddSample()];
+
+      // If we're adding a sample, we need to drop the return focus...
+      this.$refs.add_sample_modal.returnFocus = undefined;
+      this.$refs.add_sample_modal.closeModal();
+
+      this.$refs.add_sample_wait.openModal(undefined, this.$refs.add_sample_button);
       store.pause();
 
       this.$nextTick(() => {
-        sendHttpCommand(store.getActiveSerial(), {"AddSample": [this.activeBank, this.activeButton, name]}).then(() => {
-          this.waitModal = false;
+        websocket.send_command(store.getActiveSerial(), {"AddSample": [this.activeBank, this.activeButton, name]}).then(() => {
+          this.selectedAddSample = undefined;
+          this.$refs.add_sample_wait.closeModal();
           store.resume();
         });
       })

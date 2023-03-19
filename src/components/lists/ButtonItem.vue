@@ -1,5 +1,7 @@
 <template>
-  <button ref="button" :aria-label="(label === undefined) ? text : label" :class="{ centered: centered, disabled: disabled }">{{text}}</button>
+  <div>
+    <button ref="button" :aria-label="(label === undefined) ? text : label" :class="{ centered: centered, disabled: disabled }">{{text}}</button>
+  </div>
 </template>
 
 <script>

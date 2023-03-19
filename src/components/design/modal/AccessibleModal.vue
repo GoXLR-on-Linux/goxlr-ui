@@ -1,10 +1,15 @@
 <template>
   <div v-show=is_visible class="modal-mask">
     <div class="modal-wrapper">
-      <div ref="dialog" class="modal-container" role="dialog" aria-modal="true" :aria-labelledby="`${id}_label`" :aria-describedby="`${id}_body`" @keyup.esc.prevent="closeModal">
+      <div ref="dialog" class="modal-container" role="dialog" aria-modal="true" :aria-labelledby="`${id}_label`"
+           :aria-describedby="`${id}_body`" @keyup.esc.prevent="closeModalEsc">
         <div class="modal-header">
-          <div :id="`${id}_label`"><slot name="title"></slot></div>
-          <button v-show=show_close ref="close" @click="closeModal()"><font-awesome-icon title="Close" icon="fa-solid fa-xmark" /></button>
+          <div :id="`${id}_label`">
+            <slot name="title"></slot>
+          </div>
+          <button v-show=show_close ref="close" @click="closeModal()">
+            <font-awesome-icon title="Close" icon="fa-solid fa-xmark"/>
+          </button>
         </div>
         <div class="modal-body" :id="`${id}_body`">
           <slot></slot>
@@ -28,11 +33,12 @@ export default {
 
   props: {
     id: {type: String, required: true},
-    show_close: { type: Boolean, default: true },
-    show_footer: { byte: Boolean, default: true},
+    show_close: {type: Boolean, default: true},
+    show_footer: {type: Boolean, default: true},
+    prevent_esc: {type: Boolean, default: false},
 
     bodyPadding: {type: String, default: "20px"},
-    width: {type: String, default: "500px" }
+    width: {type: String, default: "500px"}
   },
 
   data() {
@@ -51,10 +57,8 @@ export default {
       this.$nextTick(() => {
         if (focusRef === undefined) {
           if (this.$refs.ok !== undefined) {
-            console.log("Focus OK");
             this.$refs.ok.focus();
           } else {
-            console.log("Focus Close");
             this.$refs.close.focus();
           }
         } else {
@@ -65,6 +69,13 @@ export default {
         this.trap = focusTrap.createFocusTrap(this.$refs.dialog);
         this.trap.activate();
       })
+    },
+
+    closeModalEsc() {
+      if (this.prevent_esc) {
+        return;
+      }
+      this.closeModal()
     },
 
     closeModal() {

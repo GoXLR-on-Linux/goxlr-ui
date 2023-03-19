@@ -14,6 +14,8 @@ export default {
     selected: String,
     menu: Array,
     menu_id: String,
+
+    max_height: {type: String, optional: true, default: "inherit"}
   },
 
   methods: {
@@ -60,7 +62,7 @@ export default {
 </script>
 
 <template>
-  <VerticalScrollingContainer ref="container" role="radiogroup">
+  <VerticalScrollingContainer :class="{ height: max_height }" ref="container" role="radiogroup">
     <RadioItem
         v-for="option in options"
         :key="option.id"
@@ -93,6 +95,10 @@ export default {
 </template>
 
 <style scoped>
+.container .height {
+  max-height: v-bind(max_height)
+}
+
 button {
   background-color: transparent;
   border: 0;
