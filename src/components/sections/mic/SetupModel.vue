@@ -2,7 +2,7 @@
   <!-- Build the Modal -->
   <CenteredContainer>
     <ContentContainer>
-      <RadioSelection title="Mic Type" group="mic_type" :options="microphone_options" :selected="getActiveMicType()" @selection-changed="handleButtonPress" />
+      <RadioSelection ref="selection" title="Mic Type" group="mic_type" :options="microphone_options" :selected="getActiveMicType()" @selection-changed="handleButtonPress" />
 
       <Slider title="Gain" :slider-min-value=0 :slider-max-value=72 text-suffix="dB"
               :slider-value=getGainValue() :store-path="getStorePath()" @value-changed="setGain" />
@@ -64,7 +64,10 @@ export default {
     },
 
     focus() {
-        this.$refs[store.getActiveDevice().mic_status.mic_type].focus();
+      let activeType = store.getActiveDevice().mic_status.mic_type;
+      let button = this.$refs.selection.getButtonByRef(activeType);
+      console.log(button);
+      button.focus();
     }
   }
 }
