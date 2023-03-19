@@ -1,5 +1,5 @@
 <template>
-  <BigButton id="license_button" :title="setupTitle" @button-clicked="$refs.licenseModal.openModal()">
+  <BigButton id="license_button" ref="license_button" :title="setupTitle" @button-clicked="$refs.licenseModal.openModal(undefined, $refs.license_button)">
     <font-awesome-icon icon="fa-solid fa-book-open"/>
   </BigButton>
   <AccessibleModal width="680px" ref="licenseModal" id="license_modal" :show_footer=false>
