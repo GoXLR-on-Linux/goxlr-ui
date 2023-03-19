@@ -1,8 +1,8 @@
 <template>
-  <div class="contextBox">
-    <div class="label">Waveform</div>
+  <WidgetContainer style="width: fit-content">
+    <template v-slot:title>Waveform</template>
     <div class="content">
-      <div class="vertical_button" style="text-align: center" v-bind:class="{enabled: (activeSample !== -1)}" @click="playActiveSample()"><font-awesome-icon :icon="getPlaybackButton()"></font-awesome-icon></div>
+      <button class="vertical_button" :aria-label="getPlaybackLabel()" style="text-align: center" v-bind:class="{enabled: (activeSample !== -1)}" @click="playActiveSample()"><font-awesome-icon :icon="getPlaybackButton()"></font-awesome-icon></button>
 
       <div ref="wrapper" style="position: relative; width: 500px">
         <div class="drag_handle left" style="text-align: center" ref="left" v-bind:class="{enabled: (activeSample !== -1)}" @mousedown.stop="mouseDownLeft">|</div>
@@ -10,16 +10,18 @@
         <div style="color: white; height: 170px; line-height: 85px; text-align: center">Waveform Coming Soon!<br/>&lt;-- Position Sliders Supported --&gt;</div>
       </div>
 
-      <div class="vertical_button" style="text-align: center" v-bind:class="{enabled: (activeSample !== -1)}" @click="deleteActiveSample()"><font-awesome-icon icon="fa-solid fa-trash"></font-awesome-icon></div>
+      <button class="vertical_button" aria-label="Remove Sample" style="text-align: center" v-bind:class="{enabled: (activeSample !== -1)}" @click="deleteActiveSample()"><font-awesome-icon icon="fa-solid fa-trash"></font-awesome-icon></button>
     </div>
-  </div>
+  </WidgetContainer>
 </template>
 
 <script>
 import {websocket} from "@/util/sockets";
 import {store} from "@/store";
+import WidgetContainer from "@/components/containers/WidgetContainer.vue";
 export default {
   name: "AudioVisualiser",
+  components: {WidgetContainer},
   props: {
     activeBank: String,
     activeButton: String,
@@ -62,6 +64,13 @@ export default {
         return "fa-solid fa-stop";
       }
       return "fa-solid fa-play";
+    },
+
+    getPlaybackLabel() {
+      if (store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].is_playing) {
+        return "Stop Playback";
+      }
+      return "Playback Sample";
     },
 
     deleteActiveSample() {
@@ -209,7 +218,7 @@ export default {
 
 <style scoped>
 .vertical_button {
-  height: 170px;
+  height: 100%;
   width: 30px;
   margin-left: 6px;
   margin-right: 6px;
@@ -219,21 +228,31 @@ export default {
   line-height: 170px;
   padding-left: 6px;
   padding-right: 6px;
+
+  border: 0px;
 }
 
 .vertical_button:hover.enabled {
   background-color: #49514e;
 }
 
+.vertical_button:not(.enabled) {
+  background-color: #2B2F2D;
+}
+
 .drag_handle {
   position: absolute;
 
-  height: 170px;
+  height: 100%;
   width: 20px;
 
   background-color: #3b413f;
   color: #fff;
   line-height: 170px;
+}
+
+.drag_handle:not(.enabled) {
+  background-color: #2B2F2D;
 }
 
 .drag_handle.left {
@@ -248,27 +267,13 @@ export default {
   background-color: #49514e;
 }
 
-.contextBox {
-  height: 220px;
-  margin: 3px;
-  background-color: #353937;
-}
-
 .content {
-  height: 170px;
+  height: 100%;
+  padding-top: 6px;
+  padding-bottom: 6px;
 
   display: inline-flex;
   flex-direction: row;
   flex-wrap: nowrap;
-}
-
-.label {
-  padding: 10px;
-  color: #fff;
-  background-color: #3b413f;
-
-  text-transform: uppercase;
-
-  margin-bottom: 8px;
 }
 </style>
