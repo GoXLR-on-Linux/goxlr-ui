@@ -13,7 +13,7 @@
     <AudioVisualiser :active-bank="activeBank" :active-button="activeButton" :active-sample="parseInt(activeSample)" @deselect-sample="activeSample = '-1'" />
   </GroupContainer>
 
-  <AccessibleModal ref="add_sample_modal" id="add_sample" :show_footer="true">
+  <AccessibleModal ref="add_sample_modal" id="add_sample" :show_footer="true" @modal-close="selectedAddSample = undefined">
     <template v-slot:title>Add Sample</template>
     <ScrollingRadioList max_height="300px" group="sample_list" :options="getSampleList()" :selected="getSelectedAddSample()" @selection-changed="selectAddSample" />
     <template v-slot:footer>
@@ -162,7 +162,6 @@ export default {
 
       this.$nextTick(() => {
         websocket.send_command(store.getActiveSerial(), {"AddSample": [this.activeBank, this.activeButton, name]}).then(() => {
-          this.selectedAddSample = undefined;
           this.$refs.add_sample_wait.closeModal();
           store.resume();
         });
