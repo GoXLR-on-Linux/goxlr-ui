@@ -1,5 +1,5 @@
 <template>
-  <button role="button" :aria-labelledby="`button_title_${id}`" class="content" @click="clicked">
+  <button ref="button" role="button" :aria-labelledby="`button_title_${id}`" class="content" @click="clicked">
     <div class="img-section">
       <slot/>
     </div>
@@ -19,6 +19,9 @@ export default {
   methods: {
     clicked: function (){
       this.$emit("button-clicked")
+    },
+    focus: function() {
+      this.$refs.button.focus();
     }
   }
 }
