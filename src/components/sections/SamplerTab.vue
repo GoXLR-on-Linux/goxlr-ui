@@ -101,12 +101,12 @@ export default {
 
     setActiveBank(bank) {
       this.activeBank = bank;
-      this.activeSample = -1;
+      this.activeSample = "-1";
     },
 
     setActiveButton(button) {
       this.activeButton = button;
-      this.activeSample = -1;
+      this.activeSample = "-1";
     },
 
 
