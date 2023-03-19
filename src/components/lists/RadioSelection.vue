@@ -1,16 +1,14 @@
 <script>
 import WidgetContainer from "@/components/containers/WidgetContainer.vue";
-import RadioItem from "@/components/lists/RadioItem.vue";
-import VerticalScrollingContainer from "@/components/containers/VerticalScrollingContainer.vue";
-import DropMenu from "@/components/design/DropMenu.vue";
+import ScrollingRadioList from "@/components/lists/ScrollingRadioList.vue";
 
 export default {
   name: "RadioSelection",
   emits: ['selection-changed', 'menu-opened', 'menu-selected'],
   components: {
-    DropMenu,
-    VerticalScrollingContainer,
-    RadioItem,
+    ScrollingRadioList,
+    // VerticalScrollingContainer,
+    // RadioItem,
     WidgetContainer
   },
 
@@ -23,35 +21,19 @@ export default {
     menu_id: String,
   },
 
-  data() {
-    return {
-      container: undefined,
-    }
-  },
-
   methods: {
+    // We basically need to propagate these from child to parent
+    getButtonByRef(name) {
+      return this.$refs.list.getButtonByRef(name);
+    },
+
     select(option) {
       this.$emit('selection-changed', option);
-    },
-
-    getUniqueId(name) {
-      return this.group + "_" + name;
-    },
-
-    getButtonByRef(name) {
-      return this.$refs[this.getUniqueId(name)][0];
     },
 
     menuOpened(event, return_id, item) {
       // Trigger an event so anything upstream can handle the behaviour..
       this.$emit('menu-opened', event, return_id, item);
-
-      // Trigger the menu open.
-      this.$refs.contextMenu.showMenu(event, item, return_id, this.container.getMainRef().scrollTop);
-    },
-
-    getButtonId(value) {
-      return value.toLowerCase().replace(" ", "_").replace("(", "_").replace(")", "_") + "_" + this.menu_id;
     },
 
     menuOptionClicked(event) {
@@ -59,58 +41,20 @@ export default {
       this.$emit('menu-selected', event);
     }
   },
-
-  mounted() {
-      this.container = this.$refs.container;
-  }
 }
 </script>
 
 <template>
-  <WidgetContainer role="radiogroup">
-    <template #title><slot name="title">{{ title }}</slot></template>
-    <VerticalScrollingContainer ref="container">
-      <RadioItem
-          v-for="option in options"
-          :key="option.id"
-          :id="getUniqueId(option.id)"
-          :ref="getUniqueId(option.id)"
-          :group="group"
-          :text="option.label"
-          :selected="selected === option.id"
-          :disabled="option.disabled"
-          @radio-selected="select(option.id)"
-      >
-        <template v-if="this.menu !== undefined" #right>
-          <button :aria-label="`${option.label} Options`" :id="getButtonId(option.id)"
-                  aria-haspopup="menu" :aria-controls="this.menu_id"
-                  @click.prevent.stop="menuOpened($event, getButtonId(option.id), option.id)">
-            <font-awesome-icon icon="fa-solid fa-ellipsis-vertical"/>
-          </button>
-        </template>
-
-      </RadioItem>
-      <slot></slot>
-    </VerticalScrollingContainer>
+  <WidgetContainer>
+    <template #title>
+      <slot name="title">{{ title }}</slot>
+    </template>
+    <ScrollingRadioList ref="list" :group="group" :options="options" :selected="selected" :menu="menu"
+                        :menu_id="menu_id" @selection-changed="select" @menu-opened="menuOpened"
+                        @menu-selected="menuOptionClicked"
+    />
   </WidgetContainer>
-  <DropMenu
-      v-if="this.menu !== undefined"
-      :options="this.menu"
-      ref="contextMenu"
-      @option-clicked="menuOptionClicked"
-      :menu_id="this.menu_id"
-  />
 </template>
 
 <style scoped>
-button {
-  background-color: transparent;
-  border: 0;
-  padding: 6px;
-  margin: 0;
-}
-
-button:focus {
-  outline: none;
-}
 </style>
