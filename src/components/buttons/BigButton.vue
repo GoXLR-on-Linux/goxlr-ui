@@ -52,6 +52,11 @@ button .img-section {
   -webkit-align-items: center;
   -webkit-justify-content: center;
 }
+
+button:hover {
+  cursor: pointer;
+}
+
 button:hover .img-section {
   color: #fff;
   background-color: #49514E;
