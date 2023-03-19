@@ -1,5 +1,5 @@
 <template>
-  <ul @keydown.prevent="debugEvent" v-show="is_active" :aria-expanded="is_active" ref="menuList" role="menu"
+  <ul @keyup.stop.prevent="debugEvent" v-show="is_active" :aria-expanded="is_active" ref="menuList" role="menu"
       :id="menu_id"
  class="context-menu" v-click-outside="onClickOutside">
     <li role="presentation" v-for="(option, index) in options" :key="index" @click.stop="optionClicked(option)"
