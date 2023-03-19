@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import BigButton from "@/components/big_buttons/BigButton.vue";
+import BigButton from "@/components/buttons/BigButton.vue";
 
 export default {
   name: "HelpButton",

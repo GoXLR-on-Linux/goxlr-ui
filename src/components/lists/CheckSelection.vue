@@ -1,7 +1,7 @@
 <script>
 import WidgetContainer from "@/components/containers/WidgetContainer.vue";
 import VerticalScrollingContainer from "@/components/containers/VerticalScrollingContainer.vue";
-import CheckItem from "@/components/button_list/CheckItem.vue";
+import CheckItem from "@/components/lists/CheckItem.vue";
 
 export default {
   name: "CheckSelection",

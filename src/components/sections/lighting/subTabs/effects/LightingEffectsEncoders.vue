@@ -1,6 +1,6 @@
 <script>
 import GroupContainer from "@/components/containers/GroupContainer.vue";
-import RadioSelection from "@/components/button_list/RadioSelection.vue";
+import RadioSelection from "@/components/lists/RadioSelection.vue";
 import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
 
 import { store } from "@/store";

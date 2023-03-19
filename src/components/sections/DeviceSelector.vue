@@ -19,7 +19,7 @@
 
 <script>
 
-import Button from "@/components/button_list/Button";
+import Button from "@/components/buttons/Button.vue";
 import {store} from "@/store";
 
 export default {

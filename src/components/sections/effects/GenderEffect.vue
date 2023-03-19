@@ -11,7 +11,7 @@ import {store} from "@/store";
 import SliderInput from "@/components/slider/Slider";
 import {websocket} from "@/util/sockets";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
-import RadioSelection from "@/components/button_list/RadioSelection.vue";
+import RadioSelection from "@/components/lists/RadioSelection.vue";
 
 export default {
   name: "GenderEffect",

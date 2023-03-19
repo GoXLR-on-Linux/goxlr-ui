@@ -53,7 +53,7 @@ import {sendHttpCommand, websocket} from "@/util/sockets";
 import ModalButton from "@/components/design/modal/ModalButton";
 import ModalInput from "@/components/design/modal/ModalInput";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
-import RadioSelection from "@/components/button_list/RadioSelection.vue";
+import RadioSelection from "@/components/lists/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 

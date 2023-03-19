@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import BigButton from "@/components/big_buttons/BigButton.vue";
+import BigButton from "@/components/buttons/BigButton.vue";
 import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 import {store} from "@/store";
 

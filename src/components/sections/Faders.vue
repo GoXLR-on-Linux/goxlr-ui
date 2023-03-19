@@ -12,7 +12,7 @@
 <script>
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import RadioSelection from "@/components/button_list/RadioSelection.vue";
+import RadioSelection from "@/components/lists/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 
 export default {

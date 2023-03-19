@@ -1,6 +1,6 @@
 <script>
 import WidgetContainer from "@/components/containers/WidgetContainer.vue";
-import RadioItem from "@/components/button_list/RadioItem.vue";
+import RadioItem from "@/components/lists/RadioItem.vue";
 import VerticalScrollingContainer from "@/components/containers/VerticalScrollingContainer.vue";
 import DropMenu from "@/components/design/DropMenu.vue";
 

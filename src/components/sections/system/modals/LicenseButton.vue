@@ -52,7 +52,7 @@ SOFTWARE.</textarea>
 
 <script>
 import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
-import BigButton from "@/components/big_buttons/BigButton.vue";
+import BigButton from "@/components/buttons/BigButton.vue";
 
 export default {
   name: "LicenseButton",

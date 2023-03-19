@@ -40,9 +40,9 @@ import {sendHttpCommand, websocket} from "@/util/sockets";
 import AudioVisualiser from "@/components/sections/sampler/AudioVisualiser";
 import SampleHandler from "@/components/sections/files/SampleHandler";
 import ModalBox from "@/components/design/modal/ModalBox";
-import RadioSelection from "@/components/button_list/RadioSelection.vue";
+import RadioSelection from "@/components/lists/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
-import PushButton from "@/components/button_list/Button.vue";
+import PushButton from "@/components/buttons/Button.vue";
 
 export default {
   name: "SamplerTab",
