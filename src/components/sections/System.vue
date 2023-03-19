@@ -7,11 +7,9 @@
         <font-awesome-icon icon="fa-solid fa-gear"/>
       </BigButton>
       <div style="margin-right: 30px"></div>
-      <BigButton id="about" title="About" @button-clicked="showVersionModal = true">
-        <font-awesome-icon icon="fa-solid fa-circle-info"/>
-      </BigButton>
+      <AboutButton/>
       <div style="margin-right: 30px"></div>
-      <LicenseButton />
+      <LicenseButton/>
       <div style="margin-right: 30px"></div>
       <a :href="'https://discord.gg/Wbp3UxkX2j'">
         <BigButton id="help" :title="'Help'">
@@ -21,37 +19,6 @@
     </GroupContainer>
   </CenteredContainer>
 
-  <ModalBox v-if="showVersionModal" @close="showVersionModal = false">
-    <template v-slot:title>About GoXLR</template>
-    <div style="text-align: left">
-      <div style="margin-bottom: 20px">
-        <div style="font-size: 16px; font-weight: bold">Serial</div>
-        <div>{{ getSerial() }}</div>
-      </div>
-
-      <div style="margin-bottom: 20px">
-        <div style="font-size: 16px; font-weight: bold">Utility Version</div>
-        <div>{{ getUtilityVersion() }}</div>
-      </div>
-
-      <div>
-        <div style="font-size: 16px; font-weight: bold">Hardware Version</div>
-        <div>
-          <span style="display: inline-block; width: 80px; font-weight: bold">Firmware: </span>
-          <span>{{ getFirmwareVersion() }}</span>
-        </div>
-        <div>
-          <span style="display: inline-block; width: 80px; font-weight: bold">Dice: </span>
-          <span>{{ getDice() }}</span>
-        </div>
-        <div>
-          <span style="display: inline-block; width: 80px; font-weight: bold">FPGA: </span>
-          <span>{{ getFPGACount() }}</span>
-        </div>
-      </div>
-    </div>
-    <template v-slot:footer>&nbsp;</template>
-  </ModalBox>
   <ModalBox width="680px" v-if="showSettingsModal" @close="showSettingsModal = false">
     <template v-slot:title>Device Settings (Work In Progress)</template>
     <div style="text-align: left">
@@ -73,7 +40,7 @@
         <input type="checkbox" :checked="isShowIcon()" @change="setShowIcon"/>
       </div>
       <div style="padding: 12px">
-        Recover Defaults:<br />
+        Recover Defaults:<br/>
         <button style="margin: 3px" @click="recover_defaults('Profiles')">Profiles</button>
         <button style="margin: 3px" @click="recover_defaults('MicProfiles')">Mic Profiles</button>
         <button style="margin: 3px" @click="recover_defaults('Icons')">Icons</button>
@@ -97,10 +64,12 @@ import MicSetupButton from "@/components/sections/system/modals/MicSetupButton.v
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import LicenseButton from "@/components/sections/system/modals/LicenseButton.vue";
+import AboutButton from "@/components/sections/system/modals/AboutButton.vue";
 
 export default {
   name: "SystemComponent",
   components: {
+    AboutButton,
     LicenseButton,
     GroupContainer,
     CenteredContainer,
@@ -117,27 +86,6 @@ export default {
   },
 
   methods: {
-    getSerial() {
-      return store.getActiveSerial();
-    },
-
-    getUtilityVersion() {
-      return store.getVersion();
-    },
-
-    getFirmwareVersion() {
-      let version = store.getActiveDevice().hardware.versions.firmware;
-      return version[0] + "." + version[1] + "." + version[2] + "." + version[3];
-    },
-
-    getDice() {
-      let version = store.getActiveDevice().hardware.versions.dice;
-      return version[0] + "." + version[1] + "." + version[2] + "." + version[3];
-    },
-
-    getFPGACount() {
-      return store.getActiveDevice().hardware.versions.fpga_count;
-    },
 
     getHold() {
       return store.getActiveDevice().settings.mute_hold_duration;
