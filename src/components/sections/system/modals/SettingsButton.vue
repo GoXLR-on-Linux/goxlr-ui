@@ -10,6 +10,11 @@
         <SimpleNumberInput :min-value="0" :max-value="5000" @value-updated="updateHold"
                            :current-text-value="getHold()"/>
       </div>
+      <div v-if="!isDeviceMini()" style="padding: 12px">
+        <span style="display: inline-block; width: 300px">Sampler Pre-Record Buffer (Requires Restart): </span>
+        <SimpleNumberInput :min-value="0" :max-value="30000" @value-updated="updateSamplerPreRecord"
+                           :current-text-value="getSamplerPreRecord()"/>
+      </div>
       <div style="padding: 12px">
         <span style="display: inline-block; width: 360px">Voice Chat Mute All Also Mutes Mic To Chat Mic:</span>
         <input type="checkbox" :checked="get_vcmaammtcm()" @change="set_vcmaammtcm"/>
@@ -42,12 +47,14 @@ import BigButton from "@/components/buttons/BigButton.vue";
 import SimpleNumberInput from "@/components/design/SimpleNumberInput.vue";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "SettingsButton",
   components: {SimpleNumberInput, BigButton, AccessibleModal},
 
   methods: {
+    isDeviceMini,
     getHold() {
       return store.getActiveDevice().settings.mute_hold_duration;
     },
@@ -55,6 +62,15 @@ export default {
     updateHold(value) {
       websocket.send_command(store.getActiveSerial(), {"SetMuteHoldDuration": value});
     },
+
+    getSamplerPreRecord() {
+      return store.getActiveDevice().sampler.record_buffer;
+    },
+
+    updateSamplerPreRecord(millis) {
+      websocket.send_command(store.getActiveSerial(), { "SetSamplerPreBufferDuration": millis })
+    },
+
 
     get_vcmaammtcm() {
       // I hate this name :D
