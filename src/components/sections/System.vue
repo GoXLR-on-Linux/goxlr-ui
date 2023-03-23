@@ -4,6 +4,7 @@
       <div class="buttons">
         <div><MicSetupButton /></div>
         <div><SettingsButton /></div>
+        <div><ShutdownButton /></div>
         <div><AboutButton /></div>
         <div><LicenseButton /></div>
         <div><HelpButton /></div>
@@ -20,10 +21,12 @@ import LicenseButton from "@/components/sections/system/modals/LicenseButton.vue
 import AboutButton from "@/components/sections/system/modals/AboutButton.vue";
 import SettingsButton from "@/components/sections/system/modals/SettingsButton.vue";
 import HelpButton from "@/components/sections/system/HelpButton.vue";
+import ShutdownButton from "@/components/sections/system/modals/ShutdownButton.vue";
 
 export default {
   name: "SystemComponent",
   components: {
+    ShutdownButton,
     HelpButton,
     SettingsButton,
     AboutButton,
