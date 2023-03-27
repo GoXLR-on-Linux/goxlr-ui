@@ -131,16 +131,6 @@ export default {
       this.createNewProfile = false;
     },
 
-    profileNameExists(name) {
-      for (let check of this.profileList) {
-        console.log(check);
-        if (check === name) {
-          return true;
-        }
-      }
-      return false;
-    },
-
     saveActiveProfile() {
       this.$emit('save-profile');
     },
