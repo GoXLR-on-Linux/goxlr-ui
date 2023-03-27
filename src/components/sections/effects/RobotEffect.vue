@@ -87,14 +87,12 @@ export default {
       let freq = store.getActiveDevice().effects.current.robot.low_freq;
       if (freq === 0) {
         return 0;
-      } else if (freq === 1) {
+      } else if (freq === 1 || freq === 2) {
         return 3
-      } else if (freq === 2) {
-        return 5
       } else if (freq === 3) {
         return 7
       } else {
-        return freq - 4;
+        return freq + 4;
       }
     },
     setLowFreqValue(id, value) {
