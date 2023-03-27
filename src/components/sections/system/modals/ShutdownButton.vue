@@ -7,7 +7,7 @@
     <template v-slot:title>Shutdown Actions</template>
     <div v-if="isValid()">
       <div style="padding-bottom: 15px">
-        These actions will be executed when Open GoXLR is safely shut down.
+        These actions will be executed when the GoXLR Utility is safely shut down.
       </div>
       <div>
         <input type="checkbox" ref="saveProfile" id="saveProfile" :checked="isActive('SaveProfile')"
