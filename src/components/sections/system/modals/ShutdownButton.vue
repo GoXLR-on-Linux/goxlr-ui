@@ -10,23 +10,25 @@
         These actions will be executed when Open GoXLR is safely shut down.
       </div>
       <div>
-        <input type="checkbox" id="a" :checked="isActive('SaveProfile')" @change="changed"><label for="a">Save
-        Profile</label>
+        <input type="checkbox" ref="saveProfile" id="saveProfile" :checked="isActive('SaveProfile')"
+               @change="changed"><label for="saveProfile">Save Profile</label>
       </div>
       <div>
-        <input type="checkbox" id="b" :checked="isActive('SaveMicProfile')" @change="changed"><label for="b">Save Mic Profile</label>
+        <input type="checkbox" ref="saveMicProfile" id="saveMicProfile" :checked="isActive('SaveMicProfile')"
+               @change="changed"><label for="saveMicProfile">Save Mic Profile</label>
       </div>
       <div>
-        <input type="checkbox" ref="color_profile" id="c" :checked="isActive('LoadProfileColours')" @change="changed"><label for="c">Load
-        Colour
-        Profile: </label>
-        <select @change="profileChanged" :value="getSelectedProfile()">
-          <option v-for="value in getValues()" :key="value">{{ value }}</option>
+        <input type="checkbox" ref="loadColourProfile" id="loadColourProfile" :checked="isActive('LoadProfileColours')"
+               @change="changed"><label for="loadColourProfile">Load Colour Profile: </label>
+        <select ref="colourProfile" @change="profileChanged" :value="getSelectedProfile()">
+          <option v-for="value in getProfiles()" :key="value">{{ value }}</option>
         </select>
       </div>
     </div>
     <div v-else>
-      Shutdown Configuration appears to have been manually modified,
+      Shutdown Configuration appears to have been manually modified, in order to prevent damage, the UI here will not
+      function. To completely reset the shutdown actions, press the button below:<br /><br />
+      <button @click="resetShutdownActions">Reset Shutdown Actions</button>
     </div>
   </AccessibleModal>
 </template>
@@ -35,29 +37,48 @@
 import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 import BigButton from "@/components/buttons/BigButton.vue";
 import {store} from "@/store";
+import {websocket} from "@/util/sockets";
+
 
 export default {
   name: "ShutdownButton",
   components: {BigButton, AccessibleModal},
 
+  data: function() {
+    return {
+      commands: ["SaveProfile", "SaveMicProfile", "LoadProfileColours"],
+  };
+},
+
   methods: {
     isValid() {
-      return true;
-    },
+      // Ok, firstly, we need to iterate over all the comamnds, and see if any aren't in our list...
+      let commands = [];
+      let order = [];
 
-    changed() {
-      //console.log(e);
-    },
-    isActive(command) {
       for (const object of store.getActiveDevice().shutdown_commands) {
         for (const key in object) {
-          if (key === command) {
-            return true;
+          if (!this.commands.includes(key)) {
+            return false;
+          } else {
+            // Perform a duplicate check...
+            if (commands.includes(key)) {
+              return false;
+            }
+            order.push(this.commands.indexOf(key));
+            commands.push(key);
           }
         }
       }
-      return false;
+
+      // Now verify the order of the commands...
+      return order.every((value, index, array) => !index || array[index-1] <= value);
     },
+
+    isActive(command) {
+      return this.getValue(command) !== undefined;
+    },
+
     getValue(command) {
       for (const object of store.getActiveDevice().shutdown_commands) {
         for (const key in object) {
@@ -66,23 +87,52 @@ export default {
           }
         }
       }
+      return undefined;
     },
 
-    getValues() {
+    getProfiles() {
       return store.getProfileFiles();
     },
-    profileChanged(e) {
-      if (this.$refs.color_profile.checked) {
-        // We need to change the colour profile :)
-        //console.log(e);
-        console.log("Button checked, change profile to: " + e.srcElement.value);
+
+    changed() {
+      // If any checkmark changes, we need to send an updated command list to the Daemon.
+      this.generateShutdownActions();
+    },
+
+    profileChanged() {
+      // Only send an update to the Daemon if the Load Colours checkbox is actually checked.
+      if (!this.$refs.loadColourProfile.checked) {
         return;
       }
-
-      console.log("Button not pressed, do nothing.");
+      this.generateShutdownActions();
     },
+
     getSelectedProfile() {
-        return this.getValue("LoadProfileColours").LoadProfileColours;
+      let profile = this.getValue("LoadProfileColours");
+      if (profile !== undefined) {
+        return profile.LoadProfileColours;
+      }
+
+      return this.getProfiles()[0];
+    },
+
+    generateShutdownActions() {
+      let actions = [];
+      if (this.$refs.saveProfile.checked) {
+        actions.push({"SaveProfile": []});
+      }
+      if (this.$refs.saveMicProfile.checked) {
+        actions.push({"SaveMicProfile": []})
+      }
+      if (this.$refs.loadColourProfile.checked) {
+        actions.push({"LoadProfileColours": this.$refs.colourProfile.value});
+      }
+
+      websocket.send_command(store.getActiveSerial(), { "SetShutdownCommands": actions });
+    },
+
+    resetShutdownActions() {
+      websocket.send_command(store.getActiveSerial(), { "SetShutdownCommands": [] });
     }
   }
 }
