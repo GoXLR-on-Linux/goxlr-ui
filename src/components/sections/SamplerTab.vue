@@ -14,8 +14,16 @@
   </GroupContainer>
 
   <AccessibleModal ref="add_sample_modal" id="add_sample" :show_footer="true" @modal-close="selectedAddSample = undefined">
-    <template v-slot:title>Add Sample</template>
-    <ScrollingRadioList max_height="300px" group="sample_list" :options="getSampleList()" :selected="getSelectedAddSample()" @selection-changed="selectAddSample" />
+    <template v-slot:title>
+      <span>Add Sample</span>
+      <button class="openButton" @click="openSamples" aria-label="Open Samples Directory">
+        <font-awesome-icon icon="fa-solid fa-folder" />
+      </button>
+    </template>
+    <ScrollingRadioList v-if="getSampleList().length > 0" max_height="300px" group="sample_list" :options="getSampleList()" :selected="getSelectedAddSample()" @selection-changed="selectAddSample" />
+    <span v-else>
+      There are currently no samples in the samples folder. Copy some over so they can be selected here!
+    </span>
     <template v-slot:footer>
       <ModalButton ref="ok" class="modal-default-button" :enabled="selectedAddSample !== undefined" @click="addSample">Add</ModalButton>
     </template>
@@ -91,6 +99,10 @@ export default {
   },
 
   methods: {
+    openSamples() {
+      websocket.open_path("Samples");
+    },
+
     getSampleOptions() {
        let samples = [];
        this.getSamples().forEach((sample, index) => {
@@ -172,5 +184,22 @@ export default {
 </script>
 
 <style scoped>
+button {
+  border: 0;
+  background-color: transparent;
+  padding: 0;
+  margin-left: 5px;
+}
+
+.openButton {
+  display: inline-block;
+  color: #a5a7a6;
+  font-size: 14px
+}
+
+.openButton:hover {
+  color: #fff;
+  cursor: pointer;
+}
 
 </style>
