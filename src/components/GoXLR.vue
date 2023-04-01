@@ -4,7 +4,14 @@
     <DeviceSelector v-if="!isDeviceSet()"/>
 
     <template v-if="isDeviceSet()">
+      <div style="display: flex; flex-direction: row; column-gap: 30px">
+        <div>
       <FileTabs />
+        </div>
+        <div>
+          <SubmixTest />
+        </div>
+      </div>
 
       <div style="height: 25px; background-color: #3b413f"/>
 
@@ -69,10 +76,12 @@ import {isDeviceMini} from "@/util/util";
 import LightingTab from "@/components/sections/lighting/LightingTab";
 import SamplerTab from "@/components/sections/SamplerTab";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
+import SubmixTest from "@/components/sections/SubmixTest.vue";
 
 export default {
   name: 'GoXLR',
   components: {
+    SubmixTest,
     ContentContainer,
     SamplerTab,
     LightingTab,
