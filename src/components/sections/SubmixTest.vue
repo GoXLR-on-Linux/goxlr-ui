@@ -110,23 +110,42 @@ export default {
       };
       websocket.send_command(store.getActiveSerial(), command);
       store.getActiveDevice().levels.submix.inputs[e.target.name].volume = e.target.value;
+
+      if (this.isSubMixLinked(e.target.name)) {
+        let ratio = store.getActiveDevice().levels.submix.inputs[e.target.name].ratio;
+        store.getActiveDevice().levels.volumes[e.target.name] = this.calculateMixVolume(e.target.value, ratio);
+      }
     },
 
     mouseDown(e) {
-      console.log(this.getStorePath(e.target.name));
-      store.pausePatchPath(this.getStorePath(e.target.name));
+      console.log(this.getMixStorePath(e.target.name));
+      store.pausePatchPath(this.getMixStorePath(e.target.name));
+
+      if (this.isSubMixLinked(e.target.name)) {
+        store.pausePatchPath(this.getMainStorePath(e.target.name));
+      }
     },
 
     mouseUp(e) {
-      console.log(this.getStorePath(e.target.name));
-      store.resumePatchPath(this.getStorePath(e.target.name));
-
+      console.log(this.getMixStorePath(e.target.name));
+      store.resumePatchPath(this.getMixStorePath(e.target.name));
+      if (this.isSubMixLinked(e.target.name)) {
+        store.resumePatchPath(this.getMainStorePath(e.target.name));
+      }
     },
 
-    getStorePath(name) {
-      return "/mixers/" + store.getActiveSerial() + "/levels/submix/inputs/" + name + "/volume"
-    }
+    calculateMixVolume(value, ratio) {
+      let calculated_volume = parseInt(value) / ratio;
+      return Math.min(Math.floor(calculated_volume), 255);
+    },
 
+    getMixStorePath(name) {
+      return "/mixers/" + store.getActiveSerial() + "/levels/submix/inputs/" + name + "/volume"
+    },
+
+    getMainStorePath(name) {
+      return "/mixers/" + store.getActiveSerial() + "/levels/volumes/" + name;
+    }
   }
 }
 </script>
