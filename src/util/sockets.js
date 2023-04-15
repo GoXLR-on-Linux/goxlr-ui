@@ -122,6 +122,13 @@ export class Websocket {
         return this.#sendRequest(request);
     }
 
+    set_tts_enabled(enabled) {
+        let request = {
+            "SetTTSEnabled": enabled
+        }
+        return this.#sendRequest(request);
+    }
+
     send_shutdown() {
         return this.#sendRequest("StopDaemon");
     }

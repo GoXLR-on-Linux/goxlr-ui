@@ -28,6 +28,10 @@
         <input type="checkbox" :checked="isShowIcon()" @change="setShowIcon"/>
       </div>
       <div style="padding: 12px">
+        <span style="display: inline-block; width: 360px">TTS on button press:</span>
+        <input type="checkbox" :checked="isTTSEnabled()" @change="setTTSEnabled"/>
+      </div>
+      <div style="padding: 12px">
         Recover Defaults:<br/>
         <button style="margin: 3px" @click="recover_defaults('Profiles')">Profiles</button>
         <button style="margin: 3px" @click="recover_defaults('MicProfiles')">Mic Profiles</button>
@@ -99,6 +103,14 @@ export default {
 
     setShowIcon(event) {
       websocket.set_show_icon(event.target.checked);
+    },
+
+    isTTSEnabled() {
+      return store.isTTSEnabled();
+    },
+
+    setTTSEnabled(event) {
+      websocket.set_tts_enabled(event.target.checked);
     },
 
     recover_defaults(type) {
