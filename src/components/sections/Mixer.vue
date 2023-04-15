@@ -1,11 +1,22 @@
 <template>
   <CenteredContainer>
-    <GroupContainer v-if="submixEnabled" title="Mix Assignment">
-
+    <GroupContainer v-if="submixEnabled()" title="Mix Assignment">
+      <!-- TODO: Fix this, really.. :D -->
+      <div style="color: #fff">
+        <div v-for="output in Object.keys(outputDevices)" :key="output" style="display: flex; flex-direction: row; gap: 6px">
+          <div style="width: 120px">{{ output }}</div>
+          <div style="margin-right: 15px">
+            <label for="A">A:</label> <input @change="setDeviceMix" :checked="isOutputA(outputDevices[output])" type="radio" id="A" :name="outputDevices[output]" />
+          </div>
+          <div>
+            <label for="B">B:</label> <input @change="setDeviceMix" :checked="!isOutputA(outputDevices[output])" type="radio" id="B" :name="outputDevices[output]" />
+          </div>
+        </div>
+      </div>
     </GroupContainer>
 
     <GroupContainer v-if="!submixEnabled()" title="Inputs">
-      <template #right>
+      <template v-if="isSubMixSupported()" #right>
         <input type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled" />
         <span style="color: #fff"> Submixes</span>
       </template>
@@ -16,7 +27,7 @@
       />
     </GroupContainer>
     <GroupContainer v-else title="Inputs">
-      <template #right>
+      <template v-if="isSubMixSupported()" #right>
         <input type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled" />
         <span style="color: #fff"> Submixes</span>
       </template>
@@ -48,6 +59,7 @@ import {
   OutputMixerSubmixHidden,
   OutputMixer,
   InputMixer,
+  OutputDevice,
 } from "@/util/mixerMapping";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
@@ -64,6 +76,7 @@ export default {
       inputMixer: InputMixer,
       outputMixer: OutputMixer,
       submixHide: OutputMixerSubmixHidden,
+      outputDevices: OutputDevice,
       channelNames: ChannelName,
       channelNamesReadable: ChannelNameReadable,
 
@@ -151,6 +164,10 @@ export default {
     },
 
     submixEnabled() {
+      if (!this.isSubMixSupported()) {
+        return false;
+      }
+
       return store.getActiveDevice().levels.submix !== null;
     },
 
@@ -159,6 +176,25 @@ export default {
         "SetSubMixEnabled": e.target.checked
       };
 
+      websocket.send_command(store.getActiveSerial(), command);
+    },
+
+    isSubMixSupported() {
+      return store.getActiveDevice().levels.submix_supported;
+    },
+
+    isOutputA(name) {
+      return this.getOutputMix(name) === "A";
+    },
+
+    getOutputMix(name) {
+      return store.getActiveDevice().levels.submix.outputs[name];
+    },
+
+    setDeviceMix(e) {
+      let command = {
+        "SetSubMixOutputMix": [e.target.name, e.target.id]
+      };
       websocket.send_command(store.getActiveSerial(), command);
     },
   }
