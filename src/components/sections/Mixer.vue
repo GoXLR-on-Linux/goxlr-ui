@@ -1,14 +1,14 @@
 <template>
   <CenteredContainer>
-    <GroupContainer v-if="!submixEnabled()" title="Mixer">
-      <Slider v-for="item in mixerOrder" :key=item :id=channelNames.indexOf(item) :title="channelNamesReadable[item]"
+    <GroupContainer v-if="!submixEnabled()" title="Inputs">
+      <Slider v-for="item in inputMixer" :key=item :id=channelNames.indexOf(item) :title="channelNamesReadable[item]"
               :slider-min-value=0
               :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%" :slider-value="getValue(item)"
               :store-path="getStorePath(item)" @value-changed="valueChange"
       />
     </GroupContainer>
-    <GroupContainer v-else title="Mixer">
-      <SubmixSlider v-for="item in SubMixerOrder()" :key=item :id=channelNames.indexOf(item)
+    <GroupContainer v-else title="Inputs">
+      <SubmixSlider v-for="item in inputMixer" :key=item :id=channelNames.indexOf(item)
                     :title="channelNamesReadable[item]" :slider-min-value=0
                     :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%"
                     :slider-a-value="getValue(item)" :slider-b-value="getSubmixValue(item)"
@@ -16,14 +16,14 @@
       />
     </GroupContainer>
 
-    <ExpandoGroupContainer title="Headphones" @expando-clicked="isVisible = !isVisible" :expanded="isVisible">
-      <Slider v-for="item in headphoneOrder" :key=item :id=channelNames.indexOf(item)
+    <GroupContainer title="Outputs" @expando-clicked="isVisible = !isVisible" :expanded="isVisible">
+      <Slider v-for="item in outputMixer" :key=item :id=channelNames.indexOf(item)
               :title="channelNamesReadable[item]" :slider-min-value=0
               :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%" :slider-value="getValue(item)"
               :store-path="getStorePath(item)" @value-changed="valueChange"
-              v-show="(!hpHide.includes(item) || (hpHide.includes(item) && isVisible))"
+              v-show="!submixEnabled() || (!submixHide.includes(item))"
       />
-    </ExpandoGroupContainer>
+    </GroupContainer>
   </CenteredContainer>
 </template>
 
@@ -32,26 +32,25 @@ import Slider from "../slider/Slider";
 import {
   ChannelName,
   ChannelNameReadable,
-  HeadphoneMixerHidden,
-  HeadphoneMixerOrder,
-  MixerOrder, SubMixerOrder
+  OutputMixerSubmixHidden,
+  OutputMixer,
+  InputMixer, SubMixerOrder
 } from "@/util/mixerMapping";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
-import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 import SubmixSlider from "@/components/slider/SubmixSlider.vue";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
   name: "MixerTop",
-  components: {CenteredContainer, SubmixSlider, ExpandoGroupContainer, GroupContainer, Slider},
+  components: {CenteredContainer, SubmixSlider, GroupContainer, Slider},
 
   data() {
     return {
-      mixerOrder: MixerOrder,
-      headphoneOrder: HeadphoneMixerOrder,
-      hpHide: HeadphoneMixerHidden,
+      inputMixer: InputMixer,
+      outputMixer: OutputMixer,
+      submixHide: OutputMixerSubmixHidden,
       channelNames: ChannelName,
       channelNamesReadable: ChannelNameReadable,
 

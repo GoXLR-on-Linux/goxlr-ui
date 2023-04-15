@@ -106,37 +106,26 @@ export const EqFreqs = [
     "Equalizer16KHz",
 ]
 
-export let MixerOrder = [
+export let InputMixer = [
     "Mic",
     "Chat",
     "Music",
     "Game",
     "Console",
     "LineIn",
-    "LineOut",
     "System",
     "Sample",
 ]
 
-export let SubMixerOrder =  [
-    "Mic",
-    "Chat",
-    "Music",
-    "Game",
-    "Console",
-    "LineIn",
-    "System",
-    "Sample",
-];
 
-
-export let HeadphoneMixerOrder = [
+export let OutputMixer = [
+    "LineOut",
     "Headphones",
     "MicMonitor",
 ]
 
 /* Items in here are hidden behind the 'Expand' button */
-export let HeadphoneMixerHidden = [
+export let OutputMixerSubmixHidden = [
     "MicMonitor"
 ]
 
