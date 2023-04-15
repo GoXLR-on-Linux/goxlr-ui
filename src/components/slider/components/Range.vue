@@ -26,24 +26,27 @@ export default {
     currentFieldValue: Number,
 
     storePath: { type: String, required: true },
+    id: {type: String, required: false, default: ""},
+
+    colour: { type: String, required: false, default: "#82CFD0"}
   },
 
   methods: {
     mouseDown() {
       store.pausePatchPath(this.storePath);
       store.pause();
-      this.$emit("mouse-down")
+      this.$emit("mouse-down", this.id)
     },
 
     mouseUp() {
-      this.$emit("mouse-up")
+      this.$emit("mouse-up", this.id)
       store.resumePatchPath(this.storePath);
       store.resume();
     },
 
     update(e) {
       // Value has changed, emit something upwards..
-      this.$emit("value-updated", e.target.value)
+      this.$emit("value-updated", e.target.value, this.id)
     }
   },
 
@@ -68,7 +71,7 @@ export default {
       let width = (position / distance) * 100;
 
       return {
-        background: 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + width + '%, #252927 ' + width + '%, #252927 100%)'
+        background: 'linear-gradient(to right, ' + this.colour + '  0%, ' + this.colour + ' ' + width + '%, #252927 ' + width + '%, #252927 100%)'
       }
     }
   },
@@ -77,7 +80,7 @@ export default {
 
 <style scoped>
 #slider {
-  background: linear-gradient(to right, #82CFD0 0%, #82CFD0 50%, #252927 50%, #252927 100%);
+  background: linear-gradient(to right, v-bind(colour) 0%, v-bind(colour) 50%, #252927 50%, #252927 100%);
   border: none;
 
   border-radius: 2px;
@@ -94,7 +97,7 @@ input[type='range']::-webkit-slider-thumb  {
   width: 16px;
   height: 16px;
   border-radius: 8px;
-  background: #82CFD0;
+  background: v-bind(colour);
   -webkit-appearance: none;
 }
 
@@ -102,7 +105,7 @@ input[type='range']::-moz-range-thumb {
   width: 16px;
   height: 16px;
   border-radius: 7px;
-  background: #82CFD0;
+  background: v-bind(colour);
   border: 0;
 }
 
@@ -113,5 +116,6 @@ input[type='range']::-moz-range-thumb {
 
 .rotation-wrapper {
   height: 130px;
+  width: 90px;
 }
 </style>

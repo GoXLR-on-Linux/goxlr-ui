@@ -21,9 +21,16 @@
         </Tab>
         <Tab name="Mixer" selected>
             <ContentContainer>
-              <Faders/>
               <Mixer/>
             </ContentContainer>
+        </Tab>
+        <Tab name="Configuration">
+          <ContentContainer>
+            <CenteredContainer>
+              <Faders/>
+              <Cough/>
+            </CenteredContainer>
+          </ContentContainer>
         </Tab>
         <Tab v-if="!isDeviceMini()" name="Effects">
           <EffectsTab />
@@ -31,11 +38,6 @@
         <Tab v-if="!isDeviceMini()" name="Sampler">
           <ContentContainer>
             <SamplerTab />
-          </ContentContainer>
-        </Tab>
-        <Tab name="Cough">
-          <ContentContainer>
-            <Cough/>
           </ContentContainer>
         </Tab>
         <Tab name="Lighting">
@@ -77,10 +79,12 @@ import LightingTab from "@/components/sections/lighting/LightingTab";
 import SamplerTab from "@/components/sections/SamplerTab";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import SubmixTest from "@/components/sections/SubmixTest.vue";
+import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
   name: 'GoXLR',
   components: {
+    CenteredContainer,
     SubmixTest,
     ContentContainer,
     SamplerTab,

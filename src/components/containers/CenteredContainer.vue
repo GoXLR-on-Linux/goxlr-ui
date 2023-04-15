@@ -14,5 +14,9 @@ export default {
   .centered {
     margin: auto;
     width: fit-content;
+
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
   }
 </style>

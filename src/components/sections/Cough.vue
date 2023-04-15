@@ -1,10 +1,8 @@
 <template>
-  <CenteredContainer>
     <GroupContainer title="Cough Button Settings">
       <RadioSelection title="Button Behaviour" :options="button_behaviour" group="cough_button_behaviour" @selection-changed="behaviorPressed" :selected="getCough()" />
       <RadioSelection title="Mute Behaviour" :options="mute_behaviour" group="cough_mute_behaviour" @selection-changed="setActiveMuteFunction" :selected="getActiveMute()" />
     </GroupContainer>
-  </CenteredContainer>
 </template>
 
 <script>
@@ -12,11 +10,10 @@ import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
-import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
   name: "CoughButtonSettings",
-  components: {CenteredContainer, GroupContainer, RadioSelection},
+  components: {GroupContainer, RadioSelection},
 
   data() {
     return {

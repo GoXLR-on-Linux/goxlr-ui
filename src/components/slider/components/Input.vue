@@ -1,11 +1,15 @@
 <template>
-  <div v-if="!editable" class="sliderInput">
-    <input type="text" v-on:blur="reset" :value="displayValue()" :min="minValue" :max="maxValue" :disabled="!editable" />
-    <div class="suffix"><span class="filler">{{ displayValue() }}</span><span v-html="getSuffix()"></span></div>
-  </div>
-  <div v-if="editable" class="sliderInput">
-    <input type="number" v-on:input="update" v-on:blur="reset" v-model="localTextValue" :min="minValue" :max="maxValue" :disabled="!editable" />
-    <div class="suffix"><span class="filler">{{ localTextValue }}</span><span v-html="getSuffix()"></span></div>
+  <div>
+    <div v-if="!editable" class="sliderInput">
+      <input type="text" v-on:blur="reset" :value="displayValue()" :min="minValue" :max="maxValue"
+             :disabled="!editable"/>
+      <div class="suffix"><span class="filler">{{ displayValue() }}</span><span v-html="getSuffix()"></span></div>
+    </div>
+    <div v-if="editable" class="sliderInput">
+      <input type="number" v-on:input="update" v-on:blur="reset" v-model="localTextValue" :min="minValue"
+             :max="maxValue" :disabled="!editable"/>
+      <div class="suffix"><span class="filler">{{ localTextValue }}</span><span v-html="getSuffix()"></span></div>
+    </div>
   </div>
 </template>
 
@@ -22,12 +26,14 @@ export default {
   },
 
   props: {
+    id: { type: String, required: false, default: "" },
     editable: Boolean,
     currentTextValue: Number,
     overrideValue: String,
-    minValue: { type: Number, default: 0 },
-    maxValue: { type: Number, default: 100 },
-    textSuffix: { type: String, default: "" }
+    minValue: {type: Number, default: 0},
+    maxValue: {type: Number, default: 100},
+    textSuffix: {type: String, default: ""},
+    colour: {type: String, required: false, default: '#59b1b6'}
   },
 
   methods: {
@@ -58,7 +64,7 @@ export default {
       }
 
       // Value has changed, emit something upwards..
-      this.$emit("value-updated", parseInt(newValue));
+      this.$emit("value-updated", parseInt(newValue), this.id);
     },
 
     reset(e) {
@@ -74,7 +80,7 @@ export default {
   },
 
   watch: {
-    currentTextValue: function(newValue) {
+    currentTextValue: function (newValue) {
       this.localTextValue = newValue;
       this.lastTextValue = newValue;
     }
@@ -97,7 +103,7 @@ export default {
   left: 0;
   top: 0;
 
-  color: #59b1b6;
+  color: v-bind(colour);
 
   /* Prevent Mouse interactions */
   user-select: none;
@@ -112,14 +118,14 @@ export default {
 }
 
 .sliderInput .suffix .filler {
-  color: rgba(0,0,0,0);
+  color: rgba(0, 0, 0, 0);
 }
 
 .sliderInput input[type=number], .sliderInput input[type=text] {
   font-family: LeagueMonoCondensed, sans-serif;
 
   background-color: #3b413f;
-  color: #59b1b6;
+  color: v-bind(colour);
   padding: 10px;
   box-sizing: border-box;
 
@@ -129,15 +135,15 @@ export default {
 
   margin-top: 15px;
 
-  border:none;
-  background-image:none;
+  border: none;
+  background-image: none;
   box-shadow: none;
   outline: none;
 
-  -moz-appearance:textfield;
+  -moz-appearance: textfield;
 }
 
-.sliderInput  input[type=number]::-webkit-inner-spin-button {
+.sliderInput input[type=number]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }

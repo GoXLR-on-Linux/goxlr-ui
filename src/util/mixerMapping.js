@@ -118,6 +118,18 @@ export let MixerOrder = [
     "Sample",
 ]
 
+export let SubMixerOrder =  [
+    "Mic",
+    "Chat",
+    "Music",
+    "Game",
+    "Console",
+    "LineIn",
+    "System",
+    "Sample",
+];
+
+
 export let HeadphoneMixerOrder = [
     "Headphones",
     "MicMonitor",

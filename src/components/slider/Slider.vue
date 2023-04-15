@@ -3,7 +3,7 @@
     <Label v-bind:title="title"/>
     <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
            :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
-           @mouse-up="setMouseUp"/>
+           @mouse-up="setMouseUp" />
 
     <Input :current-text-value="textValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
            :textSuffix="textSuffix"
@@ -220,5 +220,11 @@ export default {
 #sliderBox {
   width: 90px;
   background-color: #353937;
+}
+
+.range {
+  margin-top: 10px;
+  margin-bottom: -10px;
+  margin-left: 15px;
 }
 </style>
