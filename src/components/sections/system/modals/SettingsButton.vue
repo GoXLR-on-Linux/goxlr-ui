@@ -1,5 +1,5 @@
 <template>
-  <BigButton id="about_button" ref="button" title="Settings" @button-clicked="$refs.modal.openModal(undefined, $refs.button)">
+  <BigButton id="settings_button" ref="button" title="Settings" @button-clicked="$refs.modal.openModal(undefined, $refs.button)">
     <font-awesome-icon icon="fa-solid fa-gear" />
   </BigButton>
   <AccessibleModal width="630px" ref="modal" id="about_modal" :show_footer=false>
