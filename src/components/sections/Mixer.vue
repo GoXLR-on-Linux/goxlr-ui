@@ -21,7 +21,7 @@
               :title="channelNamesReadable[item]" :slider-min-value=0
               :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%" :slider-value="getValue(item)"
               :store-path="getStorePath(item)" @value-changed="valueChange"
-              v-show="!submixEnabled() || (!submixHide.includes(item))"
+              v-show="!submixEnabled() || !submixHide.includes(item)"
       />
     </GroupContainer>
   </CenteredContainer>
