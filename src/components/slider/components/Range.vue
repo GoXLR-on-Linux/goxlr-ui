@@ -21,6 +21,9 @@ export default {
   },
 
   props: {
+    height: { type: Number, required: false, default: 130 },
+    transform: { type: Number, required: false, default: -85 },
+
     minValue: {type: Number, default: 0},
     maxValue: {type: Number, default: 100},
     currentFieldValue: Number,
@@ -73,6 +76,16 @@ export default {
       return {
         background: 'linear-gradient(to right, ' + this.colour + '  0%, ' + this.colour + ' ' + width + '%, #252927 ' + width + '%, #252927 100%)'
       }
+    },
+    heightString: {
+      get() {
+        return this.height + "px";
+      },
+    },
+    transformString: {
+      get() {
+        return this.transform + "px";
+      }
     }
   },
 }
@@ -81,11 +94,10 @@ export default {
 <style scoped>
 #slider {
   background: linear-gradient(to right, v-bind(colour) 0%, v-bind(colour) 50%, #252927 50%, #252927 100%);
-  border: none;
 
   border-radius: 2px;
   height: 3px;
-  width: 130px;
+  width: v-bind(heightString);
   outline: none;
   transition: background 450ms ease-in;
   -webkit-appearance: none;
@@ -110,12 +122,12 @@ input[type='range']::-moz-range-thumb {
 }
 
 .rotation {
-  transform: rotate(-90deg) translate(-85px);
+  transform: rotate(-90deg) translate(v-bind(transformString));
   z-index: -1;
 }
 
 .rotation-wrapper {
-  height: 130px;
+  height: v-bind(heightString);
   width: 90px;
 }
 </style>

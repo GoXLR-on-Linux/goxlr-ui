@@ -5,18 +5,21 @@
     <div style="display: flex; flex-direction: row">
       <Range id="A" :current-field-value=fieldAValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
              :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
-             @mouse-up="setMouseUp" style="margin-left: -12px"/>
+             @mouse-up="setMouseUp" style="margin-left: -12px" :height=115 :transform=-70 />
 
       <Range id="B" :current-field-value=fieldBValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
              :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
-             @mouse-up="setMouseUp" style="margin-left: -32px;" colour="#E07C24"/>
+             @mouse-up="setMouseUp" style="margin-left: -32px;" colour="#E07C24" :height=115 :transform=-70 />
     </div>
 
-    <div style="display: flex; flex-direction: row">
+    <div style="margin-top: 5px; height: 20px; line-height: 20px; text-align: center">
+      <input type="checkbox" :checked="submixLinked" />
+    </div>
+    <div style="display: flex; flex-direction: row; margin-top: 5px">
       <Input id="A" :current-text-value="textAValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
              :textSuffix="textSuffix"
              :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"
-             style="width: 60px"
+             style="width: 60px;"
       />
 
       <Input id="B" :current-text-value="textBValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
@@ -61,6 +64,8 @@ export default {
     sliderMaxValue: Number,
     sliderAValue: Number,
     sliderBValue: Number,
+
+    submixLinked: Boolean,
 
     textMinValue: Number,
     textMaxValue: Number,

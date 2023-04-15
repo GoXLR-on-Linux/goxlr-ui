@@ -112,7 +112,6 @@ export default {
   box-sizing: border-box;
 
   text-align: center;
-  margin-top: 15px;
   padding: 10px;
   width: 100%;
 }
@@ -132,8 +131,6 @@ export default {
   text-align: center;
 
   width: 100%;
-
-  margin-top: 15px;
 
   border: none;
   background-image: none;

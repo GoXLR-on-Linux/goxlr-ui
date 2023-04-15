@@ -12,6 +12,7 @@
                     :title="channelNamesReadable[item]" :slider-min-value=0
                     :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%"
                     :slider-a-value="getValue(item)" :slider-b-value="getSubmixValue(item)"
+                    :submix-linked="isSubMixLinked(item)"
                     :store-path="getSubmixPaths(item)" @value-changed="submixValueChange"
       />
     </GroupContainer>
@@ -34,7 +35,7 @@ import {
   ChannelNameReadable,
   OutputMixerSubmixHidden,
   OutputMixer,
-  InputMixer, SubMixerOrder
+  InputMixer,
 } from "@/util/mixerMapping";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
@@ -60,10 +61,6 @@ export default {
   },
 
   methods: {
-    SubMixerOrder() {
-      return SubMixerOrder
-    },
-
     valueChange(id, volume) {
       let str_id = this.channelNames[id];
       let command = undefined;
@@ -135,6 +132,10 @@ export default {
 
     getSubmixPaths(id) {
       return this.getStorePath(id) + ";/mixers/" + store.getActiveSerial() + "/levels/submix/inputs/" + id + "/volume"
+    },
+
+    isSubMixLinked(name) {
+      return store.getActiveDevice().levels.submix.inputs[name].linked;
     },
 
     submixEnabled() {

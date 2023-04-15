@@ -3,11 +3,13 @@
     <Label v-bind:title="title"/>
     <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
            :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
-           @mouse-up="setMouseUp" />
+           @mouse-up="setMouseUp"/>
 
     <Input :current-text-value="textValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
            :textSuffix="textSuffix"
-           :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"/>
+           :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"
+           style="margin-top: 15px"
+    />
   </div>
 </template>
 
