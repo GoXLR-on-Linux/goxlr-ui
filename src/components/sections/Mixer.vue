@@ -97,6 +97,7 @@ export default {
         ]
       };
       websocket.send_command(store.getActiveSerial(), command);
+      store.getActiveDevice().levels.volumes[str_id] = volume;
     },
 
     submixValueChange(id, volume, side) {
@@ -106,10 +107,12 @@ export default {
         command = {
           "SetVolume": [str_id, volume]
         };
+        store.getActiveDevice().levels.volumes[str_id] = volume;
       } else {
         command = {
           "SetSubMixVolume": [str_id, volume]
         };
+        store.getActiveDevice().levels.submix.inputs[str_id] = volume;
       }
       websocket.send_command(store.getActiveSerial(), command);
 
