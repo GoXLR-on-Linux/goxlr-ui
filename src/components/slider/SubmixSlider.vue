@@ -83,7 +83,7 @@ export default {
         this.fieldBValue = parseInt(newValue);
       }
 
-      this.calculateTextValue();
+      this.calculateTextValue(id);
     },
 
     inputValueUpdated(newValue, id) {
@@ -245,9 +245,7 @@ export default {
       return this.textMaxValue;
     },
 
-    getValue() {
-      return this.fieldValue;
-    }
+
   },
 
   mounted() {
