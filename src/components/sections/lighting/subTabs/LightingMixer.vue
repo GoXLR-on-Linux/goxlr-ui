@@ -57,7 +57,10 @@ export default {
 
     onChannelSelectionChange: function(id) {
       this.activeChannel = id;
-      this.textValue = this.getBottomText();
+
+      if (!isDeviceMini()) {
+        this.textValue = this.getBottomText();
+      }
     },
 
     /***************************/
@@ -278,7 +281,9 @@ export default {
   },
 
   mounted() {
-    this.textValue = this.getBottomText();
+    if (!this.isDeviceMini()) {
+      this.textValue = this.getBottomText();
+    }
   }
 }
 </script>
@@ -301,7 +306,7 @@ export default {
         <ColourPicker title="Top Colour" :color-value="getFaderTopColour()" @colour-changed="onFaderTopColourChange" />
       </GroupContainer>
 
-      <GroupContainer v-show="!isDeviceMini()" title="Screen">
+      <GroupContainer v-if="!isDeviceMini()" title="Screen">
         <ColourPicker title="Background Colour" :color-value="getScreenColour()" @colour-changed="onScreenColourChange" />
         <RadioSelection
           title="Icon"
