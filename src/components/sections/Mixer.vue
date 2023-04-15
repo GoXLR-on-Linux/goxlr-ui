@@ -1,6 +1,14 @@
 <template>
   <CenteredContainer>
+    <GroupContainer v-if="submixEnabled" title="Mix Assignment">
+
+    </GroupContainer>
+
     <GroupContainer v-if="!submixEnabled()" title="Inputs">
+      <template #right>
+        <input type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled" />
+        <span style="color: #fff"> Submixes</span>
+      </template>
       <Slider v-for="item in inputMixer" :key=item :id=channelNames.indexOf(item) :title="channelNamesReadable[item]"
               :slider-min-value=0
               :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%" :slider-value="getValue(item)"
@@ -8,6 +16,10 @@
       />
     </GroupContainer>
     <GroupContainer v-else title="Inputs">
+      <template #right>
+        <input type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled" />
+        <span style="color: #fff"> Submixes</span>
+      </template>
       <SubmixSlider v-for="item in inputMixer" :key=item :id=channelNames.indexOf(item)
                     :title="channelNamesReadable[item]" :slider-min-value=0
                     :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%"
@@ -140,6 +152,14 @@ export default {
 
     submixEnabled() {
       return store.getActiveDevice().levels.submix !== null;
+    },
+
+    setSubmixEnabled(e) {
+      let command = {
+        "SetSubMixEnabled": e.target.checked
+      };
+
+      websocket.send_command(store.getActiveSerial(), command);
     },
   }
 }
