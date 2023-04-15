@@ -8,7 +8,11 @@ export default {
   computed: {
     rightWidth: {
       get() {
-        return this.$refs.right.clientWidth + "px";
+        let width = this.$refs.right.clientWidth;
+        if (width === 0) {
+          return "0px";
+        }
+        return width + 2 + "px";
       }
     }
   }
@@ -22,7 +26,7 @@ export default {
         {{ title }}
       </div>
       <div ref="right" class="right">
-        <slot  name="right"></slot>
+        <slot name="right"></slot>
       </div>
     </div>
 
