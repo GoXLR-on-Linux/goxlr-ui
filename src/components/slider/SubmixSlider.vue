@@ -13,7 +13,7 @@
     </div>
 
     <div style="margin-top: 5px; height: 20px; line-height: 20px; text-align: center">
-      <input type="checkbox" :checked="submixLinked" />
+      <input type="checkbox" :checked="submixLinked" @change="setSubmixLinked" />
     </div>
     <div style="display: flex; flex-direction: row; margin-top: 5px">
       <Input id="A" :current-text-value="textAValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
@@ -227,7 +227,11 @@ export default {
       // Emit the latest value..
       let value = (this.rangeSelected === 'A') ? this.fieldAValue : this.fieldBValue;
       this.$emit('value-changed', this.id, value, this.rangeSelected);
-    }
+    },
+
+    setSubmixLinked(e) {
+      this.$emit('submix-linked', this.id, e.target.checked);
+    },
   },
 
   computed: {
@@ -244,8 +248,6 @@ export default {
       }
       return this.textMaxValue;
     },
-
-
   },
 
   mounted() {

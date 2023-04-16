@@ -3,13 +3,16 @@
     <GroupContainer v-if="submixEnabled()" title="Mix Assignment">
       <!-- TODO: Fix this, really.. :D -->
       <div style="color: #fff">
-        <div v-for="output in Object.keys(outputDevices)" :key="output" style="display: flex; flex-direction: row; gap: 6px">
+        <div v-for="output in Object.keys(outputDevices)" :key="output"
+             style="display: flex; flex-direction: row; gap: 6px">
           <div style="width: 120px">{{ output }}</div>
           <div style="margin-right: 15px">
-            <label for="A">A:</label> <input @change="setDeviceMix" :checked="isOutputA(outputDevices[output])" type="radio" id="A" :name="outputDevices[output]" />
+            <label for="A">A:</label> <input @change="setDeviceMix" :checked="isOutputA(outputDevices[output])"
+                                             type="radio" id="A" :name="outputDevices[output]"/>
           </div>
           <div>
-            <label for="B">B:</label> <input @change="setDeviceMix" :checked="!isOutputA(outputDevices[output])" type="radio" id="B" :name="outputDevices[output]" />
+            <label for="B">B:</label> <input @change="setDeviceMix" :checked="!isOutputA(outputDevices[output])"
+                                             type="radio" id="B" :name="outputDevices[output]"/>
           </div>
         </div>
       </div>
@@ -17,7 +20,7 @@
 
     <GroupContainer v-if="!submixEnabled()" title="Inputs">
       <template v-if="isSubMixSupported()" #right>
-        <input type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled" />
+        <input type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled"/>
         <span style="color: #fff"> Submixes</span>
       </template>
       <Slider v-for="item in inputMixer" :key=item :id=channelNames.indexOf(item) :title="channelNamesReadable[item]"
@@ -28,7 +31,7 @@
     </GroupContainer>
     <GroupContainer v-else title="Inputs">
       <template v-if="isSubMixSupported()" #right>
-        <input type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled" />
+        <input type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled"/>
         <span style="color: #fff"> Submixes</span>
       </template>
       <SubmixSlider v-for="item in inputMixer" :key=item :id=channelNames.indexOf(item)
@@ -37,6 +40,7 @@
                     :slider-a-value="getValue(item)" :slider-b-value="getSubmixValue(item)"
                     :submix-linked="isSubMixLinked(item)"
                     :store-path="getSubmixPaths(item)" @value-changed="submixValueChange"
+                    @submix-linked="submixLinkChanged"
       />
     </GroupContainer>
 
@@ -200,6 +204,14 @@ export default {
       };
       websocket.send_command(store.getActiveSerial(), command);
     },
+
+    submixLinkChanged(id, value) {
+      let str_id = this.channelNames[id];
+      let command = {
+        "SetSubMixLinked": [str_id, value]
+      };
+      websocket.send_command(store.getActiveSerial(), command);
+    }
   }
 }
 </script>
