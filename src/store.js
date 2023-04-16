@@ -43,6 +43,10 @@ export const store = reactive({
         return this.status.config.show_tray_icon;
     },
 
+    isTTSEnabled() {
+        return this.status.config.tts_enabled;
+    },
+
     getDeviceCount() {
         return Object.keys(this.status.mixers).length;
     },

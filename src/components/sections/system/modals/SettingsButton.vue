@@ -1,5 +1,5 @@
 <template>
-  <BigButton id="about_button" ref="button" title="Settings" @button-clicked="$refs.modal.openModal(undefined, $refs.button)">
+  <BigButton id="settings_button" ref="button" title="Settings" @button-clicked="$refs.modal.openModal(undefined, $refs.button)">
     <font-awesome-icon icon="fa-solid fa-gear" />
   </BigButton>
   <AccessibleModal width="630px" ref="modal" id="about_modal" :show_footer=false>
@@ -26,6 +26,10 @@
       <div style="padding: 12px">
         <span style="display: inline-block; width: 360px">Show Tray Icon (requires restart):</span>
         <input type="checkbox" :checked="isShowIcon()" @change="setShowIcon"/>
+      </div>
+      <div style="padding: 12px">
+        <span style="display: inline-block; width: 360px">TTS on button press:</span>
+        <input type="checkbox" :checked="isTTSEnabled()" @change="setTTSEnabled"/>
       </div>
       <div style="padding: 12px">
         Recover Defaults:<br/>
@@ -99,6 +103,14 @@ export default {
 
     setShowIcon(event) {
       websocket.set_show_icon(event.target.checked);
+    },
+
+    isTTSEnabled() {
+      return store.isTTSEnabled();
+    },
+
+    setTTSEnabled(event) {
+      websocket.set_tts_enabled(event.target.checked);
     },
 
     recover_defaults(type) {
