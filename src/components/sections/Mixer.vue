@@ -112,7 +112,7 @@ export default {
         command = {
           "SetSubMixVolume": [str_id, volume]
         };
-        store.getActiveDevice().levels.submix.inputs[str_id] = volume;
+        store.getActiveDevice().levels.submix.inputs[str_id].volume = volume;
       }
       websocket.send_command(store.getActiveSerial(), command);
 
