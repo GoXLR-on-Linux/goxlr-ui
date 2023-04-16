@@ -4,35 +4,42 @@
     <DeviceSelector v-if="!isDeviceSet()"/>
 
     <template v-if="isDeviceSet()">
-      <FileTabs />
+      <div style="display: flex; flex-direction: row; column-gap: 30px">
+        <div>
+          <FileTabs/>
+        </div>
+
+      </div>
 
       <div style="height: 25px; background-color: #3b413f"/>
 
       <Tabs>
         <Tab name="Mic">
-            <Mic/>
+          <Mic/>
         </Tab>
         <Tab name="Mixer" selected>
-            <ContentContainer>
+          <ContentContainer>
+            <Mixer/>
+          </ContentContainer>
+        </Tab>
+        <Tab name="Configuration">
+          <ContentContainer>
+            <CenteredContainer>
               <Faders/>
-              <Mixer/>
-            </ContentContainer>
+              <Cough/>
+            </CenteredContainer>
+          </ContentContainer>
         </Tab>
         <Tab v-if="!isDeviceMini()" name="Effects">
-          <EffectsTab />
+          <EffectsTab/>
         </Tab>
         <Tab v-if="!isDeviceMini()" name="Sampler">
           <ContentContainer>
-            <SamplerTab />
-          </ContentContainer>
-        </Tab>
-        <Tab name="Cough">
-          <ContentContainer>
-            <Cough/>
+            <SamplerTab/>
           </ContentContainer>
         </Tab>
         <Tab name="Lighting">
-            <LightingTab />
+          <LightingTab/>
         </Tab>
         <Tab name="Routing">
           <ContentContainer>
@@ -69,10 +76,12 @@ import {isDeviceMini} from "@/util/util";
 import LightingTab from "@/components/sections/lighting/LightingTab";
 import SamplerTab from "@/components/sections/SamplerTab";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
+import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
   name: 'GoXLR',
   components: {
+    CenteredContainer,
     ContentContainer,
     SamplerTab,
     LightingTab,

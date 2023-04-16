@@ -126,7 +126,6 @@ export const store = reactive({
         if (this.have_device) {
             for (let patch of json.Patch) {
                 if (this.pausedPaths.includes(patch.path)) {
-                    console.log("Ignoring Patch on " + patch.path);
                     continue;
                 }
 

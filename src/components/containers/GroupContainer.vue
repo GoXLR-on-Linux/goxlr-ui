@@ -1,52 +1,79 @@
 <script>
 export default {
-    name: "GroupContainer",
-    props: {
-        title: String,
+  name: "GroupContainer",
+  props: {
+    title: String,
+  },
+
+  computed: {
+    rightWidth: {
+      get() {
+        let width = this.$refs.right.clientWidth;
+        if (width === 0) {
+          return "0px";
+        }
+        return width + 2 + "px";
+      }
     }
+  }
 }
 </script>
 
 <template>
-    <div class="container">
-        <p v-if="title !== ''" class="title">
-            {{ title }}
-        </p>
-        <div class="content">
-            <slot></slot>
-        </div>
+  <div class="container">
+    <div style="width: 100%">
+      <div v-if="title !== ''" class="title">
+        {{ title }}
+      </div>
+      <div ref="right" class="right">
+        <slot name="right"></slot>
+      </div>
     </div>
+
+    <div class="content">
+      <slot></slot>
+    </div>
+  </div>
 </template>
 
 <style scoped>
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    padding: 24px;
+  padding: 24px;
 
-    background-color: #2D3230;
+  background-color: #2D3230;
 }
 
 .title {
-    padding: 0 0 10px 0;
+  display: inline-block;
+  width: calc(100% - (v-bind(rightWidth) * 2));
 
-    color: #ffffff;
-    text-transform: uppercase;
+  padding: 0 0 10px 0;
+  margin-left: v-bind(rightWidth);
+
+  color: #ffffff;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .content {
-    display: flex;
-    flex-direction: row;
-    gap: 6px;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
 
-    height: fit-content;
-    width: fit-content;
+  height: fit-content;
+  width: fit-content;
+}
+
+.right {
+  display: inline-block;
 }
 </style>

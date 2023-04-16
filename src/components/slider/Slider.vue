@@ -7,7 +7,9 @@
 
     <Input :current-text-value="textValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
            :textSuffix="textSuffix"
-           :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"/>
+           :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"
+           style="margin-top: 15px"
+    />
   </div>
 </template>
 
@@ -220,5 +222,11 @@ export default {
 #sliderBox {
   width: 90px;
   background-color: #353937;
+}
+
+.range {
+  margin-top: 10px;
+  margin-bottom: -10px;
+  margin-left: 15px;
 }
 </style>
