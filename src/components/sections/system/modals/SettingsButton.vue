@@ -27,7 +27,7 @@
         <span style="display: inline-block; width: 360px">Show Tray Icon (requires restart):</span>
         <input type="checkbox" :checked="isShowIcon()" @change="setShowIcon"/>
       </div>
-      <div style="padding: 12px">
+      <div v-if="isTTSAvailable()" style="padding: 12px">
         <span style="display: inline-block; width: 360px">TTS on button press:</span>
         <input type="checkbox" :checked="isTTSEnabled()" @change="setTTSEnabled"/>
       </div>
@@ -103,6 +103,10 @@ export default {
 
     setShowIcon(event) {
       websocket.set_show_icon(event.target.checked);
+    },
+
+    isTTSAvailable() {
+      return store.isTTSAvailable();
     },
 
     isTTSEnabled() {

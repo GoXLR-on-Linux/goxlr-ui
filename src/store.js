@@ -47,6 +47,10 @@ export const store = reactive({
         return this.status.config.tts_enabled;
     },
 
+    isTTSAvailable() {
+        return this.status.config.tts_enabled !== null;
+    },
+
     getDeviceCount() {
         return Object.keys(this.status.mixers).length;
     },
