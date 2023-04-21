@@ -1,14 +1,14 @@
 <template>
-  <div id="sliderBox">
+  <div class="sliderBox">
     <Label v-bind:title="title"/>
     <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
            :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
-           @mouse-up="setMouseUp"/>
+           @mouse-up="setMouseUp" :background-colour="rangeBackgroundColour"/>
 
     <Input :current-text-value="textValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
            :textSuffix="textSuffix"
            :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"
-           style="margin-top: 15px"
+           style="margin-top: 15px" :background-colour="inputBackgroundColour"
     />
   </div>
 </template>
@@ -43,6 +43,10 @@ export default {
   props: {
     id: {type: Number, default: -1},
     storePath: {type: String, required: true},
+
+    backgroundColour: {type: String, required: false, default: "#353937"},
+    inputBackgroundColour: { type: String, required: false, default: "#3b413f" },
+    rangeBackgroundColour: { type: String, required: false, default: '#252927' },
 
     title: {type: String, default: "UNSET"},
 
@@ -219,9 +223,9 @@ export default {
 </script>
 
 <style scoped>
-#sliderBox {
+.sliderBox {
   width: 90px;
-  background-color: #353937;
+  background-color: v-bind(backgroundColour);
 }
 
 .range {

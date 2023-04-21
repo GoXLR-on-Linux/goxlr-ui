@@ -33,7 +33,8 @@ export default {
     minValue: {type: Number, default: 0},
     maxValue: {type: Number, default: 100},
     textSuffix: {type: String, default: ""},
-    colour: {type: String, required: false, default: '#59b1b6'}
+    colour: {type: String, required: false, default: '#59b1b6'},
+    backgroundColour: {type: String, required: false, default: '#3b413f' }
   },
 
   methods: {
@@ -123,7 +124,7 @@ export default {
 .sliderInput input[type=number], .sliderInput input[type=text] {
   font-family: LeagueMonoCondensed, sans-serif;
 
-  background-color: #3b413f;
+  background-color: v-bind(backgroundColour);
   color: v-bind(colour);
   padding: 10px;
   box-sizing: border-box;

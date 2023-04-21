@@ -3,7 +3,7 @@
     <div class="rotation">
       <input id="slider" type="range" v-bind:style="getCurrentStyle" v-bind:min="minValue"
              v-bind:max="maxValue" v-bind:value="localFieldValue" v-on:input="update"
-             v-on:mousedown="mouseDown" v-on:mouseup="mouseUp" v-on:keydown="mouseDown" v-on:keyup="mouseUp" />
+             v-on:mousedown="mouseDown" v-on:mouseup="mouseUp" v-on:keydown="mouseDown" v-on:keyup="mouseUp"/>
     </div>
   </div>
 </template>
@@ -21,17 +21,18 @@ export default {
   },
 
   props: {
-    height: { type: Number, required: false, default: 130 },
-    transform: { type: Number, required: false, default: -85 },
+    height: {type: Number, required: false, default: 130},
+    transform: {type: Number, required: false, default: -85},
 
     minValue: {type: Number, default: 0},
     maxValue: {type: Number, default: 100},
     currentFieldValue: Number,
 
-    storePath: { type: String, required: true },
+    storePath: {type: String, required: true},
     id: {type: String, required: false, default: ""},
 
-    colour: { type: String, required: false, default: "#82CFD0"}
+    colour: {type: String, required: false, default: "#82CFD0"},
+    backgroundColour: {type: String, required: false, default: '#252927'}
   },
 
   methods: {
@@ -74,7 +75,7 @@ export default {
       let width = (position / distance) * 100;
 
       return {
-        background: 'linear-gradient(to right, ' + this.colour + '  0%, ' + this.colour + ' ' + width + '%, #252927 ' + width + '%, #252927 100%)'
+        background: 'linear-gradient(to right, ' + this.colour + '  0%, ' + this.colour + ' ' + width + '%, ' + this.backgroundColour + ' ' + width + '%, ' + this.backgroundColour + ' 100%)'
       }
     },
     heightString: {
@@ -93,7 +94,7 @@ export default {
 
 <style scoped>
 #slider {
-  background: linear-gradient(to right, v-bind(colour) 0%, v-bind(colour) 50%, #252927 50%, #252927 100%);
+  background: linear-gradient(to right, v-bind(colour) 0%, v-bind(colour) 50%, v-bind(backgroundColour) 50%, v-bind(backgroundColour) 100%);
 
   border-radius: 2px;
   height: 3px;
@@ -105,7 +106,7 @@ export default {
   display: block;
 }
 
-input[type='range']::-webkit-slider-thumb  {
+input[type='range']::-webkit-slider-thumb {
   width: 16px;
   height: 16px;
   border-radius: 8px;
