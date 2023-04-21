@@ -47,7 +47,7 @@ export default {
   flex-direction: column;
   align-items: center;
 
-  padding: 24px;
+  padding: 8px 24px 24px;
 
   background-color: #2D3230;
 }
@@ -56,7 +56,7 @@ export default {
   display: inline-block;
   width: calc(100% - (v-bind(rightWidth) * 2));
 
-  padding: 0 0 10px 0;
+  padding: 16px 0 10px;
   margin-left: v-bind(rightWidth);
 
   color: #ffffff;
