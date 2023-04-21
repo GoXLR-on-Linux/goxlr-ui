@@ -15,6 +15,7 @@ export default {
 <template>
   <div class="expando">
     <GroupContainer :title="title">
+      <template #right><slot name="right"></slot></template>
       <slot></slot>
     </GroupContainer>
     <ExpandoBox @expando-clicked="$emit('expando-clicked')" :expanded="expanded"/>
