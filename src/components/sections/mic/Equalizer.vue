@@ -1,5 +1,13 @@
 <template>
   <ExpandoGroupContainer title="Equalizer" @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()">
+    <template #right>
+      <div style="margin-bottom: 8px;">
+      <button class="reset">RESET</button>
+
+      <label for="eq_fine">Enable Fine Tune</label><input type="checkbox" id="eq_fine">
+      </div>
+
+    </template>
     <Slider v-show="!isAdvanced()" :id=0 title="Bass" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
             :slider-value=getBassValue() :store-path="getAggregateStorePaths(0)" @value-changed="aggregateChanged"/>
     <Slider v-show="!isAdvanced()" :id=1 title="Mid" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
@@ -194,5 +202,24 @@ export default {
   display: inline-flex;
   flex-direction: row;
   flex-wrap: nowrap;
+}
+
+label {
+  color: #fff;
+  font-size: 10px;
+  font-family: sans-serif;
+}
+
+.reset {
+  border: 0;
+  margin: 0 30px 0 0;
+  padding: 5px 24px;
+  color: #fff;
+  font-family: LeagueMonoCondensed, sans-serif;
+  background-color: #3b413f;
+}
+
+.reset:hover {
+ background-color: #535c59;
 }
 </style>
