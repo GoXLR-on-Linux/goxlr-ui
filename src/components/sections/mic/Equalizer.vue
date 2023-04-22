@@ -1,25 +1,40 @@
 <template>
   <ExpandoGroupContainer title="Equalizer" @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()">
     <template #right>
-      <div style="margin-bottom: 8px;">
-      <button class="reset">RESET</button>
+      <div v-show="isAdvanced()" style="margin-bottom: 8px;">
+        <button class="reset">RESET</button>
 
-      <label for="eq_fine">Enable Fine Tune</label><input type="checkbox" id="eq_fine">
+        <label for="eq_fine">Enable Fine Tune</label><input type="checkbox" id="eq_fine">
       </div>
 
     </template>
     <Slider v-show="!isAdvanced()" :id=0 title="Bass" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
-            :slider-value=getBassValue() :store-path="getAggregateStorePaths(0)" @value-changed="aggregateChanged"/>
+            :slider-value=getBassValue() :store-path="getAggregateStorePaths(0)"
+            :background-colour="getBackgroundColour(1)"
+            :input-background-colour="getInputBackgroundColour(1)"
+            :range-background-colour="getRangeBackgroundColour(1)"
+            @value-changed="aggregateChanged"/>
     <Slider v-show="!isAdvanced()" :id=1 title="Mid" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
-            :slider-value=getMidValue() :store-path="getAggregateStorePaths(1)" @value-changed="aggregateChanged"/>
+            :slider-value=getMidValue() :store-path="getAggregateStorePaths(1)"
+            :background-colour="getBackgroundColour(5)"
+            :input-background-colour="getInputBackgroundColour(5)"
+            :range-background-colour="getRangeBackgroundColour(5)"
+            @value-changed="aggregateChanged"/>
     <Slider v-show="!isAdvanced()" :id=2 title="Treble" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
-            :store-path="getAggregateStorePaths(2)" :slider-value=getTrebleValue() @value-changed="aggregateChanged"/>
+            :store-path="getAggregateStorePaths(2)" :slider-value=getTrebleValue()
+            :background-colour="getBackgroundColour(9)"
+            :input-background-colour="getInputBackgroundColour(9)"
+            :range-background-colour="getRangeBackgroundColour(9)"
+            @value-changed="aggregateChanged"
+    />
 
 
     <Slider v-show="isAdvanced()" v-for="index in this.getElementCount()" :id=index :key=index :slider-min-value=-9
-            :slider-max-value=9
-            :text-min-value=-9 :text-max-value=9 text-suffix="" :slider-value="getValue(index)"
-            :title=getTitle(index) :store-path="getStorePath(index)" @value-changed="valueChange"/>
+            :slider-max-value=9 :text-min-value=-9 :text-max-value=9 text-suffix="" :slider-value="getValue(index)"
+            :title=getTitle(index) :store-path="getStorePath(index)" :background-colour="getBackgroundColour(index)"
+            :input-background-colour="getInputBackgroundColour(index)"
+            :range-background-colour="getRangeBackgroundColour(index)"
+            @value-changed="valueChange"/>
 
   </ExpandoGroupContainer>
 </template>
@@ -57,6 +72,35 @@ export default {
         return EqMiniFreqs.length;
       }
       return EqFreqs.length;
+    },
+
+    getBackgroundColour(index) {
+      if (index < 5) {
+        return "#252927";
+      }
+      if (index < 8) {
+        return "#353937";
+      }
+
+      return "#3b413f";
+    },
+
+    getInputBackgroundColour(index) {
+      if (index < 5) {
+        return "#353937";
+      }
+      if (index < 8) {
+        return "#3b413f";
+      }
+
+      return "#535c59";
+    },
+
+    getRangeBackgroundColour(index) {
+      if (index < 5) {
+        return "#353937";
+      }
+      return "#252927";
     },
 
     getTitle(id) {
@@ -220,6 +264,6 @@ label {
 }
 
 .reset:hover {
- background-color: #535c59;
+  background-color: #535c59;
 }
 </style>
