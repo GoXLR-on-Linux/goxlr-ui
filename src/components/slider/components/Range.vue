@@ -1,9 +1,11 @@
 <template>
   <div class="rotation-wrapper">
     <div class="rotation">
-      <input id="slider" type="range" v-bind:style="getCurrentStyle" v-bind:min="minValue"
+      <input class="slider" type="range" v-bind:style="getCurrentStyle" v-bind:min="minValue"
              v-bind:max="maxValue" v-bind:value="localFieldValue" v-on:input="update"
-             v-on:mousedown="mouseDown" v-on:mouseup="mouseUp" v-on:keydown="mouseDown" v-on:keyup="mouseUp"/>
+             v-on:mousedown="mouseDown" v-on:mouseup="mouseUp" v-on:keydown="mouseDown" v-on:keyup="mouseUp"
+             :aria-description="title" :aria-valuetext="getReportedValue()"
+      />
     </div>
   </div>
 </template>
@@ -17,6 +19,7 @@ export default {
   data() {
     return {
       localFieldValue: 0,
+      announceValue: '',
     }
   },
 
@@ -32,10 +35,20 @@ export default {
     id: {type: String, required: false, default: ""},
 
     colour: {type: String, required: false, default: "#82CFD0"},
-    backgroundColour: {type: String, required: false, default: '#252927'}
+    backgroundColour: {type: String, required: false, default: '#252927'},
+
+    title: {type: String, required: false, default: ''},
+    reportedValue: {type: String, required: false, default: ''}
   },
 
   methods: {
+    getReportedValue() {
+      if (this.announceValue === '') {
+        return this.localFieldValue;
+      }
+      return this.announceValue;
+    },
+
     mouseDown() {
       store.pausePatchPath(this.storePath);
       store.pause();
@@ -58,6 +71,12 @@ export default {
     currentFieldValue: function (newValue) {
       this.localFieldValue = newValue;
     },
+
+    reportedValue: function (newValue) {
+      if (this.announceValue !== newValue) {
+        this.announceValue = newValue;
+      }
+    }
   },
 
 
@@ -93,7 +112,7 @@ export default {
 </script>
 
 <style scoped>
-#slider {
+.slider {
   background: linear-gradient(to right, v-bind(colour) 0%, v-bind(colour) 50%, v-bind(backgroundColour) 50%, v-bind(backgroundColour) 100%);
 
   border-radius: 2px;

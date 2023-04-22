@@ -2,12 +2,12 @@
   <div>
     <div v-if="!editable" class="sliderInput">
       <input type="text" v-on:blur="reset" :value="displayValue()" :min="minValue" :max="maxValue"
-             :disabled="!editable"/>
+             :disabled="!editable" :aria-description="title" :aria-valuetext="getDisplayValue()" />
       <div class="suffix"><span class="filler">{{ displayValue() }}</span><span v-html="getSuffix()"></span></div>
     </div>
     <div v-if="editable" class="sliderInput">
       <input type="number" v-on:input="update" v-on:blur="reset" v-model="localTextValue" :min="minValue"
-             :max="maxValue" :disabled="!editable"/>
+             :max="maxValue" :disabled="!editable" :aria-description="title" :aria-valuetext="getDisplayValue()" />
       <div class="suffix"><span class="filler">{{ localTextValue }}</span><span v-html="getSuffix()"></span></div>
     </div>
   </div>
@@ -26,7 +26,7 @@ export default {
   },
 
   props: {
-    id: { type: String, required: false, default: "" },
+    id: {type: String, required: false, default: ""},
     editable: Boolean,
     currentTextValue: Number,
     overrideValue: String,
@@ -34,7 +34,8 @@ export default {
     maxValue: {type: Number, default: 100},
     textSuffix: {type: String, default: ""},
     colour: {type: String, required: false, default: '#59b1b6'},
-    backgroundColour: {type: String, required: false, default: '#3b413f' }
+    backgroundColour: {type: String, required: false, default: '#3b413f'},
+    title: {type: String, required: false, default: ''},
   },
 
   methods: {
@@ -44,6 +45,10 @@ export default {
         output += "&nbsp;";
       }
       return output + this.textSuffix;
+    },
+
+    getDisplayValue() {
+      return this.localTextValue + this.textSuffix;
     },
 
     update(e) {

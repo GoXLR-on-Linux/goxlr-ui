@@ -3,12 +3,12 @@
     <Label v-bind:title="title"/>
     <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
            :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
-           @mouse-up="setMouseUp" :background-colour="rangeBackgroundColour"/>
+           @mouse-up="setMouseUp" :background-colour="rangeBackgroundColour" :title="title" :reported-value="getTextValue()"/>
 
     <Input :current-text-value="textValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
            :textSuffix="textSuffix"
            :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"
-           style="margin-top: 15px" :background-colour="inputBackgroundColour"
+           style="margin-top: 15px" :background-colour="inputBackgroundColour" :title="title"
     />
   </div>
 </template>
@@ -48,7 +48,7 @@ export default {
     inputBackgroundColour: { type: String, required: false, default: "#3b413f" },
     rangeBackgroundColour: { type: String, required: false, default: '#252927' },
 
-    title: {type: String, default: "UNSET"},
+    title: {type: String, default: ""},
 
     sliderMinValue: Number,
     sliderMaxValue: Number,
@@ -62,6 +62,24 @@ export default {
   },
 
   methods: {
+    getTextValue() {
+      let value = this.displayValue();
+      if (value === undefined) {
+        value = this.textValue;
+      }
+
+      if (this.textSuffix !== undefined) {
+        let suffix = this.textSuffix;
+        // Do some magic, if the first character is :, it's probably a ratio, repharse slightly.
+        if (suffix.startsWith(':')) {
+          suffix = suffix.replace(':', " to ");
+        }
+
+        return value + "" + suffix;
+      }
+      return value.toString();
+    },
+
     sliderValueUpdated(newValue) {
       this.fieldValue = parseInt(newValue);
       this.calculateTextValue();

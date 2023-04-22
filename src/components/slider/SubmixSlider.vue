@@ -5,27 +5,29 @@
     <div style="display: flex; flex-direction: row">
       <Range id="A" :current-field-value=fieldAValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
              :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
-             @mouse-up="setMouseUp" style="margin-left: -12px" :height=115 :transform=-70 />
+             @mouse-up="setMouseUp" style="margin-left: -12px" :height=115 :transform=-70 :title="getTitle('Ay')"
+             :reported-value="getTextValue('A')"/>
 
       <Range id="B" :current-field-value=fieldBValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
              :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
-             @mouse-up="setMouseUp" style="margin-left: -32px;" colour="#E07C24" :height=115 :transform=-70 />
+             @mouse-up="setMouseUp" style="margin-left: -32px;" colour="#E07C24" :height=115 :transform=-70
+             :title="getTitle('B')" :reported-value="getTextValue('B')"/>
     </div>
 
     <div style="margin-top: 5px; height: 20px; line-height: 20px; text-align: center">
-      <input type="checkbox" :checked="submixLinked" @change="setSubmixLinked" />
+      <input type="checkbox" :checked="submixLinked" @change="setSubmixLinked" aria-description="Mixes Linked"/>
     </div>
     <div style="display: flex; flex-direction: row; margin-top: 5px">
       <Input id="A" :current-text-value="textAValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
              :textSuffix="textSuffix"
              :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"
-             style="width: 60px;"
+             style="width: 60px;" :title="getTitle('Ay')"
       />
 
       <Input id="B" :current-text-value="textBValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
              :textSuffix="textSuffix"
              :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"
-             colour="#E07C24" style="width: 60px"/>
+             colour="#E07C24" style="width: 60px" :title="getTitle('B')"/>
 
     </div>
   </div>
@@ -58,7 +60,7 @@ export default {
     id: {type: Number, default: -1},
     storePath: {type: String, required: true},
 
-    title: {type: String, default: "UNSET"},
+    title: {type: String, default: ""},
 
     sliderMinValue: Number,
     sliderMaxValue: Number,
@@ -75,8 +77,18 @@ export default {
   },
 
   methods: {
+    getTitle(id) {
+      return this.title + " '" + id + "'";
+    },
+
+    getTextValue(id) {
+      if (id === 'A') {
+        return this.textAValue + "" + this.textSuffix;
+      }
+      return this.textBValue + "" + this.textSuffix;
+    },
+
     sliderValueUpdated(newValue, id) {
-      console.log(id);
       if (id === "A") {
         this.fieldAValue = parseInt(newValue);
       } else {
@@ -103,7 +115,7 @@ export default {
     setCurrentTextValue(id, value) {
       if (id === 'A') {
         this.textAValue = value;
-      }  else {
+      } else {
         this.textBValue = value;
       }
     },
