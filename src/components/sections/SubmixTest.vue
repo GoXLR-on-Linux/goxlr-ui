@@ -118,7 +118,6 @@ export default {
     },
 
     mouseDown(e) {
-      console.log(this.getMixStorePath(e.target.name));
       store.pausePatchPath(this.getMixStorePath(e.target.name));
 
       if (this.isSubMixLinked(e.target.name)) {
@@ -127,7 +126,6 @@ export default {
     },
 
     mouseUp(e) {
-      console.log(this.getMixStorePath(e.target.name));
       store.resumePatchPath(this.getMixStorePath(e.target.name));
       if (this.isSubMixLinked(e.target.name)) {
         store.resumePatchPath(this.getMainStorePath(e.target.name));
