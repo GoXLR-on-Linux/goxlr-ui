@@ -5,14 +5,29 @@ export default {
     title: String,
   },
 
+  data() {
+    return {
+      observer: null,
+      width: 0,
+    }
+  },
+
+  mounted() {
+    this.observer = new ResizeObserver(() => {
+      if (this.$refs.right !== null) {
+        this.width = this.$refs.right.clientWidth;
+      }
+    });
+    this.observer.observe(this.$refs.right);
+  },
+
   computed: {
     rightWidth: {
       get() {
-        let width = this.$refs.right.clientWidth;
-        if (width === 0) {
+        if (this.width === 0) {
           return "0px";
         }
-        return width + 2 + "px";
+        return this.width + 2 + "px";
       }
     }
   }
