@@ -2,7 +2,7 @@
   <ExpandoGroupContainer title="Echo" :expanded="is_expanded" @expando-clicked="is_expanded = !is_expanded">
     <RadioSelection title="Style" group="effects_echo_style" :options="echo_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
-    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />
+    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" text-suffix="%" />
     <SliderInput title="Feedback" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackValue()" :store-path="getStorePath('feedback')" v-show="is_expanded" @value-changed="setFeedbackValue" />
     <SliderInput title="Tempo" :slider-min-value=45 :slider-max-value=300 text-suffix="BPM" :slider-value="getTempoValue()" :store-path="getStorePath('tempo')" v-show="is_expanded" @value-changed="setTempoValue"/>
     <SliderInput title="Delay L" :slider-min-value=0 :slider-max-value=2500 text-suffix="ms" :slider-value="getDelayLValue()" :store-path="getStorePath('delay_left')" v-show="is_expanded" @value-changed="setDelayLValue"/>

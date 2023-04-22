@@ -2,7 +2,7 @@
   <ExpandoGroupContainer title="Reverb" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
     <RadioSelection title="Style" group="effects_reverb_style" :options="reverb_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
-    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()"
+    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" text-suffix="%"
                  :store-path="getStorePath('amount')" @value-changed="setAmountValue"/>
     <SliderInput title="Decay" :value-map="decay_map" :slider-value="getDecayValue()" text-suffix="ms"
                  :store-path="getStorePath('decay')" v-show="is_expanded" @value-changed="setDecayValue"/>
