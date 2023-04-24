@@ -9,7 +9,8 @@ export default {
   name: "SliderLabel",
 
   props: {
-    title: String
+    title: String,
+    textColour: { type: String, required: false, default: "#fff" },
   }
 }
 </script>
@@ -17,7 +18,7 @@ export default {
 <style scoped>
   .labelText {
     padding: 10px 0px;
-    color: #fff;
+    color: v-bind(textColour);
 
     height: 18px;
     font-size: 10pt;
