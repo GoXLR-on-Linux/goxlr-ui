@@ -1,21 +1,22 @@
 <template>
   <div id="sliderBox">
-    <Label v-bind:title="title"/>
+    <Label v-bind:title="title" :text-colour="getTextColour()"/>
 
     <div style="display: flex; flex-direction: row">
       <Range id="A" :current-field-value=fieldAValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
              :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
              @mouse-up="setMouseUp" style="margin-left: -12px" :height=115 :transform=-70 :title="getTitle('Ay')"
-             :reported-value="getTextValue('A')"/>
+             :colour="getColour('A')" :reported-value="getTextValue('A')"/>
 
       <Range id="B" :current-field-value=fieldBValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
              :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
-             @mouse-up="setMouseUp" style="margin-left: -32px;" colour="#E07C24" :height=115 :transform=-70
-             :title="getTitle('B')" :reported-value="getTextValue('B')"/>
+             @mouse-up="setMouseUp" style="margin-left: -32px;"  :height=115 :transform=-70 :title="getTitle('B')"
+             :colour="getColour('B')" :reported-value="getTextValue('B')"/>
     </div>
 
     <div style="margin-top: 5px; height: 20px; line-height: 20px; text-align: center">
-      <input type="checkbox" :checked="submixLinked" @change="setSubmixLinked" aria-description="Link {{title}} Channels"/>
+      <input type="checkbox" :checked="submixLinked" @change="setSubmixLinked"
+             aria-description="Link {{title}} Channels"/>
     </div>
     <div style="display: flex; flex-direction: row; margin-top: 5px">
       <Input id="A" :current-text-value="textAValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
@@ -73,12 +74,25 @@ export default {
     textMaxValue: Number,
     textSuffix: String,
 
+    dimmed: {type: Boolean, required: false, default: false},
+
     valueMap: Array,
   },
 
   methods: {
     getTitle(id) {
       return this.title + " '" + id + "'";
+    },
+
+    getColour(id) {
+      if (id === 'A') {
+        return (this.dimmed) ? "#3b7679" : "#82CFD0";
+      }
+      return (this.dimmed) ? "#955218" : "#E07C24";
+    },
+
+    getTextColour() {
+      return (this.dimmed) ? "#838584" : "#fff";
     },
 
     getTextValue(id) {
