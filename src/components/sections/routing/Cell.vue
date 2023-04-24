@@ -1,6 +1,5 @@
 <template>
-  <td @click="clicked" role="checkbox" :aria-description="`Routing from ${input} to ${output}`">
-    <!-- input type="checkbox" aria-hidden="false" :aria-label="`Routing from ${input} to ${output}`" :checked="enabled" / -->
+  <td @click="clicked" role="checkbox" :aria-description="`Routing from ${input} to ${output}`" :aria-checked="enabled" tabindex="0">
     <font-awesome-icon v-if="enabled" icon="fa-solid fa-circle-check" />
   </td>
 </template>
