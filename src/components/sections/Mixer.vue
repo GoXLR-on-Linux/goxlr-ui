@@ -38,7 +38,7 @@
                     :title="channelNamesReadable[item]" :slider-min-value=0
                     :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%"
                     :slider-a-value="getValue(item)" :slider-b-value="getSubmixValue(item)"
-                    :submix-linked="isSubMixLinked(item)"
+                    :submix-linked="isSubMixLinked(item)" :dimmed="isSubmixDimmed(item)"
                     :store-path="getSubmixPaths(item)" @value-changed="submixValueChange"
                     @submix-linked="submixLinkChanged"
       />
@@ -63,7 +63,7 @@ import {
   OutputMixerSubmixHidden,
   OutputMixer,
   InputMixer,
-  OutputDevice,
+  OutputDevice, channelNameToInputDevice,
 } from "@/util/mixerMapping";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
@@ -168,6 +168,11 @@ export default {
 
     isSubMixLinked(name) {
       return store.getActiveDevice().levels.submix.inputs[name].linked;
+    },
+
+    isSubmixDimmed(name) {
+      // We need to check the routing table, to see if this item is routed to headphones..
+      return !store.getActiveDevice().router[channelNameToInputDevice(name)].Headphones;
     },
 
     submixEnabled() {

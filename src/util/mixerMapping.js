@@ -52,6 +52,22 @@ export const ChannelName = [
     "LineOut",
 ]
 
+/**
+ * TODO: This might need to be handled in the Daemon, we've hit a situation where the the ChannelName and InputDevice
+ * enums aren't synced correctly, despite almost representing the same thing, which can cause weirdness.
+ * @param name
+ * @returns {*|string}
+ */
+export function channelNameToInputDevice(name) {
+    if (name === 'Mic') {
+        return 'Microphone';
+    }
+    if (name === 'Sample') {
+        return 'Samples';
+    }
+    return name;
+}
+
 export const ChannelNameReadable = {
     "Mic": "Mic",
     "LineIn": "Line In",

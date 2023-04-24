@@ -1,6 +1,6 @@
 <template>
   <div id="sliderBox">
-    <Label v-bind:title="title" :text-colour="getTextColour()"/>
+    <Label v-bind:title="title" :text-colour="getLabelColour()"/>
 
     <div style="display: flex; flex-direction: row">
       <Range id="A" :current-field-value=fieldAValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
@@ -22,13 +22,13 @@
       <Input id="A" :current-text-value="textAValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
              :textSuffix="textSuffix"
              :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"
-             style="width: 60px;" :title="getTitle('Ay')"
+             style="width: 60px;" :colour="getColour('A')" :title="getTitle('Ay')"
       />
 
       <Input id="B" :current-text-value="textBValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
              :textSuffix="textSuffix"
              :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"
-             colour="#E07C24" style="width: 60px" :title="getTitle('B')"/>
+             :colour="getColour('B')" style="width: 60px" :title="getTitle('B')"/>
 
     </div>
   </div>
@@ -91,7 +91,7 @@ export default {
       return (this.dimmed) ? "#955218" : "#E07C24";
     },
 
-    getTextColour() {
+    getLabelColour() {
       return (this.dimmed) ? "#838584" : "#fff";
     },
 
