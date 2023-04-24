@@ -15,7 +15,7 @@
     </div>
 
     <div style="margin-top: 5px; height: 20px; line-height: 20px; text-align: center">
-      <input type="checkbox" :checked="submixLinked" @change="setSubmixLinked" aria-description="Mixes Linked"/>
+      <input type="checkbox" :checked="submixLinked" @change="setSubmixLinked" aria-description="Link {{title}} Channels"/>
     </div>
     <div style="display: flex; flex-direction: row; margin-top: 5px">
       <Input id="A" :current-text-value="textAValue" :min-value="minimumTextValue" :max-value="maximumTextValue"

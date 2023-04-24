@@ -20,8 +20,8 @@
 
     <GroupContainer v-if="!submixEnabled()" title="Inputs">
       <template v-if="isSubMixSupported()" #right>
-        <input type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled"/>
-        <span style="color: #fff"> Submixes</span>
+        <label for="submix_enabled">Submixes</label>
+        <input id="submix_enabled" type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled"/>
       </template>
       <Slider v-for="item in inputMixer" :key=item :id=channelNames.indexOf(item) :title="channelNamesReadable[item]"
               :slider-min-value=0
@@ -31,8 +31,8 @@
     </GroupContainer>
     <GroupContainer v-else title="Inputs">
       <template v-if="isSubMixSupported()" #right>
-        <input type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled"/>
-        <span style="color: #fff"> Submixes</span>
+        <label for="submix_enabled">Submixes</label>
+        <input id="submix_enabled" type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled"/>
       </template>
       <SubmixSlider v-for="item in inputMixer" :key=item :id=channelNames.indexOf(item)
                     :title="channelNamesReadable[item]" :slider-min-value=0
@@ -217,4 +217,7 @@ export default {
 </script>
 
 <style scoped>
+label {
+  color: #fff;
+}
 </style>
