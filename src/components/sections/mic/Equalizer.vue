@@ -1,13 +1,12 @@
 <template>
   <ExpandoGroupContainer title="Equalizer" @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()">
-    <template #right>
-      <div v-show="isAdvanced()" style="margin-bottom: 8px;">
-        <button class="reset">RESET</button>
+<!--    <template #right>-->
+<!--      <div v-show="isAdvanced()" style="margin-bottom: 8px;">-->
+<!--        <button class="reset">RESET</button>-->
 
-        <label for="eq_fine">Enable Fine Tune</label><input type="checkbox" id="eq_fine">
-      </div>
-
-    </template>
+<!--        <label for="eq_fine">Enable Fine Tune</label><input type="checkbox" id="eq_fine">-->
+<!--      </div>-->
+<!--    </template>-->
     <Slider v-show="!isAdvanced()" :id=0 title="Bass" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
             :slider-value=getBassValue() :store-path="getAggregateStorePaths(0)"
             :background-colour="getBackgroundColour(1)"
