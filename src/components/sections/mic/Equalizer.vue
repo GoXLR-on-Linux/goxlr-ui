@@ -75,6 +75,18 @@ export default {
     },
 
     getBackgroundColour(index) {
+      if (isDeviceMini()) {
+        if (index < 3) {
+          return "#252927";
+        }
+
+        if (index < 5) {
+          return "#353937";
+        }
+
+        return "#3b413f";
+      }
+
       if (index < 5) {
         return "#252927";
       }
@@ -86,6 +98,18 @@ export default {
     },
 
     getInputBackgroundColour(index) {
+      if (isDeviceMini()) {
+        if (index < 3) {
+          return "#353937";
+        }
+
+        if (index < 5) {
+          return "#3b413f";
+        }
+
+        return "#535c59";
+      }
+
       if (index < 5) {
         return "#353937";
       }
@@ -97,6 +121,13 @@ export default {
     },
 
     getRangeBackgroundColour(index) {
+      if (isDeviceMini()) {
+        if (index < 3) {
+          return "#353937";
+        }
+        return "#252927";
+      }
+
       if (index < 5) {
         return "#353937";
       }
@@ -237,17 +268,6 @@ export default {
 </script>
 
 <style scoped>
-.hidden {
-  visibility: hidden;
-  display: none !important;
-}
-
-.rowContent {
-  display: inline-flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-}
-
 label {
   color: #fff;
   font-size: 10px;
