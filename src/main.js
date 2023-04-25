@@ -17,13 +17,13 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {
     faMicrophoneLines, faCircleQuestion, faFloppyDisk, faFileCirclePlus, faCopy, faTrash, faCheckCircle, faCheck,
     faFolder, faEllipsisVertical, faPlay, faStop, faXmark, faGear, faBookOpen, faCircleInfo, faChevronLeft,
-    faChevronRight, faPowerOff
+    faChevronRight, faPowerOff, faLink, faLinkSlash
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
     faMicrophoneLines, faCircleQuestion, faFloppyDisk, faEllipsisVertical, faFileCirclePlus, faCopy, faTrash,
     faCheckCircle, faCheck, faFolder, faTrash, faPlay, faStop, faXmark, faGear, faBookOpen, faCircleInfo,
-    faChevronLeft, faChevronRight, faPowerOff
+    faChevronLeft, faChevronRight, faPowerOff, faLink, faLinkSlash
 );
 
 websocket.connect().then(() => {

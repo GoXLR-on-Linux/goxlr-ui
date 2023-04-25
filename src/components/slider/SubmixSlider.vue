@@ -10,13 +10,14 @@
 
       <Range id="B" :current-field-value=fieldBValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
              :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
-             @mouse-up="setMouseUp" style="margin-left: -32px;"  :height=115 :transform=-70 :title="getTitle('B')"
+             @mouse-up="setMouseUp" style="margin-left: -32px;" :height=115 :transform=-70 :title="getTitle('B')"
              :colour="getColour('B')" :reported-value="getTextValue('B')"/>
     </div>
 
-    <div style="margin-top: 5px; height: 20px; line-height: 20px; text-align: center">
-      <input type="checkbox" :checked="submixLinked" @change="setSubmixLinked"
-             aria-description="Link {{title}} Channels"/>
+    <div class="link" style="" @click="toggleSubmixLinked" role="checkbox" aria-description="Link {{title}} Channels"
+         :aria-checked="submixLinked" tabindex="0" :style="{ color: getLabelColour() }">
+      <div v-if="submixLinked"><font-awesome-icon icon="fa-solid fa-link" /></div>
+      <div v-else><font-awesome-icon icon="fa-solid fa-link-slash" /></div>
     </div>
     <div style="display: flex; flex-direction: row; margin-top: 5px">
       <Input id="A" :current-text-value="textAValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
@@ -38,10 +39,11 @@
 import Input from "@/components/slider/components/Input.vue";
 import Range from "@/components/slider/components/Range.vue";
 import Label from "@/components/slider/components/Label.vue";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 export default {
   name: "SubmixSlider",
-  components: {Input, Range, Label},
+  components: {FontAwesomeIcon, Input, Range, Label},
 
   data() {
     return {
@@ -255,6 +257,10 @@ export default {
       this.$emit('value-changed', this.id, value, this.rangeSelected);
     },
 
+    toggleSubmixLinked() {
+      this.$emit('submix-linked', this.id, !this.submixLinked);
+    },
+
     setSubmixLinked(e) {
       this.$emit('submix-linked', this.id, e.target.checked);
     },
@@ -301,5 +307,13 @@ export default {
 #sliderBox {
   width: 120px;
   background-color: #353937;
+}
+
+.link {
+  color: #fff;
+  margin-top: 5px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
 }
 </style>
