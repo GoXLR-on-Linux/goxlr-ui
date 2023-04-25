@@ -16,8 +16,14 @@
 
     <div class="link" style="" @click="toggleSubmixLinked" role="checkbox" aria-description="Link {{title}} Channels"
          :aria-checked="submixLinked" tabindex="0" :style="{ color: getLabelColour() }">
-      <div v-if="submixLinked"><font-awesome-icon icon="fa-solid fa-link" /></div>
-      <div v-else><font-awesome-icon icon="fa-solid fa-link-slash" /></div>
+      <div v-if="dimmed">
+        <img v-if="submixLinked" src="@/assets/submix/linked-dimmed.png" style="height: 20px">
+        <img v-else src="@/assets/submix/unlinked-dimmed.png" style="height: 20px" />
+      </div>
+      <div v-else>
+        <img v-if="submixLinked" src="@/assets/submix/linked-white.png" style="height: 20px" />
+        <img v-else src="@/assets/submix/unlinked-white.png" style="height: 20px" />
+      </div>
     </div>
     <div style="display: flex; flex-direction: row; margin-top: 5px">
       <Input id="A" :current-text-value="textAValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
@@ -39,11 +45,10 @@
 import Input from "@/components/slider/components/Input.vue";
 import Range from "@/components/slider/components/Range.vue";
 import Label from "@/components/slider/components/Label.vue";
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 export default {
   name: "SubmixSlider",
-  components: {FontAwesomeIcon, Input, Range, Label},
+  components: {Input, Range, Label},
 
   data() {
     return {
