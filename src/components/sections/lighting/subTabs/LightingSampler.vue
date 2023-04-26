@@ -42,19 +42,19 @@ export default {
 
   methods: {
     activeColor() {
-      return "#" + store.getActiveDevice().lighting.sampler["SamplerSelect" + this.selectedButtonOption].colours["colour_one"];
+      return "#" + store.getActiveDevice().lighting.sampler[this.getActiveBank()].colours["colour_one"];
     },
 
     emptyColor() {
-      return "#" + store.getActiveDevice().lighting.sampler["SamplerSelect" + this.selectedButtonOption].colours["colour_three"];
+      return "#" + store.getActiveDevice().lighting.sampler[this.getActiveBank()].colours["colour_three"];
     },
 
     inactiveColor() {
-      return "#" + store.getActiveDevice().lighting.sampler["SamplerSelect" + this.selectedButtonOption].colours["colour_two"];
+      return "#" + store.getActiveDevice().lighting.sampler[this.getActiveBank()].colours["colour_two"];
     },
 
     selectedInactiveOption() {
-      return store.getActiveDevice().lighting.sampler["SamplerSelect" + this.selectedButtonOption].off_style
+      return store.getActiveDevice().lighting.sampler[this.getActiveBank()].off_style
     },
 
     onButtonSelectionChange(id) {
@@ -62,31 +62,37 @@ export default {
     },
 
     onInactiveSelectionChange(id) {
-      websocket.send_command(store.getActiveSerial(), {"SetSampleOffStyle": ["SampleSelect" + this.selectedButtonOption, id]});
+      websocket.send_command(store.getActiveSerial(), {"SetSampleOffStyle": [this.getActiveBank(), id]});
     },
 
     onActiveColourChange(value) {
       let colour_one = value.substr(1, 6);
-      let colour_two = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_two;
-      let colour_three = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_three;
+      let colour_two = store.getActiveDevice().lighting.sampler[this.getActiveBank()].colours.colour_two;
+      let colour_three = store.getActiveDevice().lighting.sampler[this.getActiveBank()].colours.colour_three;
 
-      websocket.send_command(store.getActiveSerial(), {"SetSampleColour": [this.selectedButtonOption, colour_one, colour_two, colour_three]})
+      websocket.send_command(store.getActiveSerial(), {"SetSampleColour": [this.getActiveBank(), colour_one, colour_two, colour_three]})
     },
 
     onEmptyColourChange(value) {
-      let colour_one = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_one;
-      let colour_two = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_two;
+      console.log(store.getActiveDevice().lighting.sampler);
+
+      let colour_one = store.getActiveDevice().lighting.sampler[this.getActiveBank()].colours.colour_one;
+      let colour_two = store.getActiveDevice().lighting.sampler[this.getActiveBank()].colours.colour_two;
       let colour_three = value.substr(1, 6);
 
-      websocket.send_command(store.getActiveSerial(), {"SetSampleColour": [this.selectedButtonOption, colour_one, colour_two, colour_three]})
+      websocket.send_command(store.getActiveSerial(), {"SetSampleColour": [this.getActiveBank(), colour_one, colour_two, colour_three]})
     },
 
     onInactiveColourChange(value) {
-      let colour_one = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_one;
+      let colour_one = store.getActiveDevice().lighting.sampler[this.getActiveBank()].colours.colour_one;
       let colour_two = value.substr(1, 6);
-      let colour_three = store.getActiveDevice().lighting.sampler[this.activeBank].colours.colour_three;
+      let colour_three = store.getActiveDevice().lighting.sampler[this.getActiveBank()].colours.colour_three;
 
-      websocket.send_command(store.getActiveSerial(), {"SetSampleColour": [this.selectedButtonOption, colour_one, colour_two, colour_three]})
+      websocket.send_command(store.getActiveSerial(), {"SetSampleColour": [this.getActiveBank(), colour_one, colour_two, colour_three]})
+    },
+
+    getActiveBank() {
+      return "SamplerSelect" + this.selectedButtonOption;
     }
   }
 }
