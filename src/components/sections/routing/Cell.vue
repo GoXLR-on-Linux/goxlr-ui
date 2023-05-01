@@ -1,6 +1,8 @@
 <template>
-  <td @click="clicked" role="checkbox" :aria-description="`Routing from ${input} to ${output}`" :aria-checked="enabled" tabindex="0">
-    <font-awesome-icon v-if="enabled" icon="fa-solid fa-circle-check" />
+  <td>
+    <div @click="clicked" role="checkbox" :aria-valuenow="enabled" :aria-description="`Routing from ${input} to ${output}`" :aria-checked="enabled" tabindex="0">
+      <font-awesome-icon v-if="enabled" icon="fa-solid fa-circle-check" />
+    </div>
   </td>
 </template>
 
@@ -24,17 +26,21 @@ export default {
 
 <style scoped>
   td {
+    padding: 0;
+  }
+
+  div {
     text-align: center;
     font-size: 18px;
     color: #59b1b6;
     background-color: #3b413f;
-    padding: 0;
     margin: 0;
     position: relative;
+    height: 26px;
   }
 
   /* Force SVG to center of the Cell */
-  td svg {
+  div svg {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -44,11 +50,11 @@ export default {
     text-align: center;
   }
 
-  td:has(>input[type=checkbox]:focus) {
+  div:has(>input[type=checkbox]:focus) {
     background-color: #49514e;
   }
 
-  td:hover {
+  div:hover {
     background-color: #49514e;
   }
 </style>
