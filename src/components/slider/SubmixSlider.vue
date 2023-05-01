@@ -14,7 +14,7 @@
              :colour="getColour('B')" :reported-value="getTextValue('B')"/>
     </div>
 
-    <div class="link" style="" @click="toggleSubmixLinked" role="checkbox" aria-description="Link {{title}} Channels"
+    <div class="link" style="" @click="toggleSubmixLinked" role="checkbox" :aria-label="`Link ${title} Channels`"
          :aria-checked="submixLinked" tabindex="0" :style="{ color: getLabelColour() }">
       <div v-if="dimmed">
         <img v-if="submixLinked" :src="`${publicPath}images/submix/linked-dimmed.png`" style="height: 20px">
