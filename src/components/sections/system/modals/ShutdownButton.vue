@@ -18,6 +18,20 @@
                @change="changed"><label for="saveMicProfile">Save Mic Profile</label>
       </div>
       <div>
+        <input type="checkbox" ref="loadMicProfile" id="loadMicProfile" :checked="isActive('LoadMicProfile')"
+               @change="changed"><label for="loadMicProfile">Load Shutdown Mic Profile: </label>
+        <select ref="micProfile" @change="micProfileChanged" :value="getSelectedMicProfile()">
+          <option v-for="value in getMicProfiles()" :key="value">{{ value }}</option>
+        </select>
+      </div>
+      <div>
+        <input type="checkbox" ref="loadFullProfile" id="loadFullProfile" :checked="isActive('LoadProfile')"
+               @change="changed"><label for="loadFullProfile">Load Shutdown Full Profile: </label>
+        <select ref="fullProfile" @change="fullProfileChanged" :value="getSelectedFullProfile()">
+          <option v-for="value in getProfiles()" :key="value">{{ value }}</option>
+        </select>
+      </div>
+      <div>
         <input type="checkbox" ref="loadColourProfile" id="loadColourProfile" :checked="isActive('LoadProfileColours')"
                @change="changed"><label for="loadColourProfile">Load Colour Profile: </label>
         <select ref="colourProfile" @change="profileChanged" :value="getSelectedProfile()">
@@ -46,7 +60,7 @@ export default {
 
   data: function() {
     return {
-      commands: ["SaveProfile", "SaveMicProfile", "LoadProfileColours"],
+      commands: ["SaveProfile", "SaveMicProfile", "LoadMicProfile", "LoadProfile", "LoadProfileColours"],
   };
 },
 
@@ -94,6 +108,10 @@ export default {
       return store.getProfileFiles();
     },
 
+    getMicProfiles() {
+      return store.getMicProfileFiles();
+    },
+
     changed() {
       // If any checkmark changes, we need to send an updated command list to the Daemon.
       this.generateShutdownActions();
@@ -102,6 +120,22 @@ export default {
     profileChanged() {
       // Only send an update to the Daemon if the Load Colours checkbox is actually checked.
       if (!this.$refs.loadColourProfile.checked) {
+        return;
+      }
+      this.generateShutdownActions();
+    },
+
+    fullProfileChanged() {
+      // Only send an update to the Daemon if the Load Colours checkbox is actually checked.
+      if (!this.$refs.loadFullProfile.checked) {
+        return;
+      }
+      this.generateShutdownActions();
+    },
+
+    micProfileChanged() {
+      // Only send an update to the Daemon if the Load Colours checkbox is actually checked.
+      if (!this.$refs.loadMicProfile.checked) {
         return;
       }
       this.generateShutdownActions();
@@ -116,6 +150,25 @@ export default {
       return this.getProfiles()[0];
     },
 
+    getSelectedFullProfile() {
+      let profile = this.getValue("LoadProfile");
+      if (profile !== undefined) {
+        return profile.LoadProfile[0];
+      }
+
+      return this.getProfiles()[0];
+    },
+
+    getSelectedMicProfile() {
+      let profile = this.getValue("LoadMicProfile");
+      if (profile !== undefined) {
+        return profile.LoadMicProfile[0];
+      }
+
+      return this.getMicProfiles()[0];
+
+    },
+
     generateShutdownActions() {
       let actions = [];
       if (this.$refs.saveProfile.checked) {
@@ -123,6 +176,12 @@ export default {
       }
       if (this.$refs.saveMicProfile.checked) {
         actions.push({"SaveMicProfile": []})
+      }
+      if (this.$refs.loadMicProfile.checked) {
+        actions.push({"LoadMicProfile": [this.$refs.micProfile.value, false]})
+      }
+      if (this.$refs.loadFullProfile.checked) {
+        actions.push({"LoadProfile": [this.$refs.fullProfile.value, false]})
       }
       if (this.$refs.loadColourProfile.checked) {
         actions.push({"LoadProfileColours": this.$refs.colourProfile.value});

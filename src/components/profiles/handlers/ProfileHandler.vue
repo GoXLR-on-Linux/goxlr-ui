@@ -81,7 +81,7 @@ export default {
 
     loadProfile: function (label) {
       let command = {
-        "LoadProfile": label
+        "LoadProfile": [ label, false ]
       };
 
       sendHttpCommand(store.getActiveSerial(), command)
