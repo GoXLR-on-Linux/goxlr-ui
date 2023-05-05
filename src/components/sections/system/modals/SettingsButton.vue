@@ -16,6 +16,10 @@
                            :current-text-value="getSamplerPreRecord()"/>
       </div>
       <div style="padding: 12px">
+        <span style="display: inline-block; width: 360px">Allow UI Network Access (Required Restart):</span>
+        <input type="checkbox" :checked="get_allow_network_access()" @change="set_allow_network_access"/>
+      </div>
+      <div style="padding: 12px">
         <span style="display: inline-block; width: 360px">Voice Chat Mute All Also Mutes Mic To Chat Mic:</span>
         <input type="checkbox" :checked="get_vcmaammtcm()" @change="set_vcmaammtcm"/>
       </div>
@@ -75,6 +79,17 @@ export default {
       websocket.send_command(store.getActiveSerial(), { "SetSamplerPreBufferDuration": millis })
     },
 
+    get_allow_network_access() {
+      // I hate this name :D
+      if (!store.getActiveDevice()) {
+        return false;
+      }
+      return store.isAllowNetworkAccess();
+    },
+
+    set_allow_network_access(event) {
+      websocket.set_allow_network_access(event.target.checked);
+    },
 
     get_vcmaammtcm() {
       // I hate this name :D
@@ -85,7 +100,6 @@ export default {
     },
 
     set_vcmaammtcm(event) {
-      console.log(event);
       websocket.send_command(store.getActiveSerial(), {"SetVCMuteAlsoMuteCM": event.target.checked})
     },
 

@@ -51,6 +51,11 @@ export const store = reactive({
         return this.status.config.tts_enabled !== null;
     },
 
+    isAllowNetworkAccess() {
+        console.log(this.status.config);
+        return this.status.config.allow_network_access;
+    },
+
     getDeviceCount() {
         return Object.keys(this.status.mixers).length;
     },

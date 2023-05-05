@@ -129,6 +129,13 @@ export class Websocket {
         return this.#sendRequest(request);
     }
 
+    set_allow_network_access(enabled) {
+        let request = {
+            "SetAllowNetworkAccess": enabled
+        }
+        return this.#sendRequest(request);
+    }
+
     send_shutdown() {
         return this.#sendRequest("StopDaemon");
     }
