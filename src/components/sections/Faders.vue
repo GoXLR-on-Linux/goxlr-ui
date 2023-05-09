@@ -1,17 +1,17 @@
 <template>
   <GroupContainer title="Faders">
     <RadioSelection title="Channel" group="faders_channel" :options="fader_options" :selected="activeChannel"
-                   @selection-changed="channelChanged"/>
+      @selection-changed="channelChanged" />
     <RadioSelection title="Source" group="faders_source" :options="source_options" :selected="getActiveSource()"
-                   @selection-changed="sourceChanged"/>
+      @selection-changed="sourceChanged" :label="'Source for ' + getActiveChannelName()" />
     <RadioSelection title="Mute Behaviour" group="faders_mute" :options="getMuteFunctions()"
-                   :selected="getActiveMuteFunction()" @selection-changed="muteFunctionChanged"/>
+      :selected="getActiveMuteFunction()" @selection-changed="muteFunctionChanged" />
   </GroupContainer>
 </template>
 
 <script>
-import {store} from "@/store";
-import {websocket} from "@/util/sockets";
+import { store } from "@/store";
+import { websocket } from "@/util/sockets";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 
@@ -20,7 +20,7 @@ export default {
    * Everything here focuses around the 'Channel' input,
    */
 
-  components: {GroupContainer, RadioSelection},
+  components: { GroupContainer, RadioSelection },
   name: "MicFaders",
 
   data() {
@@ -28,31 +28,31 @@ export default {
       activeChannel: "A",
 
       fader_options: [
-        {id: "A", label: "Channel 1"},
-        {id: "B", label: "Channel 2"},
-        {id: "C", label: "Channel 3"},
-        {id: "D", label: "Channel 4"}
+        { id: "A", label: "Channel 1" },
+        { id: "B", label: "Channel 2" },
+        { id: "C", label: "Channel 3" },
+        { id: "D", label: "Channel 4" }
       ],
 
       source_options: [
-        {id: "Mic", label: "Mic"},
-        {id: "Chat", label: "Voice Chat"},
-        {id: "Music", label: "Music"},
-        {id: "Game", label: "Game"},
-        {id: "Console", label: "Console"},
-        {id: "LineIn", label: "Line In"},
-        {id: "System", label: "System"},
-        {id: "Sample", label: "Sample"},
-        {id: "Headphones", label: "Headphones"},
-        {id: "LineOut", label: "Line Out"}
+        { id: "Mic", label: "Mic" },
+        { id: "Chat", label: "Voice Chat" },
+        { id: "Music", label: "Music" },
+        { id: "Game", label: "Game" },
+        { id: "Console", label: "Console" },
+        { id: "LineIn", label: "Line In" },
+        { id: "System", label: "System" },
+        { id: "Sample", label: "Sample" },
+        { id: "Headphones", label: "Headphones" },
+        { id: "LineOut", label: "Line Out" }
       ],
 
       mute_options: [
-        {id: "All", label: "Mute All"},
-        {id: "ToStream", label: "Mute to Stream"},
-        {id: "ToVoiceChat", label: "Mute to Voice Chat"},
-        {id: "ToPhones", label: "Mute to Phones"},
-        {id: "ToLineOut", label: "Mute to Line Out"},
+        { id: "All", label: "Mute All" },
+        { id: "ToStream", label: "Mute to Stream" },
+        { id: "ToVoiceChat", label: "Mute to Voice Chat" },
+        { id: "ToPhones", label: "Mute to Phones" },
+        { id: "ToLineOut", label: "Mute to Line Out" },
       ]
     }
   },
@@ -138,10 +138,12 @@ export default {
     getMuteFunctions: function () {
       this.updateDisabledMuteFunctions(this.getActiveSource());
       return this.mute_options;
+    },
+    getActiveChannelName: function () {
+      return this.fader_options.find((option) => option.id === this.activeChannel).label;
     }
   },
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
