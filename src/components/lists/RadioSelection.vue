@@ -12,6 +12,7 @@ export default {
 
   props: {
     title: String,
+    label: String,
     group: String,
     options: Array,
     selected: String,
@@ -48,7 +49,7 @@ export default {
       <slot name="title">{{ title }}</slot>
     </template>
     <ScrollingRadioList ref="list" :group="group" :options="options" :selected="selected" :menu="menu" :menu_id="menu_id"
-      @selection-changed="select" @menu-opened="menuOpened" @menu-selected="menuOptionClicked" :title="title">
+      @selection-changed="select" @menu-opened="menuOpened" @menu-selected="menuOptionClicked" :label="label || title">
       <slot>{{}}</slot>
     </ScrollingRadioList>
   </WidgetContainer>

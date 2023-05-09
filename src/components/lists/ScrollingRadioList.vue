@@ -9,7 +9,7 @@ export default {
   components: { DropMenu, RadioItem, VerticalScrollingContainer },
 
   props: {
-    title: { type: String, default: "" },
+    label: { type: String, default: "" },
     group: String,
     options: Array,
     selected: String,
@@ -63,7 +63,7 @@ export default {
 </script>
 
 <template>
-  <VerticalScrollingContainer :class="{ height: max_height }" ref="container" role="radiogroup" :aria-label="title">
+  <VerticalScrollingContainer :class="{ height: max_height }" ref="container" role="radiogroup" :aria-label="label">
     <RadioItem v-for="option in options" :key="option.id" :id="getUniqueId(option.id)" :ref="getUniqueId(option.id)"
       :group="group" :text="option.label" :selected="selected === option.id" :disabled="option.disabled"
       @radio-selected="select(option.id)">
