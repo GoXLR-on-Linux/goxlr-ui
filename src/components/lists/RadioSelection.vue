@@ -47,11 +47,11 @@ export default {
     <template #title>
       <slot name="title">{{ title }}</slot>
     </template>
-    <ScrollingRadioList ref="list" :group="group" :options="options" :selected="selected" :menu="menu"
-                        :menu_id="menu_id" @selection-changed="select" @menu-opened="menuOpened"
-                        @menu-selected="menuOptionClicked"><slot>{{}}</slot></ScrollingRadioList>
+    <ScrollingRadioList ref="list" :group="group" :options="options" :selected="selected" :menu="menu" :menu_id="menu_id"
+      @selection-changed="select" @menu-opened="menuOpened" @menu-selected="menuOptionClicked" :title="title">
+      <slot>{{}}</slot>
+    </ScrollingRadioList>
   </WidgetContainer>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
