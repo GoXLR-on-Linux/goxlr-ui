@@ -9,7 +9,7 @@ export default {
     },
     role: {
       type: String,
-      default: "group"
+      default: "region"
     }
   },
 
