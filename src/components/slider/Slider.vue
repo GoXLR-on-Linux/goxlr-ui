@@ -1,6 +1,6 @@
 <template>
   <div class="sliderBox">
-    <Label v-bind:title="title"/>
+    <Label v-bind:title="title" role="heading" aria-level="3" />
     <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
            :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
            @mouse-up="setMouseUp" :background-colour="rangeBackgroundColour" :title="title" :reported-value="getTextValue()"/>

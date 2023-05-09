@@ -4,7 +4,7 @@
       <input class="slider" type="range" v-bind:style="getCurrentStyle" v-bind:min="minValue"
              v-bind:max="maxValue" v-bind:value="localFieldValue" v-on:input="update"
              v-on:mousedown="mouseDown" v-on:mouseup="mouseUp" v-on:keydown="mouseDown" v-on:keyup="mouseUp"
-             :aria-description="title" :aria-valuetext="getReportedValue()"
+             :aria-label="title" :aria-description="title" :aria-valuetext="getReportedValue()"
       />
     </div>
   </div>
