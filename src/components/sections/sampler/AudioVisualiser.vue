@@ -1,31 +1,39 @@
 <template>
   <WidgetContainer style="width: fit-content">
     <template v-slot:title>Waveform</template>
-    <div class="content">
-      <button class="vertical_button" :aria-label="getPlaybackLabel()" style="text-align: center" v-bind:class="{enabled: (activeSample !== -1)}" @click="playActiveSample()"><font-awesome-icon :icon="getPlaybackButton()"></font-awesome-icon></button>
+    <div class="content" role="group" :aria-label="`Waveform for ${sampleName}`">
+      <button class="vertical_button" :aria-label="getPlaybackLabel()" style="text-align: center"
+        v-bind:class="{ enabled: (activeSample !== -1) }" @click="playActiveSample()"><font-awesome-icon
+          :icon="getPlaybackButton()"></font-awesome-icon></button>
 
       <div ref="wrapper" style="position: relative; width: 500px">
-        <div class="drag_handle left" style="text-align: center" ref="left" v-bind:class="{enabled: (activeSample !== -1)}" @mousedown.stop="mouseDownLeft">|</div>
-        <div class="drag_handle right" ref="right" style="text-align: center" v-bind:class="{enabled: (activeSample !== -1)}" @mousedown.stop="mouseDownRight">|</div>
-        <div style="color: white; height: 170px; line-height: 85px; text-align: center">Waveform Coming Soon!<br/>&lt;-- Position Sliders Supported --&gt;</div>
+        <div class="drag_handle left" style="text-align: center" ref="left"
+          v-bind:class="{ enabled: (activeSample !== -1) }" @mousedown.stop="mouseDownLeft">|</div>
+        <div class="drag_handle right" ref="right" style="text-align: center"
+          v-bind:class="{ enabled: (activeSample !== -1) }" @mousedown.stop="mouseDownRight">|</div>
+        <div style="color: white; height: 170px; line-height: 85px; text-align: center">Waveform Coming Soon!<br />&lt;--
+          Position Sliders Supported --&gt;</div>
       </div>
 
-      <button class="vertical_button" aria-label="Remove Sample" style="text-align: center" v-bind:class="{enabled: (activeSample !== -1)}" @click="deleteActiveSample()"><font-awesome-icon icon="fa-solid fa-trash"></font-awesome-icon></button>
+      <button class="vertical_button" aria-label="Remove Sample" style="text-align: center"
+        v-bind:class="{ enabled: (activeSample !== -1) }" @click="deleteActiveSample()"><font-awesome-icon
+          icon="fa-solid fa-trash"></font-awesome-icon></button>
     </div>
   </WidgetContainer>
 </template>
 
 <script>
-import {websocket} from "@/util/sockets";
-import {store} from "@/store";
+import { websocket } from "@/util/sockets";
+import { store } from "@/store";
 import WidgetContainer from "@/components/containers/WidgetContainer.vue";
 export default {
   name: "AudioVisualiser",
-  components: {WidgetContainer},
+  components: { WidgetContainer },
   props: {
     activeBank: String,
     activeButton: String,
     activeSample: Number,
+    sampleName: String,
   },
 
   data() {
@@ -53,9 +61,9 @@ export default {
       }
 
       if (store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].is_playing) {
-        websocket.send_command(store.getActiveSerial(), {"StopSamplePlayback": [this.activeBank, this.activeButton]});
+        websocket.send_command(store.getActiveSerial(), { "StopSamplePlayback": [this.activeBank, this.activeButton] });
       } else {
-        websocket.send_command(store.getActiveSerial(), {"PlaySampleByIndex": [this.activeBank, this.activeButton, this.activeSample]});
+        websocket.send_command(store.getActiveSerial(), { "PlaySampleByIndex": [this.activeBank, this.activeButton, this.activeSample] });
       }
     },
 
@@ -78,7 +86,7 @@ export default {
         return;
       }
 
-      websocket.send_command(store.getActiveSerial(), {"RemoveSampleByIndex": [this.activeBank, this.activeButton, this.activeSample]})
+      websocket.send_command(store.getActiveSerial(), { "RemoveSampleByIndex": [this.activeBank, this.activeButton, this.activeSample] })
       this.$emit("deselect-sample");
     },
 
@@ -137,7 +145,7 @@ export default {
         let wrapperWidth = this.$refs.wrapper.clientWidth - this.$refs.left.clientWidth;
         let rightPosition = parseInt(this.rightPosition);
         let percentage = rightPosition / wrapperWidth * 100;
-        websocket.send_command(store.getActiveSerial(), {"SetSampleStopPercent": [this.activeBank, this.activeButton, this.activeSample, percentage]});
+        websocket.send_command(store.getActiveSerial(), { "SetSampleStopPercent": [this.activeBank, this.activeButton, this.activeSample, percentage] });
       }
     },
 

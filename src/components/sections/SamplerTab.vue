@@ -5,19 +5,19 @@
     <RadioSelection title="Button" group="sampler_button" :options="button_options" :selected="activeButton"
       @selection-changed="setActiveButton" :label="'Button for bank ' + activeBank" />
     <RadioSelection title="Function" group="sampler_function" :options="function_options" :selected="getActiveFunction()"
-      @selection-changed="setActiveFunction" :label="'Function for ' + activeButton + ' button in bank ' + activeBank" />
+      @selection-changed="setActiveFunction" :label="`Function for ${activeButton} button in bank ${activeBank}`" />
     <RadioSelection title="Play Order" group="sampler_order" :options="order_options" :selected="getActiveOrder()"
-      @selection-changed="setActiveOrder" :label="'Play Order for ' + activeButton + ' button in bank ' + activeBank" />
+      @selection-changed="setActiveOrder" :label="`Play Order for ${activeButton} button in bank ${activeBank}`" />
   </GroupContainer>
   <GroupContainer title="Sampler">
     <RadioSelection title="Samples" group="sampler_samples" :options="getSampleOptions()" :selected="activeSample"
-      @selection-changed="setActiveSample">
+      @selection-changed="setActiveSample" :label="`Sample for ${activeButton} button in bank ${activeBank}`">
       <ButtonItem id="add_sample" ref="add_sample_button" text="+" label="Add Sample" :centered="true"
         @click="$refs.add_sample_modal.openModal(undefined, $refs.add_sample_button)" />
     </RadioSelection>
 
     <AudioVisualiser :active-bank="activeBank" :active-button="activeButton" :active-sample="parseInt(activeSample)"
-      @deselect-sample="activeSample = '-1'" />
+      @deselect-sample="activeSample = '-1'" :sampleName="getActiveSampleName(activeSample)" />
   </GroupContainer>
 
   <AccessibleModal ref="add_sample_modal" id="add_sample" :show_footer="true"
@@ -190,6 +190,12 @@ export default {
           store.resume();
         });
       })
+    },
+    getActiveSampleName: function (id) {
+      if (id === "-1") {
+        return "";
+      }
+      return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].samples[id].name;
     }
   }
 }
