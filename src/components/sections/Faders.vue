@@ -5,7 +5,8 @@
     <RadioSelection title="Source" group="faders_source" :options="source_options" :selected="getActiveSource()"
       @selection-changed="sourceChanged" :label="'Source for ' + getActiveChannelName()" />
     <RadioSelection title="Mute Behaviour" group="faders_mute" :options="getMuteFunctions()"
-      :selected="getActiveMuteFunction()" @selection-changed="muteFunctionChanged" />
+      :selected="getActiveMuteFunction()" @selection-changed="muteFunctionChanged"
+      :label="'Mute Behaviour for ' + getActiveChannelName()" />
   </GroupContainer>
 </template>
 
