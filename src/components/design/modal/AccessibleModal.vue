@@ -4,7 +4,7 @@
       <div ref="dialog" class="modal-container" role="dialog" aria-modal="true" :aria-labelledby="`${id}_label`"
            :aria-describedby="`${id}_body`" @keyup.esc.prevent="closeModalEsc">
         <div class="modal-header">
-          <div :id="`${id}_label`">
+          <div :id="`${id}_label`" role="heading" aria-level="2">
             <slot name="title"></slot>
           </div>
           <button v-show=show_close ref="close" @click="closeModal()">
