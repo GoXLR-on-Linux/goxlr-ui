@@ -1,5 +1,5 @@
 <template>
-  <div class="sliderBox">
+  <div class="sliderBox" role="group" :aria-label="title">
     <Label v-bind:title="title" role="heading" aria-level="3" />
     <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
            :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
