@@ -298,8 +298,6 @@ export default {
     },
 
     applyMuteToAll() {
-      // SetButtonGroupColours(ButtonColourGroups, String, Option<String>),
-      // SetButtonGroupOffStyle(ButtonColourGroups, ButtonColourOffStyle),
       let colour_one = store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[this.activeChannel]].colours.colour_one;
       let colour_two = store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[this.activeChannel]].colours.colour_two;
       websocket.send_command(store.getActiveSerial(), {"SetButtonGroupColours": ["FaderMute", colour_one, colour_two]});
