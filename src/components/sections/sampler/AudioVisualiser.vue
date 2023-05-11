@@ -8,10 +8,12 @@
       </button>
 
       <div ref="wrapper" style="position: relative; width: 500px; background-color: #252927">
-        <div class="drag_handle left" style="text-align: center" ref="left"
+        <div class="cover cover_left"></div>
+        <div class="cover cover_right"></div>
+        <div class="drag_handle left" ref="left"
              v-bind:class="{ enabled: (activeSample !== -1) }" @mousedown.stop="mouseDownLeft">|
         </div>
-        <div class="drag_handle right" ref="right" style="text-align: center"
+        <div class="drag_handle right" ref="right"
              v-bind:class="{ enabled: (activeSample !== -1) }" @mousedown.stop="mouseDownRight">|
         </div>
         <div id="waveform" class="waveform"></div>
@@ -41,7 +43,6 @@ export default {
     activeButton: String,
     activeSample: Number,
     sampleName: String,
-    samplePath: String,
   },
 
   data() {
@@ -240,6 +241,20 @@ export default {
     });
   },
 
+  computed: {
+    cover_left_width() {
+      return this.leftPosition;
+    },
+
+    cover_right_width() {
+      return (this.$refs.wrapper.clientWidth - parseInt(this.rightPosition, 10) - this.$refs.right.clientWidth) + "px";
+    },
+
+    cover_right_left() {
+      return (parseInt(this.rightPosition, 10) + this.$refs.right.clientWidth) + "px";
+    },
+  },
+
   watch: {
     activeSample() {
       this.resolvePercentages();
@@ -295,6 +310,8 @@ export default {
   color: #fff;
   line-height: 170px;
 
+  text-align: center;
+
   z-index: 3;
 }
 
@@ -312,6 +329,23 @@ export default {
 
 .drag_handle:hover.enabled {
   background-color: #49514e;
+}
+
+.cover {
+  position: absolute;
+  background-color: rgb(45, 50, 48, 0.9);
+  height: 173px;
+  z-index: 3;
+}
+
+.cover_left {
+  left: 0;
+  width: v-bind(cover_left_width);
+}
+
+.cover_right {
+  left: v-bind(cover_right_left);
+  width: v-bind(cover_right_width);
 }
 
 .waveform {
