@@ -236,8 +236,12 @@ function getWebsocketAddress() {
 
 // Same as above, except for HTTP request...
 function getHTTPAddress() {
+    return getBaseHTTPAddress() + "/api/command";
+}
+
+export function getBaseHTTPAddress() {
     if (process.env.NODE_ENV === "development") {
-        return "http://localhost:14564/api/command";
+        return "http://localhost:14564/";
     }
-    return "/api/command";
+    return "/";
 }

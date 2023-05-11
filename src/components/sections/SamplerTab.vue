@@ -1,4 +1,4 @@
-<template xmlns:slot="http://www.w3.org/1999/html">
+<template>
   <GroupContainer title="Bank">
     <RadioSelection title="Bank" group="sampler_bank" :options="bank_options" :selected="activeBank"
       @selection-changed="setActiveBank" />
@@ -17,7 +17,7 @@
     </RadioSelection>
 
     <AudioVisualiser :active-bank="activeBank" :active-button="activeButton" :active-sample="parseInt(activeSample)"
-      @deselect-sample="activeSample = '-1'" :sampleName="getActiveSampleName(activeSample)" />
+      @deselect-sample="activeSample = '-1'" :sample-name="getActiveSampleName(activeSample)" />
   </GroupContainer>
 
   <AccessibleModal ref="add_sample_modal" id="add_sample" :show_footer="true"
@@ -196,7 +196,7 @@ export default {
         return "";
       }
       return store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].samples[id].name;
-    }
+    },
   }
 }
 </script>

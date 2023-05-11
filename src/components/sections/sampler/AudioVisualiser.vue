@@ -6,13 +6,12 @@
         v-bind:class="{ enabled: (activeSample !== -1) }" @click="playActiveSample()"><font-awesome-icon
           :icon="getPlaybackButton()"></font-awesome-icon></button>
 
-      <div ref="wrapper" style="position: relative; width: 500px">
+      <div ref="wrapper" style="position: relative; width: 500px; background-color: #252927">
         <div class="drag_handle left" style="text-align: center" ref="left"
           v-bind:class="{ enabled: (activeSample !== -1) }" @mousedown.stop="mouseDownLeft">|</div>
         <div class="drag_handle right" ref="right" style="text-align: center"
           v-bind:class="{ enabled: (activeSample !== -1) }" @mousedown.stop="mouseDownRight">|</div>
-        <div style="color: white; height: 170px; line-height: 85px; text-align: center">Waveform Coming Soon!<br />&lt;--
-          Position Sliders Supported --&gt;</div>
+        <div id="waveform" class="waveform"></div>
       </div>
 
       <button class="vertical_button" aria-label="Remove Sample" style="text-align: center"
@@ -23,9 +22,12 @@
 </template>
 
 <script>
-import { websocket } from "@/util/sockets";
+import { websocket, getBaseHTTPAddress } from "@/util/sockets";
 import { store } from "@/store";
 import WidgetContainer from "@/components/containers/WidgetContainer.vue";
+import WaveSurfer from "wavesurfer.js/dist/wavesurfer";
+
+
 export default {
   name: "AudioVisualiser",
   components: { WidgetContainer },
@@ -34,6 +36,7 @@ export default {
     activeButton: String,
     activeSample: Number,
     sampleName: String,
+    samplePath: String,
   },
 
   data() {
@@ -51,6 +54,8 @@ export default {
 
       leftPosition: "0px",
       rightPosition: "480px",
+
+      wavesurfer: undefined,
     }
   },
 
@@ -133,6 +138,7 @@ export default {
         let wrapperWidth = this.$refs.wrapper.clientWidth - this.$refs.left.clientWidth;
         let leftPosition = parseInt(this.leftPosition);
 
+        console.log(leftPosition);
         let percentage = 0;
         if (leftPosition > 0) {
           percentage = leftPosition / wrapperWidth * 100;
@@ -216,10 +222,36 @@ export default {
     }
   },
 
+  mounted() {
+    this.wavesurfer = WaveSurfer.create({
+      container: '#waveform',
+      height: 173 / 2,
+      interact: false,
+      splitChannels: true,
+      hideScrollbar: true,
+      waveColor: "#d7d7d7",
+      cursorWidth: 0,
+      progressColor: "#d7d7d7",
+    });
+  },
+
   watch: {
     activeSample() {
       this.resolvePercentages();
     },
+
+    sampleName() {
+      if (this.sampleName === "") {
+        this.wavesurfer.empty();
+        return;
+      }
+
+      let url = getBaseHTTPAddress();
+      url = url + "files/samples/" + this.sampleName;
+
+      this.wavesurfer.load(url)
+      console.log("Sample name Changed! " + this.sampleName);
+    }
   },
 }
 </script>
@@ -237,7 +269,7 @@ export default {
   padding-left: 6px;
   padding-right: 6px;
 
-  border: 0px;
+  border: 0;
 }
 
 .vertical_button:hover.enabled {
@@ -257,6 +289,8 @@ export default {
   background-color: #3b413f;
   color: #fff;
   line-height: 170px;
+
+  z-index: 3;
 }
 
 .drag_handle:not(.enabled) {
@@ -273,6 +307,15 @@ export default {
 
 .drag_handle:hover.enabled {
   background-color: #49514e;
+}
+
+.waveform {
+  margin-left: 20px;
+  margin-right: 20px;
+  color: white;
+  height: 173px;
+  z-index: 0;
+  background-color: #252927;
 }
 
 .content {
