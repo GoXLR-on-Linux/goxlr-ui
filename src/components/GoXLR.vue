@@ -13,7 +13,7 @@
 
       <div style="height: 25px; background-color: #3b413f"/>
       <h1 class="sr-only">Device Settings</h1>
-      <Tabs label="Lower Ribbon">
+      <Tabs label="Device Settings">
         <Tab name="Mic">
           <Mic/>
         </Tab>

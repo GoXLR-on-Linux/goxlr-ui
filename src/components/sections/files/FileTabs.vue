@@ -1,5 +1,5 @@
 <template>
-    <Tabs style="width: 480px" label="Upper Ribbon">
+    <Tabs style="width: 480px" label="Profiles and Files">
         <Tab name="Profiles" :selected="true">
             <ProfileHandler />
         </Tab>
