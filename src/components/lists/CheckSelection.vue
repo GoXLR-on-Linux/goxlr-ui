@@ -31,7 +31,7 @@ export default {
 </script>
 
 <template>
-  <WidgetContainer role="group" :aria-label="title">
+  <WidgetContainer role="group" :aria-label="title" :title="title">
     <VerticalScrollingContainer>
       <CheckItem v-for="option in options" :key="option.id" :id="option.id" :group="group" :text="option.label"
         :selected="option.selected" :disabled="option.disabled" @check-changed="change" />
