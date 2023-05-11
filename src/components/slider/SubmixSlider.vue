@@ -1,6 +1,6 @@
 <template>
-  <div id="sliderBox">
-    <Label v-bind:title="title" :text-colour="getLabelColour()"/>
+  <div id="sliderBox" role="group" :aria-label="title">
+    <Label v-bind:title="title" :text-colour="getLabelColour()" role="heading" aria-level="3"/>
 
     <div style="display: flex; flex-direction: row">
       <Range id="A" :current-field-value=fieldAValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"

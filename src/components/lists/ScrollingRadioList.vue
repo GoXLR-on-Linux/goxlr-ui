@@ -6,16 +6,17 @@ import DropMenu from "@/components/design/DropMenu.vue";
 export default {
   name: "ScrollingRadioList",
   emits: ['selection-changed', 'menu-opened', 'menu-selected'],
-  components: {DropMenu, RadioItem, VerticalScrollingContainer},
+  components: { DropMenu, RadioItem, VerticalScrollingContainer },
 
   props: {
+    label: { type: String, default: "" },
     group: String,
     options: Array,
     selected: String,
     menu: Array,
     menu_id: String,
 
-    max_height: {type: String, optional: true, default: "inherit"}
+    max_height: { type: String, optional: true, default: "inherit" }
   },
 
   methods: {
@@ -62,36 +63,22 @@ export default {
 </script>
 
 <template>
-  <VerticalScrollingContainer :class="{ height: max_height }" ref="container" role="radiogroup">
-    <RadioItem
-        v-for="option in options"
-        :key="option.id"
-        :id="getUniqueId(option.id)"
-        :ref="getUniqueId(option.id)"
-        :group="group"
-        :text="option.label"
-        :selected="selected === option.id"
-        :disabled="option.disabled"
-        @radio-selected="select(option.id)"
-    >
+  <VerticalScrollingContainer :class="{ height: max_height }" ref="container" role="radiogroup" :aria-label="label">
+    <RadioItem v-for="option in options" :key="option.id" :id="getUniqueId(option.id)" :ref="getUniqueId(option.id)"
+      :group="group" :text="option.label" :selected="selected === option.id" :disabled="option.disabled"
+      @radio-selected="select(option.id)">
       <template v-if="this.menu !== undefined" #right>
-        <button :aria-label="`${option.label} Options`" :id="getButtonId(option.id)"
-                aria-haspopup="menu" :aria-controls="this.menu_id"
-                @click.prevent.stop="menuOpened($event, getButtonId(option.id), option.id)">
-          <font-awesome-icon icon="fa-solid fa-ellipsis-vertical"/>
+        <button :aria-label="`${option.label} Options`" :id="getButtonId(option.id)" aria-haspopup="menu"
+          :aria-controls="this.menu_id" @click.prevent.stop="menuOpened($event, getButtonId(option.id), option.id)">
+          <font-awesome-icon icon="fa-solid fa-ellipsis-vertical" />
         </button>
       </template>
 
     </RadioItem>
     <slot></slot>
   </VerticalScrollingContainer>
-  <DropMenu
-      v-if="this.menu !== undefined"
-      :options="this.menu"
-      ref="contextMenu"
-      @option-clicked="menuOptionClicked"
-      :menu_id="this.menu_id"
-  />
+  <DropMenu v-if="this.menu !== undefined" :options="this.menu" ref="contextMenu" @option-clicked="menuOptionClicked"
+    :menu_id="this.menu_id" />
 </template>
 
 <style scoped>

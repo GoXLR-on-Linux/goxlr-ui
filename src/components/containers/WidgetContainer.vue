@@ -9,7 +9,7 @@ export default {
 
 <template>
     <div class="container">
-        <p class="title">
+        <p class="title" role="heading" aria-level="3">
             <slot name="title">{{ title }}</slot>
         </p>
         <slot></slot>

@@ -4,15 +4,15 @@
       <!-- TODO: Fix this, really.. :D -->
       <div style="color: #fff">
         <div v-for="output in Object.keys(outputDevices)" :key="output"
-             style="display: flex; flex-direction: row; gap: 6px">
-          <div style="width: 120px">{{ output }}</div>
-          <div style="margin-right: 15px">
+             style="display: flex; flex-direction: row; gap: 6px" role="radiogroup" :aria-label="output">
+          <div style="width: 120px" role="heading" aria-level="3">{{ output }}</div>
+          <div style="margin-right: 15px" role="presentation">
             <label for="A">A:</label> <input @change="setDeviceMix" :checked="isOutputA(outputDevices[output])"
-                                             type="radio" id="A" :name="outputDevices[output]"/>
+                                             type="radio" id="A" :name="outputDevices[output]" aria-label="A"/>
           </div>
-          <div>
+          <div role="presentation">
             <label for="B">B:</label> <input @change="setDeviceMix" :checked="!isOutputA(outputDevices[output])"
-                                             type="radio" id="B" :name="outputDevices[output]"/>
+                                             type="radio" id="B" :name="outputDevices[output]" aria-label="B"/>
           </div>
         </div>
       </div>

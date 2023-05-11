@@ -13,6 +13,7 @@ export default {
   },
 
   props: {
+    title: String,
     group: String,
     options: Array,
   },
@@ -30,25 +31,13 @@ export default {
 </script>
 
 <template>
-  <WidgetContainer role="group">
+  <WidgetContainer role="group" :aria-label="title">
     <VerticalScrollingContainer>
-      <CheckItem
-          v-for="option in options"
-          :key="option.id"
-          :id="option.id"
-          :group="group"
-          :text="option.label"
-          :selected="option.selected"
-          :disabled="option.disabled"
-          @check-changed="change"
-      />
+      <CheckItem v-for="option in options" :key="option.id" :id="option.id" :group="group" :text="option.label"
+        :selected="option.selected" :disabled="option.disabled" @check-changed="change" />
       <slot></slot>
     </VerticalScrollingContainer>
   </WidgetContainer>
 </template>
 
-<style scoped>
-
-
-
-</style>
+<style scoped></style>

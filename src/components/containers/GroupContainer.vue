@@ -2,7 +2,16 @@
 export default {
   name: "GroupContainer",
   props: {
+    label: String,
     title: String,
+    level: {
+      type: Number,
+      default: 2
+    },
+    role: {
+      type: String,
+      default: "region"
+    }
   },
 
   data() {
@@ -35,9 +44,9 @@ export default {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" :role="role" :aria-label="label || title || ''">
     <div style="width: 100%">
-      <div v-if="title !== ''" class="title">
+      <div v-if="title !== ''" class="title" role="heading" :aria-level="level">
         {{ title }}
       </div>
       <div ref="right" class="right">

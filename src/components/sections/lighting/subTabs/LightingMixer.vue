@@ -1,8 +1,8 @@
 <script>
-import {store} from "@/store";
-import {websocket} from "@/util/sockets";
-import {LightingInactiveOptions, MuteButtonNamesForFader, ScribbleNames} from "@/util/mixerMapping";
-import {isDeviceMini} from "@/util/util";
+import { store } from "@/store";
+import { websocket } from "@/util/sockets";
+import { LightingInactiveOptions, MuteButtonNamesForFader, ScribbleNames } from "@/util/mixerMapping";
+import { isDeviceMini } from "@/util/util";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
@@ -51,11 +51,11 @@ export default {
     isDeviceMini,
 
     /* Channel Selection */
-    selectedChannel: function() {
+    selectedChannel: function () {
       return this.activeChannel;
     },
 
-    onChannelSelectionChange: function(id) {
+    onChannelSelectionChange: function (id) {
       this.activeChannel = id;
 
       if (!isDeviceMini()) {
@@ -67,7 +67,7 @@ export default {
 
     /* Fader Colour Common */
     onFaderColourChange(top, bottom) {
-      websocket.send_command(store.getActiveSerial(), {"SetFaderColours": [this.activeChannel, top, bottom]});
+      websocket.send_command(store.getActiveSerial(), { "SetFaderColours": [this.activeChannel, top, bottom] });
     },
 
     /* Fader Top Colour */
@@ -140,7 +140,7 @@ export default {
         type = "Meter"
       }
 
-      websocket.send_command(store.getActiveSerial(), {"SetFaderDisplayStyle": [this.activeChannel, type]});
+      websocket.send_command(store.getActiveSerial(), { "SetFaderDisplayStyle": [this.activeChannel, type] });
     },
 
     /***************************/
@@ -152,7 +152,7 @@ export default {
 
     onScreenColourChange(value) {
       value = value.substr(1, 6);
-      websocket.send_command(store.getActiveSerial(), {"SetSimpleColour": [ScribbleNames[this.activeChannel], value]});
+      websocket.send_command(store.getActiveSerial(), { "SetSimpleColour": [ScribbleNames[this.activeChannel], value] });
     },
 
     /* Icons */
@@ -183,7 +183,7 @@ export default {
     },
 
     onIconSelectionChange(value) {
-      websocket.send_command(store.getActiveSerial(), {"SetScribbleIcon": [this.activeChannel, value]})
+      websocket.send_command(store.getActiveSerial(), { "SetScribbleIcon": [this.activeChannel, value] })
     },
 
     /* Display Options */
@@ -219,13 +219,13 @@ export default {
     },
 
     setScreenInverted(inverted) {
-      websocket.send_command(store.getActiveSerial(), {"SetScribbleInvert": [this.activeChannel, inverted]});
+      websocket.send_command(store.getActiveSerial(), { "SetScribbleInvert": [this.activeChannel, inverted] });
     },
 
     setScreenNumberShow(show) {
       let channel = Object.keys(store.getActiveDevice().fader_status).indexOf(this.activeChannel) + 1;
       let value = show ? channel.toString() : "";
-      websocket.send_command(store.getActiveSerial(), {"SetScribbleNumber": [this.activeChannel, value]})
+      websocket.send_command(store.getActiveSerial(), { "SetScribbleNumber": [this.activeChannel, value] })
     },
 
     /* Text Field */
@@ -240,7 +240,7 @@ export default {
 
     applyUpdate(event) {
       let value = event.target.value;
-      websocket.send_command(store.getActiveSerial(), {"SetScribbleText": [this.activeChannel, value]})
+      websocket.send_command(store.getActiveSerial(), { "SetScribbleText": [this.activeChannel, value] })
     },
 
 
@@ -268,7 +268,7 @@ export default {
     },
 
     setMuteColourValues(active, inactive) {
-      websocket.send_command(store.getActiveSerial(), {"SetButtonColours": [MuteButtonNamesForFader[this.activeChannel], active, inactive]});
+      websocket.send_command(store.getActiveSerial(), { "SetButtonColours": [MuteButtonNamesForFader[this.activeChannel], active, inactive] });
     },
 
     selectedMuteInactiveOption() {
@@ -276,7 +276,11 @@ export default {
     },
 
     onMuteInactiveSelectionChange(id) {
-      websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [MuteButtonNamesForFader[this.activeChannel], id]});
+      websocket.send_command(store.getActiveSerial(), { "SetButtonOffStyle": [MuteButtonNamesForFader[this.activeChannel], id] });
+    },
+    getSelectedChannelName() {
+      //get the current selected channel name to be used in aria-labels
+      return this.buttonOptions.find(option => option.id === this.activeChannel).label;
     },
   },
 
@@ -292,29 +296,21 @@ export default {
   <div style="display: flex">
     <ContentContainer>
       <GroupContainer title="Faders">
-        <RadioSelection title="Channel"
-          group="lighting_mixer_channel_select"
-          :options="buttonOptions"
-          :selected="selectedChannel()"
-          @selection-changed="onChannelSelectionChange"
-        />
+        <RadioSelection title="Channel" group="lighting_mixer_channel_select" :options="buttonOptions"
+          :selected="selectedChannel()" @selection-changed="onChannelSelectionChange" />
       </GroupContainer>
 
-      <GroupContainer title="Fader">
+      <GroupContainer title="Fader" :label="`Fader Settings for ${getSelectedChannelName()}`">
         <CheckSelection title="Style" :options="getStyleOptions()" @selection-changed="onStyleSelectionChanged" />
-        <ColourPicker title="Bottom Colour" :color-value="getFaderBottomColour()" @colour-changed="onFaderBottomColourChange" />
+        <ColourPicker title="Bottom Colour" :color-value="getFaderBottomColour()"
+          @colour-changed="onFaderBottomColourChange" />
         <ColourPicker title="Top Colour" :color-value="getFaderTopColour()" @colour-changed="onFaderTopColourChange" />
       </GroupContainer>
 
-      <GroupContainer v-if="!isDeviceMini()" title="Screen">
+      <GroupContainer v-if="!isDeviceMini()" title="Screen" :label="`Screen Settings for ${getSelectedChannelName()}`">
         <ColourPicker title="Background Colour" :color-value="getScreenColour()" @colour-changed="onScreenColourChange" />
-        <RadioSelection
-          title="Icon"
-          group="lighting_mixer_icon_select"
-          :options="getIconOptions()"
-          :selected="getSelectedIcon()"
-          @selection-changed="onIconSelectionChange"
-        >
+        <RadioSelection title="Icon" group="lighting_mixer_icon_select" :options="getIconOptions()"
+          :selected="getSelectedIcon()" @selection-changed="onIconSelectionChange">
           <template #title>
             <div>
               <span style="padding-right: 14px">Icons</span>
@@ -328,23 +324,20 @@ export default {
 
         <CheckSelection title="Options" :options="getDisplayOptions()" @selection-changed="onDisplayOptionsChanged">
           <div style="text-align: center">
-            <hr style="margin-top: 14px"/>
+            <hr style="margin-top: 14px" />
             <div style="color: #fff; text-align: left; padding-left: 8px; margin-top: 16px;">Text:</div>
-            <input type="text" v-model="textValue" @blur="applyUpdate" v-on:keyup.enter="applyUpdate"/>
+            <input type="text" v-model="textValue" @blur="applyUpdate" v-on:keyup.enter="applyUpdate" aria-label="Text"
+              aria-description="Text to display on the GoXLR screen" />
           </div>
         </CheckSelection>
       </GroupContainer>
 
-      <GroupContainer title="Mute">
+      <GroupContainer title="Mute" :label="`Mute Settings for ${getSelectedChannelName()}`">
         <ColourPicker title="Active" :color-value="getMuteActiveColour()" @colour-changed="onMuteActiveColourChanged" />
-        <RadioSelection
-            title="Inactive Option"
-            group="lighting_mixer_mute_inactive_behaviour"
-            :options="inactiveOptions"
-            :selected="selectedMuteInactiveOption()"
-            @selection-changed="onMuteInactiveSelectionChange"
-        />
-        <ColourPicker title="Inactive" :color-value="getMuteInactiveColour()" @colour-changed="onMuteInactiveColourChanged" />
+        <RadioSelection title="Inactive Option" group="lighting_mixer_mute_inactive_behaviour" :options="inactiveOptions"
+          :selected="selectedMuteInactiveOption()" @selection-changed="onMuteInactiveSelectionChange" />
+        <ColourPicker title="Inactive" :color-value="getMuteInactiveColour()"
+          @colour-changed="onMuteInactiveColourChanged" />
       </GroupContainer>
     </ContentContainer>
   </div>

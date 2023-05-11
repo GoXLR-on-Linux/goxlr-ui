@@ -28,23 +28,45 @@ export default {
   methods: {
     getTabs() {
       return isDeviceMini() ? ['Mixer', 'Cough', 'Global'] : ['Mixer', 'Effects', 'Sampler', 'Cough', 'Global']
+    },
+    onTabKeydown(event) {
+      const tabs = this.getTabs();
+      const activeTab = this.currentTab;
+      const activeTabIndex = tabs.indexOf(activeTab);
+      let nextTab;
+
+      if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+        nextTab = tabs[(activeTabIndex + 1) % tabs.length];
+        //explanation: if activeTabIndex is 0, then 0+1 % 3 = 1, so nextTab is tabs[1]
+      } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+        nextTab =
+          tabs[(activeTabIndex - 1 + tabs.length) % tabs.length];
+        //explanation: if activeTabIndex is 0, then 0-1+3 % 3 = 2, so nextTab is tabs[2]
+      } else if (event.key === "Home") {
+        nextTab = tabs[0];
+      } else if (event.key === "End") {
+        nextTab = tabs[tabs.length - 1];
+      }
+
+      if (nextTab) {
+        this.currentTab = nextTab;
+        //we need a ref on the button element to focus it
+        this.$refs[nextTab][0].focus();
+      }
     }
   }
 }
 </script>
 
 <template>
-  <CenteredContainer>
-    <button
-      v-for="tab in getTabs()"
-      :key="tab"
-      :class="['button', { active: currentTab === tab }]"
-      @click="currentTab = tab"
-    >
+  <CenteredContainer role="tablist" aria-label="Lighting Settings">
+    <button v-for="tab in getTabs()" :key="tab" :class="['button', { active: currentTab === tab }]"
+      @click="currentTab = tab" role="tab" :aria-selected="currentTab === tab" :aria-controls="tab.toLowerCase()"
+      :tabindex="currentTab === tab ? 0 : -1" :ref="tab" @keydown="onTabKeydown">
       {{ tab }}
     </button>
   </CenteredContainer>
-  <component :is="currentTab" />
+  <component :is="currentTab" role="tabpanel" :aria-label="currentTab" />
 </template>
 
 <style scoped>

@@ -100,14 +100,15 @@ export default {
   <WidgetContainer :title="title">
     <slot>
       <div class="spacer"></div>
-      <img src="wheel.png" draggable="false" @mousemove.stop="mouseMove" @mouseleave="mouseLeave" @click="mouseClick" />
+      <img src="wheel.png" draggable="false" @mousemove.stop="mouseMove" @mouseleave="mouseLeave" @click="mouseClick"
+        role="button" tabindex="0" :aria-label="`${title}, Colour Picker`" />
       <div class="spacer"></div>
       <div class="controls">
         <div class="colourPreview"></div>
 
-        <input type="text" :value="hexString" @keyup="updateColour"/>
+        <input type="text" :value="hexString" @keyup="updateColour" :aria-label="title" />
 
-        <button @click="clearColour">
+        <button @click="clearColour" :aria-label="`Clear ${title}`">
           <font-awesome-icon title="Clear" icon="fa-solid fa-xmark" />
         </button>
       </div>
@@ -117,8 +118,8 @@ export default {
 
 <style scoped>
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .spacer {

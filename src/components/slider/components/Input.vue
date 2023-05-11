@@ -2,12 +2,12 @@
   <div>
     <div v-if="!editable" class="sliderInput">
       <input type="text" v-on:blur="reset" :value="displayValue()" :min="minValue" :max="maxValue"
-             :disabled="!editable" :aria-description="title" :aria-valuetext="getDisplayValue()" />
+             :disabled="!editable" :aria-label="title" :aria-description="title" :aria-valuetext="getDisplayValue()" />
       <div class="suffix"><span class="filler">{{ displayValue() }}</span><span v-html="getSuffix()"></span></div>
     </div>
     <div v-if="editable" class="sliderInput">
       <input type="number" v-on:input="update" v-on:blur="reset" v-model="localTextValue" :min="minValue"
-             :max="maxValue" :disabled="!editable" :aria-description="title" :aria-valuetext="getDisplayValue()" />
+             :max="maxValue" :disabled="!editable" :aria-label="title" :aria-description="title" :aria-valuetext="getDisplayValue()" />
       <div class="suffix"><span class="filler">{{ localTextValue }}</span><span v-html="getSuffix()"></span></div>
     </div>
   </div>
