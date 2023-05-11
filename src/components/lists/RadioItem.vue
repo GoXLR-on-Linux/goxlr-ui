@@ -1,9 +1,8 @@
 <template>
   <div class="wrapper">
-    <label ref="label" :class="{ selected: this.selected, disabled: this.disabled }">
-      <input ref="check" :name=group :id=id type="radio" @change="change" :value=id :checked="selected"
-             :disabled="disabled"/>{{ text }}
-    </label>
+    <input ref="check" :name=group :id=id type="radio" @change="change" :value=id :checked="selected"
+           :disabled="disabled" :aria-labelledby="`label_${id}`" class="screenreader-only"/>
+    <label ref="label" :id="`label_${id}`" :for="id" :class="{ selected: this.selected, disabled: this.disabled }">{{text}}</label>
     <div ref="right_ref" class="right_side" :class="{ selected: this.selected, disabled: this.disabled }">
       <slot name="right"></slot>
     </div>
@@ -64,20 +63,6 @@ export default {
   flex-direction: row;
 }
 
-/*
-Firefox doesn't support complete hiding of the radio button (it's pretty aggressive with detecting label and button
-attachment, so we do some tricks to make it 'seem' hidden, so that the screen reader can treat the radio correctly
-while it not being visibly visible!
- */
-input[type=radio] {
-  opacity: 0;
-  width: 0;
-  border: 0;
-  height: 0;
-  margin: 0;
-}
-
-
 /* We're going to try and make the label look and behave like a legacy 'Button' */
 label {
   display: block;
@@ -91,10 +76,7 @@ label {
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  /*
-   We sneak the padding 4 pixels to the left, because we can't completely hide the radio button..
-   */
-  padding: v-bind(padding) v-bind(padding) v-bind(padding) calc(v-bind(padding) - 4px);
+  padding: v-bind(padding);
   text-align: left;
   color: #fff;
 }
