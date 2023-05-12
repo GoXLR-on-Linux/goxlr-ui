@@ -4,8 +4,8 @@ import GroupContainer from "@/components/containers/GroupContainer.vue";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
 import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
 
-import { store } from "@/store";
-import { websocket } from "@/util/sockets";
+import {store} from "@/store";
+import {websocket} from "@/util/sockets";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
@@ -16,7 +16,7 @@ export default {
     GroupContainer,
     RadioSelection,
     ColourPicker
-},
+  },
 
   data() {
     return {
@@ -28,7 +28,6 @@ export default {
         {
           id: 'Global',
           label: 'Global',
-          disabled: true
         }
       ],
       selected: 'Accent'
@@ -45,7 +44,11 @@ export default {
     },
 
     onColourChange(value) {
-      websocket.send_command(store.getActiveSerial(), {"SetSimpleColour": [this.selected, value.substr(1, 6)]});
+      if (this.selected === "Accent") {
+        websocket.send_command(store.getActiveSerial(), {"SetSimpleColour": [this.selected, value.substr(1, 6)]});
+      } else {
+        websocket.send_command(store.getActiveSerial(), {"SetGlobalColour": value.substr(1, 6)});
+      }
     },
   }
 }
@@ -55,8 +58,9 @@ export default {
   <CenteredContainer>
     <ContentContainer>
       <GroupContainer title="Areas">
-        <RadioSelection title="Area" group="lighting_global_areas" :options="this.options" :selected="this.selected" @selection-changed="onSelectionChange"/>
-        <ColourPicker title="Colour" :color-value="color()" @colour-changed="onColourChange" />
+        <RadioSelection title="Area" group="lighting_global_areas" :options="this.options" :selected="this.selected"
+                        @selection-changed="onSelectionChange"/>
+        <ColourPicker title="Colour" :color-value="color()" @colour-changed="onColourChange"/>
       </GroupContainer>
     </ContentContainer>
   </CenteredContainer>
