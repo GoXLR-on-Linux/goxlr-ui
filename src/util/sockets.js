@@ -236,7 +236,7 @@ function getWebsocketAddress() {
 
 // Same as above, except for HTTP request...
 function getHTTPAddress() {
-    return getBaseHTTPAddress() + "/api/command";
+    return getBaseHTTPAddress() + "api/command";
 }
 
 export function getBaseHTTPAddress() {
