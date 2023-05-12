@@ -21,13 +21,13 @@ export default {
 
   data() {
     return {
-      currentTab: 'Mixer',
+      currentTab: 'Global',
     }
   },
 
   methods: {
     getTabs() {
-      return isDeviceMini() ? ['Mixer', 'Cough', 'Global'] : ['Mixer', 'Effects', 'Sampler', 'Cough', 'Global']
+      return isDeviceMini() ? ['Global', 'Mixer', 'Cough'] : ['Global', 'Mixer', 'Effects', 'Sampler', 'Cough']
     },
     onTabKeydown(event) {
       const tabs = this.getTabs();

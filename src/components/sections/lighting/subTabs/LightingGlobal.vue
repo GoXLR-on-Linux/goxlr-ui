@@ -22,15 +22,15 @@ export default {
     return {
       options: [
         {
-          id: 'Accent',
-          label: 'Accent'
-        },
-        {
           id: 'Global',
           label: 'Global',
+        },
+        {
+          id: 'Accent',
+          label: 'Accent'
         }
       ],
-      selected: 'Accent'
+      selected: 'Global'
     }
   },
 
