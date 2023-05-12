@@ -88,9 +88,7 @@ export default {
   padding: 6px 6px;
   width: fit-content;
 
-  /** Tmporary top margin, removed after higher level tab refactoring */
   margin-top: 15px;
-
 
   color: #ffffff;
   background-color: #353937;

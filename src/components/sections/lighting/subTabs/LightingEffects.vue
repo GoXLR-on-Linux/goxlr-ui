@@ -19,7 +19,7 @@ export default {
 
 <template>
   <CenteredContainer>
-    <ContentContainer style="padding-top: 15px">
+    <ContentContainer style="padding-top: 15px; ; padding-bottom: 20px">
         <Presets />
         <LightingEffectsEncoders />
         <LightingEffectsEffects />

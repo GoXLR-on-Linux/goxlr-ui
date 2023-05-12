@@ -76,7 +76,7 @@ export default {
 
 <template>
   <CenteredContainer>
-    <ContentContainer style="padding-top: 15px">
+    <ContentContainer style="padding-top: 15px; padding-bottom: 20px">
       <GroupContainer title="Cough/Bleep Buttons">
         <RadioSelection title="Buttons" group="lighting_cough_buttons" :options="this.buttonOptions" :selected="this.selectedButtonOption" @selection-changed="onButtonSelectionChange"/>
         <ColourPicker title="Active" :color-value="activeColor()" @colour-changed="onActiveColourChange" />

@@ -56,7 +56,7 @@ export default {
 
 <template>
   <CenteredContainer>
-    <ContentContainer style="padding-top: 15px">
+    <ContentContainer style="padding-top: 15px; padding-bottom: 20px">
       <GroupContainer title="Areas">
         <RadioSelection title="Area" group="lighting_global_areas" :options="this.options" :selected="this.selected"
                         @selection-changed="onSelectionChange"/>
