@@ -111,7 +111,7 @@ export default {
 
 <template>
   <CenteredContainer>
-    <ContentContainer>
+    <ContentContainer style="padding-top: 15px">
       <GroupContainer title="Bank">
         <template #right>
           <button class="applyToAll" @click="applyToAll()">Apply to All</button>

@@ -5,7 +5,7 @@ import Sampler from "@/components/sections/lighting/subTabs/LightingSampler.vue"
 import Cough from "@/components/sections/lighting/subTabs/LightingCough.vue";
 import Global from "@/components/sections/lighting/subTabs/LightingGlobal.vue";
 
-import { isDeviceMini } from "@/util/util";
+import {isDeviceMini} from "@/util/util";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
@@ -40,7 +40,7 @@ export default {
         //explanation: if activeTabIndex is 0, then 0+1 % 3 = 1, so nextTab is tabs[1]
       } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
         nextTab =
-          tabs[(activeTabIndex - 1 + tabs.length) % tabs.length];
+            tabs[(activeTabIndex - 1 + tabs.length) % tabs.length];
         //explanation: if activeTabIndex is 0, then 0-1+3 % 3 = 2, so nextTab is tabs[2]
       } else if (event.key === "Home") {
         nextTab = tabs[0];
@@ -59,29 +59,47 @@ export default {
 </script>
 
 <template>
-  <CenteredContainer role="tablist" aria-label="Lighting Settings">
+  <CenteredContainer class="sections" role="tablist" aria-label="Lighting Settings">
     <button v-for="tab in getTabs()" :key="tab" :class="['button', { active: currentTab === tab }]"
-      @click="currentTab = tab" role="tab" :aria-selected="currentTab === tab" :aria-controls="tab.toLowerCase()"
-      :tabindex="currentTab === tab ? 0 : -1" :ref="tab" @keydown="onTabKeydown">
+            @click="currentTab = tab" role="tab" :aria-selected="currentTab === tab" :aria-controls="tab.toLowerCase()"
+            :tabindex="currentTab === tab ? 0 : -1" :ref="tab" @keydown="onTabKeydown">
       {{ tab }}
     </button>
   </CenteredContainer>
-  <component :is="currentTab" role="tabpanel" :aria-label="currentTab" />
+  <component :is="currentTab" role="tabpanel" :aria-label="currentTab"/>
 </template>
 
 <style scoped>
+
+.sections > button:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+.sections > button:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+.sections {
+  gap: 2px;
+}
+
 .button {
   min-width: 100px;
-  margin: 0 2px;
-  padding: 10px 20px;
+  padding: 6px 6px;
+  width: fit-content;
 
   /** Tmporary top margin, removed after higher level tab refactoring */
-  margin-top: 40px;
+  margin-top: 15px;
+
 
   color: #ffffff;
-  background-color: #2b2f2d;
+  background-color: #353937;
   border: none;
   cursor: pointer;
+}
+
+.button:not(.active):hover {
+  background-color: #49514e;
 }
 
 .button.active {

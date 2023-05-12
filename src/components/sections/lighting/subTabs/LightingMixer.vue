@@ -322,7 +322,7 @@ export default {
 
 <template>
   <div style="display: flex">
-    <ContentContainer>
+    <ContentContainer style="padding-top: 15px">
       <GroupContainer title="Faders">
         <RadioSelection title="Channel" group="lighting_mixer_channel_select" :options="buttonOptions"
                         :selected="selectedChannel()" @selection-changed="onChannelSelectionChange"/>
