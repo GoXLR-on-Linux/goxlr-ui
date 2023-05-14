@@ -42,8 +42,8 @@
                     tabindex="0"
                     aria-valuemin="0"
                     aria-valuemax="100"
-                    :aria-valuenow="leftPercentage"
-                    :aria-valuetext="`${leftPercentage}%`"
+                    :aria-valuenow="+leftPercentage.toFixed(2)"
+                    :aria-valuetext="`${+leftPercentage.toFixed(2)}%`"
                 >
                     |
                 </div>
@@ -59,8 +59,8 @@
                     :aria-disabled="activeSample === -1"
                     aria-valuemin="0"
                     aria-valuemax="100"
-                    :aria-valuenow="rightPercentage"
-                    :aria-valuetext="`${rightPercentage}%`"
+                    :aria-valuenow="+rightPercentage.toFixed(2)"
+                    :aria-valuetext="`${+rightPercentage.toFixed(2)}%`"
                 >
                     |
                 </div>
