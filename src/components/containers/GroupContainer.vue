@@ -33,7 +33,7 @@ export default {
   computed: {
     rightWidth() {
       if (this.width === 0) {
-        return "0";
+        return "0px";
       }
       return this.width + 2 + "px";
     }
