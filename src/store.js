@@ -1,5 +1,5 @@
-import {reactive} from "vue";
-import {applyOperation} from "fast-json-patch";
+import { reactive } from "vue";
+import { applyOperation } from "fast-json-patch";
 
 
 export const store = reactive({
@@ -14,6 +14,13 @@ export const store = reactive({
     status: {
         "mixers": {},
         "files": {}
+    },
+    a11y: {
+        notifications: {
+            enabled: true,
+            assertive: "",
+            polite: ""
+        }
     },
 
     socketDisconnected() {
@@ -162,4 +169,13 @@ export const store = reactive({
     isPaused() {
         return !this.active;
     },
+    getAccessibilityNotification(type) {
+        if (this.a11y.notifications.enabled) {
+            return this.a11y.notifications[type];
+        }
+        return "";
+    },
+    setAccessibilityNotification(type, message) {
+        this.a11y.notifications[type] = message;
+    }
 });
