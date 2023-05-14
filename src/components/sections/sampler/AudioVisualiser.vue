@@ -38,6 +38,7 @@
                     @keydown="keyDown"
                     role="slider"
                     aria-label="Sample Start"
+                    :aria-disabled="activeSample === -1"
                     tabindex="0"
                     aria-valuemin="0"
                     aria-valuemax="100"
@@ -55,6 +56,7 @@
                     role="slider"
                     aria-label="Sample End"
                     tabindex="0"
+                    :aria-disabled="activeSample === -1"
                     aria-valuemin="0"
                     aria-valuemax="100"
                     :aria-valuenow="rightPercentage"
@@ -352,6 +354,9 @@ export default {
                 "px";
         },
         keyDown(event) {
+            if (this.activeSample === -1) {
+                return;
+            }
             //space bar is responsible for toggling playback of the sample
             if (event.keyCode === 32) {
                 event.preventDefault();
