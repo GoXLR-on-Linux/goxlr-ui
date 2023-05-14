@@ -419,7 +419,6 @@ export default {
         if (index < validSteppers.length - 1) {
           this.stepper = validSteppers[index + 1];
         }
-        return;
       }
     },
   },
