@@ -225,7 +225,7 @@ export default {
                 // Calculate the left Percentage from the Positions...
                 let wrapperWidth =
                     this.$refs.wrapper.clientWidth -
-                    this.$refs.left.clientWidth;
+                    this.$refs.left.clientWidth - this.$refs.right.clientWidth;
                 let leftPosition = parseInt(this.leftPosition);
                 this.leftPercentage = 0;
                 if (leftPosition > 0) {
@@ -245,8 +245,8 @@ export default {
             {
                 let wrapperWidth =
                     this.$refs.wrapper.clientWidth -
-                    this.$refs.left.clientWidth;
-                let rightPosition = parseInt(this.rightPosition);
+                    this.$refs.left.clientWidth - this.$refs.right.clientWidth;
+                let rightPosition = parseInt(this.rightPosition) - this.$refs.left.clientWidth;
                 this.rightPercentage = (rightPosition / wrapperWidth) * 100;
                 websocket.send_command(store.getActiveSerial(), {
                     SetSampleStopPercent: [
@@ -294,10 +294,10 @@ export default {
             let rightBar = parseInt(this.rightPosition);
 
             if (rightPosition > rightBar) {
-                this.rightPosition = rightPosition + "px";
+                this.rightPosition = Math.round(rightPosition) + "px";
             }
 
-            this.leftPosition = position + "px";
+            this.leftPosition = Math.round(position) + "px";
         },
 
         mouseMoveRight(event) {
@@ -325,7 +325,7 @@ export default {
                     position - this.positions.elementWidth + "px";
             }
 
-            this.rightPosition = position + "px";
+            this.rightPosition = Math.round(position) + "px";
         },
 
         resolvePercentages() {
@@ -347,10 +347,9 @@ export default {
                 this.$refs.left.clientWidth -
                 this.$refs.right.clientWidth;
             this.leftPercentage = start_pct;
-            this.leftPosition = (start_pct / 100) * wrapper + "px";
+            this.leftPosition = Math.round((start_pct / 100) * wrapper) + "px";
             this.rightPercentage = stop_pct;
-            this.rightPosition =
-                (stop_pct / 100) * (wrapper + this.$refs.left.clientWidth) +
+            this.rightPosition = Math.round((stop_pct / 100) * (wrapper + this.$refs.right.clientWidth)) +
                 "px";
         },
         keyDown(event) {
@@ -565,7 +564,6 @@ export default {
             url = url + "files/samples/" + this.sampleName;
 
             this.wavesurfer.load(url);
-            console.log("Sample name Changed! " + this.sampleName);
         },
     },
 };
