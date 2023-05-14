@@ -97,15 +97,11 @@ export default {
         background: 'linear-gradient(to right, ' + this.colour + '  0%, ' + this.colour + ' ' + width + '%, ' + this.backgroundColour + ' ' + width + '%, ' + this.backgroundColour + ' 100%)'
       }
     },
-    heightString: {
-      get() {
-        return this.height + "px";
-      },
+    heightString() {
+      return this.height + "px";
     },
-    transformString: {
-      get() {
-        return this.transform + "px";
-      }
+    transformString() {
+      return this.transform + "px";
     }
   },
 }

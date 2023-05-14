@@ -31,13 +31,11 @@ export default {
   },
 
   computed: {
-    rightWidth: {
-      get() {
-        if (this.width === 0) {
-          return "0px";
-        }
-        return this.width + 2 + "px";
+    rightWidth() {
+      if (this.width === 0) {
+        return "0";
       }
+      return this.width + 2 + "px";
     }
   }
 }

@@ -32,7 +32,7 @@ export default {
   },
 
   computed: {
-    right_width: function () {
+    right_width() {
       return this.$refs.right.clientWidth + "px";
     }
   }
@@ -58,11 +58,11 @@ export default {
 }
 
 .button:first-child {
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 .button:last-child {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .left_side {
