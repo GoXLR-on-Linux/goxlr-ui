@@ -1,33 +1,73 @@
 <template>
   <WidgetContainer style="width: fit-content">
     <template v-slot:title>Waveform</template>
-    <div class="content" role="group" :aria-label="`Waveform for ${sampleName}`">
-      <button class="vertical_button" :aria-label="getPlaybackLabel()" style="text-align: center"
-        @click="playActiveSample()" :disabled="activeSample === -1">
+    <div
+      class="content"
+      role="group"
+      :aria-label="`Waveform for ${sampleName}`"
+    >
+      <button
+        class="vertical_button"
+        :aria-label="getPlaybackLabel()"
+        style="text-align: center"
+        @click="playActiveSample()"
+        :disabled="activeSample === -1"
+      >
         <font-awesome-icon :icon="getPlaybackButton()"></font-awesome-icon>
       </button>
 
-      <div ref="wrapper" style="position: relative; width: 500px; background-color: #252927" role="group"
-        aria-label="Waveform">
+      <div
+        ref="wrapper"
+        style="position: relative; width: 500px; background-color: #252927"
+        role="group"
+        aria-label="Waveform"
+      >
         <div class="cover cover_left"></div>
         <div class="cover cover_right"></div>
-        <div class="drag_handle left" ref="left" v-bind:class="{ enabled: activeSample !== -1 }"
-          @mousedown.stop="mouseDownLeft" @keydown="keyDown" role="slider" aria-label="Sample Start"
-          :aria-disabled="activeSample === -1" tabindex="0" aria-valuemin="0" aria-valuemax="100"
-          :aria-valuenow="+leftPercentage.toFixed(2)" :aria-valuetext="`${+leftPercentage.toFixed(2)}%`">
+        <div
+          class="drag_handle left"
+          ref="left"
+          v-bind:class="{ enabled: activeSample !== -1 }"
+          @mousedown.stop="mouseDownLeft"
+          @keydown="keyDown"
+          role="slider"
+          aria-label="Sample Start"
+          :aria-disabled="activeSample === -1"
+          tabindex="0"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          :aria-valuenow="+leftPercentage.toFixed(2)"
+          :aria-valuetext="`${+leftPercentage.toFixed(2)}%`"
+        >
           |
         </div>
-        <div class="drag_handle right" ref="right" v-bind:class="{ enabled: activeSample !== -1 }" @keydown="keyDown"
-          @mousedown.stop="mouseDownRight" role="slider" aria-label="Sample End" tabindex="0"
-          :aria-disabled="activeSample === -1" aria-valuemin="0" aria-valuemax="100"
-          :aria-valuenow="+rightPercentage.toFixed(2)" :aria-valuetext="`${+rightPercentage.toFixed(2)}%`">
+        <div
+          class="drag_handle right"
+          ref="right"
+          v-bind:class="{ enabled: activeSample !== -1 }"
+          @keydown="keyDown"
+          @mousedown.stop="mouseDownRight"
+          role="slider"
+          aria-label="Sample End"
+          tabindex="0"
+          :aria-disabled="activeSample === -1"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          :aria-valuenow="+rightPercentage.toFixed(2)"
+          :aria-valuetext="`${+rightPercentage.toFixed(2)}%`"
+        >
           |
         </div>
         <div id="waveform" class="waveform"></div>
       </div>
 
-      <button class="vertical_button" aria-label="Remove Sample" style="text-align: center" @click="deleteActiveSample()"
-        :disabled="activeSample === -1">
+      <button
+        class="vertical_button"
+        aria-label="Remove Sample"
+        style="text-align: center"
+        @click="deleteActiveSample()"
+        :disabled="activeSample === -1"
+      >
         <font-awesome-icon icon="fa-solid fa-trash"></font-awesome-icon>
       </button>
     </div>
@@ -235,8 +275,8 @@ export default {
       if (
         position >=
         this.positions.parentWidth -
-        this.positions.elementWidth -
-        this.positions.elementWidth
+          this.positions.elementWidth -
+          this.positions.elementWidth
       ) {
         position =
           this.positions.parentWidth -
@@ -298,7 +338,8 @@ export default {
       let wrapper = this.$refs.wrapper.clientWidth;
 
       // We need to focus on the 'Right' side of the left handle, so pull this down so the max left value is correct (460px)
-      let left_wrapper = wrapper - this.$refs.left.clientWidth - this.$refs.right.clientWidth;
+      let left_wrapper =
+        wrapper - this.$refs.left.clientWidth - this.$refs.right.clientWidth;
       this.leftPercentage = start_pct;
 
       if (this.leftPercentage > 100) {
@@ -324,20 +365,22 @@ export default {
       // The right wrapper value is slightly different, it needs to include the left side, but not the right..
       let right_wrapper = wrapper - this.$refs.right.clientWidth;
 
-      this.rightPosition = Math.round(
-        (stop_pct / 100) * (right_wrapper)
-      );
+      this.rightPosition = Math.round((stop_pct / 100) * right_wrapper);
 
       if (this.rightPercentage > 100) {
         // Something's gone wrong, and a percentage is higher than it should be, Reset.
-        console.log("Something is wrong with the right value max.. Correcting!");
+        console.log(
+          "Something is wrong with the right value max.. Correcting!"
+        );
         this.rightPercentage = 100;
         this.rightPosition = right_wrapper;
         this.mouseUp();
       }
 
       if (this.rightPercentage < 0) {
-        console.log("Something is wrong with the right value min.. Correcting!");
+        console.log(
+          "Something is wrong with the right value min.. Correcting!"
+        );
         this.rightPercentage = 0;
         this.rightPosition = this.$refs.left.clientWidth;
         this.mouseUp();
@@ -444,13 +487,17 @@ export default {
         this.mouseUp();
         return;
       }
-      //shift+pageup/ shift+pagedown, change the step size
+      //pageup/ pagedown, change the step size
       if (event.keyCode === 33) {
         event.preventDefault();
         let index = validSteppers.indexOf(this.stepper);
         if (index > 0) {
           this.stepper = validSteppers[index - 1];
         }
+        store.setAccessibilityNotification(
+          "polite",
+          `Zoom level: ${this.stepper}`
+        );
         return;
       }
       if (event.keyCode === 34) {
@@ -459,6 +506,10 @@ export default {
         if (index < validSteppers.length - 1) {
           this.stepper = validSteppers[index + 1];
         }
+        store.setAccessibilityNotification(
+          "polite",
+          `Zoom level: ${this.stepper}`
+        );
       }
     },
   },
