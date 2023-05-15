@@ -32,7 +32,7 @@ export const InputDevice = {
 
 export const OutputDevice = {
     "Headphones": "Headphones",
-    "Broadcast Mix": "BroadcastMix",
+    "Stream Mix": "BroadcastMix",
     "Line Out": "LineOut",
     "Chat Mic": "ChatMic",
     "Sampler": "Sampler",
