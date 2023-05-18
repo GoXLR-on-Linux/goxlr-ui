@@ -174,7 +174,7 @@ export default {
       });
       store.setAccessibilityNotification(
         "polite",
-        `Sample ${this.sampleName} has been deleted from button ${this.activeButton} in bank ${this.activeBank}`
+        `Sample ${this.sampleName} has been deleted from ${this.activeButton} button in bank ${this.activeBank}`
       );
       this.$emit("deselect-sample");
     },

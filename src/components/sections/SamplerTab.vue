@@ -284,7 +284,7 @@ export default {
             store.resume();
             store.setAccessibilityNotification(
               "polite",
-              `sample ${name} added to ${this.activeButton} button in bank ${this.activeBank}.`
+              `Sample ${name} added to ${this.activeButton} button in bank ${this.activeBank}.`
             );
           });
       });
