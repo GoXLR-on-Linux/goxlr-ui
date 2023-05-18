@@ -172,6 +172,10 @@ export default {
           this.activeSample,
         ],
       });
+      store.setAccessibilityNotification(
+        "polite",
+        `Sample ${this.sampleName} has been deleted from ${this.activeButton} button in bank ${this.activeBank}`
+      );
       this.$emit("deselect-sample");
     },
 
