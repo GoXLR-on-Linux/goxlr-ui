@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex; flex-direction: row; border: 1px solid #353937; margin-left: 10px;">
+  <div style="display: flex; flex-direction: row; border: 1px solid #353937; margin-left: 10px; padding-bottom: 11px; margin-bottom: 0;">
     <div class="banks">
       <div v-for="x in 6" :key="x">
         <EffectButton :id="x"/>
@@ -9,21 +9,21 @@
       <div>
         <div style="display: flex; flex-direction: row; gap: 35px ">
           <div style="display: flex; flex-direction: column">
-            <div style="width: 75px; height: 75px; background-color: #2f2f2f; margin: 8px"></div>
+            <div style="width: 75px; height: 75px; background-color: #2f2f2f; margin: 8px; border-radius: calc(50%)"></div>
             <div>Reverb</div>
           </div>
           <div style="display: flex; flex-direction: column">
-            <div style="width: 75px; height: 75px; background-color: #2f2f2f; margin: 8px"></div>
+            <div style="width: 75px; height: 75px; background-color: #2f2f2f; margin: 8px; border-radius: calc(50%)"></div>
             <div>Pitch</div>
           </div>
         </div>
         <div style="display: flex; flex-direction: row; gap: 35px">
           <div style="display: flex; flex-direction: column">
-            <div style="width: 75px; height: 75px; background-color: #2f2f2f; margin: 8px"></div>
+            <div style="width: 75px; height: 75px; background-color: #2f2f2f; margin: 8px; border-radius: calc(50%)"></div>
             <div>Echo</div>
           </div>
           <div style="display: flex; flex-direction: column">
-            <div style="width: 75px; height: 75px; background-color: #2f2f2f; margin: 8px"></div>
+            <div style="width: 75px; height: 75px; background-color: #2f2f2f; margin: 8px; border-radius: calc(50%)"></div>
             <div>Gender</div>
           </div>
         </div>
@@ -32,8 +32,8 @@
     <div class="right">
       <div class="right_button megaphone">Megaphone</div>
       <div class="right_button robot">Robot</div>
-      <div class="right_button hardtune">HardTune</div>
-      <div class="right_button fx">Fx</div>
+      <div class="right_button hardtune">Hardtune</div>
+      <div class="right_button fx">FX</div>
     </div>
   </div>
 </template>

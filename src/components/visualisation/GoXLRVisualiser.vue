@@ -3,6 +3,10 @@
     <FaderVisualisation />
     <div v-if="!isDeviceMini()" class="right">
       <EffectsVisualisation />
+      <div style="display: flex; flex-direction: row">
+        <SamplerVisualisation />
+        <MuteVisualisation />
+      </div>
     </div>
   </div>
 </template>
@@ -11,11 +15,13 @@
 import FaderVisualisation from "@/components/visualisation/faders/FaderVisualisation.vue";
 import EffectsVisualisation from "@/components/visualisation/effects/EffectsVisualisation.vue";
 import {isDeviceMini} from "@/util/util";
+import SamplerVisualisation from "@/components/visualisation/sampler/SamplerVisualisation.vue";
+import MuteVisualisation from "@/components/visualisation/mute/MuteVisualisation.vue";
 
 export default {
   name: "GoXLRVisualiser",
   methods: {isDeviceMini},
-  components: {EffectsVisualisation, FaderVisualisation},
+  components: {MuteVisualisation, SamplerVisualisation, EffectsVisualisation, FaderVisualisation},
 
 }
 </script>
