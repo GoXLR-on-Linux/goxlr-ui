@@ -7,7 +7,7 @@
       <font-awesome-icon icon="fa-solid fa-folder" />
     </div>
   </div>
-  <div style="height: 290px">
+  <div style="height: 340px">
     <ProfileButton v-for="(name, index) in fileList()" :key="index" :show-check=false :button-id="name"
                    :label="getLabel(name)" :is-selected="isSelected(name)" :is-active="false"
                    @button-clicked="setSelected"

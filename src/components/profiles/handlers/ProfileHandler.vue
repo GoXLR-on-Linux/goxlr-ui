@@ -11,7 +11,7 @@
       <font-awesome-icon icon="fa-solid fa-folder" />
     </button>
   </div>
-  <div style="height: 290px">
+  <div style="height: 340px">
     <ProfileManager
       ref="manager"
       :profile-list="getProfileList()"
