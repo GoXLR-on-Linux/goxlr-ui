@@ -1,47 +1,37 @@
 <template>
   <div class="base">
-    <div class="faders">
-      <VisualisationFader fader="A"/>
-      <VisualisationFader fader="B"/>
-      <VisualisationFader fader="C"/>
-      <VisualisationFader fader="D"/>
+    <FaderVisualisation />
+    <div v-if="!isDeviceMini()" class="right">
+      <EffectsVisualisation />
     </div>
-    <!-- Channel Width: 70px -->
-    <!-- Img: 56w - 32h -->
-    <!--
-      Slider Width: 36px
-      Colour Size: 12px
-      Colour Count: 15
-
-      button: 58x36
-
-
-
-
-
-    -->
   </div>
 </template>
 
 <script>
-import VisualisationFader from "@/components/visualisation/VisualisationFader.vue";
+import FaderVisualisation from "@/components/visualisation/faders/FaderVisualisation.vue";
+import EffectsVisualisation from "@/components/visualisation/effects/EffectsVisualisation.vue";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "GoXLRVisualiser",
-  components: {VisualisationFader},
+  methods: {isDeviceMini},
+  components: {EffectsVisualisation, FaderVisualisation},
 
 }
 </script>
 
 <style scoped>
 .base {
-  width: 800px;
+  display: flex;
+  flex-direction: row;
+
   height: 409px;
   background-color: #151515
 }
 
-.faders {
+.right {
   display: flex;
-  flex-direction: row
+  flex-direction: column;
 }
+
 </style>

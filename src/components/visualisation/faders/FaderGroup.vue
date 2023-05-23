@@ -1,6 +1,6 @@
 <template>
   <div style="width: 70px; display: flex; flex-direction: column; padding: 3px; border: 1px solid #353937">
-    <div class="scribble"></div>
+    <div v-if="!isDeviceMini()" class="scribble"></div>
     <div style="display: flex; flex-direction: row">
       <div style="margin-left: 7px; margin-top: 20px;">
         <FaderDots :fader="fader" :value="getFaderValue()" />
@@ -26,6 +26,7 @@ import FaderSlider from "@/components/visualisation/faders/FaderSlider.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {store} from "@/store";
 import {MuteButtonNamesForFader, ScribbleNames} from "@/util/mixerMapping";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "VisualisationFader",
@@ -36,6 +37,7 @@ export default {
   },
 
   methods: {
+    isDeviceMini,
     getFaderValue() {
       // Firstly, we need to get the item assigned to this fader...
       let channel = store.getActiveDevice().fader_status[this.fader].channel;
