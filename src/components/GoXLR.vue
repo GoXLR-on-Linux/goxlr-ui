@@ -8,6 +8,9 @@
         <div>
           <FileTabs />
         </div>
+        <div>
+          <GoXLRVisualiser />
+        </div>
       </div>
 
       <div style="height: 25px; background-color: #3b413f" />
@@ -76,10 +79,12 @@ import LightingTab from "@/components/sections/lighting/LightingTab";
 import SamplerTab from "@/components/sections/SamplerTab";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
+import GoXLRVisualiser from "@/components/visualisation/GoXLRVisualiser.vue";
 
 export default {
   name: "GoXLR",
   components: {
+    GoXLRVisualiser,
     A11yNotifications,
     CenteredContainer,
     ContentContainer,
