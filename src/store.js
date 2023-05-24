@@ -34,12 +34,24 @@ export const store = reactive({
         this.has_disconnected = true;
     },
 
+    daemonVersion() {
+        if (this.status !== undefined) {
+            if (this.status.config !== undefined) {
+                return this.status.config.daemon_version;
+            }
+            return undefined;
+        } else {
+            return undefined;
+        }
+    },
+
     isConnected() {
         return !this.has_disconnected;
     },
 
     getVersion() {
-        return this.status.config.daemon_version;
+        return "0.11.0";
+        //return this.status.config.daemon_version;
     },
 
     isAutostartEnabled() {

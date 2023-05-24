@@ -1,7 +1,7 @@
 <template>
   <div id="main">
+    <VersionCheck />
     <DeviceSelector v-if="!isDeviceSet()" />
-
     <template v-if="isDeviceSet()">
       <h1 class="screenreader-only">Profiles and Files</h1>
       <div style="display: flex; flex-direction: row; column-gap: 30px">
@@ -80,10 +80,12 @@ import SamplerTab from "@/components/sections/SamplerTab";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import GoXLRVisualiser from "@/components/visualisation/GoXLRVisualiser.vue";
+import VersionCheck from "@/components/VersionCheck.vue";
 
 export default {
   name: "GoXLR",
   components: {
+    VersionCheck,
     GoXLRVisualiser,
     A11yNotifications,
     CenteredContainer,
