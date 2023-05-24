@@ -50,8 +50,7 @@ export const store = reactive({
     },
 
     getVersion() {
-        return "0.11.0";
-        //return this.status.config.daemon_version;
+        return this.status.config.daemon_version;
     },
 
     isAutostartEnabled() {
