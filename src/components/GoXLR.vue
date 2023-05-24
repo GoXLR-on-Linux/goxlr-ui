@@ -1,6 +1,5 @@
 <template>
   <div id="main">
-    <VersionCheck />
     <DeviceSelector v-if="!isDeviceSet()" />
     <template v-if="isDeviceSet()">
       <h1 class="screenreader-only">Profiles and Files</h1>
@@ -55,6 +54,7 @@
         </Tab>
       </Tabs>
     </template>
+    <VersionCheck />
     <A11yNotifications />
   </div>
 </template>

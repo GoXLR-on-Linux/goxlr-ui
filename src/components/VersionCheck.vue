@@ -1,6 +1,8 @@
 <template>
-  <div v-if="outdated()" class="outdated">Your GoXLR Utility is out of date, if you're not about to stream, please <a :href="release_path">click here</a> to grab the update.</div>
-  <div v-else style="margin-top: 20px;"></div>
+  <div v-if="hasVersion()" class="version">
+    GoXLR Utility v{{getVersion()}}
+    <span v-if="outdated()"> - <a :href="release_path"> Update Available</a></span>
+  </div>
 </template>
 
 <script>
@@ -37,6 +39,14 @@ export default {
                   this.release_path = data.html_url;
                 })
           });
+    },
+
+    hasVersion() {
+      return (store.daemonVersion() !== undefined);
+    },
+
+    getVersion() {
+      return store.daemonVersion();
     },
 
     outdated() {
@@ -81,14 +91,15 @@ export default {
 </script>
 
 <style scoped>
- .outdated {
-   border: 0 solid #ff0000;
-   border-bottom-width: 1px;
-   background-color: rgba(255, 0, 0, 0.2);
+ .version {
+   font-family: sans-serif;
    text-align: center;
-   color: #fff;
+   color: #444444;
    margin-bottom: 8px;
    padding: 3px;
+ }
 
+ .version a {
+   color: #555555;
  }
 </style>
