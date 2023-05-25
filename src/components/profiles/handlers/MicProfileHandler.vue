@@ -83,7 +83,7 @@ export default {
 
     loadProfile(label) {
       let command = {
-        "LoadMicProfile": label
+        "LoadMicProfile": [label, true]
       };
 
       sendHttpCommand(store.getActiveSerial(), command)
