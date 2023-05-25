@@ -80,14 +80,14 @@ export default {
 
       // The follow code only really applies for values of less than a second..
       if (decay < 1000) {
-        if (this.decay_map.indexOf(decay.toString()) === -1) {
+        if (this.decay_map.indexOf(decay) === -1) {
           // Because under windows, the increments are '20ish' the value can bounce between even and odd, whereas
           // here, we hard maintain odd. We'll correct this by subtracting 10 from the value if it doesn't exist
           // in our map.
           decay -= 10;
         }
       }
-      return this.decay_map.indexOf(decay.toString());
+      return this.decay_map.indexOf(decay);
     },
     setDecayValue(id, value) {
       websocket.send_command(store.getActiveSerial(), {"SetReverbDecay": parseInt(this.decay_map[value])});
@@ -167,13 +167,13 @@ export default {
 
     let current = 10;
     while (current < 1000) {
-      map.push(current.toString());
+      map.push(current);
       current += 20;
     }
 
     current = 1000;
     while (current <= 20000) {
-      map.push(current.toString());
+      map.push(current);
       current += 100;
     }
 

@@ -42,16 +42,16 @@ export default {
       let pitch_style = store.getActiveDevice().effects.current.pitch.style;
       if (hardtune_enabled) {
         if (pitch_style === "Narrow") {
-          return ["-12", "0", "12"];
+          return [-12, 0, 12];
         } else {
-          return ["-24", "-12", "0", "12", "24"];
+          return [-24, -12, 0, 12, 24];
         }
       }
 
       let max_value = (pitch_style === "Narrow") ? 12 : 24;
       let map = [];
       for (let i = max_value * -1; i <= max_value; i++) {
-        map.push(i.toString());
+        map.push(i);
       }
       return map;
     },
