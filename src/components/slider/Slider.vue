@@ -6,8 +6,8 @@
            @mouse-up="setMouseUp" :background-colour="rangeBackgroundColour" :title="title" :reported-value="getTextValue()"/>
 
     <Input :current-text-value="textValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
-           :textSuffix="textSuffix"
-           :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"
+           :textSuffix="textSuffix" :value-map="valueMap" :current-field-value=fieldValue
+           :editable="isEditable()" @value-updated="inputValueUpdated"
            style="margin-top: 15px" :background-colour="inputBackgroundColour" :title="title"
     />
   </div>
@@ -86,6 +86,14 @@ export default {
     },
 
     inputValueUpdated(newValue) {
+      if (this.valueMap !== undefined) {
+        // If we have a value map, the input will return the index of the 'new' item, so we need to instead update
+        // the field value here, and rerun the calcs based on that.
+        this.fieldValue = newValue;
+        this.calculateTextValue();
+        return;
+      }
+
       // Webkit / Blink are interesting in that they wont prevent a user from entering an invalid
       // number, so we use this code to force any entry into our boundries.
 

@@ -1,14 +1,15 @@
 <template>
   <div>
-    <div v-if="!editable" class="sliderInput">
-      <input type="text" v-on:blur="reset" :value="displayValue()" :min="minValue" :max="maxValue"
-             :disabled="!editable" :aria-label="title" :aria-description="title" :aria-valuetext="getDisplayValue()" />
+    <!--    <div v-if="!editable" class="sliderInput">-->
+    <!--      <input type="text" v-on:blur="reset" :value="displayValue()" :min="minValue" :max="maxValue"-->
+    <!--             :disabled="!editable" :aria-label="title" :aria-description="title" :aria-valuetext="getDisplayValue()"/>-->
+    <!--      <div class="suffix"><span class="filler">{{ displayValue() }}</span><span v-html="getSuffix()"></span></div>-->
+    <!--    </div>-->
+    <div class="sliderInput">
+      <input type="number" v-on:input="update" v-on:focus="focus" v-on:blur="reset" v-model="localTextValue" :min="minValue"
+             :max="maxValue" :aria-label="title" :aria-description="title"
+             :aria-valuetext="getDisplayValue()"/>
       <div class="suffix"><span class="filler">{{ displayValue() }}</span><span v-html="getSuffix()"></span></div>
-    </div>
-    <div v-if="editable" class="sliderInput">
-      <input type="number" v-on:input="update" v-on:blur="reset" v-model="localTextValue" :min="minValue"
-             :max="maxValue" :disabled="!editable" :aria-label="title" :aria-description="title" :aria-valuetext="getDisplayValue()" />
-      <div class="suffix"><span class="filler">{{ localTextValue }}</span><span v-html="getSuffix()"></span></div>
     </div>
   </div>
 </template>
@@ -21,7 +22,9 @@ export default {
   data() {
     return {
       localTextValue: 0,
-      lastTextValue: 0
+      lastTextValue: 0,
+
+      focused: false,
     }
   },
 
@@ -29,9 +32,16 @@ export default {
     id: {type: String, required: false, default: ""},
     editable: Boolean,
     currentTextValue: Number,
-    overrideValue: Number,
+
+    // Handlers for ValueMap..
+    currentFieldValue: Number,
+    valueMap: Array,
+
+    // Handlers for Non ValueMaps..
     minValue: {type: Number, default: 0},
     maxValue: {type: Number, default: 100},
+
+    // Display Related Settings
     textSuffix: {type: String, default: ""},
     colour: {type: String, required: false, default: '#59b1b6'},
     backgroundColour: {type: String, required: false, default: '#3b413f'},
@@ -39,6 +49,7 @@ export default {
   },
 
   methods: {
+
     getSuffix() {
       let output = "";
       for (let i = 0; i < this.textSuffix.length; i++) {
@@ -59,6 +70,41 @@ export default {
         return;
       }
 
+      if (this.valueMap !== undefined) {
+        // We need to find the closest index which matches this value...
+        let base = undefined;
+        for (let i = 0; i < this.valueMap.length; i++) {
+          if (this.valueMap[i] >= newValue) {
+            // Ok, it's between this value and the previous..
+            base = i;
+            break;
+          }
+        }
+
+        let result = 0;
+        if (base === undefined) {
+          // We got to the end of the loop, and this value was higher!
+          result = this.valueMap.length - 1;
+        } else if (base === 0) {
+          // The first value higher was at the base of the list, do nothing.
+          result = 0;
+        } else if (this.valueMap[base] === newValue) {
+          result = base;
+        } else {
+          let lower = this.valueMap[base - 1];
+          let upper = this.valueMap[base];
+
+          // Calculate which value this is nearest to..
+          let middle = (upper - lower) / 2;
+          let ours = newValue - lower;
+
+          let index = (ours < middle) ? base - 1 : base;
+          result = index;
+        }
+        this.$emit("value-updated", result, this.id);
+        return;
+      }
+
       if (e.target.value > this.maxValue) {
         newValue = this.maxValue;
         this.localTextValue = this.maxValue;
@@ -73,22 +119,43 @@ export default {
       this.$emit("value-updated", parseInt(newValue), this.id);
     },
 
+    focus() {
+      this.focused = true;
+    },
+
     reset(e) {
-      e.target.value = this.lastTextValue;
+      this.focused = false;
+      e.target.value = this.displayValue();
     },
 
     displayValue() {
-      if (this.overrideValue !== undefined) {
-        return this.overrideValue;
+      if (this.valueMap !== undefined) {
+        return this.valueMap[this.currentFieldValue];
       }
       return this.localTextValue;
     },
   },
 
   watch: {
+    currentFieldValue: function() {
+      if (this.focused) {
+        return;
+      }
+
+      if (this.valueMap !== undefined) {
+        this.localTextValue = this.displayValue();
+      }
+    },
+
     currentTextValue: function (newValue) {
-      this.localTextValue = newValue;
-      this.lastTextValue = newValue;
+      if (this.focused) {
+        return;
+      }
+
+      if (this.valueMap === undefined) {
+        this.localTextValue = newValue;
+        this.lastTextValue = newValue;
+      }
     }
   },
 }
