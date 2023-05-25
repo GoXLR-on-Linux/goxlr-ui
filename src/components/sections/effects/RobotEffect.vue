@@ -85,6 +85,11 @@ export default {
       // We need to correctly calculate Low Frequency, this is crazy, but it's how the GoXLR expects
       // values on the low end. This is likely due to rounding errors on the low curve...
       let freq = store.getActiveDevice().effects.current.robot.low_freq;
+      let map = this.getLowFreqValueMap();
+      if (freq > map.length) {
+        return map.length -1;
+      }
+
       if (freq === 0) {
         return 0;
       } else if (freq === 1 || freq === 2) {
@@ -108,6 +113,13 @@ export default {
       } else {
         sent_value = value + 4;
       }
+
+      // With the above, we need to prevent overflowing the actual map..
+      let map = this.getLowFreqValueMap();
+      if (sent_value > map.length) {
+        sent_value = map.length -1;
+      }
+
       websocket.send_command(store.getActiveSerial(), { "SetRobotFreq": [ "Low", sent_value ] });
     },
 
