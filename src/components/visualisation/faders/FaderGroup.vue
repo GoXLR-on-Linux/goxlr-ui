@@ -53,6 +53,10 @@ export default {
 
   computed: {
     scribbleColour() {
+      if (isDeviceMini()) {
+        return "#000";
+      }
+
       return "#" + store.getActiveDevice().lighting.simple[ScribbleNames[this.fader]].colour_one;
     },
 
