@@ -1,12 +1,12 @@
 <template>
   <ExpandoGroupContainer title="Equalizer" @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()">
-<!--    <template #right>-->
-<!--      <div v-show="isAdvanced()" style="margin-bottom: 8px;">-->
-<!--        <button class="reset">RESET</button>-->
+    <template #right>
+      <div v-show="isAdvanced()" style="margin-bottom: 8px;">
+        <button class="reset" @click="resetEqValues()">RESET</button>
 
-<!--        <label for="eq_fine">Enable Fine Tune</label><input type="checkbox" id="eq_fine">-->
-<!--      </div>-->
-<!--    </template>-->
+        <label for="eq_fine">Enable Fine Tune</label><input type="checkbox" id="eq_fine">
+      </div>
+    </template>
     <Slider v-show="!isAdvanced()" :id=0 title="Bass" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
             :slider-value=getBassValue() :store-path="getAggregateStorePaths(0)"
             :background-colour="getBackgroundColour(1)"
@@ -260,6 +260,41 @@ export default {
             this.getStorePath(5) + ";" + this.getStorePath(6) :
             this.getStorePath(8) + ";" + this.getStorePath(9) + ";" + this.getStorePath(10);
       }
+    },
+
+    resetEqValues() {
+      // Lots of commands here, I could move this to the Util, but not sure yet!
+      if (isDeviceMini()) {
+        websocket.send_command(store.getActiveSerial(), {"SetEqMiniFreq": ["Equalizer90Hz", 90]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqMiniFreq": ["Equalizer250Hz", 250]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqMiniFreq": ["Equalizer500Hz", 500]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqMiniFreq": ["Equalizer1KHz", 1000]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqMiniFreq": ["Equalizer3KHz", 3000]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqMiniFreq": ["Equalizer8KHz", 8000]});
+
+        // Next part is easy..
+        for (let value of EqMiniFreqs) {
+          websocket.send_command(store.getActiveSerial(), {"SetEqMiniGain": [value, 0]});
+        }
+      } else {
+        // Full has more buttons :(
+        websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer31Hz", 31]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer63Hz", 63]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer125Hz", 125]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer250Hz", 250]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer500Hz", 500]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer1KHz", 1000]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer2KHz", 2000]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer4KHz", 4000]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer8KHz", 8000]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer16KHz", 16000]});
+
+        for (let value of EqFreqs) {
+          websocket.send_command(store.getActiveSerial(), {"SetEqGain": [value, 0]});
+        }
+      }
+
+
     }
 
   }
