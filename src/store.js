@@ -49,6 +49,10 @@ export const store = reactive({
         return !this.has_disconnected;
     },
 
+    getConfig() {
+        return this.status.config;
+    },
+
     getVersion() {
         return this.status.config.daemon_version;
     },

@@ -93,6 +93,14 @@ export class Websocket {
         return this.#sendRequest("GetStatus");
     }
 
+    set_log_level(level) {
+        let request = {
+            "SetLogLevel": level
+        }
+
+        return this.#sendRequest(request);
+    }
+
     open_path(type) {
         let request = {
             "OpenPath": type

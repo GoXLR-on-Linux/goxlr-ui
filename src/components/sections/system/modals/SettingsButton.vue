@@ -14,7 +14,22 @@
     :show_footer="false"
   >
     <template v-slot:title>Settings (Work in Progress)</template>
-    <div style="text-align: left" role=" region" aria-label="settings">
+    <div style="text-align: left" role="region" aria-label="settings">
+      <div style="padding: 12px">
+        Log Level (Requires Restart):
+        <select @change="setLogLevel" style="margin-right: 15px">
+          <option :selected="getLogLevel() === 'Off'" value="Off">Off</option>
+          <option :selected="getLogLevel() === 'Error'" value="Error">Error</option>
+          <option :selected="getLogLevel() === 'Warn'" value="Warn">Warn</option>
+          <option :selected="getLogLevel() === 'Info'" value="Info">Info</option>
+          <option :selected="getLogLevel() === 'Debug'" value="Debug">Debug</option>
+          <option :selected="getLogLevel() === 'Trace'" value="Trace">Trace</option>
+        </select>
+        <button class="openButton" @click="openLogs">
+          <font-awesome-icon icon="fa-solid fa-folder"/>
+        </button>
+      </div>
+
       <div style="padding: 12px">
         <span style="display: inline-block; width: 300px"
           >Mute Button Hold to Mute All Duration:
@@ -142,6 +157,19 @@ export default {
 
   methods: {
     isDeviceMini,
+    getLogLevel() {
+      return store.getConfig().log_level;
+    },
+
+    setLogLevel(event) {
+      websocket.set_log_level(event.target.value);
+    },
+
+    openLogs() {
+      websocket.open_path("Logs");
+    },
+
+
     getHold() {
       return store.getActiveDevice().settings.mute_hold_duration;
     },
@@ -227,4 +255,22 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+button.openButton {
+  border: 0;
+  background-color: transparent;
+  padding: 0;
+  margin: -4px;
+}
+
+.openButton {
+  display: inline-block;
+  color: #a5a7a6;
+  font-size: 14px
+}
+
+.openButton:hover {
+  color: #fff;
+  cursor: pointer;
+}
+</style>
