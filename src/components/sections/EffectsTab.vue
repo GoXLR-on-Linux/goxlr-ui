@@ -70,7 +70,7 @@
         </template>
         <template v-slot:footer>
           <ModalButton ref="confirmFocusOk" @click="loadPreset()">OK</ModalButton>
-          <ModalButton @click="this.selectedPreset = undefined; $refs.override_preset.closeModal();">Cancel
+          <ModalButton @click="this.selectedPreset = undefined; $refs.override_preset_modal.closeModal();">Cancel
           </ModalButton>
         </template>
       </AccessibleModal>
