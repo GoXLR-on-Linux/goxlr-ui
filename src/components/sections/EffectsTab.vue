@@ -203,7 +203,7 @@ export default {
       websocket.send_command(store.getActiveSerial(), {"LoadEffectPreset": name}).then(() => {
         store.getActiveDevice().effects.preset_names[store.getActiveDevice().effects.active_preset] = name;
 
-        let currentBank = EffectPresets.indexOf(this.selectedPreset) + 1;
+        let currentBank = EffectPresets.indexOf(store.getActiveDevice().effects.active_preset) + 1;
         store.setAccessibilityNotification(
             "polite",
             `Preset ${name} loaded to bank ${currentBank}.`
@@ -211,9 +211,10 @@ export default {
 
         this.selectedPreset = undefined;
       }).finally(() => {
-        this.$nextTick(() => {
-          this.$refs.override_preset_modal.closeModal();
-        })
+        let self = this;
+        setTimeout(() => {
+          self.$refs.override_preset_modal.closeModal();
+        }, 10);
       });
     },
 
@@ -270,10 +271,11 @@ export default {
       websocket.send_command(store.getActiveSerial(), command).then(() => {
         store.getActiveDevice().effects.preset_names[store.getActiveDevice().effects.active_preset] = this.newPresetName;
       }).finally(() => {
-        this.$nextTick(() => {
-          this.$refs.renamePresetModal.closeModal();
-          this.newPresetName = ''
-        })
+        let self = this;
+        this.newPresetName = ''
+        setTimeout(() => {
+          self.$refs.renamePresetModal.closeModal();
+        }, 10);
       });
     },
 
