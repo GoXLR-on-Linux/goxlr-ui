@@ -4,11 +4,11 @@
       <GroupContainer title="Preset">
         <RadioSelection
             title="Group"
-            group="lighting_mixer_icon_select"
+            group="preset_select"
             :options="getEffectOptions()"
             :selected="getSelectedEffectOption()"
             :menu="menu_options"
-            menu_id="profile_buttons"
+            menu_id="preset_buttons"
             @menu-opened="menuOpened"
             @menu-selected="optionClicked"
             @selection-changed="onEffectSelectionChange"
@@ -18,13 +18,10 @@
       <AccessibleModal ref="renamePresetModal" id="renameEffect" :show_close="false">
         <template v-slot:title>Enter New Preset Name</template>
         <template v-slot:default>
-          <ModalInput ref="newName" v-model="newPresetName" placeholder="New Preset Name"
-                      @on-enter="$refs.renamePresetModal.closeModal(); renamePreset(); this.newPresetName = ''"/>
+          <ModalInput ref="newName" v-model="newPresetName" placeholder="New Preset Name" @on-enter="renamePreset();"/>
         </template>
         <template v-slot:footer>
-          <ModalButton ref="focusOk"
-                       @click="renamePreset(); $refs.renamePresetModal.closeModal(); this.newPresetName = ''">OK
-          </ModalButton>
+          <ModalButton ref="focusOk" @click="renamePreset();">OK</ModalButton>
           <ModalButton @click="$refs.renamePresetModal.closeModal(); this.newPresetName = ''">Cancel</ModalButton>
         </template>
       </AccessibleModal>
@@ -78,14 +75,13 @@
       <AccessibleModal ref="overwrite_library_save" id="overwrite_save" :show_close="false">
         <template v-slot:title>Confirm Preset Overwrite</template>
         <template v-slot:default>
-          The preset {{getCurrentPresetName()}} already exists in your library, would you like to overwrite?
+          The preset {{ getCurrentPresetName() }} already exists in your library, would you like to overwrite?
         </template>
         <template v-slot:footer>
-          <ModalButton ref="overwriteConfirm" @click="saveActivePreset();$refs.overwrite_library_save.closeModal();">
+          <ModalButton ref="overwriteConfirm" @click="saveActivePreset(); $refs.overwrite_library_save.closeModal();">
             Overwrite
           </ModalButton>
-          <ModalButton @click="$refs.overwrite_library_save.closeModal();">Cancel
-          </ModalButton>
+          <ModalButton @click="$refs.overwrite_library_save.closeModal();">Cancel</ModalButton>
         </template>
       </AccessibleModal>
 
@@ -112,7 +108,7 @@ import RobotEffect from "@/components/sections/effects/RobotEffect";
 import HardTuneEffect from "@/components/sections/effects/HardTuneEffect";
 import {EffectPresets} from "@/util/mixerMapping";
 import {store} from "@/store";
-import {sendHttpCommand, websocket} from "@/util/sockets";
+import {websocket} from "@/util/sockets";
 import ModalButton from "@/components/design/modal/ModalButton";
 import ModalInput from "@/components/design/modal/ModalInput";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
@@ -204,16 +200,21 @@ export default {
 
     loadPreset() {
       let name = this.getSelectedPreset();
-      this.$refs.override_preset_modal.closeModal();
+      websocket.send_command(store.getActiveSerial(), {"LoadEffectPreset": name}).then(() => {
+        store.getActiveDevice().effects.preset_names[store.getActiveDevice().effects.active_preset] = name;
 
-      websocket.send_command(store.getActiveSerial(), {"LoadEffectPreset": name});
+        let currentBank = EffectPresets.indexOf(this.selectedPreset) + 1;
+        store.setAccessibilityNotification(
+            "polite",
+            `Preset ${name} loaded to bank ${currentBank}.`
+        );
 
-      store.setAccessibilityNotification(
-          "polite",
-          `Preset ${name} loaded to bank ${this.selectedPreset}.`
-      );
-
-      this.selectedPreset = undefined;
+        this.selectedPreset = undefined;
+      }).finally(() => {
+        this.$nextTick(() => {
+          this.$refs.override_preset_modal.closeModal();
+        })
+      });
     },
 
     onEffectSelectionChange(id) {
@@ -231,6 +232,7 @@ export default {
     },
 
     getLabel(id, key) {
+      console.log(store.getActiveDevice().effects.preset_names);
       return (id + 1).toString() + ": " + store.getActiveDevice().effects.preset_names[key];
     },
 
@@ -265,8 +267,14 @@ export default {
 
       let command = {"RenameActivePreset": this.newPresetName}
 
-      sendHttpCommand(store.getActiveSerial(), command);
-      this.newPresetName = "";
+      websocket.send_command(store.getActiveSerial(), command).then(() => {
+        store.getActiveDevice().effects.preset_names[store.getActiveDevice().effects.active_preset] = this.newPresetName;
+      }).finally(() => {
+        this.$nextTick(() => {
+          this.$refs.renamePresetModal.closeModal();
+          this.newPresetName = ''
+        })
+      });
     },
 
     saveActivePreset() {
