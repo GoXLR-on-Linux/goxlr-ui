@@ -329,4 +329,21 @@ button {
 button:focus {
   outline: none;
 }
+
+.openButton {
+  border: 0;
+  background-color: transparent;
+  padding: 0;
+  margin-left: 5px;
+
+
+  display: inline-block;
+  color: #a5a7a6;
+  font-size: 14px;
+}
+
+.openButton:hover {
+  color: #fff;
+  cursor: pointer;
+}
 </style>
