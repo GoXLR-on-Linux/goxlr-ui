@@ -58,12 +58,18 @@ export default {
 
   mounted() {
     this.container = this.$refs.container;
+  },
+
+  computed: {
+    maxHeight() {
+      return this.max_height;
+    }
   }
 }
 </script>
 
 <template>
-  <VerticalScrollingContainer :class="{ height: max_height }" ref="container" role="radiogroup" :aria-label="label">
+  <VerticalScrollingContainer class="height" ref="container" role="radiogroup" :aria-label="label">
     <RadioItem v-for="option in options" :key="option.id" :id="getUniqueId(option.id)" :ref="getUniqueId(option.id)"
       :group="group" :text="option.label" :selected="selected === option.id" :disabled="option.disabled"
       @radio-selected="select(option.id)">
@@ -83,7 +89,7 @@ export default {
 
 <style scoped>
 .container .height {
-  max-height: v-bind(max_height)
+  max-height: v-bind(maxHeight)
 }
 
 button {

@@ -14,77 +14,6 @@
             @selection-changed="onEffectSelectionChange"
         />
       </GroupContainer>
-
-      <AccessibleModal ref="renamePresetModal" id="renameEffect" :show_close="false">
-        <template v-slot:title>Enter New Preset Name</template>
-        <template v-slot:default>
-          <ModalInput ref="newName" v-model="newPresetName" placeholder="New Preset Name" @on-enter="renamePreset();"/>
-        </template>
-        <template v-slot:footer>
-          <ModalButton ref="focusOk" @click="renamePreset();">OK</ModalButton>
-          <ModalButton @click="$refs.renamePresetModal.closeModal(); this.newPresetName = ''">Cancel</ModalButton>
-        </template>
-      </AccessibleModal>
-
-      <AccessibleModal
-          ref="select_preset_modal"
-          id="select_preset"
-          :show_footer="true"
-      >
-        <template v-slot:title>
-          <span>Load Preset</span>
-          <button
-              class="openButton"
-              @click="openPresets"
-              aria-label="Open Presets Directory"
-          >
-            <font-awesome-icon icon="fa-solid fa-folder"/>
-          </button>
-        </template>
-        <ScrollingRadioList
-            v-if="getPresetList().length > 0"
-            max_height="300px"
-            group="preset_list"
-            :options="getPresetList()"
-            :selected="getSelectedPreset()"
-            @selection-changed="selectPreset"
-        />
-        <span v-else>
-      There are currently no presets in the library, save or copy some for them to appear here.
-    </span>
-        <template v-slot:footer>
-          <ModalButton
-              ref="ok" class="modal-default-button" :enabled="selectedPreset !== undefined"
-              @click="confirmPresetLoad()">Ok
-          </ModalButton>
-        </template>
-      </AccessibleModal>
-
-      <AccessibleModal ref="override_preset_modal" id="override_preset" :show_close="false">
-        <template v-slot:title>Confirm Preset Load</template>
-        <template v-slot:default>
-          Loading this preset will replace any unsaved changes on this effects bank, would you like to proceed?
-        </template>
-        <template v-slot:footer>
-          <ModalButton ref="confirmFocusOk" @click="loadPreset()">OK</ModalButton>
-          <ModalButton @click="this.selectedPreset = undefined; $refs.override_preset_modal.closeModal();">Cancel
-          </ModalButton>
-        </template>
-      </AccessibleModal>
-
-      <AccessibleModal ref="overwrite_library_save" id="overwrite_save" :show_close="false">
-        <template v-slot:title>Confirm Preset Overwrite</template>
-        <template v-slot:default>
-          The preset {{ getCurrentPresetName() }} already exists in your library, would you like to overwrite?
-        </template>
-        <template v-slot:footer>
-          <ModalButton ref="overwriteConfirm" @click="saveActivePreset(); $refs.overwrite_library_save.closeModal();">
-            Overwrite
-          </ModalButton>
-          <ModalButton @click="$refs.overwrite_library_save.closeModal();">Cancel</ModalButton>
-        </template>
-      </AccessibleModal>
-
     </div>
     <ContentContainer :no-left-pad="true">
       <ReverbEffect/>
@@ -96,6 +25,77 @@
       <HardTuneEffect/>
     </ContentContainer>
   </div>
+
+  <!-- Modals -->
+  <AccessibleModal ref="renamePresetModal" id="renameEffect" :show_close="false">
+    <template v-slot:title>Enter New Preset Name</template>
+    <template v-slot:default>
+      <ModalInput ref="newName" v-model="newPresetName" placeholder="New Preset Name" @on-enter="renamePreset();"/>
+    </template>
+    <template v-slot:footer>
+      <ModalButton ref="focusOk" @click="renamePreset();">OK</ModalButton>
+      <ModalButton @click="$refs.renamePresetModal.closeModal(); this.newPresetName = ''">Cancel</ModalButton>
+    </template>
+  </AccessibleModal>
+
+  <AccessibleModal
+      ref="select_preset_modal"
+      id="select_preset"
+      :show_footer="true"
+  >
+    <template v-slot:title>
+      <span>Load Preset</span>
+      <button
+          class="openButton"
+          @click="openPresets"
+          aria-label="Open Presets Directory"
+      >
+        <font-awesome-icon icon="fa-solid fa-folder"/>
+      </button>
+    </template>
+    <ScrollingRadioList
+        v-if="getPresetList().length > 0"
+        max_height="300px"
+        group="preset_list"
+        :options="getPresetList()"
+        :selected="getSelectedPreset()"
+        @selection-changed="selectPreset"
+    />
+    <span v-else>
+      There are currently no presets in the library, save or copy some for them to appear here.
+    </span>
+    <template v-slot:footer>
+      <ModalButton
+          ref="ok" class="modal-default-button" :enabled="selectedPreset !== undefined"
+          @click="confirmPresetLoad()">Ok
+      </ModalButton>
+    </template>
+  </AccessibleModal>
+
+  <AccessibleModal ref="override_preset_modal" id="override_preset" :show_close="false">
+    <template v-slot:title>Confirm Preset Load</template>
+    <template v-slot:default>
+      Loading this preset will replace any unsaved changes on this effects bank, would you like to proceed?
+    </template>
+    <template v-slot:footer>
+      <ModalButton ref="confirmFocusOk" @click="loadPreset()">OK</ModalButton>
+      <ModalButton @click="this.selectedPreset = undefined; $refs.override_preset_modal.closeModal();">Cancel
+      </ModalButton>
+    </template>
+  </AccessibleModal>
+
+  <AccessibleModal ref="overwrite_library_save" id="overwrite_save" :show_close="false">
+    <template v-slot:title>Confirm Preset Overwrite</template>
+    <template v-slot:default>
+      The preset {{ getCurrentPresetName() }} already exists in your library, would you like to overwrite?
+    </template>
+    <template v-slot:footer>
+      <ModalButton ref="overwriteConfirm" @click="saveActivePreset(); $refs.overwrite_library_save.closeModal();">
+        Overwrite
+      </ModalButton>
+      <ModalButton @click="$refs.overwrite_library_save.closeModal();">Cancel</ModalButton>
+    </template>
+  </AccessibleModal>
 </template>
 
 <script>
