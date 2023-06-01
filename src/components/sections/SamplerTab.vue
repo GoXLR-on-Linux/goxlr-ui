@@ -66,7 +66,7 @@
       ref="add_sample_modal"
       id="add_sample"
       :show_footer="true"
-      @modal-close="selectedAddSample = undefined"
+      @modal-close="stopPlayback(); selectedAddSample = undefined"
   >
     <template v-slot:title>
       <span>Add Sample</span>
@@ -91,13 +91,28 @@
       they can be selected here!
     </span>
     <template v-slot:footer>
-      <ModalButton
-          ref="ok"
-          class="modal-default-button"
-          :enabled="selectedAddSample !== undefined"
-          @click="addSample"
-      >Add
-      </ModalButton>
+      <div style="display: flex; flex-direction: row">
+        <div style="width: 50%; text-align: left; padding-left: 10px;">
+          <ModalButton
+              style="width: 50px; padding: 8px 2px"
+              ref="err"
+              class="modal-default-button"
+              :enabled="selectedAddSample !== undefined"
+              @click="toggleAudio"
+          >
+            <font-awesome-icon :icon="getPlaybackButton()"></font-awesome-icon>
+          </ModalButton>
+        </div>
+        <div style="text-align: right; width: 50%">
+          <ModalButton
+              ref="ok"
+              class="modal-default-button"
+              :enabled="selectedAddSample !== undefined"
+              @click="addSample"
+          >Add
+          </ModalButton>
+        </div>
+      </div>
     </template>
   </AccessibleModal>
 
@@ -126,7 +141,7 @@ import ButtonItem from "@/components/lists/ButtonItem.vue";
 import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 import ScrollingRadioList from "@/components/lists/ScrollingRadioList.vue";
 import ModalButton from "@/components/design/modal/ModalButton.vue";
-import {websocket} from "@/util/sockets";
+import {getBaseHTTPAddress, websocket} from "@/util/sockets";
 
 export default {
   name: "SamplerTab",
@@ -150,6 +165,9 @@ export default {
 
       showAddModal: false,
       waitModal: false,
+
+      audio_player: undefined,
+      audio_playing: false,
 
       bank_options: [
         {id: "A", label: "A"},
@@ -247,6 +265,7 @@ export default {
 
     selectAddSample(sample) {
       this.selectedAddSample = sample;
+      this.audio_player.src = this.getSampleUrl();
     },
 
     getSelectedAddSample() {
@@ -297,7 +316,59 @@ export default {
           this.activeButton
           ].samples[id].name;
     },
+
+    getSampleUrl() {
+      if (this.selectedAddSample === undefined) {
+        return undefined;
+      }
+
+      let name = store.getSampleFiles()[this.selectedAddSample];
+      let url = getBaseHTTPAddress();
+      url = url + "files/samples/" + name;
+
+      return url;
+    },
+
+    stopPlayback() {
+      if (this.isAudioPlaying()) {
+        this.audio_player.pause();
+      }
+    },
+
+    toggleAudio() {
+      if (!this.isAudioPlaying()) {
+        this.audio_player.play();
+      } else {
+        this.audio_player.pause();
+      }
+    },
+
+    getPlaybackButton() {
+      if (this.audio_playing) {
+        return "fa-solid fa-stop";
+      }
+      return "fa-solid fa-play";
+    },
+
+    isAudioPlaying() {
+      return this.audio_playing;
+    }
   },
+
+  mounted() {
+    this.audio_player = new Audio();
+    this.audio_player.onpause = () => {
+      this.audio_playing = false;
+      this.audio_player.currentTime = 0;
+    };
+    this.audio_player.onplay = () => {
+      this.audio_playing = true;
+    }
+    this.audio_player.onended = () => {
+      this.audio_playing = false;
+      this.audio_player.currentTime = 0;
+    }
+  }
 };
 </script>
 
