@@ -253,6 +253,8 @@ export default {
     },
 
     getSampleList() {
+      console.log(this.getPaths());
+
       let samples = [];
       for (let sample of Object.keys(store.getSampleFiles()).sort()) {
         samples.push({
@@ -352,7 +354,39 @@ export default {
 
     isAudioPlaying() {
       return this.audio_playing;
-    }
+    },
+
+    getPaths() {
+      if (store.getSampleFiles() === undefined) {
+        return {};
+      }
+
+      return Object.keys(store.getSampleFiles()).reduce(function (acc, value) {
+        let fields = value.split("/");
+        let currentDirectory = acc;
+
+        fields.forEach(function (element, index) {
+          if (index !== fields.length - 1) {
+            // We're not at the end yet, look for a subdir..
+            let subDirectory = currentDirectory.filter(function (field) {
+              return typeof field == 'object' && field[element];
+            })[0];
+
+            // Couldn't find an existing SubDirectory, create it..
+            if (!subDirectory) {
+              subDirectory = Object.create(null);
+              subDirectory[element] = [];
+              currentDirectory.push(subDirectory);
+            }
+            currentDirectory = subDirectory[element];
+          } else {
+            currentDirectory.push(element);
+          }
+        });
+
+        return acc;
+      }, []);
+    },
   },
 
   mounted() {
