@@ -233,7 +233,6 @@ export default {
     },
 
     getLabel(id, key) {
-      console.log(store.getActiveDevice().effects.preset_names);
       return (id + 1).toString() + ": " + store.getActiveDevice().effects.preset_names[key];
     },
 
