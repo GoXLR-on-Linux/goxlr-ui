@@ -26,9 +26,10 @@ export default {
   components: {ScrollingRadioList},
 
   props: {
-    max_height: { type: String, optional: true, default: "inherit" },
+    max_height: {type: String, optional: true, default: "inherit"},
     padding: {type: String, required: false, default: "8px"},
-    background: {type: String, required: false, default: "#3b413f" },
+    background: {type: String, required: false, default: "#3b413f"},
+    group: {type: String, required: true}
   },
 
   data() {

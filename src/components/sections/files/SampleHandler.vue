@@ -8,7 +8,7 @@
     </div>
   </div>
   <div style="height: 340px; overflow-y: scroll">
-    <SampleFileSelector background="transparent" padding="6px"/>
+    <SampleFileSelector background="transparent" padding="6px" group="sample_list"/>
   </div>
 </template>
 
