@@ -78,16 +78,8 @@
         <font-awesome-icon icon="fa-solid fa-folder"/>
       </button>
     </template>
-<!--    <ScrollingRadioList-->
-<!--        ref="sampleList"-->
-<!--        v-if="getSampleList().length > 0"-->
-<!--        max_height="300px"-->
-<!--        group="sample_list"-->
-<!--        :options="getSampleList()"-->
-<!--        :selected="getSelectedAddSample()"-->
-<!--        @selection-changed="selectAddSample"-->
-<!--    />-->
-    <SampleFileSelector ref="sample_selector" />
+
+    <SampleFileSelector ref="sample_selector" max_height="300px" />
 
     <template v-slot:footer>
       <div style="display: flex; flex-direction: row">

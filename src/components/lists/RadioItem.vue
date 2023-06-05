@@ -3,8 +3,8 @@
     <input ref="check" :name=group :id=id type="radio" @change="change" :value=id :checked="selected"
            :disabled="disabled" :aria-labelledby="`label_${id}`" class="screenreader-only"/>
     <label ref="label" :id="`label_${id}`" :for="id" :class="{ selected: this.selected, disabled: this.disabled }">
-      <font-awesome-icon v-if="icon !== undefined" :icon="icon" />
-      {{text}}
+      <font-awesome-icon v-if="icon !== undefined" :icon="icon"/>
+      {{ text }}
     </label>
     <div ref="right_ref" class="right_side" :class="{ selected: this.selected, disabled: this.disabled }">
       <slot name="right"></slot>
@@ -29,7 +29,8 @@ export default {
     selected: {type: Boolean, required: false, default: false},
     disabled: {type: Boolean, required: false, default: false},
 
-    padding: {type: String, required: false, default: "8px"}
+    padding: {type: String, required: false, default: "8px"},
+    background: {type: String, required: false, default: "#3b413f" },
   },
 
   data: function () {
@@ -59,7 +60,7 @@ export default {
   computed: {
     right_width: function () {
       return this.$refs.right_ref.clientWidth + "px";
-    }
+    },
   }
 }
 </script>
@@ -77,7 +78,7 @@ label {
 
   width: calc(100% - 12px - v-bind(right_width));
   margin: auto 0 auto auto;
-  background-color: #3b413f;
+  background-color: v-bind(background);
 
   overflow: hidden;
   text-overflow: ellipsis;

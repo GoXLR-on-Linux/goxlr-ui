@@ -7,23 +7,20 @@
       <font-awesome-icon icon="fa-solid fa-folder"/>
     </div>
   </div>
-  <div style="height: 340px">
-    <ProfileButton v-for="(name, index) in fileList()" :key="index" :show-check=false :button-id="getValue(name)"
-                   :label="name" :is-selected="isSelected(name)" :is-active="false"
-                   @button-clicked="setSelected"
-                   @button-double-clicked="handleDoubleClick"/>
+  <div style="height: 340px; overflow-y: scroll">
+    <SampleFileSelector background="transparent" padding="6px"/>
   </div>
 </template>
 
 <script>
 import {websocket} from "@/util/sockets";
 import {store} from "@/store";
-import ProfileButton from "@/components/profiles/ProfileButton";
+import SampleFileSelector from "@/components/sections/sampler/SampleFileSelector.vue";
 
 export default {
   emits: ['sample-clicked'],
   name: "SampleHandler",
-  components: {ProfileButton},
+  components: {SampleFileSelector},
 
   data: function () {
     return {

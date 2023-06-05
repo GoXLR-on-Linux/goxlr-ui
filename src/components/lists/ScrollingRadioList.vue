@@ -16,7 +16,9 @@ export default {
     menu: Array,
     menu_id: String,
 
-    max_height: { type: String, optional: true, default: "inherit" }
+    max_height: { type: String, optional: true, default: "inherit" },
+    padding: {type: String, required: false, default: "8px"},
+    background: {type: String, required: false, default: "#3b413f" },
   },
 
   methods: {
@@ -76,11 +78,11 @@ export default {
   <VerticalScrollingContainer class="height" ref="container" role="radiogroup" :aria-label="label">
     <RadioItem v-for="option in options" :key="option.id" :id="getUniqueId(option.id)" :ref="getUniqueId(option.id)"
       :group="group" :text="option.label" :selected="selected === option.id" :disabled="option.disabled"
-      @radio-selected="select(option.id)" :icon="option.icon">
+      @radio-selected="select(option.id)" :icon="option.icon" :background="background" :padding="padding">
       <template v-if="this.menu !== undefined" #right>
         <button :aria-label="`${option.label} Options`" :id="getButtonId(option.id)" aria-haspopup="menu"
           :aria-controls="this.menu_id" @click.prevent.stop="menuOpened($event, getButtonId(option.id), option.id)">
-          <font-awesome-icon icon="fa-solid fa-ellipsis-vertical" />
+          <span width="20px"><font-awesome-icon icon="fa-solid fa-ellipsis-vertical" /></span>
         </button>
       </template>
     </RadioItem>

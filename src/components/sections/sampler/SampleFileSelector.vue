@@ -2,7 +2,9 @@
   <ScrollingRadioList
       ref="sampleList"
       v-if="getSampleList().length > 0"
-      max_height="300px"
+      :max_height="max_height"
+      :padding="padding"
+      :background="background"
       group="sample_list"
       :options="getSampleList()"
       :selected="getSelectedSample()"
@@ -22,6 +24,12 @@ import {getBaseHTTPAddress} from "@/util/sockets";
 export default {
   name: "SampleFileSelector",
   components: {ScrollingRadioList},
+
+  props: {
+    max_height: { type: String, optional: true, default: "inherit" },
+    padding: {type: String, required: false, default: "8px"},
+    background: {type: String, required: false, default: "#3b413f" },
+  },
 
   data() {
     return {
