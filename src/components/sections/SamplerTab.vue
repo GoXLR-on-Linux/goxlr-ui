@@ -169,6 +169,8 @@ export default {
       audio_player: undefined,
       audio_playing: false,
 
+      current_path: [],
+
       bank_options: [
         {id: "A", label: "A"},
         {id: "B", label: "B"},
@@ -253,21 +255,83 @@ export default {
     },
 
     getSampleList() {
-      console.log(this.getPaths());
-
       let samples = [];
-      for (let sample of Object.keys(store.getSampleFiles()).sort()) {
+      let directories = [];
+      let files = [];
+
+      let paths = this.getSamplePaths();
+      let descend_path = [...this.current_path];
+
+      if (descend_path.length > 0) {
         samples.push({
-          id: sample,
-          label: sample,
+          id: "*" + descend_path[descend_path.length - 1],
+          icon: "turn-up",
+          label: "Parent Directory"
+        });
+      }
+
+      while (descend_path.length > 0) {
+        let next = descend_path.shift();
+
+        for (let path of paths) {
+          if (typeof path == 'object') {
+            let name = Object.keys(path)[0];
+
+            if (name === next) {
+              paths = path[name];
+              break;
+            }
+          }
+        }
+      }
+
+      for (let path of paths) {
+        if (typeof path == 'object') {
+          // Objects in the array will only ever have one child, which is the name of the path.
+          directories.push(Object.keys(path)[0]);
+        } else {
+          files.push(path);
+        }
+      }
+
+      for (let directory of directories.sort()) {
+        samples.push({
+          id: "+" + directory,
+          icon: "fa-solid fa-folder",
+          label: directory
+        });
+      }
+
+      for (let file of files.sort()) {
+        samples.push({
+          id: "-" + file,
+          icon: "fa-solid fa-music",
+          label: file
         });
       }
       return samples;
     },
 
     selectAddSample(sample) {
-      this.selectedAddSample = sample;
-      this.audio_player.src = this.getSampleUrl();
+      let sampleArr = sample.split("");
+      let prefix = sampleArr.shift();
+      sample = sampleArr.join("");
+
+      this.stopPlayback();
+      if (prefix === "*") {
+        this.current_path.pop();
+      }
+      if (prefix === "+") {
+        this.selectedAddSample = undefined;
+        this.current_path.push(sample);
+      }
+      if (prefix === "-") {
+        this.selectedAddSample = prefix + sample;
+        this.audio_player.src = this.getSampleUrl();
+
+        // Changing the src will stop playback, but wont trigger the stop events.
+        this.audio_playing = false;
+      }
     },
 
     getSelectedAddSample() {
@@ -279,7 +343,7 @@ export default {
     },
 
     addSample() {
-      let name = store.getSampleFiles()[this.getSelectedAddSample()];
+      let name = this.getSelectedAddSample().substring(1);
 
       // If we're adding a sample, we need to drop the return focus...
       this.$refs.add_sample_modal.returnFocus = undefined;
@@ -324,7 +388,7 @@ export default {
         return undefined;
       }
 
-      let name = store.getSampleFiles()[this.selectedAddSample];
+      let name = this.selectedAddSample.substring(1);
       let url = getBaseHTTPAddress();
       url = url + "files/samples/" + name;
 
@@ -356,7 +420,7 @@ export default {
       return this.audio_playing;
     },
 
-    getPaths() {
+    getSamplePaths() {
       if (store.getSampleFiles() === undefined) {
         return {};
       }
