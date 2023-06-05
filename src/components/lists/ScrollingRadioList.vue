@@ -72,7 +72,7 @@ export default {
   <VerticalScrollingContainer class="height" ref="container" role="radiogroup" :aria-label="label">
     <RadioItem v-for="option in options" :key="option.id" :id="getUniqueId(option.id)" :ref="getUniqueId(option.id)"
       :group="group" :text="option.label" :selected="selected === option.id" :disabled="option.disabled"
-      @radio-selected="select(option.id)">
+      @radio-selected="select(option.id)" :icon="option.icon">
       <template v-if="this.menu !== undefined" #right>
         <button :aria-label="`${option.label} Options`" :id="getButtonId(option.id)" aria-haspopup="menu"
           :aria-controls="this.menu_id" @click.prevent.stop="menuOpened($event, getButtonId(option.id), option.id)">

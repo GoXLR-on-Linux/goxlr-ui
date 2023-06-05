@@ -2,7 +2,10 @@
   <div class="wrapper">
     <input ref="check" :name=group :id=id type="radio" @change="change" :value=id :checked="selected"
            :disabled="disabled" :aria-labelledby="`label_${id}`" class="screenreader-only"/>
-    <label ref="label" :id="`label_${id}`" :for="id" :class="{ selected: this.selected, disabled: this.disabled }">{{text}}</label>
+    <label ref="label" :id="`label_${id}`" :for="id" :class="{ selected: this.selected, disabled: this.disabled }">
+      <font-awesome-icon v-if="icon !== undefined" :icon="icon" />
+      {{text}}
+    </label>
     <div ref="right_ref" class="right_side" :class="{ selected: this.selected, disabled: this.disabled }">
       <slot name="right"></slot>
     </div>
@@ -10,12 +13,16 @@
 </template>
 
 <script>
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+
 export default {
+  components: {FontAwesomeIcon},
   emits: ["radio-selected"],
   name: "RadioItem",
 
   props: {
     text: {type: String, required: true},
+    icon: {type: String, required: false},
     id: {type: String, required: true},
     group: {type: String, required: true},
 
