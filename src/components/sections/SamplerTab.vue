@@ -66,7 +66,7 @@
       ref="add_sample_modal"
       id="add_sample"
       :show_footer="true"
-      @modal-close="stopPlayback(); selectedAddSample = undefined"
+      @modal-close="stopAudio()"
   >
     <template v-slot:title>
       <span>Add Sample</span>
@@ -78,19 +78,17 @@
         <font-awesome-icon icon="fa-solid fa-folder"/>
       </button>
     </template>
-    <ScrollingRadioList
-        ref="sampleList"
-        v-if="getSampleList().length > 0"
-        max_height="300px"
-        group="sample_list"
-        :options="getSampleList()"
-        :selected="getSelectedAddSample()"
-        @selection-changed="selectAddSample"
-    />
-    <span v-else>
-      There are currently no samples in the samples folder. Copy some over so
-      they can be selected here!
-    </span>
+<!--    <ScrollingRadioList-->
+<!--        ref="sampleList"-->
+<!--        v-if="getSampleList().length > 0"-->
+<!--        max_height="300px"-->
+<!--        group="sample_list"-->
+<!--        :options="getSampleList()"-->
+<!--        :selected="getSelectedAddSample()"-->
+<!--        @selection-changed="selectAddSample"-->
+<!--    />-->
+    <SampleFileSelector ref="sample_selector" />
+
     <template v-slot:footer>
       <div style="display: flex; flex-direction: row">
         <div style="width: 50%; text-align: left; padding-left: 10px;">
@@ -98,7 +96,7 @@
               style="width: 50px; padding: 8px 2px"
               ref="err"
               class="modal-default-button"
-              :enabled="selectedAddSample !== undefined"
+              :enabled="hasSelectedSample()"
               @click="toggleAudio"
           >
             <font-awesome-icon :icon="getPlaybackButton()"></font-awesome-icon>
@@ -108,7 +106,7 @@
           <ModalButton
               ref="ok"
               class="modal-default-button"
-              :enabled="selectedAddSample !== undefined"
+              :enabled="hasSelectedSample()"
               @click="addSample"
           >Add
           </ModalButton>
@@ -140,15 +138,16 @@ import RadioSelection from "@/components/lists/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import ButtonItem from "@/components/lists/ButtonItem.vue";
 import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
-import ScrollingRadioList from "@/components/lists/ScrollingRadioList.vue";
 import ModalButton from "@/components/design/modal/ModalButton.vue";
-import {getBaseHTTPAddress, websocket} from "@/util/sockets";
+import {websocket} from "@/util/sockets";
+import SampleFileSelector from "@/components/sections/sampler/SampleFileSelector.vue";
 
 export default {
   name: "SamplerTab",
   components: {
+    SampleFileSelector,
+
     ModalButton,
-    ScrollingRadioList,
     AccessibleModal,
     ButtonItem,
     GroupContainer,
@@ -162,15 +161,8 @@ export default {
       activeButton: "TopLeft",
       activeSample: "-1",
 
-      selectedAddSample: undefined,
-
       showAddModal: false,
       waitModal: false,
-
-      audio_player: undefined,
-      audio_playing: false,
-
-      current_path: [],
 
       bank_options: [
         {id: "A", label: "A"},
@@ -255,96 +247,13 @@ export default {
           ].samples;
     },
 
-    getSampleList() {
-      let samples = [];
-      let directories = [];
-      let files = [];
-
-      let paths = this.getSamplePaths();
-      let descend_path = [...this.current_path];
-
-      if (descend_path.length > 0) {
-        samples.push({
-          id: "*" + descend_path[descend_path.length - 1],
-          icon: "turn-up",
-          label: "Parent Directory"
-        });
+    hasSelectedSample() {
+      // This may not have been mounted when this is first called, so fail-safe.
+      if (this.$refs.sample_selector === undefined) {
+        return false;
       }
 
-      while (descend_path.length > 0) {
-        let next = descend_path.shift();
-
-        for (let path of paths) {
-          if (typeof path == 'object') {
-            let name = Object.keys(path)[0];
-
-            if (name === next) {
-              paths = path[name];
-              break;
-            }
-          }
-        }
-      }
-
-      for (let path of paths) {
-        if (typeof path == 'object') {
-          // Objects in the array will only ever have one child, which is the name of the path.
-          directories.push(Object.keys(path)[0]);
-        } else {
-          files.push(path);
-        }
-      }
-
-      for (let directory of directories.sort()) {
-        samples.push({
-          id: "+" + directory,
-          icon: "fa-solid fa-folder",
-          label: directory
-        });
-      }
-
-      for (let file of files.sort()) {
-        samples.push({
-          id: "-" + file,
-          icon: "fa-solid fa-music",
-          label: file
-        });
-      }
-      return samples;
-    },
-
-    selectAddSample(sample) {
-      let sampleArr = sample.split("");
-      let prefix = sampleArr.shift();
-      sample = sampleArr.join("");
-
-      this.stopPlayback();
-      if (prefix === "*") {
-        this.current_path.pop();
-
-        this.$nextTick(() => {
-          this.$refs.sampleList.getFirstButtonRef().focus();
-        });
-      }
-      if (prefix === "+") {
-        this.selectedAddSample = undefined;
-        this.current_path.push(sample);
-
-        this.$nextTick(() => {
-          this.$refs.sampleList.getFirstButtonRef().focus();
-        });
-      }
-      if (prefix === "-") {
-        this.selectedAddSample = prefix + sample;
-        this.audio_player.src = this.getSampleUrl();
-
-        // Changing the src will stop playback, but wont trigger the stop events.
-        this.audio_playing = false;
-      }
-    },
-
-    getSelectedAddSample() {
-      return this.selectedAddSample;
+      return this.$refs.sample_selector.getSelectedSampleName() !== undefined;
     },
 
     setActiveSample(id) {
@@ -352,7 +261,7 @@ export default {
     },
 
     addSample() {
-      let name = this.getSelectedAddSample().substring(1);
+      let name = this.$refs.sample_selector.getSelectedSampleName();
 
       // If we're adding a sample, we need to drop the return focus...
       this.$refs.add_sample_modal.returnFocus = undefined;
@@ -392,90 +301,26 @@ export default {
           ].samples[id].name;
     },
 
-    getSampleUrl() {
-      if (this.selectedAddSample === undefined) {
-        return undefined;
-      }
-
-      let name = this.selectedAddSample.substring(1);
-      let url = getBaseHTTPAddress();
-      url = url + "files/samples/" + name;
-
-      return url;
-    },
-
-    stopPlayback() {
-      if (this.isAudioPlaying()) {
-        this.audio_player.pause();
-      }
+    stopAudio() {
+      this.$refs.sample_selector.stopPlayback();
     },
 
     toggleAudio() {
-      if (!this.isAudioPlaying()) {
-        this.audio_player.play();
-      } else {
-        this.audio_player.pause();
-      }
+      this.$refs.sample_selector.toggleAudio();
     },
 
     getPlaybackButton() {
-      if (this.audio_playing) {
-        return "fa-solid fa-stop";
-      }
-      return "fa-solid fa-play";
-    },
-
-    isAudioPlaying() {
-      return this.audio_playing;
-    },
-
-    getSamplePaths() {
-      if (store.getSampleFiles() === undefined) {
-        return {};
+      // Again, fail safe..
+      if (this.$refs.sample_selector === undefined) {
+        return "play";
       }
 
-      return Object.keys(store.getSampleFiles()).reduce(function (acc, value) {
-        let fields = value.split("/");
-        let currentDirectory = acc;
-
-        fields.forEach(function (element, index) {
-          if (index !== fields.length - 1) {
-            // We're not at the end yet, look for a subdir..
-            let subDirectory = currentDirectory.filter(function (field) {
-              return typeof field == 'object' && field[element];
-            })[0];
-
-            // Couldn't find an existing SubDirectory, create it..
-            if (!subDirectory) {
-              subDirectory = Object.create(null);
-              subDirectory[element] = [];
-              currentDirectory.push(subDirectory);
-            }
-            currentDirectory = subDirectory[element];
-          } else {
-            currentDirectory.push(element);
-          }
-        });
-
-        return acc;
-      }, []);
+      if (this.$refs.sample_selector.isAudioPlaying()) {
+        return "stop";
+      }
+      return "play";
     },
   },
-
-  mounted() {
-    this.audio_player = new Audio();
-    this.audio_player.onpause = () => {
-      this.audio_playing = false;
-      this.audio_player.currentTime = 0;
-    };
-    this.audio_player.onplay = () => {
-      this.audio_playing = true;
-    }
-    this.audio_player.onended = () => {
-      this.audio_playing = false;
-      this.audio_player.currentTime = 0;
-    }
-  }
 };
 </script>
 
