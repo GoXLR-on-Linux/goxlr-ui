@@ -79,6 +79,7 @@
       </button>
     </template>
     <ScrollingRadioList
+        ref="sampleList"
         v-if="getSampleList().length > 0"
         max_height="300px"
         group="sample_list"
@@ -320,10 +321,18 @@ export default {
       this.stopPlayback();
       if (prefix === "*") {
         this.current_path.pop();
+
+        this.$nextTick(() => {
+          this.$refs.sampleList.getFirstButtonRef().focus();
+        });
       }
       if (prefix === "+") {
         this.selectedAddSample = undefined;
         this.current_path.push(sample);
+
+        this.$nextTick(() => {
+          this.$refs.sampleList.getFirstButtonRef().focus();
+        });
       }
       if (prefix === "-") {
         this.selectedAddSample = prefix + sample;

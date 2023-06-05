@@ -32,6 +32,10 @@ export default {
       return this.$refs[this.getUniqueId(name)][0];
     },
 
+    getFirstButtonRef() {
+      return this.$refs[this.getUniqueId(this.options[0].id)][0];
+    },
+
     menuOpened(event, return_id, item) {
       // Trigger an event so anything upstream can handle the behaviour..
       this.$emit('menu-opened', event, return_id, item);
@@ -47,7 +51,7 @@ export default {
     menuOptionClicked(event) {
       // We need to emit this up to whatever is putting us here :)
       this.$emit('menu-selected', event);
-    }
+    },
   },
 
   data() {
@@ -79,7 +83,6 @@ export default {
           <font-awesome-icon icon="fa-solid fa-ellipsis-vertical" />
         </button>
       </template>
-
     </RadioItem>
     <slot></slot>
   </VerticalScrollingContainer>
