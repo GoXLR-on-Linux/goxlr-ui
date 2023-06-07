@@ -4,7 +4,8 @@
       <div v-show="isAdvanced()" style="margin-bottom: 8px;">
         <button class="reset" @click="resetEqValues()">RESET</button>
 
-        <label for="eq_fine">Enable Fine Tune</label><input type="checkbox" id="eq_fine">
+        <label for="eq_fine">Enable Fine Tune</label><input type="checkbox" id="eq_fine" ref="fine_tune"
+                                                            :checked="fineTuneEnabled()" @change="setFineTuneEnabled">
       </div>
     </template>
     <Slider v-show="!isAdvanced()" :id=0 title="Bass" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
@@ -33,7 +34,14 @@
             :title=getTitle(index) :store-path="getStorePath(index)" :background-colour="getBackgroundColour(index)"
             :input-background-colour="getInputBackgroundColour(index)"
             :range-background-colour="getRangeBackgroundColour(index)"
-            @value-changed="valueChange"/>
+            @value-changed="valueChange">
+      <template v-if="fineTuneEnabled()" #header>
+        <FineTuneHeader :title="getTitle(index)" :minValue="getMinEqValue(index)" :maxValue="getMaxEqValue(index)"
+                        :current-value="getCurrentEqValue(index)"
+                        :range-background-colour="getRangeBackgroundColour(index)"
+                        @value-changed="freqValueChanged" :store-path="getStoreFreqPath(index)" :id="index"/>
+      </template>
+    </Slider>
 
   </ExpandoGroupContainer>
 </template>
@@ -45,10 +53,11 @@ import {EqFreqs, EqMiniFreqs} from "@/util/mixerMapping";
 import {websocket} from "@/util/sockets";
 import {isDeviceMini} from "@/util/util";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
+import FineTuneHeader from "@/components/sections/mic/FineTuneHeader.vue";
 
 export default {
   name: "MicEqualiser",
-  components: {ExpandoGroupContainer, Slider},
+  components: {FineTuneHeader, ExpandoGroupContainer, Slider},
 
   data() {
     return {
@@ -133,6 +142,128 @@ export default {
       return "#252927";
     },
 
+    getMinEqValue(index) {
+      if (isDeviceMini()) {
+        switch (index) {
+          case 1:
+            return 30;
+          case 2:
+            return 100;
+          case 3:
+            return 310;
+          case 4:
+            return 800;
+          case 5:
+            return 2600;
+          case 6:
+            return 5100;
+        }
+      } else {
+        let min = 30;
+        if (index !== 1) {
+          min = Math.floor(store.getActiveDevice().mic_status.equaliser.frequency[EqFreqs[index - 2]]);
+        }
+        switch (index) {
+          case 1:
+            return Math.max(30, min);
+          case 2:
+            return Math.max(30, min);
+          case 3:
+            return Math.max(30, min);
+          case 4:
+            return Math.max(30, min);
+          case 5:
+            return Math.max(300, min);
+          case 6:
+            return Math.max(300, min);
+          case 7:
+            return Math.max(300, min);
+          case 8:
+            return Math.max(2000, min);
+          case 9:
+            return Math.max(2000, min);
+          case 10:
+            return Math.max(2000, min);
+        }
+      }
+      return 0;
+    },
+
+    getMaxEqValue(index) {
+      if (isDeviceMini()) {
+        switch (index) {
+          case 1:
+            return 90;
+          case 2:
+            return 300;
+          case 3:
+            return 800;
+          case 4:
+            return 2500;
+          case 5:
+            return 5000;
+          case 6:
+            return 18000;
+        }
+      } else {
+        let max = 18000;
+        if (index !== EqFreqs.length) {
+          max = Math.floor(store.getActiveDevice().mic_status.equaliser.frequency[EqFreqs[index]]);
+        }
+        switch (index) {
+          case 1:
+            return Math.min(300, max);
+          case 2:
+            return Math.min(300, max);
+          case 3:
+            return Math.min(300, max);
+          case 4:
+            return Math.min(300, max);
+          case 5:
+            return Math.min(2000, max);
+          case 6:
+            return Math.min(2000, max);
+          case 7:
+            return Math.min(2000, max);
+          case 8:
+            return Math.min(18000, max);
+          case 9:
+            return Math.min(18000, max);
+          case 10:
+            return max;
+        }
+      }
+      return 0;
+    },
+
+    freqValueChanged(id, value) {
+      let commandName = (isDeviceMini()) ? "SetEqMiniFreq" : "SetEqFreq";
+      id -= 1;
+
+      let key = (isDeviceMini()) ? EqMiniFreqs[id] : EqFreqs[id];
+      this.sendFreqCommand(commandName, key, value);
+    },
+
+    getCurrentEqValue(index) {
+      if (isDeviceMini()) {
+        return Math.floor(store.getActiveDevice().mic_status.equaliser_mini.frequency[EqMiniFreqs[index - 1]]);
+      } else {
+        return Math.floor(store.getActiveDevice().mic_status.equaliser.frequency[EqFreqs[index - 1]]);
+      }
+    },
+
+    fineTuneEnabled() {
+      return store.getActiveDevice().settings.display.equaliser_fine === "Advanced";
+    },
+
+    setFineTuneEnabled(e) {
+      let mode = (e.target.checked) ? "Advanced" : "Simple";
+      let command = {
+        "SetElementDisplayMode": ["EqFineTune", mode]
+      };
+      websocket.send_command(store.getActiveSerial(), command);
+    },
+
     getTitle(id) {
       // Vue counts from 1 instead of 0 which we need for positioning..
       id -= 1;
@@ -148,7 +279,7 @@ export default {
       if (freq < 1000) {
         return Math.round(freq * 10) / 10 + "Hz";
       } else {
-        return Math.round(freq) / 1000 + "Khz";
+        return (Math.round(freq) / 1000).toFixed(1) + "Khz";
       }
     },
 
@@ -189,6 +320,19 @@ export default {
         store.getActiveDevice().mic_status.equaliser_mini.gain[key] = value;
       } else {
         store.getActiveDevice().mic_status.equaliser.gain[key] = value;
+      }
+    },
+
+    sendFreqCommand(commandName, key, value) {
+      let command = {[commandName]: [key, value]};
+      websocket.send_command(store.getActiveSerial(), command);
+
+      // We might be updating a slider from another slider, so we need to force store the change, as
+      // we disable patching while the slider is active.
+      if (isDeviceMini()) {
+        store.getActiveDevice().mic_status.equaliser_mini.frequency[key] = value;
+      } else {
+        store.getActiveDevice().mic_status.equaliser.frequency[key] = value;
       }
     },
 
@@ -236,6 +380,13 @@ export default {
         treble = Math.round((gain[EqMiniFreqs[4]] + gain[EqMiniFreqs[5]]) / 2)
       }
       return treble
+    },
+
+    getStoreFreqPath(id) {
+      id -= 1;
+      let path = isDeviceMini() ? "equaliser_mini" : "equaliser";
+      let title = isDeviceMini() ? EqMiniFreqs[id] : EqFreqs[id];
+      return "/mixers/" + store.getActiveSerial() + "/mic_status/" + path + "/frequency/" + title;
     },
 
     getStorePath(id) {
