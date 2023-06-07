@@ -1,6 +1,6 @@
 <template>
   <div class="sliderBox" role="group" :aria-label="title">
-    <Label v-bind:title="title" role="heading" aria-level="3" />
+    <slot name="header"><Label v-bind:title="title" role="heading" aria-level="3" /></slot>
     <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
            :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
            @mouse-up="setMouseUp" :background-colour="rangeBackgroundColour" :title="title" :reported-value="getTextValue()"/>
@@ -252,11 +252,5 @@ export default {
 .sliderBox {
   width: 90px;
   background-color: v-bind(backgroundColour);
-}
-
-.range {
-  margin-top: 10px;
-  margin-bottom: -10px;
-  margin-left: 15px;
 }
 </style>
