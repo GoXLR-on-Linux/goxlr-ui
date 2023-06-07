@@ -1,6 +1,6 @@
 <template>
-  <div class="rotation-wrapper">
-    <div class="rotation">
+  <div :class="{ 'rotation-wrapper': needsRotation }">
+    <div :class="{ 'rotation': needsRotation }">
       <input class="slider" type="range" v-bind:style="getCurrentStyle" v-bind:min="minValue"
              v-bind:max="maxValue" v-bind:value="localFieldValue" v-on:input="update"
              v-on:mousedown="mouseDown" v-on:mouseup="mouseUp" v-on:keydown="mouseDown" v-on:keyup="mouseUp"
@@ -26,6 +26,7 @@ export default {
   props: {
     height: {type: Number, required: false, default: 130},
     transform: {type: Number, required: false, default: -85},
+    needsRotation: {type: Boolean, required: false, default: true},
 
     minValue: {type: Number, default: 0},
     maxValue: {type: Number, default: 100},
