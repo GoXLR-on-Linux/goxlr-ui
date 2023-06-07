@@ -107,7 +107,7 @@ export default {
       }
 
       return Object.keys(store.getSampleFiles()).reduce(function (acc, value) {
-        value = value.replace("\\", "/");
+        value = value.replace(/\\/g, '/');
 
         let fields = value.split("/");
         let currentDirectory = acc;
