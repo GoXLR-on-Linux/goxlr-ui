@@ -39,7 +39,9 @@
         <FineTuneHeader :title="getTitle(index)" :minValue="getMinEqValue(index)" :maxValue="getMaxEqValue(index)"
                         :current-value="getCurrentEqValue(index)"
                         :range-background-colour="getRangeBackgroundColour(index)"
-                        @value-changed="freqValueChanged" :store-path="getStoreFreqPath(index)" :id="index"/>
+                        @value-changed="freqValueChanged" :store-path="getStoreFreqPath(index)" :id="index"
+                        :step="getStep(index)"
+        />
       </template>
     </Slider>
 
@@ -236,6 +238,13 @@ export default {
       return 0;
     },
 
+    getStep(index) {
+      if (index < 5) {
+        return 0.5;
+      }
+      return 1;
+    },
+
     freqValueChanged(id, value) {
       let commandName = (isDeviceMini()) ? "SetEqMiniFreq" : "SetEqFreq";
       id -= 1;
@@ -270,14 +279,17 @@ export default {
 
       // Probably a better way to do this
       let freq = undefined;
+      let end = 4;
       if (isDeviceMini()) {
-        freq = parseInt(store.getActiveDevice().mic_status.equaliser_mini.frequency[EqMiniFreqs[id]]);
+        freq = parseFloat(store.getActiveDevice().mic_status.equaliser_mini.frequency[EqMiniFreqs[id]]);
+        end = 2;
       } else {
-        freq = parseInt(store.getActiveDevice().mic_status.equaliser.frequency[EqFreqs[id]]);
+        freq = parseFloat(store.getActiveDevice().mic_status.equaliser.frequency[EqFreqs[id]]);
+        end = 4;
       }
       // Turn this frequency into a 'Number'
-      if (freq < 1000) {
-        return Math.round(freq * 10) / 10 + "Hz";
+      if (id < end) {
+        return (freq).toFixed(1) + "Hz";
       } else {
         return (Math.round(freq) / 1000).toFixed(1) + "Khz";
       }
@@ -340,9 +352,9 @@ export default {
       id -= 1;
 
       if (isDeviceMini()) {
-        return parseInt(store.getActiveDevice().mic_status.equaliser_mini.gain[EqMiniFreqs[id]]);
+        return parseFloat(store.getActiveDevice().mic_status.equaliser_mini.gain[EqMiniFreqs[id]]);
       } else {
-        return parseInt(store.getActiveDevice().mic_status.equaliser.gain[EqFreqs[id]]);
+        return parseFloat(store.getActiveDevice().mic_status.equaliser.gain[EqFreqs[id]]);
       }
     },
 
@@ -429,7 +441,7 @@ export default {
         }
       } else {
         // Full has more buttons :(
-        websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer31Hz", 31]});
+        websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer31Hz", 31.5]});
         websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer63Hz", 63]});
         websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer125Hz", 125]});
         websocket.send_command(store.getActiveSerial(), {"SetEqFreq": ["Equalizer250Hz", 250]});

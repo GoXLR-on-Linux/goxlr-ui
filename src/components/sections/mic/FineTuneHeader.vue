@@ -8,6 +8,8 @@
         :current-field-value="fieldValue"
         :background-colour="rangeBackgroundColour"
 
+        :step="step"
+
         @value-updated="sliderValueUpdated"
         @mouse-down="setMouseDown"
         @mouse-up="setMouseUp"
@@ -34,6 +36,8 @@ export default {
     backgroundColour: {type: String, required: false, default: '#252927'},
     rangeBackgroundColour: {type: String, required: false, default: '#252927'},
 
+    step: {type: Number, required: false, default: 1},
+
     storePath: {type: String, required: true},
 
     minValue: {type: Number, required: true},
@@ -50,7 +54,7 @@ export default {
 
   methods: {
     sliderValueUpdated(newValue) {
-      this.fieldValue = parseInt(newValue);
+      this.fieldValue = parseFloat(newValue);
     },
 
     setMouseDown() {
