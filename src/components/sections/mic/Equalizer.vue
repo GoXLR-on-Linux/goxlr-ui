@@ -242,7 +242,7 @@ export default {
       if (index < 5) {
         return 0.5;
       }
-      return 1;
+      return 100;
     },
 
     freqValueChanged(id, value) {
@@ -258,10 +258,7 @@ export default {
         return Math.floor(store.getActiveDevice().mic_status.equaliser_mini.frequency[EqMiniFreqs[index - 1]]);
       } else {
         let value = parseFloat(store.getActiveDevice().mic_status.equaliser.frequency[EqFreqs[index - 1]]);
-        if (index < 5) {
-          return this.roundToStep(value, 0.5);
-        }
-        return value;
+        return this.roundToStep(value, this.getStep(index));
       }
     },
 
@@ -283,7 +280,12 @@ export default {
       if (isDeviceMini()) {
         return (id < 3) ? value + "Hz" : value + "Khz";
       } else {
-        return (id < 5) ? value.toFixed(1) + "Hz" : value + "Khz";
+        if (!this.fineTuneEnabled()) {
+          // In the official app, when fine tune isn't enabled, the values are 'sanitised' a bit so that things
+          // like 0.5KHz become 500Hz, and decimals are removed when not needed. We'll do the same.
+          return (value < 1000) ? Math.round(value * 10) / 10 + "Hz" : Math.round(value) / 1000 + "Khz";
+        }
+        return (id < 5) ? value.toFixed(1) + "Hz" : (value / 1000).toFixed(1) + "KHz";
       }
     },
 

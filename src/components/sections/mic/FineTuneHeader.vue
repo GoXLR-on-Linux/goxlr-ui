@@ -97,7 +97,6 @@ export default {
   height: 10px;
   font-size: 10pt;
 
-  text-transform: uppercase;
   text-align: center;
   font-stretch: condensed;
 }
