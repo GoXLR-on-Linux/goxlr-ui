@@ -1,5 +1,19 @@
 <template>
-  <div class="header">{{ title }}</div>
+  <div>
+    <TextInput
+        :min-value=getTextMinValue()
+        :max-value=getTextMaxValue()
+        :allow-float=true
+
+        :current-text-value=getTextValue()
+        :current-field-value=fieldValue
+        :background-colour="backgroundColour"
+        colour="#fff"
+        :text-suffix="titleSuffix"
+        @value-updated="inputValueUpdated"
+    />
+
+  </div>
   <div>
     <RangeSelector
         :store-path=storePath
@@ -21,16 +35,19 @@
 
 <script>
 import RangeSelector from "@/components/slider/components/Range.vue";
+import TextInput from "@/components/slider/components/Input.vue";
+import {roundToStep} from "@/util/util";
 
 export default {
   emits: ["value-changed"],
 
   name: "FineTuneHeader",
-  components: {RangeSelector},
+  components: {TextInput, RangeSelector},
 
   props: {
     id: {type: Number, required: true, default: -1},
     title: {type: String, required: true, default: "UNKNOWN"},
+    titleSuffix: {type: String, required: true},
 
     colour: {type: String, required: false, default: "#82CFD0"},
     backgroundColour: {type: String, required: false, default: '#252927'},
@@ -74,8 +91,49 @@ export default {
 
       // Emit the latest value..
       this.$emit('value-changed', this.id, this.fieldValue);
+    },
+
+    getTextValue() {
+      if (this.titleSuffix === "KHz") {
+        return (this.fieldValue / 1000).toFixed(1);
+      }
+      return this.fieldValue.toFixed(1);
+    },
+
+    getTextMinValue() {
+      if (this.titleSuffix === "KHz") {
+        return (this.minValue / 1000);
+      } else {
+        return this.minValue;
+      }
+    },
+
+    getTextMaxValue() {
+      if (this.titleSuffix === "KHz") {
+        return (this.maxValue / 1000);
+      } else {
+        return this.maxValue;
+      }
+    },
+
+
+    inputValueUpdated(newValue) {
+      let final = newValue;
+      // Oddly enough, we're going to handle this here, rather than push up as it's some specialised code, firstly,
+      // do we need to 'explode' the value?
+      if (this.titleSuffix === "KHz") {
+        final = parseFloat(newValue) * 1000;
+      }
+
+      // We need to round the final value to the nearest 'step'..
+      console.log(this.step);
+      final = roundToStep(final, this.step);
+
+      this.fieldValue = final;
+      this.$emit('value-changed', this.id, final);
     }
   },
+
 
   mounted() {
     this.fieldValue = this.currentValue;
