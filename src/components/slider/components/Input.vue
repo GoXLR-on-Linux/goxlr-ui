@@ -31,7 +31,7 @@ export default {
   props: {
     id: {type: String, required: false, default: ""},
     editable: Boolean,
-    currentTextValue: Number,
+    currentTextValue: [ Number, String ],
 
     // Handlers for ValueMap..
     currentFieldValue: Number,
