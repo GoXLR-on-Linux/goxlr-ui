@@ -4,7 +4,7 @@
       <input class="slider" type="range" v-bind:style="getCurrentStyle" v-bind:min="minValue"
              v-bind:max="maxValue" v-bind:value="localFieldValue" v-on:input="update"
              v-on:mousedown="mouseDown" v-on:mouseup="mouseUp" v-on:keydown="mouseDown" v-on:keyup="mouseUp"
-             :aria-label="title" :aria-description="title" :aria-valuetext="getReportedValue()"
+             :aria-label="title" :aria-description="title" :aria-valuetext="getReportedValue()" :step="step"
       />
     </div>
   </div>
@@ -27,6 +27,8 @@ export default {
     height: {type: Number, required: false, default: 130},
     transform: {type: Number, required: false, default: -85},
     needsRotation: {type: Boolean, required: false, default: true},
+
+    step: {type: Number, required: false, default: 1},
 
     minValue: {type: Number, default: 0},
     maxValue: {type: Number, default: 100},
@@ -86,8 +88,8 @@ export default {
       // This code essentially adjusts the background position to keep it below the 'thumb'..
       let distance = this.maxValue - this.minValue;
       let position = 0;
-      for (let i = this.minValue; i <= this.maxValue; i++, position++) {
-        if (i === parseInt(this.localFieldValue)) {
+      for (let i = this.minValue; i <= this.maxValue; i += this.step, position += this.step) {
+        if (i === parseFloat(this.localFieldValue)) {
           break;
         }
       }
