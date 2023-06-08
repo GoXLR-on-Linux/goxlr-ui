@@ -30,7 +30,7 @@
 
 
     <Slider v-show="isAdvanced()" v-for="index in this.getElementCount()" :id=index :key=index :slider-min-value=-9
-            :slider-max-value=9 :text-min-value=-9 :text-max-value=9 text-suffix="" :slider-value="getValue(index)"
+            :slider-max-value=9 :text-min-value=-9 :text-max-value=9 text-suffix="" :slider-value="getGainValue(index)"
             :title=getTitle(index) :store-path="getStorePath(index)" :background-colour="getBackgroundColour(index)"
             :input-background-colour="getInputBackgroundColour(index)"
             :range-background-colour="getRangeBackgroundColour(index)"
@@ -257,7 +257,11 @@ export default {
       if (isDeviceMini()) {
         return Math.floor(store.getActiveDevice().mic_status.equaliser_mini.frequency[EqMiniFreqs[index - 1]]);
       } else {
-        return Math.floor(store.getActiveDevice().mic_status.equaliser.frequency[EqFreqs[index - 1]]);
+        let value = parseFloat(store.getActiveDevice().mic_status.equaliser.frequency[EqFreqs[index - 1]]);
+        if (index < 5) {
+          return this.roundToStep(value, 0.5);
+        }
+        return value;
       }
     },
 
@@ -274,24 +278,12 @@ export default {
     },
 
     getTitle(id) {
-      // Vue counts from 1 instead of 0 which we need for positioning..
-      id -= 1;
+      let value = this.getCurrentEqValue(id);
 
-      // Probably a better way to do this
-      let freq = undefined;
-      let end = 4;
       if (isDeviceMini()) {
-        freq = parseFloat(store.getActiveDevice().mic_status.equaliser_mini.frequency[EqMiniFreqs[id]]);
-        end = 2;
+        return (id < 3) ? value + "Hz" : value + "Khz";
       } else {
-        freq = parseFloat(store.getActiveDevice().mic_status.equaliser.frequency[EqFreqs[id]]);
-        end = 4;
-      }
-      // Turn this frequency into a 'Number'
-      if (id < end) {
-        return (freq).toFixed(1) + "Hz";
-      } else {
-        return (Math.round(freq) / 1000).toFixed(1) + "Khz";
+        return (id < 5) ? value.toFixed(1) + "Hz" : value + "Khz";
       }
     },
 
@@ -348,14 +340,21 @@ export default {
       }
     },
 
-    getValue(id) {
+    getGainValue(id) {
       id -= 1;
 
       if (isDeviceMini()) {
-        return parseFloat(store.getActiveDevice().mic_status.equaliser_mini.gain[EqMiniFreqs[id]]);
+        return parseInt(store.getActiveDevice().mic_status.equaliser_mini.gain[EqMiniFreqs[id]]);
       } else {
-        return parseFloat(store.getActiveDevice().mic_status.equaliser.gain[EqFreqs[id]]);
+        // Depeding on the id, we need to round this off to the nearest 0.5..
+        return parseInt(store.getActiveDevice().mic_status.equaliser.gain[EqFreqs[id]]);
       }
+    },
+
+    roundToStep(value, step) {
+      step || (step = 1.0);
+      let inverse = 1.0 / step;
+      return Math.round(value * inverse) / inverse;
     },
 
     getBassValue() {
