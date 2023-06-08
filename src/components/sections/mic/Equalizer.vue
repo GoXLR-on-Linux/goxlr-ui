@@ -40,7 +40,7 @@
                         :current-value="getCurrentEqValue(index)"
                         :range-background-colour="getRangeBackgroundColour(index)"
                         @value-changed="freqValueChanged" :store-path="getStoreFreqPath(index)" :id="index"
-                        :step="getStep(index)"
+                        :step="getStep(index)" :title-suffix="getFrequencySuffix(index)" :background-colour="getBackgroundColour(index)"
         />
       </template>
     </Slider>
@@ -53,7 +53,7 @@ import Slider from "../../slider/Slider";
 import {store} from "@/store";
 import {EqFreqs, EqMiniFreqs} from "@/util/mixerMapping";
 import {websocket} from "@/util/sockets";
-import {isDeviceMini} from "@/util/util";
+import {isDeviceMini, roundToStep} from "@/util/util";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
 import FineTuneHeader from "@/components/sections/mic/FineTuneHeader.vue";
 
@@ -258,7 +258,7 @@ export default {
         return Math.floor(store.getActiveDevice().mic_status.equaliser_mini.frequency[EqMiniFreqs[index - 1]]);
       } else {
         let value = parseFloat(store.getActiveDevice().mic_status.equaliser.frequency[EqFreqs[index - 1]]);
-        return this.roundToStep(value, this.getStep(index));
+        return roundToStep(value, this.getStep(index));
       }
     },
 
@@ -287,6 +287,10 @@ export default {
         }
         return (id < 5) ? value.toFixed(1) + "Hz" : (value / 1000).toFixed(1) + "KHz";
       }
+    },
+
+    getFrequencySuffix(index) {
+      return (index < 5) ? "Hz" : "KHz";
     },
 
     valueChange(id, value) {
@@ -351,12 +355,6 @@ export default {
         // Depeding on the id, we need to round this off to the nearest 0.5..
         return parseInt(store.getActiveDevice().mic_status.equaliser.gain[EqFreqs[id]]);
       }
-    },
-
-    roundToStep(value, step) {
-      step || (step = 1.0);
-      let inverse = 1.0 / step;
-      return Math.round(value * inverse) / inverse;
     },
 
     getBassValue() {
