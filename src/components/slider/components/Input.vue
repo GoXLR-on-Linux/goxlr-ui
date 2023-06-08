@@ -6,7 +6,8 @@
     <!--      <div class="suffix"><span class="filler">{{ displayValue() }}</span><span v-html="getSuffix()"></span></div>-->
     <!--    </div>-->
     <div class="sliderInput">
-      <input type="number" v-on:input="update" v-on:focus="focus" v-on:blur="reset" v-model="localTextValue" :min="minValue"
+      <input type="number" v-on:input="update" v-on:focus="focus" v-on:blur="reset" v-model="localTextValue"
+             :min="minValue"
              :max="maxValue" :aria-label="title" :aria-description="title"
              :aria-valuetext="getDisplayValue()"/>
       <div class="suffix"><span class="filler">{{ displayValue() }}</span><span v-html="getSuffix()"></span></div>
@@ -31,7 +32,8 @@ export default {
   props: {
     id: {type: String, required: false, default: ""},
     editable: Boolean,
-    currentTextValue: [ Number, String ],
+    currentTextValue: [Number, String],
+    allowFloat: {type: Boolean, default: false},
 
     // Handlers for ValueMap..
     currentFieldValue: Number,
@@ -98,25 +100,22 @@ export default {
           let middle = (upper - lower) / 2;
           let ours = newValue - lower;
 
-          let index = (ours < middle) ? base - 1 : base;
-          result = index;
+          result = (ours < middle) ? base - 1 : base;
         }
         this.$emit("value-updated", result, this.id);
         return;
       }
 
-      if (e.target.value > this.maxValue) {
-        newValue = this.maxValue;
-        this.localTextValue = this.maxValue;
-      }
+      if (e.target.value > this.maxValue || e.target.value < this.minValue) {
+        // We're outside the range of this input, don't trigger an event until either
+        // blur, or we're inside.
+        return;
 
-      if (e.target.value < this.minValue) {
-        newValue = this.minValue;
-        this.localTextValue = this.minValue;
       }
 
       // Value has changed, emit something upwards..
-      this.$emit("value-updated", parseInt(newValue), this.id);
+      let value = (this.allowFloat) ? parseFloat(newValue) : parseInt(newValue);
+      this.$emit("value-updated", value, this.id);
     },
 
     focus() {
@@ -125,7 +124,31 @@ export default {
 
     reset(e) {
       this.focused = false;
-      e.target.value = this.displayValue();
+
+      let newValue = e.target.value;
+      if (!this.isNumber(newValue)) {
+        this.localTextValue = this.lastTextValue;
+        return;
+      }
+
+      if (e.target.value < this.minValue) {
+        this.localTextValue = this.minValue;
+        this.$emit("value-updated", this.minValue, this.id);
+        return;
+      }
+
+      if (e.target.value > this.maxValue) {
+        this.localTextValue = this.maxValue;
+        this.$emit("value-updated", this.maxValue, this.id);
+      }
+    },
+
+    isNumber(str) {
+      // This isn't perfect, but will catch *MOST* cases where values aren't numbers..
+      if (typeof str != "string") {
+        return false;
+      }
+      return !isNaN(str) && !isNaN(parseFloat(str));
     },
 
     displayValue() {
@@ -137,7 +160,7 @@ export default {
   },
 
   watch: {
-    currentFieldValue: function() {
+    currentFieldValue: function () {
       if (this.focused) {
         return;
       }
