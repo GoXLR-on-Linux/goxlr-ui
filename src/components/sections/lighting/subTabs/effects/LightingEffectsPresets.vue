@@ -76,7 +76,6 @@ export default {
       const active = store.getActiveDevice().lighting.buttons[this.activePreset].colours.colour_one;
       const inactive = value.substr(1, 6);
 
-      console.log("Preset Inactive");
       websocket.send_command(store.getActiveSerial(), {"SetButtonColours": [this.activePreset, active, inactive]});
     },
 

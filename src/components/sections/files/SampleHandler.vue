@@ -52,7 +52,6 @@ export default {
 
     // eslint-disable-next-line no-unused-vars
     handleDoubleClick(value) {
-      console.log(value);
       this.$emit("sample-clicked", value);
     },
   }

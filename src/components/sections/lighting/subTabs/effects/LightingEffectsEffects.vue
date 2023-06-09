@@ -58,7 +58,6 @@ export default {
     },
 
     onInactiveSelectionChange(id) {
-      console.log("Here? " + this.selectedEffect);
       websocket.send_command(store.getActiveSerial(), {"SetButtonOffStyle": [this.selectedEffect, id]});
     },
 

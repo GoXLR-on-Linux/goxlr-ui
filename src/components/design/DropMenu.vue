@@ -165,7 +165,6 @@ export default {
           break;
         }
       }
-      console.log(e);
     }
   },
 }

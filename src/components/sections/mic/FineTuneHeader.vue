@@ -125,7 +125,6 @@ export default {
       }
 
       // We need to round the final value to the nearest 'step'..
-      console.log(this.step);
       final = roundToStep(final, this.step);
 
       this.fieldValue = final;

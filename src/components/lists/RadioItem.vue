@@ -46,7 +46,6 @@ export default {
 
     isSelected() {
       if (this.$refs.check === undefined) {
-        console.log("No Ref.");
         return false;
       }
       return this.selected;

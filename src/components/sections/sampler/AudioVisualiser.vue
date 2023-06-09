@@ -389,8 +389,6 @@ export default {
         this.rightPosition = this.$refs.left.clientWidth;
         this.mouseUp();
       }
-
-      console.log(this.rightPosition);
     },
     keyDown(event) {
       if (this.activeSample === -1) {

@@ -74,8 +74,6 @@ export default {
     },
 
     onEmptyColourChange(value) {
-      console.log(store.getActiveDevice().lighting.sampler);
-
       let colour_one = store.getActiveDevice().lighting.sampler[this.selectedButtonOption].colours.colour_one;
       let colour_two = store.getActiveDevice().lighting.sampler[this.selectedButtonOption].colours.colour_two;
       let colour_three = value.substr(1, 6);

@@ -66,7 +66,6 @@ export default {
     focus() {
       let activeType = store.getActiveDevice().mic_status.mic_type;
       let button = this.$refs.selection.getButtonByRef(activeType);
-      console.log(button);
       button.focus();
     }
   }

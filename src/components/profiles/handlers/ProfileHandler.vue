@@ -141,7 +141,6 @@ export default {
     },
 
     saveProfile() {
-      console.log("Saving Main Profile..");
       sendHttpCommand(store.getActiveSerial(), { SaveProfile: [] });
       store.setAccessibilityNotification(
         "polite",
@@ -150,7 +149,6 @@ export default {
     },
 
     saveProfileAs(name) {
-      console.log(name);
       let command = {
         SaveProfileAs: name,
       };

@@ -46,7 +46,6 @@ export default {
 
     stylePressed(button) {
       websocket.send_command(store.getActiveSerial(), {"SetGenderStyle": button});
-      console.log(button);
     },
 
     getAmountValue() {
