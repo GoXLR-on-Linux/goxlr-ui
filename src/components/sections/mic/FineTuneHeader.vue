@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-bottom: 8px;">
     <TextInput
         :min-value=getTextMinValue()
         :max-value=getTextMaxValue()
@@ -12,9 +12,8 @@
         :text-suffix="titleSuffix"
         @value-updated="inputValueUpdated"
     />
-
   </div>
-  <div>
+  <div style="margin-bottom: 22px">
     <RangeSelector
         :store-path=storePath
         :min-value=minValue
@@ -148,15 +147,4 @@ export default {
 </script>
 
 <style scoped>
-.header {
-  padding: 10px 0;
-  color: #fff;
-
-  height: 10px;
-  font-size: 10pt;
-
-  text-align: center;
-  font-stretch: condensed;
-}
-
 </style>

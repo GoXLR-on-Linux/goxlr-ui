@@ -1,9 +1,12 @@
 <template>
   <div class="sliderBox" role="group" :aria-label="title">
-    <slot name="header"><Label v-bind:title="title" role="heading" aria-level="3" /></slot>
+    <slot name="header"><Label v-bind:title="title" role="heading" aria-level="3"/></slot>
     <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
            :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
-           @mouse-up="setMouseUp" :background-colour="rangeBackgroundColour" :title="title" :reported-value="getTextValue()"/>
+           @mouse-up="setMouseUp" :background-colour="rangeBackgroundColour" :title="title"
+           :reported-value="getTextValue()"
+           :height="rangeHeight" :transform="rangeTransform"
+    />
 
     <Input :current-text-value="textValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
            :textSuffix="textSuffix" :value-map="valueMap" :current-field-value=fieldValue
@@ -45,8 +48,8 @@ export default {
     storePath: {type: String, required: true},
 
     backgroundColour: {type: String, required: false, default: "#353937"},
-    inputBackgroundColour: { type: String, required: false, default: "#3b413f" },
-    rangeBackgroundColour: { type: String, required: false, default: '#252927' },
+    inputBackgroundColour: {type: String, required: false, default: "#3b413f"},
+    rangeBackgroundColour: {type: String, required: false, default: '#252927'},
 
     title: {type: String, default: ""},
 
@@ -57,6 +60,9 @@ export default {
     textMinValue: Number,
     textMaxValue: Number,
     textSuffix: String,
+
+    rangeHeight: {type: Number, required: false},
+    rangeTransform: {type: Number, required: false},
 
     valueMap: Array,
   },

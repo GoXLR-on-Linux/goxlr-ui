@@ -34,7 +34,9 @@
             :title=getTitle(index) :store-path="getStorePath(index)" :background-colour="getBackgroundColour(index)"
             :input-background-colour="getInputBackgroundColour(index)"
             :range-background-colour="getRangeBackgroundColour(index)"
-            @value-changed="valueChange">
+            @value-changed="valueChange"
+            :range-height=getSliderHeight() :range-transform=getSliderTransform()
+    >
       <template v-if="fineTuneEnabled()" #header>
         <FineTuneHeader :title="getTitle(index)" :minValue="getMinEqValue(index)" :maxValue="getMaxEqValue(index)"
                         :current-value="getCurrentEqValue(index)"
@@ -68,6 +70,20 @@ export default {
   },
 
   methods: {
+    getSliderHeight() {
+      if (this.fineTuneEnabled()) {
+        return 100;
+      }
+      return undefined;
+    },
+
+    getSliderTransform() {
+      if (this.fineTuneEnabled()) {
+        return -55
+      }
+      return undefined;
+    },
+
     isAdvanced() {
       return store.getActiveDevice().settings.display.equaliser === "Advanced";
     },
