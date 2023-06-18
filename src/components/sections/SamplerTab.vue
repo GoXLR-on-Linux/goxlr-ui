@@ -79,7 +79,7 @@
       </button>
     </template>
 
-    <SampleFileSelector ref="sample_selector" max_height="300px" group="add_sample_list" />
+    <SampleFileSelector ref="sample_selector" max_height="300px" group="add_sample_list"/>
 
     <template v-slot:footer>
       <div style="display: flex; flex-direction: row">
@@ -116,9 +116,23 @@
   >
     <template v-slot:title>Please wait, analysing sample.</template>
     <div tabindex="0">
-      Please wait, sample being analysed.<br/>
-      This process may take a couple of minutes.<br/>
-      Your GoXLR <b>WILL</b> be Unresponsive during this time.
+      Please wait while the sample is being analysed.<br/>
+      Progress: {{ sampleProgress }}%
+    </div>
+  </AccessibleModal>
+
+  <AccessibleModal
+      ref="add_sample_error"
+      id="add_sample_error"
+      :show_footer="true"
+      :show_close="true"
+      :prevent_esc="false"
+      @modal-close="clearErrors()"
+  >
+    <template v-slot:title>Error adding Sample</template>
+    <div tabindex="0">
+      An error occurred while adding the sample to the bank:<br/><br/>
+      {{ error }}
     </div>
   </AccessibleModal>
 </template>
@@ -149,6 +163,8 @@ export default {
 
   data() {
     return {
+      last_error: undefined,
+
       activeBank: "A",
       activeButton: "TopLeft",
       activeSample: "-1",
@@ -259,30 +275,22 @@ export default {
       this.$refs.add_sample_modal.returnFocus = undefined;
       this.$refs.add_sample_modal.closeModal();
 
-      this.$refs.add_sample_wait.openModal(
-          undefined,
-          this.$refs.add_sample_button
-      );
-      store.setAccessibilityNotification(
-          "polite",
-          "Please wait, analysing sample. This process may take a couple of minutes. Your GoXLR WILL be Unresponsive during this time."
-      );
-      store.pause();
+      // this.$refs.add_sample_wait.openModal(
+      //     undefined,
+      //     this.$refs.add_sample_button
+      // );
+      // store.setAccessibilityNotification(
+      //     "polite",
+      //     "Please wait, analysing sample. This process may take a couple of minutes. Your GoXLR WILL be Unresponsive during this time."
+      // );
+      // store.pause();
 
-      this.$nextTick(() => {
-        websocket
-            .send_command(store.getActiveSerial(), {
-              AddSample: [this.activeBank, this.activeButton, name],
-            })
-            .then(() => {
-              this.$refs.add_sample_wait.closeModal();
-              store.resume();
-              store.setAccessibilityNotification(
-                  "polite",
-                  `Sample ${name} added to ${this.activeButton} button in bank ${this.activeBank}.`
-              );
-            });
+      websocket.send_command(store.getActiveSerial(), {
+        AddSample: [this.activeBank, this.activeButton, name],
+      }).catch(error => {
+        this.last_error = error.Error;
       });
+
     },
     getActiveSampleName: function (id) {
       if (id === "-1") {
@@ -312,7 +320,80 @@ export default {
       }
       return "play";
     },
+
+    clearErrors() {
+      if (this.last_error !== undefined) {
+        this.last_error = undefined;
+      }
+
+      if (store.getActiveDevice().sampler.processing_state.last_error !== null) {
+        websocket.send_command(store.getActiveSerial(), {
+          ClearSampleProcessError: []
+        });
+      }
+    },
   },
+
+  computed: {
+    hasError() {
+      if (this.last_error !== undefined) {
+        return true;
+      }
+      return store.getActiveDevice().sampler.processing_state.last_error !== null;
+    },
+
+    error() {
+      if (this.last_error !== undefined) {
+        return this.last_error;
+      }
+      if (store.getActiveDevice().sampler.processing_state.last_error !== null) {
+        return store.getActiveDevice().sampler.processing_state.last_error;
+      }
+
+      return "Error occurred handing Errors O_o";
+    },
+
+    sampleProgress() {
+      return store.getActiveDevice().sampler.processing_state.progress;
+    }
+  },
+
+  watch: {
+    sampleProgress(newValue, oldValue) {
+      // If we're going from null to not null, open the dialog..
+      if ((oldValue === null) && (newValue !== null)) {
+        // We need to open the Progress Dialog..
+        this.$refs.add_sample_wait.openModal(undefined, this.$refs.add_sample_button);
+      }
+
+      // If we're going from a Value to null, close the dialog..
+      if ((oldValue !== null && newValue == null)) {
+        this.$refs.add_sample_wait.closeModal();
+
+        store.setAccessibilityNotification(
+            "polite",
+            `Sample ${name} added to ${this.activeButton} button in bank ${this.activeBank}.`
+        );
+      }
+    },
+
+    hasError: {
+      handler(newValue) {
+        if (this.$refs.add_sample_error === undefined && newValue === true) {
+          // We've picked up a cached error of some description, clear it.
+          websocket.send_command(store.getActiveSerial(), {
+            ClearSampleProcessError: []
+          });
+
+          return;
+        }
+        if (newValue === true) {
+          this.$refs.add_sample_error.openModal(undefined, this.$refs.add_sample_button);
+        }
+      },
+      immediate: true
+    }
+  }
 };
 </script>
 
