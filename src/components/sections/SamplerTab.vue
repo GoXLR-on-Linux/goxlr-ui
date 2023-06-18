@@ -366,6 +366,11 @@ export default {
         this.$refs.add_sample_wait.openModal(undefined, this.$refs.add_sample_button);
       }
 
+      if (oldValue !== null && newValue !== null && this.$refs.add_sample_wait !== undefined && !this.$refs.add_sample_wait.isOpen()) {
+        // User has opened the page while something was processing? Throw open the modal.
+        this.$refs.add_sample_wait.openModal(undefined, this.$refs.add_sample_button);
+      }
+
       // If we're going from a Value to null, close the dialog..
       if ((oldValue !== null && newValue == null) && this.$refs.add_sample_wait.isOpen()) {
         this.$refs.add_sample_wait.closeModal();
@@ -375,9 +380,6 @@ export default {
             `Sample ${name} added to ${this.activeButton} button in bank ${this.activeBank}.`
         );
       }
-
-
-
     },
 
     hasError: {
