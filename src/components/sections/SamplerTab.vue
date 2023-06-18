@@ -367,7 +367,7 @@ export default {
       }
 
       // If we're going from a Value to null, close the dialog..
-      if ((oldValue !== null && newValue == null)) {
+      if ((oldValue !== null && newValue == null) && this.$refs.add_sample_wait.isOpen()) {
         this.$refs.add_sample_wait.closeModal();
 
         store.setAccessibilityNotification(
@@ -375,6 +375,9 @@ export default {
             `Sample ${name} added to ${this.activeButton} button in bank ${this.activeBank}.`
         );
       }
+
+
+
     },
 
     hasError: {
