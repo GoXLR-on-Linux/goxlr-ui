@@ -91,6 +91,10 @@ export default {
       }
 
       this.$emit('modal-close');
+    },
+
+    isOpen() {
+      return this.is_visible;
     }
   }
 }
