@@ -93,59 +93,21 @@ export class Websocket {
         return this.#sendRequest("GetStatus");
     }
 
-    set_log_level(level) {
-        let request = {
-            "SetLogLevel": level
-        }
-
-        return this.#sendRequest(request);
-    }
-
     open_path(type) {
         let request = {
             "OpenPath": type
         }
 
-        return this.#sendRequest(request);
+        return this.send_daemon_command(request);
     }
 
-    recover_defaults(type) {
+    send_daemon_command(command) {
         let request = {
-            "RecoverDefaults": type
+            "Daemon":
+                command
+
         }
         return this.#sendRequest(request);
-    }
-
-    set_autostart(enabled) {
-        let request = {
-            "SetAutoStartEnabled": enabled
-        }
-        return this.#sendRequest(request);
-    }
-
-    set_show_icon(enabled) {
-        let request = {
-            "SetShowTrayIcon": enabled
-        }
-        return this.#sendRequest(request);
-    }
-
-    set_tts_enabled(enabled) {
-        let request = {
-            "SetTTSEnabled": enabled
-        }
-        return this.#sendRequest(request);
-    }
-
-    set_allow_network_access(enabled) {
-        let request = {
-            "SetAllowNetworkAccess": enabled
-        }
-        return this.#sendRequest(request);
-    }
-
-    send_shutdown() {
-        return this.#sendRequest("StopDaemon");
     }
 
     send_command(serial, command) {

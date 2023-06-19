@@ -57,26 +57,6 @@ export const store = reactive({
         return this.status.config.daemon_version;
     },
 
-    isAutostartEnabled() {
-        return this.status.config.autostart_enabled;
-    },
-
-    isShowIcon() {
-        return this.status.config.show_tray_icon;
-    },
-
-    isTTSEnabled() {
-        return this.status.config.tts_enabled;
-    },
-
-    isTTSAvailable() {
-        return this.status.config.tts_enabled !== null;
-    },
-
-    isAllowNetworkAccess() {
-        return this.status.config.allow_network_access;
-    },
-
     getDeviceCount() {
         return Object.keys(this.status.mixers).length;
     },
