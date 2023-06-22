@@ -95,6 +95,8 @@ button {
   border: 0;
   padding: 6px;
   margin: 0;
+
+  cursor: pointer;
 }
 
 button:focus {
