@@ -15,7 +15,7 @@ export default {
     menu: Array,
     menu_id: String,
 
-    scrollTop: { type: Number, optional: true, default: 0 },
+    scrollTop: { type: Function, optional: true, default: () => { return 0; } },
     max_height: { type: String, optional: true, default: "inherit" },
     padding: {type: String, required: false, default: "8px"},
     background: {type: String, required: false, default: "#3b413f" },
@@ -42,10 +42,8 @@ export default {
       // Trigger an event so anything upstream can handle the behaviour..
       this.$emit('menu-opened', event, return_id, item);
 
-      console.log("The Fuck?");
-      console.log(this.scrollTop);
       // Trigger the menu open.
-      this.$refs.contextMenu.showMenu(event, item, return_id, this.scrollTop);
+      this.$refs.contextMenu.showMenu(event, item, return_id, this.scrollTop());
     },
 
     getButtonId(value) {

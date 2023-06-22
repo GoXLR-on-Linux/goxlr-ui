@@ -34,7 +34,7 @@ export default {
 
 <template>
   <VerticalScrollingContainer ref="container" class="height">
-    <RadioList v-bind="$attrs" :scroll-top="getScrollTop()" />
+    <RadioList v-bind="$attrs" :scroll-top="getScrollTop" />
   </VerticalScrollingContainer>
 </template>
 
