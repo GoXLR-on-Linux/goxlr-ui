@@ -67,7 +67,7 @@ export default {
         <template v-if="this.menu !== undefined" #right>
           <button :aria-label="`${option.label} Options`" :id="getButtonId(option.id)" aria-haspopup="menu"
             :aria-controls="this.menu_id" @click.prevent.stop="menuOpened($event, getButtonId(option.id), option.id)">
-            <span width="20px"><font-awesome-icon icon="fa-solid fa-ellipsis-vertical" /></span>
+            <font-awesome-icon icon="fa-solid fa-ellipsis-vertical" />
           </button>
         </template>
       </RadioItem>
