@@ -76,7 +76,8 @@ export default {
         leftPosition = (left - menuWidth) + 'px';
       }
 
-      if (menuHeight + top >= window.innerHeight) {
+      let windowPosition = document.documentElement.scrollTop || document.body.scrollTop;
+      if (menuHeight + top >= window.innerHeight + windowPosition) {
         topPosition = (top - menuHeight) + 'px';
       }
 
