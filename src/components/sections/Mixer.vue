@@ -1,22 +1,6 @@
 <template>
   <CenteredContainer>
-    <GroupContainer v-if="submixEnabled()" title="Mix Assignment">
-      <!-- TODO: Fix this, really.. :D -->
-      <div style="color: #fff">
-        <div v-for="output in Object.keys(outputDevices)" :key="output"
-             style="display: flex; flex-direction: row; gap: 6px" role="radiogroup" :aria-label="output">
-          <div style="width: 120px" role="heading" aria-level="3">{{ output }}</div>
-          <div style="margin-right: 15px" role="presentation">
-            <label for="A">A:</label> <input @change="setDeviceMix" :checked="isOutputA(outputDevices[output])"
-                                             type="radio" id="A" :name="outputDevices[output]" aria-label="A"/>
-          </div>
-          <div role="presentation">
-            <label for="B">B:</label> <input @change="setDeviceMix" :checked="!isOutputA(outputDevices[output])"
-                                             type="radio" id="B" :name="outputDevices[output]" aria-label="B"/>
-          </div>
-        </div>
-      </div>
-    </GroupContainer>
+    <MixAssignment v-if="submixEnabled()"/>
 
     <GroupContainer v-if="!submixEnabled()" title="Inputs">
       <template v-if="isSubMixSupported()" #right>
@@ -60,20 +44,22 @@ import Slider from "../slider/Slider";
 import {
   ChannelName,
   ChannelNameReadable,
-  OutputMixerSubmixHidden,
-  OutputMixer,
+  channelNameToInputDevice,
   InputMixer,
-  OutputDevice, channelNameToInputDevice,
+  OutputDevice,
+  OutputMixer,
+  OutputMixerSubmixHidden,
 } from "@/util/mixerMapping";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import SubmixSlider from "@/components/slider/SubmixSlider.vue";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
+import MixAssignment from "@/components/sections/mixer/MixAssignment.vue";
 
 export default {
   name: "MixerTop",
-  components: {CenteredContainer, SubmixSlider, GroupContainer, Slider},
+  components: {MixAssignment, CenteredContainer, SubmixSlider, GroupContainer, Slider},
 
   data() {
     return {
@@ -134,8 +120,7 @@ export default {
 
       // Calculate the Main volume..
       let calculated_volume = parseInt(volume) / ratio;
-      let value = Math.min(Math.floor(calculated_volume), 255);
-      store.getActiveDevice().levels.volumes[name] = value;
+      store.getActiveDevice().levels.volumes[name] = Math.min(Math.floor(calculated_volume), 255);
     },
 
     syncSubmix(name, volume) {
@@ -143,8 +128,7 @@ export default {
 
       // Calculate the Submix Volume..
       let calculated_volume = parseInt(volume) * ratio;
-      let value = Math.max(Math.floor(calculated_volume), 0);
-      store.getActiveDevice().levels.submix.inputs[name].volume = value;
+      store.getActiveDevice().levels.submix.inputs[name].volume = Math.max(Math.floor(calculated_volume), 0);
     },
 
     getValue(id) {
@@ -195,19 +179,8 @@ export default {
       return store.getActiveDevice().levels.submix_supported;
     },
 
-    isOutputA(name) {
-      return this.getOutputMix(name) === "A";
-    },
-
     getOutputMix(name) {
       return store.getActiveDevice().levels.submix.outputs[name];
-    },
-
-    setDeviceMix(e) {
-      let command = {
-        "SetSubMixOutputMix": [e.target.name, e.target.id]
-      };
-      websocket.send_command(store.getActiveSerial(), command);
     },
 
     submixLinkChanged(id, value) {

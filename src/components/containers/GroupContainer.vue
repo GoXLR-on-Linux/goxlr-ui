@@ -11,7 +11,9 @@ export default {
     role: {
       type: String,
       default: "region"
-    }
+    },
+
+    sidePadding: {type: String, required: false, default: "24px"}
   },
 
   data() {
@@ -69,7 +71,7 @@ export default {
   flex-direction: column;
   align-items: center;
 
-  padding: 8px 24px 24px;
+  padding: 8px v-bind(sidePadding) v-bind(sidePadding);
 
   background-color: #2D3230;
 }
