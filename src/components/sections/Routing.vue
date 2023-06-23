@@ -18,7 +18,8 @@
           <SubmixButton :name="OutputDevice[output]" :display="output" v-if="submixEnabled()"/>
           <th v-else>{{ output }}</th>
           <Cell v-for="input in inputs" :key="input" :enabled="isEnabled(output, input)" :output="output" :input="input"
-                :orange="isDeviceMix(OutputDevice[output], 'B')" @clicked="handleClick"/>
+                :orange="isDeviceMix(OutputDevice[output], 'B')" @clicked="handleClick"
+                :cell-disabled="!canRoute(output, input)"/>
         </tr>
       </table>
     </GroupContainer>
@@ -57,6 +58,10 @@ export default {
 
 
     handleClick: function (output, input) {
+      if (!this.canRoute(output, input)) {
+        return;
+      }
+
       let new_state = !this.isEnabled(output, input);
 
       let inputDevice = InputDevice[input];
@@ -68,6 +73,15 @@ export default {
       };
 
       websocket.send_command(store.getActiveSerial(), command);
+    },
+
+    canRoute(output, input) {
+      input = InputDevice[input];
+      output = OutputDevice[output];
+      if (output === "ChatMic" && input === "Chat") {
+        return false;
+      }
+      return !(output === "Sampler" && input === "Samples");
     },
 
     // eslint-disable-next-line no-unused-vars
