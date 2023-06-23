@@ -59,7 +59,7 @@ export default {
 
   methods: {
     getProfileList() {
-      return store.getMicProfileFiles().sort();
+      return store.getMicProfileFiles().sort(Intl.Collator().compare);
     },
 
     getActiveProfile() {

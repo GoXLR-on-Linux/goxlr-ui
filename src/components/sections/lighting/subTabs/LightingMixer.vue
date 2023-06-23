@@ -186,7 +186,7 @@ export default {
         }
       ];
 
-      store.getIconFiles().sort().forEach(item => {
+      store.getIconFiles().sort(Intl.Collator().compare).forEach(item => {
         options.push({
           id: item,
           label: item

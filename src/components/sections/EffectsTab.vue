@@ -168,7 +168,7 @@ export default {
 
     getPresetList() {
       let presets = [];
-      for (let preset of store.getPresetFiles().sort()) {
+      for (let preset of store.getPresetFiles().sort(Intl.Collator().compare)) {
         presets.push({
           id: preset,
           label: preset,

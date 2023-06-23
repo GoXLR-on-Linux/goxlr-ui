@@ -36,7 +36,7 @@ export default {
     },
 
     fileList() {
-      return store.getPresetFiles().sort();
+      return store.getPresetFiles().sort(Intl.Collator().compare);
     },
 
     getLabel(name) {

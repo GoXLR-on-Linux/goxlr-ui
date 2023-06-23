@@ -33,11 +33,6 @@ export default {
       websocket.open_path("Samples");
     },
 
-    fileList() {
-      // We need to do work here :D
-      return Object.keys(store.getSampleFiles()).sort();
-    },
-
     isSelected(label) {
       return this.selected === label;
     },

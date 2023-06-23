@@ -78,7 +78,7 @@ export default {
 
   methods: {
     getProfileList() {
-      return store.getProfileFiles().sort();
+      return store.getProfileFiles().sort(Intl.Collator().compare);
     },
 
     getActiveProfile() {
