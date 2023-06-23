@@ -13,6 +13,7 @@ export default {
     label: { type: String, required: false },
     id: {type: String, required: true},
 
+    background: {type: String, required: false, default: "#3b413f" },
     disabled: {type: Boolean, required: false, default: false},
     padding: {type: String, required: false, default: "8px"},
     centered: { type: Boolean, required: false, default: false }
@@ -41,7 +42,7 @@ button {
 
   width: calc(100% - 12px);
   margin: auto;
-  background-color: #3b413f;
+  background-color: v-bind(background);
 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -56,8 +57,7 @@ button {
 }
 
 button:focus {
-  /*background-color: #49514e;*/
-  background-color: #fff;
+  background-color: #49514e;
   outline: none;
 }
 

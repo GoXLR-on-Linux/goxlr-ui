@@ -4,7 +4,7 @@
       <p class="title screenreader-only" role="heading">Directories</p>
       <div class="buttons">
         <ButtonItem v-for="(directory, index) in getDirectoryList()" v-bind:key="index" :id="directory.id"
-                    text="" @on-click="selectDirectory" ref="button">
+                    text="" @on-click="selectDirectory" ref="button" :background="background">
           <font-awesome-icon v-if="directory.icon !== undefined" :icon="directory.icon"/>
           {{ directory.label }}
         </ButtonItem>
