@@ -17,6 +17,10 @@ export default {
       }
       return 0;
     },
+
+    getButtonByRef(name) {
+      return this.$refs.radioList.getButtonByRef(name);
+    }
   },
 
   data() {
@@ -34,7 +38,7 @@ export default {
 
 <template>
   <VerticalScrollingContainer ref="container" :max-height="maxHeight">
-    <RadioList v-bind="$attrs" :scroll-top="getScrollTop">
+    <RadioList ref="radioList" v-bind="$attrs" :scroll-top="getScrollTop">
       <slot></slot>
     </RadioList>
   </VerticalScrollingContainer>
