@@ -13,7 +13,17 @@ export default {
   props: {
     input: String,
     output: String,
-    enabled: Boolean
+    enabled: Boolean,
+    orange: { type: Boolean, required: false, default: false }
+  },
+
+  computed: {
+    textColour() {
+      if (this.orange) {
+        return "#CC7224";
+      }
+      return "#59b1b6";
+    }
   },
 
   methods: {
@@ -32,7 +42,7 @@ export default {
   div {
     text-align: center;
     font-size: 18px;
-    color: #59b1b6;
+    color: v-bind(textColour);
     background-color: #3b413f;
     margin: 0;
     position: relative;

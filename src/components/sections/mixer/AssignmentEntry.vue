@@ -130,13 +130,15 @@ export default {
   border-radius: 3px;
 }
 
-.selected.MixA {
+.selected {
   color: #2A2D2C;
-  background-color: #82CFD0;
+}
+
+.selected.MixA {
+  background-color: #59b1b6;
 }
 
 .selected.MixB {
-  color: #2A2D2C;
   background-color: #CC7224;
 }
 

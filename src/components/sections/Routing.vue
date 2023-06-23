@@ -14,18 +14,11 @@
         </tr>
         </thead>
         <tr v-for="output in getOutputs()" :key="output">
-          <th v-if="output === 'Headphones'" class="rotated" :rowspan="outputs.length - 1"><span>Outputs</span></th>
-          <th>{{ output }}</th>
-          <Cell v-for="input in inputs" :key="input" :enabled="isEnabled(output, input)" :output="output" :input="input" @clicked="handleClick"/>
-        </tr>
-        <tr>
-          <td colspan="10" class="hidden" style="height: 10px"></td>
-        </tr>
-        <tr>
-          <!-- Sampler is a little weird, it's on a line by itself because reasons? -->
-          <th colspan="2">Sampler</th>
-          <Cell v-for="input in inputs" :key="input" :enabled="isEnabled('Sampler', input)" output="Sampler"
-                :input="input" @clicked="handleClick"/>
+          <th v-if="output === 'Headphones'" class="rotated" :rowspan="outputs.length"><span>Outputs</span></th>
+          <SubmixButton :name="OutputDevice[output]" :display="output" v-if="submixEnabled()"/>
+          <th v-else>{{ output }}</th>
+          <Cell v-for="input in inputs" :key="input" :enabled="isEnabled(output, input)" :output="output" :input="input"
+                :orange="isDeviceMix(OutputDevice[output], 'B')" @clicked="handleClick"/>
         </tr>
       </table>
     </GroupContainer>
@@ -39,10 +32,16 @@ import {InputDevice, OutputDevice} from "@/util/mixerMapping";
 import {websocket} from "@/util/sockets";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
+import SubmixButton from "@/components/sections/routing/SubmixButton.vue";
 
 export default {
   name: "RoutingTable",
-  components: {GroupContainer, CenteredContainer, Cell},
+  computed: {
+    OutputDevice() {
+      return OutputDevice
+    }
+  },
+  components: {SubmixButton, GroupContainer, CenteredContainer, Cell},
 
   data() {
     return {
@@ -53,9 +52,7 @@ export default {
 
   methods: {
     getOutputs: function () {
-      let channels = Object.keys(OutputDevice);
-      channels.splice(channels.indexOf("Sampler"), 1);
-      return channels;
+      return Object.keys(OutputDevice);
     },
 
 
@@ -76,6 +73,28 @@ export default {
     // eslint-disable-next-line no-unused-vars
     isEnabled: function (output, input) {
       return store.getActiveDevice().router[InputDevice[input]][OutputDevice[output]];
+    },
+
+    submixEnabled() {
+      if (!this.isSubMixSupported()) {
+        return false;
+      }
+
+      return store.getActiveDevice().levels.submix !== null;
+    },
+    isSubMixSupported() {
+      return store.getActiveDevice().levels.submix_supported;
+    },
+
+    isDeviceMix(name, mix) {
+      if (!this.isSubMixSupported() || !this.submixEnabled()) {
+        return false;
+      }
+
+      return this.getOutputMix(name) === mix;
+    },
+    getOutputMix(name) {
+      return store.getActiveDevice().levels.submix.outputs[name];
     },
   }
 }
