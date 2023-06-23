@@ -44,11 +44,30 @@ export default {
     },
 
     reset(e) {
+      let newValue = e.target.value;
+      if (newValue === "") {
+        e.target.value = this.lastTextValue;
+        return;
+      }
+
+      if (e.target.value > this.maxValue) {
+        newValue = this.maxValue;
+        this.localTextValue = this.maxValue;
+      }
+
+      if (e.target.value < this.minValue) {
+        newValue = this.minValue;
+        this.localTextValue = this.minValue;
+      }
+
+      // Value has changed, emit something upwards..
+      this.$emit("on-blur", parseInt(newValue));
       e.target.value = this.lastTextValue;
     },
   },
 
   created() {
+
     this.localTextValue = this.currentTextValue;
   },
 

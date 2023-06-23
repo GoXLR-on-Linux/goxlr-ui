@@ -45,16 +45,18 @@
       </div>
       <div v-if="!isDeviceMini()" style="padding: 12px">
         <span style="display: inline-block; width: 300px"
-        >Sampler Pre-Record Buffer (Requires Restart):
+        >Sampler Pre-Record Buffer:
         </span>
         <SimpleNumberInput
             :min-value="0"
             :max-value="30000"
-            @value-updated="updateSamplerPreRecord"
             :current-text-value="getSamplerPreRecord()"
             aria-label="Sampler Pre-Record Buffer (Requires Restart)"
             aria-description="The duration in milliseconds that the sampler will record before the button is pressed"
+            @on-blur="updateSamplerPreRecord"
         />
+        <!--            @value-updated="updateSamplerPreRecord"-->
+
       </div>
       <div style="padding: 12px">
         <span style="display: inline-block; width: 360px"
@@ -183,6 +185,8 @@ export default {
     },
 
     updateSamplerPreRecord(millis) {
+      console.log(millis);
+
       websocket.send_command(store.getActiveSerial(), {"SetSamplerPreBufferDuration": millis});
     },
 
