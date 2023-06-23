@@ -155,8 +155,11 @@ export default {
     },
 
     isSubmixDimmed(name) {
-      // We need to check the routing table, to see if this item is routed to headphones..
-      return !store.getActiveDevice().router[channelNameToInputDevice(name)].Headphones;
+      console.log(name);
+
+      // Get the Active Monitor...
+      let monitor = store.getActiveDevice().levels.output_monitor;
+      return !store.getActiveDevice().router[channelNameToInputDevice(name)][monitor];
     },
 
     submixEnabled() {
