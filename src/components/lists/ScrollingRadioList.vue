@@ -7,7 +7,7 @@ export default {
   components: {RadioList, VerticalScrollingContainer},
 
   props: {
-    max_height: { type: String, optional: true, default: "inherit" },
+    maxHeight: { type: String, optional: true, default: "inherit" },
   },
 
   methods: {
@@ -33,13 +33,9 @@ export default {
 </script>
 
 <template>
-  <VerticalScrollingContainer ref="container" class="height">
-    <RadioList v-bind="$attrs" :scroll-top="getScrollTop" />
+  <VerticalScrollingContainer ref="container" :max-height="maxHeight">
+    <RadioList v-bind="$attrs" :scroll-top="getScrollTop">
+      <slot></slot>
+    </RadioList>
   </VerticalScrollingContainer>
 </template>
-
-<style scoped>
-.container .height {
-  max-height: v-bind(maxHeight)
-}
-</style>

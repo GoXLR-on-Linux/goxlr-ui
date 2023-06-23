@@ -1,6 +1,9 @@
 <script>
 export default {
   name: "VerticalScrollingContainer",
+  props: {
+    maxHeight: { type: String, optional: true, default: "inherit" },
+  },
 
   methods: {
     getMainRef() {
@@ -19,7 +22,6 @@ export default {
 </template>
 
 <style scoped>
-
 .scroll {
   display: flex;
   flex-direction: column;
@@ -32,6 +34,8 @@ export default {
   padding: 4px;
   box-sizing: border-box;
   width: 100%;
+
+  max-height: v-bind(maxHeight);
 
   overflow-x: hidden;
   overflow-y: scroll;

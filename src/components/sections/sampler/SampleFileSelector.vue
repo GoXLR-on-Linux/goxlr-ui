@@ -1,15 +1,30 @@
 <template>
-  <ScrollingRadioList
-      ref="sampleList"
-      v-if="getSampleList().length > 0"
-      :max_height="max_height"
-      :padding="padding"
-      :background="background"
-      group="sample_list"
-      :options="getSampleList()"
-      :selected="getSelectedSample()"
-      @selection-changed="selectSample"
-  />
+  <VerticalScrollingContainer :max-height="maxHeight" v-if="showSamples()">
+    <div v-if="getDirectoryList().length > 0">
+      <p class="title screenreader-only" role="heading">Directories</p>
+      <div class="buttons">
+        <ButtonItem v-for="(directory, index) in getDirectoryList()" v-bind:key="index" :id="directory.id"
+                    text="" @on-click="selectDirectory" ref="button">
+          <font-awesome-icon v-if="directory.icon !== undefined" :icon="directory.icon"/>
+          {{ directory.label }}
+        </ButtonItem>
+      </div>
+    </div>
+
+    <div v-if="getSampleList().length > 0">
+      <p class="title screenreader-only" role="heading">Samples</p>
+      <RadioList
+          ref="sampleList"
+          :padding="padding"
+          :background="background"
+          group="sample_list"
+          :options="getSampleList()"
+          :selected="getSelectedSample()"
+          @selection-changed="selectSample"
+      />
+    </div>
+  </VerticalScrollingContainer>
+
   <span v-else>
       There are currently no samples in the samples folder. Copy some over so
       they can be selected here!
@@ -17,16 +32,18 @@
 </template>
 
 <script>
-import ScrollingRadioList from "@/components/lists/ScrollingRadioList.vue";
 import {store} from "@/store";
 import {getBaseHTTPAddress} from "@/util/sockets";
+import VerticalScrollingContainer from "@/components/containers/VerticalScrollingContainer.vue";
+import ButtonItem from "@/components/lists/ButtonItem.vue";
+import RadioList from "@/components/lists/RadioList.vue";
 
 export default {
   name: "SampleFileSelector",
-  components: {ScrollingRadioList},
+  components: {RadioList, ButtonItem, VerticalScrollingContainer},
 
   props: {
-    max_height: {type: String, optional: true, default: "inherit"},
+    maxHeight: {type: String, optional: true, default: "inherit"},
     padding: {type: String, required: false, default: "8px"},
     background: {type: String, required: false, default: "#3b413f"},
     group: {type: String, required: true}
@@ -43,62 +60,96 @@ export default {
   },
 
   methods: {
-    getSampleList() {
+    showSamples() {
+      return this.getSampleList().length > 0 || this.getDirectoryList().length > 0;
+    },
+
+
+    getDirectoryList() {
       let samples = [];
-      let directories = [];
-      let files = [];
-
-      let paths = this.getSamplePaths();
-      let descend_path = [...this.current_path];
-
-      if (descend_path.length > 0) {
+      if (this.current_path.length > 0) {
         samples.push({
-          id: "*" + descend_path[descend_path.length - 1],
+          id: '*',
           icon: "turn-up",
           label: "Parent Directory"
         });
       }
 
+      for (let directory of this.getFileList(true).sort(Intl.Collator().compare)) {
+        samples.push({
+          id: directory,
+          icon: "fa-solid fa-folder",
+          label: directory
+        });
+      }
+      return samples;
+    },
+
+    getSampleList() {
+      let samples = [];
+      for (let file of this.getFileList(false).sort(Intl.Collator().compare)) {
+        samples.push({
+          id: file,
+          icon: "fa-solid fa-music",
+          label: file
+        });
+      }
+
+      // Return the list :)
+      return samples;
+    },
+
+    getFileList(directories) {
+      let directory = this.getCurrentDirectory();
+
+      // Get a full list of files
+      let files = [];
+      for (let file of directory) {
+        if (directories && typeof file == 'object') {
+          files.push(Object.keys(file)[0]);
+        }
+        if (!directories && typeof file != 'object') {
+          files.push(file);
+        }
+      }
+
+      // Return the list :)
+      return files;
+    },
+
+    getCurrentDirectory() {
+      // Start at the 'Top' level of the structure..
+      let level = this.getSamplePaths();
+
+      // Firstly, we need to iterate through our structure to the correct place..
+      let descend_path = [...this.current_path];
       while (descend_path.length > 0) {
+
+        // Grab the first element of the path and remove it from the list..
         let next = descend_path.shift();
 
-        for (let path of paths) {
-          if (typeof path == 'object') {
-            let name = Object.keys(path)[0];
+        // Iterate through all the parts at this layer of the structure, try
+        // to locate the object containing this paths data..
+        for (let path of level) {
 
-            if (name === next) {
-              paths = path[name];
+          // Is this a directory?
+          if (typeof path == 'object') {
+            // Get the Directory Name...
+            let dirName = Object.keys(path)[0];
+
+            // Is it the directory we're looking for?
+            if (dirName === next) {
+              // Place this as the new 'Top' level
+              level = path[dirName];
+
+              // Break the loop, we good.
               break;
             }
           }
         }
       }
 
-      for (let path of paths) {
-        if (typeof path == 'object') {
-          // Objects in the array will only ever have one child, which is the name of the path.
-          directories.push(Object.keys(path)[0]);
-        } else {
-          files.push(path);
-        }
-      }
-
-      for (let directory of directories.sort()) {
-        samples.push({
-          id: "+" + directory,
-          icon: "fa-solid fa-folder",
-          label: directory
-        });
-      }
-
-      for (let file of files.sort()) {
-        samples.push({
-          id: "-" + file,
-          icon: "fa-solid fa-music",
-          label: file
-        });
-      }
-      return samples;
+      return level;
     },
 
     getSamplePaths() {
@@ -135,34 +186,41 @@ export default {
       }, []);
     },
 
-    selectSample(sample) {
-      let sampleArr = sample.split("");
-      let prefix = sampleArr.shift();
-      sample = sampleArr.join("");
+    focus() {
+      if (this.getDirectoryList().length > 0) {
+        this.$refs.button[0].focus();
+        return;
+      }
 
+      if (this.getSampleList().length > 0) {
+        this.$refs.sampleList.getFirstButtonRef().focus()
+      }
+    },
+
+    selectDirectory(id) {
       this.stopPlayback();
-      if (prefix === "*") {
+      this.selectedSample = undefined;
+
+      if (id === "*") {
         this.current_path.pop();
-
-        this.$nextTick(() => {
-          this.$refs.sampleList.getFirstButtonRef().focus();
-        });
+      } else {
+        this.current_path.push(id);
       }
-      if (prefix === "+") {
-        this.selectedSample = undefined;
-        this.current_path.push(sample);
 
-        this.$nextTick(() => {
-          this.$refs.sampleList.getFirstButtonRef().focus();
-        });
-      }
-      if (prefix === "-") {
-        this.selectedSample = prefix + sample;
-        this.audio_player.src = this.getSampleUrl();
+      this.$nextTick(() => {
+        if (this.getDirectoryList().length > 0) {
+          this.focus();
+        }
+      });
+    },
 
-        // Changing the src will stop playback, but wont trigger the stop events.
-        this.audio_playing = false;
-      }
+    selectSample(sample) {
+      this.stopPlayback();
+      this.selectedSample = sample;
+      this.audio_player.src = this.getSampleUrl();
+
+      // Changing the src will stop playback, but wont trigger the stop events.
+      this.audio_playing = false;
     },
 
     getSelectedSample() {
@@ -174,7 +232,7 @@ export default {
         return undefined;
       }
 
-      return this.selectedSample.substring(1);
+      return this.selectedSample;
     },
 
     stopPlayback() {
@@ -200,9 +258,8 @@ export default {
         return undefined;
       }
 
-      let name = this.selectedSample.substring(1);
       let url = getBaseHTTPAddress();
-      url = url + "files/samples/" + name;
+      url = url + "files/samples/" + this.selectedSample;
 
       return url;
     },
@@ -226,5 +283,10 @@ export default {
 </script>
 
 <style scoped>
-
+.buttons {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
 </style>

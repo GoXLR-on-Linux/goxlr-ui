@@ -16,7 +16,6 @@ export default {
     menu_id: String,
 
     scrollTop: { type: Function, optional: true, default: () => { return 0; } },
-    max_height: { type: String, optional: true, default: "inherit" },
     padding: {type: String, required: false, default: "8px"},
     background: {type: String, required: false, default: "#3b413f" },
   },

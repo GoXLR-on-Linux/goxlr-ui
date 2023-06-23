@@ -44,13 +44,11 @@
       <ButtonItem
           id="add_sample"
           ref="add_sample_button"
-          text="+"
           label="Add Sample"
+          text="+"
           :centered="true"
-          @click="
-          $refs.add_sample_modal.openModal(undefined, $refs.add_sample_button)
-        "
-      />
+          @click="this.$refs.add_sample_modal.openModal($refs.sample_selector, $refs.add_sample_button);"
+      >+</ButtonItem>
     </RadioSelection>
 
     <AudioVisualiser
@@ -79,7 +77,7 @@
       </button>
     </template>
 
-    <SampleFileSelector ref="sample_selector" max_height="300px" group="add_sample_list"/>
+    <SampleFileSelector ref="sample_selector" max-height="300px" group="add_sample_list"/>
 
     <template v-slot:footer>
       <div style="display: flex; flex-direction: row">
@@ -275,16 +273,6 @@ export default {
       this.$refs.add_sample_modal.returnFocus = undefined;
       this.$refs.add_sample_modal.closeModal();
 
-      // this.$refs.add_sample_wait.openModal(
-      //     undefined,
-      //     this.$refs.add_sample_button
-      // );
-      // store.setAccessibilityNotification(
-      //     "polite",
-      //     "Please wait, analysing sample. This process may take a couple of minutes. Your GoXLR WILL be Unresponsive during this time."
-      // );
-      // store.pause();
-
       websocket.send_command(store.getActiveSerial(), {
         AddSample: [this.activeBank, this.activeButton, name],
       }).catch(error => {
@@ -364,11 +352,19 @@ export default {
       if ((oldValue === null) && (newValue !== null)) {
         // We need to open the Progress Dialog..
         this.$refs.add_sample_wait.openModal(undefined, this.$refs.add_sample_button);
+        store.setAccessibilityNotification(
+            "polite",
+            "Please wait, analysing sample. This process may take a couple of minutes."
+        );
       }
 
       if (oldValue !== null && newValue !== null && this.$refs.add_sample_wait !== undefined && !this.$refs.add_sample_wait.isOpen()) {
         // User has opened the page while something was processing? Throw open the modal.
         this.$refs.add_sample_wait.openModal(undefined, this.$refs.add_sample_button);
+        store.setAccessibilityNotification(
+            "polite",
+            "Please wait, analysing sample. This process may take a couple of minutes."
+        );
       }
 
       // If we're going from a Value to null, close the dialog..

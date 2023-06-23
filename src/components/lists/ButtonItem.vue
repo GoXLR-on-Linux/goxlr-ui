@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button ref="button" :aria-label="(label === undefined) ? text : label" :class="{ centered: centered, disabled: disabled }">{{text}}</button>
+    <button ref="button" :aria-label="(label === undefined) ? text : label" :class="{ centered: centered, disabled: disabled }" @click="clicked"><slot>{{ text }}</slot></button>
   </div>
 </template>
 
@@ -9,7 +9,7 @@ export default {
   name: "ButtonItem",
 
   props: {
-    text: {type: String, required: true},
+    text: {type: String, required: true },
     label: { type: String, required: false },
     id: {type: String, required: true},
 
@@ -21,6 +21,10 @@ export default {
   methods: {
     focus() {
       this.$refs.button.focus()
+    },
+
+    clicked() {
+      this.$emit('on-click', this.id);
     }
   }
 }
@@ -28,6 +32,8 @@ export default {
 
 <style scoped>
 button {
+  font-family: LeagueMonoCondensed, sans-serif;
+
   display: block;
   box-sizing: border-box;
 
@@ -50,7 +56,8 @@ button {
 }
 
 button:focus {
-  background-color: #49514e;
+  /*background-color: #49514e;*/
+  background-color: #fff;
   outline: none;
 }
 
