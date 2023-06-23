@@ -7,7 +7,7 @@
         <div>
           <FileTabs />
         </div>
-        <div aria-hidden="true">
+        <div aria-hidden="true" style="margin: auto">
           <GoXLRVisualiser />
         </div>
       </div>
