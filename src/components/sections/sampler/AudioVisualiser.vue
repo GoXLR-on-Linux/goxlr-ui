@@ -342,8 +342,7 @@ export default {
       let wrapper = this.$refs.wrapper.clientWidth;
 
       // We need to focus on the 'Right' side of the left handle, so pull this down so the max left value is correct (460px)
-      let left_wrapper =
-        wrapper - this.$refs.left.clientWidth - this.$refs.right.clientWidth;
+      let audio = wrapper - this.$refs.left.clientWidth - this.$refs.right.clientWidth;
       this.leftPercentage = start_pct;
 
       if (this.leftPercentage > 100) {
@@ -357,19 +356,21 @@ export default {
       if (this.leftPercentage < 0) {
         console.log("Something is wrong with the left value min.. Correcting!");
         this.leftPercentage = 0;
-        this.leftPosition = left_wrapper;
+        this.leftPosition = audio;
         this.mouseUp();
       }
 
-      this.leftPosition = Math.round((start_pct / 100) * left_wrapper);
+      // We need the right side of the left handle to be correct, so our left is simply the percentage
+      // in the audio section.
+      this.leftPosition = Math.round((start_pct / 100) * audio);
 
       // For the right side, we need to focus on the *LEFT* side..
       this.rightPercentage = stop_pct;
 
-      // The right wrapper value is slightly different, it needs to include the left side, but not the right..
-      let right_wrapper = wrapper - this.$refs.right.clientWidth;
-
-      this.rightPosition = Math.round((stop_pct / 100) * right_wrapper);
+      // For the right handle, we need our percentage position in the audio, then we need to add the
+      // width of the left handle to get the correct position.
+      this.rightPosition = Math.round((stop_pct / 100) * audio);
+      this.rightPosition += this.$refs.left.clientWidth;
 
       if (this.rightPercentage > 100) {
         // Something's gone wrong, and a percentage is higher than it should be, Reset.
@@ -377,7 +378,7 @@ export default {
           "Something is wrong with the right value max.. Correcting!"
         );
         this.rightPercentage = 100;
-        this.rightPosition = right_wrapper;
+        this.rightPosition = audio + this.$refs.left.clientWidth;
         this.mouseUp();
       }
 
