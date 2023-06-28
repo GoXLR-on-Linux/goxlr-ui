@@ -55,15 +55,16 @@ export default {
 
       let state = store.getActiveDevice().cough_button.state;
       let behaviour = store.getActiveDevice().lighting.buttons.Cough.off_style;
+      console.log(state);
       if (state === "Unmuted") {
         // Check our behaviour..
         if (behaviour === "Dimmed") {
           alpha = 0.4;
         } else if (behaviour === "Colour2" || behaviour === "DimmedColour2") {
-          let colour = colour.colour_two;
-          red = parseInt(colour.substring(0, 2), 16);
-          green = parseInt(colour.substring(2, 4), 16);
-          blue = parseInt(colour.substring(4, 6), 16);
+          let colour_two = colour.colour_two;
+          red = parseInt(colour_two.substring(0, 2), 16);
+          green = parseInt(colour_two.substring(2, 4), 16);
+          blue = parseInt(colour_two.substring(4, 6), 16);
 
           if (behaviour === "DimmedColour2") {
             alpha = 0.4;
