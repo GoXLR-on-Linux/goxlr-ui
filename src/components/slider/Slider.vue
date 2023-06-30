@@ -162,7 +162,7 @@ export default {
       let input = Math.round((position / textDistance) * sliderDistance);
       this.fieldValue = this.sliderMinValue + input;
 
-      this.$emit('value-changed', this.id, this.fieldValue);
+      this.$emit('value-changed', this.id, this.fieldValue, false);
     },
 
     getPosition(find, start, end) {
@@ -206,7 +206,7 @@ export default {
 
       this.timer = setInterval(() => {
         if (self.lastValue !== self.fieldValue) {
-          this.$emit('value-changed', self.id, self.fieldValue);
+          this.$emit('value-changed', self.id, self.fieldValue, false);
           self.lastValue = self.fieldValue;
         }
       }, 5);
@@ -216,7 +216,7 @@ export default {
       clearInterval(this.timer);
 
       // Emit the latest value..
-      this.$emit('value-changed', this.id, this.fieldValue);
+      this.$emit('value-changed', this.id, this.fieldValue, true);
     }
   },
 

@@ -26,6 +26,12 @@ export default {
   name: "MicGate",
   components: {ExpandoGroupContainer, Slider },
 
+  data() {
+    return {
+      updatesPaused: false,
+    }
+  },
+
   methods: {
     getAmount() {
       return Math.round((this.getThreshold() + 59) / 59 * 100)
@@ -56,7 +62,12 @@ export default {
       websocket.send_command(store.getActiveSerial(), {"SetElementDisplayMode": ["NoiseGate", mode]})
     },
 
-    setValue: function (id, value) {
+    setValue: function (id, value, last) {
+      if (this.updatesPaused && !last) {
+        return;
+      }
+
+      this.updatesPaused = true;
       switch (id) {
         case 0:
           this.commitValue("SetGateThreshold", this.calculateThreshold(value));
@@ -82,7 +93,7 @@ export default {
       let command = {
         [name]: value
       }
-      websocket.send_command(serial, command);
+      websocket.send_command(serial, command).then(() => this.updatesPaused = false);
 
       switch (name) {
         case "SetGateThreshold":

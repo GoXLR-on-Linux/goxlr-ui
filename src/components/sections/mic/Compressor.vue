@@ -29,6 +29,12 @@ export default {
   name: "MicCompressor",
   components: {ExpandoGroupContainer, Slider},
 
+  data() {
+    return {
+      updatesPaused: false,
+    }
+  },
+
   methods: {
     isAdvanced() {
       return store.getActiveDevice().settings.display.compressor === "Advanced";
@@ -39,7 +45,12 @@ export default {
       websocket.send_command(store.getActiveSerial(), {"SetElementDisplayMode": ["Compressor", mode]})
     },
 
-    setValue(id, value) {
+    setValue(id, value, last) {
+      if (this.updatesPaused && !last) {
+        return;
+      }
+
+      this.updatesPaused = true;
       switch (id) {
         case 0: {
           this.commitValue("SetCompressorThreshold", value);
@@ -75,7 +86,7 @@ export default {
       let command = {
         [name]: value
       }
-      websocket.send_command(serial, command);
+      websocket.send_command(serial, command).then(() => this.updatesPaused = false);
     },
 
     getThresholdValue() {
