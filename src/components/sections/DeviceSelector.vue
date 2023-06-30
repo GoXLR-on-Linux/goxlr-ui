@@ -1,4 +1,5 @@
 <template>
+  <div class="wrapper">
   <div class="buttonList">
     <div>
       <div class="label">Select Device</div>
@@ -14,6 +15,7 @@
         <div v-else class="no-device">No GoXLR Devices Found</div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -74,10 +76,16 @@ export default {
 </script>
 
 <style scoped>
+.wrapper {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .buttonList {
   height: 220px;
   width: 700px;
-  display: inline-flex;
   margin: 3px;
   background-color: #353937;
 }
