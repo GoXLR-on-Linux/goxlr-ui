@@ -181,7 +181,7 @@ export default {
     },
 
     getSamplerPreRecord() {
-      return store.getActiveDevice().sampler.record_buffer;
+      return Math.ceil(store.getActiveDevice().sampler.record_buffer / 1000);
     },
 
     updateSamplerPreRecord(millis) {
