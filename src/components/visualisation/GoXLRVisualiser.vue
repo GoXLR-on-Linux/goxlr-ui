@@ -20,8 +20,34 @@ import MuteVisualisation from "@/components/visualisation/mute/MuteVisualisation
 
 export default {
   name: "GoXLRVisualiser",
-  methods: {isDeviceMini},
   components: {MuteVisualisation, SamplerVisualisation, EffectsVisualisation, FaderVisualisation},
+
+  props: {
+    refs: {type: Function, default: () => ({})},
+  },
+
+  methods: {
+    isDeviceMini,
+
+    principle() {
+      /**
+       * This is currently unused principle code giving an example of how to 'descend' into a tab change
+       * its settings, it should be possible to navigate to any part of the UI using this method, so long
+       * as the refs are correctly setup. I'm not going to follow this further yet until we have the SVGs
+       * tied in, instead of the current HTML method.
+       */
+
+      this.refs()["device-tabs"].selectTab({name: "Configuration"});
+
+      // Let the tab change render..
+      this.$nextTick(() => {
+        // Set the active fader channel
+        this.refs()["faders"].activeChannel = "B";
+      })
+    },
+
+  },
+
 
 }
 </script>

@@ -8,13 +8,13 @@
           <FileTabs />
         </div>
         <div aria-hidden="true" style="margin: auto">
-          <GoXLRVisualiser />
+          <GoXLRVisualiser :refs="getRefs" />
         </div>
       </div>
 
       <div style="height: 25px; background-color: #3b413f" />
       <h1 class="sr-only">Device Settings</h1>
-      <Tabs label="Device Settings">
+      <Tabs ref="device-tabs" label="Device Settings">
         <Tab name="Mic">
           <Mic />
         </Tab>
@@ -26,7 +26,7 @@
         <Tab name="Configuration">
           <ContentContainer>
             <CenteredContainer>
-              <Faders />
+              <Faders ref="faders" />
               <Cough />
             </CenteredContainer>
           </ContentContainer>
@@ -111,6 +111,10 @@ export default {
     isDeviceSet() {
       return store.hasActiveDevice() && store.isConnected();
     },
+
+    getRefs() {
+      return this.$refs;
+    }
   },
 
   created() {
