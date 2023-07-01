@@ -55,7 +55,6 @@ export default {
 
       let state = store.getActiveDevice().cough_button.state;
       let behaviour = store.getActiveDevice().lighting.buttons.Cough.off_style;
-      console.log(state);
       if (state === "Unmuted") {
         // Check our behaviour..
         if (behaviour === "Dimmed") {
