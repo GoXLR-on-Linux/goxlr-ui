@@ -84,6 +84,13 @@ export default {
           return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
       }
     },
+    computeMixerMuteBlinkColor(fader) {
+      const colors = store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[fader]].colours;
+      return '#' + colors.colour_two
+    },
+    isMixerMuteBlinking(fader) {
+      store.getActiveDevice().fader_status[fader].mute_state === "MutedToAll";
+    },
     computeMixerDisplayColor(display) {
       return '#' + store.getActiveDevice().lighting.simple[`Scribble${display}`].colour_one;
     },
@@ -323,6 +330,18 @@ export default {
     isClearActive() {
       return store.getActiveDevice().sampler.clear_active;
     },
+    isFader1Blinking() {
+      return store.getActiveDevice().fader_status["A"].mute_state === "MutedToAll";
+    },
+    isFader2Blinking() {
+      return store.getActiveDevice().fader_status["B"].mute_state === "MutedToAll";
+    },
+    isFader3Blinking() {
+      return store.getActiveDevice().fader_status["C"].mute_state === "MutedToAll";
+    },
+    isFader4Blinking() {
+      return store.getActiveDevice().fader_status["D"].mute_state === "MutedToAll";
+    },
     isMuteBlinking() {
       return store.getActiveDevice().cough_button.state === "MutedToAll";
     },
@@ -361,6 +380,26 @@ export default {
       const elem = document.querySelector(".cough #Mute");
       if (active) elem.classList.add("blink");
       else elem.classList.remove("blink");
+    },
+    isFader1Blinking(active) {
+      const elem = document.querySelector("#Channel1 #Mute");
+      if (active) elem.classList.add("blink");
+      else elem.classList.remove("blink");
+    },
+    isFader2Blinking(active) {
+      const elem = document.querySelector("#Channel2 #Mute");
+      if (active) elem.classList.add("blink");
+      else elem.classList.remove("blink");
+    },
+    isFader3Blinking(active) {
+      const elem = document.querySelector("#Channel3 #Mute");
+      if (active) elem.classList.add("blink");
+      else elem.classList.remove("blink");
+    },
+    isFader4Blinking(active) {
+      const elem = document.querySelector("#Channel4 #Mute");
+      if (active) elem.classList.add("blink");
+      else elem.classList.remove("blink");
     }
   }
 }
@@ -382,6 +421,22 @@ export default {
 @keyframes mute-blink-animation {
   0%, 49% { color: v-bind('computeCoughButtonColor()'); }
   50%, 100% { color: v-bind('muteInactiveColor'); }
+}
+@keyframes fader1-mute-blink-animation {
+  0%, 49% { color: v-bind('computeMixerMuteColor("A")'); }
+  50%, 100% { color: v-bind('computeMixerMuteBlinkColor("A")'); }
+}
+@keyframes fader2-mute-blink-animation {
+  0%, 49% { color: v-bind('computeMixerMuteColor("B")'); }
+  50%, 100% { color: v-bind('computeMixerMuteBlinkColor("B")'); }
+}
+@keyframes fader3-mute-blink-animation {
+  0%, 49% { color: v-bind('computeMixerMuteColor("C")'); }
+  50%, 100% { color: v-bind('computeMixerMuteBlinkColor("C")'); }
+}
+@keyframes fader4-mute-blink-animation {
+  0%, 49% { color: v-bind('computeMixerMuteColor("D")'); }
+  50%, 100% { color: v-bind('computeMixerMuteBlinkColor("D")'); }
 }
 
 /* cough area */
@@ -501,9 +556,13 @@ export default {
 
 /* mixer area: mute buttons */
 #Channel1 #Mute { color: v-bind('computeMixerMuteColor("A")'); }
+#Channel1 #Mute.blink { animation: fader1-mute-blink-animation 1s infinite; }
 #Channel2 #Mute { color: v-bind('computeMixerMuteColor("B")'); }
+#Channel2 #Mute.blink { animation: fader2-mute-blink-animation 1s infinite; }
 #Channel3 #Mute { color: v-bind('computeMixerMuteColor("C")'); }
+#Channel3 #Mute.blink { animation: fader3-mute-blink-animation 1s infinite; }
 #Channel4 #Mute { color: v-bind('computeMixerMuteColor("D")'); }
+#Channel4 #Mute.blink { animation: fader4-mute-blink-animation 1s infinite; }
 
 /* mixer area: fader 1 */
 #Channel1 .display text { display: none; } /* disabled because of missing implementation */
