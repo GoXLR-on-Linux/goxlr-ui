@@ -345,11 +345,11 @@ export default {
 #Logo { color: v-bind("computeAccentColor()"); }
 
 /* animations */
-@keyframes sample-blink-animation {
+@keyframes sampler-sample-blink-animation {
   0%, 49% { color: v-bind('computeSamplerBlinkColor(1)'); }
   50%, 100% { color: v-bind('computeSamplerBlinkColor(2)'); }
 }
-@keyframes clear-blink-animation {
+@keyframes sampler-clear-blink-animation {
   0%, 49% { color: v-bind('computeSamplerClearColor(1)'); }
   50%, 100% { color: v-bind('computeSamplerClearColor(2)'); }
 }
@@ -452,15 +452,15 @@ export default {
 .sampler #BankB { color: v-bind('computeSamplerBankColor("B")'); }
 .sampler #BankC { color: v-bind('computeSamplerBankColor("C")'); }
 .sampler #Clear { color: v-bind('computeSamplerClearColor(2)'); }
-.sampler #Clear.blink { animation: clear-blink-animation 1s infinite; }
+.sampler #Clear.blink { animation: sampler-clear-blink-animation 1s infinite; }
 .sampler #TopLeft { color: v-bind('computeSamplerSampleColor("TopLeft")'); }
-.sampler #TopLeft.blink { animation: sample-blink-animation 1s infinite; }
+.sampler #TopLeft.blink { animation: sampler-sample-blink-animation 1s infinite; }
 .sampler #TopRight { color: v-bind('computeSamplerSampleColor("TopRight")'); }
-.sampler #TopRight.blink { animation: sample-blink-animation 1s infinite; }
+.sampler #TopRight.blink { animation: sampler-sample-blink-animation 1s infinite; }
 .sampler #BottomLeft { color: v-bind('computeSamplerSampleColor("BottomLeft")'); }
-.sampler #BottomLeft.blink { animation: sample-blink-animation 1s infinite; }
+.sampler #BottomLeft.blink { animation: sampler-sample-blink-animation 1s infinite; }
 .sampler #BottomRight { color: v-bind('computeSamplerSampleColor("BottomRight")'); }
-.sampler #BottomRight.blink { animation: sample-blink-animation 1s infinite; }
+.sampler #BottomRight.blink { animation: sampler-sample-blink-animation 1s infinite; }
 
 /* mixer area: fader */
 #Channel1 .rail #Fader { transform: v-bind('computeMixerFaderPosition("A")'); }
