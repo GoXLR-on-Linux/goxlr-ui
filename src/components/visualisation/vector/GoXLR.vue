@@ -30,8 +30,8 @@ export default {
     },
 
     computeMixerFaderPosition(fader) {
-      let channel = store.getActiveDevice().fader_status[fader].channel;
-      let faderPosition = store.getActiveDevice().levels.volumes[channel];
+      const channel = store.getActiveDevice().fader_status[fader].channel,
+          faderPosition = store.getActiveDevice().levels.volumes[channel];
 
       let height = 110;
       let transform = Math.ceil(height / 255 * faderPosition);
@@ -84,10 +84,13 @@ export default {
           return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
       }
     },
+    computeMixerDisplayColor(display) {
+      return '#' + store.getActiveDevice().lighting.simple[`Scribble${display}`].colour_one;
+    },
 
     computeCoughButtonColor() {
-      const colors = store.getActiveDevice().lighting.buttons.Cough.colours;
-      let colorOne = this.transformColor(colors.colour_one),
+      const colors = store.getActiveDevice().lighting.buttons.Cough.colours,
+          colorOne = this.transformColor(colors.colour_one),
           colorTwo = this.transformColor(colors.colour_two);
 
       if ("Unmuted" !== store.getActiveDevice().cough_button.state)
@@ -108,8 +111,8 @@ export default {
     },
     computeBleepButtonColor() {
       const colors = store.getActiveDevice().lighting.buttons.Bleep.colours,
-            isPressed = store.getActiveDevice().button_down.Bleep;
-      let colorOne = this.transformColor(colors.colour_one),
+            isPressed = store.getActiveDevice().button_down.Bleep,
+          colorOne = this.transformColor(colors.colour_one),
           colorTwo = this.transformColor(colors.colour_two);
 
       if (isPressed) return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
@@ -128,9 +131,9 @@ export default {
 
     computeEffectButtonColor(effectButtonName, effectStateName) {
       const colors = store.getActiveDevice().lighting.buttons[effectButtonName].colours,
-            offStyle = store.getActiveDevice().lighting.buttons[effectButtonName].off_style,
-            active = (effectStateName) === null ? store.getActiveDevice().effects.is_enabled : store.getActiveDevice().effects.current[effectStateName].is_enabled;
-      let colorOne = this.transformColor(colors.colour_one),
+          offStyle = store.getActiveDevice().lighting.buttons[effectButtonName].off_style,
+          active = (effectStateName) === null ? store.getActiveDevice().effects.is_enabled : store.getActiveDevice().effects.current[effectStateName].is_enabled,
+          colorOne = this.transformColor(colors.colour_one),
           colorTwo = this.transformColor(colors.colour_two);
 
       if (active) return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
@@ -149,8 +152,8 @@ export default {
     computeEffectPresetColor(presetIndex) {
       const colors = store.getActiveDevice().lighting.buttons[`EffectSelect${presetIndex}`].colours,
           offStyle = store.getActiveDevice().lighting.buttons[`EffectSelect${presetIndex}`].off_style,
-          activePreset = EffectLightingPresets[EffectPresets.indexOf(store.getActiveDevice().effects.active_preset)];
-      let colorOne = this.transformColor(colors.colour_one),
+          activePreset = EffectLightingPresets[EffectPresets.indexOf(store.getActiveDevice().effects.active_preset)],
+          colorOne = this.transformColor(colors.colour_one),
           colorTwo = this.transformColor(colors.colour_two);
 
       if (activePreset === `EffectSelect${presetIndex}`)
@@ -382,6 +385,9 @@ export default {
 #Channel4 #Mute { color: v-bind('computeMixerMuteColor("D")'); }
 
 /* mixer area: fader 1 */
+#Channel1 .display text { display: none; } /* disabled because of missing implementation */
+#Channel1 .display image { display: none; }
+#Channel1 .display #Backlight { color: v-bind('computeMixerDisplayColor(1)'); }
 #Channel1 .level #Level1 { color: v-bind('computeMixerLevelColor("A", 1)'); }
 #Channel1 .level #Level2 { color: v-bind('computeMixerLevelColor("A", 2)'); }
 #Channel1 .level #Level3 { color: v-bind('computeMixerLevelColor("A", 3)'); }
@@ -399,6 +405,9 @@ export default {
 #Channel1 .level #Level15 { color: v-bind('computeMixerLevelColor("A", 15)'); }
 
 /* mixer area: fader 2 */
+#Channel2 .display text { display: none; } /* disabled because of missing implementation */
+#Channel2 .display image { display: none; }
+#Channel2 .display #Backlight { color: v-bind('computeMixerDisplayColor(2)'); }
 #Channel2 .level #Level1 { color: v-bind('computeMixerLevelColor("B", 1)'); }
 #Channel2 .level #Level2 { color: v-bind('computeMixerLevelColor("B", 2)'); }
 #Channel2 .level #Level3 { color: v-bind('computeMixerLevelColor("B", 3)'); }
@@ -416,6 +425,9 @@ export default {
 #Channel2 .level #Level15 { color: v-bind('computeMixerLevelColor("B", 15)'); }
 
 /* mixer area: fader 3 */
+#Channel3 .display text { display: none; } /* disabled because of missing implementation */
+#Channel3 .display image { display: none; }
+#Channel3 .display #Backlight { color: v-bind('computeMixerDisplayColor(3)'); }
 #Channel3 .level #Level1 { color: v-bind('computeMixerLevelColor("C", 1)'); }
 #Channel3 .level #Level2 { color: v-bind('computeMixerLevelColor("C", 2)'); }
 #Channel3 .level #Level3 { color: v-bind('computeMixerLevelColor("C", 3)'); }
@@ -433,6 +445,9 @@ export default {
 #Channel3 .level #Level15 { color: v-bind('computeMixerLevelColor("C", 15)'); }
 
 /* mixer area: fader 4 */
+#Channel4 .display text { display: none; } /* disabled because of missing implementation */
+#Channel4 .display image { display: none; }
+#Channel4 .display #Backlight { color: v-bind('computeMixerDisplayColor(4)'); }
 #Channel4 .level #Level1 { color: v-bind('computeMixerLevelColor("D", 1)'); }
 #Channel4 .level #Level2 { color: v-bind('computeMixerLevelColor("D", 2)'); }
 #Channel4 .level #Level3 { color: v-bind('computeMixerLevelColor("D", 3)'); }
