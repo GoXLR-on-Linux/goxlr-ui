@@ -96,7 +96,20 @@ export default {
       websocket.send_command(store.getActiveSerial(), {"SetAnimationMode": id});
     },
 
+    // Range Helpers
+    getRangeColour(enabled) {
+      console.log(enabled);
+      if (enabled) {
+        return "#82CFD0";
+      }
+      return "#3b7679";
+    },
+
     // Mod1 Settings..
+    isMod1Enabled() {
+      return this.animationModeSelected() !== "None";
+    },
+
     getMod1StorePath() {
       return "/mixers/S201200586CQK/lighting/animation/mod1"
     },
@@ -110,6 +123,12 @@ export default {
 
       store.getActiveDevice().lighting.animation.mod1 = value;
       websocket.send_command(store.getActiveSerial(), {"SetAnimationMod1": value});
+    },
+
+    // Mod2 Settings..
+    isMod2Enabled() {
+      let mode = this.animationModeSelected();
+      return mode === "RainbowBright" || mode === "RainbowDark";
     },
 
     getMod2StorePath() {
@@ -127,12 +146,20 @@ export default {
       websocket.send_command(store.getActiveSerial(), {"SetAnimationMod2": value});
     },
 
+    // Waterfall Settings..
+    isWaterfallEnabled() {
+      let mode = this.animationModeSelected();
+      return mode !== "None" && mode !== "RetroRainbow";
+    },
+
     isWaterFallActive(type) {
       return store.getActiveDevice().lighting.animation.waterfall_direction === type;
     },
 
     setWaterfall(mode) {
-      console.log(mode);
+      if (!this.isWaterfallEnabled()) {
+        return;
+      }
       websocket.send_command(store.getActiveSerial(), {"SetAnimationWaterfall": mode});
     }
 
@@ -157,34 +184,38 @@ export default {
                         :selected="this.animationModeSelected()" @selection-changed="onAnimationModeChange"/>
 
         <div style="text-align: center; color: #fff; padding-left: 8px">
-          <div style="margin-bottom: 10px">GRADIENT MOD 1</div>
+          <div class="title" :class="{ disabled: !isMod1Enabled()}">GRADIENT MOD 1</div>
           <RangeSelector
               :store-path=getMod1StorePath()
               :current-field-value=mod1Value
               @value-updated="setMod1Value"
               :needs-rotation="false" :height=180
+              :disabled="!isMod1Enabled()"
+              :colour="getRangeColour(isMod1Enabled())"
           />
-          <div style="margin-top: 12px; margin-bottom: 20px; color: #82CFD0">{{ getMod1Value() }}</div>
+          <div class="modValue" :class="{ disabled: !isMod1Enabled()}">{{ getMod1Value() }}</div>
 
-          <div style="margin-bottom: 10px">GRADIENT MOD 2</div>
+          <div class="title" :class="{ disabled: !isMod2Enabled()}">GRADIENT MOD 2</div>
           <RangeSelector
               :store-path=getMod2StorePath()
               :current-field-value=mod2Value
               @value-updated="setMod2Value"
               :needs-rotation="false" :height=180
+              :disabled="!isMod2Enabled()"
+              :colour="getRangeColour(isMod2Enabled())"
           />
-          <div style="margin-top: 12px; color: #82CFD0">{{ getMod2Value() }}</div>
+          <div class="modValue" :class="{ disabled: !isMod2Enabled()}">{{ getMod2Value() }}</div>
 
-          <div style="margin-top: 10px">
-            <div style="margin-bottom: 5px">WATERFALL SETTINGS</div>
-            <div class="waterfall" :class="{ active: isWaterFallActive('Up') }" @click="setWaterfall('Up')">
+          <div>
+            <div class="title" :class="{ disabled: !isWaterfallEnabled()}">WATERFALL SETTINGS</div>
+            <div class="waterfall" :class="{ active: isWaterFallActive('Up'), disabled: !isWaterfallEnabled() }" @click="setWaterfall('Up')">
               <font-awesome-icon icon="fa-solid fa-up-long"/>
             </div>
-            <div class="waterfall" :class="{ active: isWaterFallActive('Down') }" @click="setWaterfall('Down')">
+            <div class="waterfall" :class="{ active: isWaterFallActive('Down'), disabled: !isWaterfallEnabled() }" @click="setWaterfall('Down')">
               <font-awesome-icon icon="fa-solid fa-down-long"/>
             </div>
-            <div class="wf-button">
-              <button style="width: 100%" :class="{ active: isWaterFallActive('Off')}" @click="setWaterfall('Off')">
+            <div class="wf-button" :class="{ disabled: !isWaterfallEnabled() }">
+              <button :class="{ active: isWaterFallActive('Off') }" style="width: 100%" @click="setWaterfall('Off')" :disabled="!isWaterfallEnabled()">
                 Off
               </button>
             </div>
@@ -196,6 +227,23 @@ export default {
 </template>
 
 <style scoped>
+.title {
+  margin-bottom: 10px;
+  margin-top: 1px;
+}
+.title.disabled {
+  color: #818483;
+}
+
+.modValue {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  color: #82CFD0;
+}
+.modValue.disabled {
+  color: #3C6061;
+}
+
 .waterfall {
   cursor: pointer;
   display: inline-block;
@@ -205,10 +253,21 @@ export default {
 
 .waterfall.active {
   color: #59B1B6;
+
+}
+
+.waterfall.active.disabled {
+  cursor: initial;
+  color: #427273;
 }
 
 .waterfall:not(.active) {
   color: #447475;
+}
+
+.waterfall:not(.active).disabled {
+  cursor: initial;
+  color: #385352;
 }
 
 .wf-button > button {
@@ -219,10 +278,23 @@ export default {
   color: #fff;
   font-family: LeagueMonoCondensed, sans-serif;
   padding: 3px;
+  cursor: pointer;
 }
 
 .wf-button > button.active {
   background-color: #59B1B6;
 }
+
+.wf-button > button:disabled {
+  cursor: initial;
+  background-color: #385352;
+}
+
+.wf-button > button.active:disabled {
+  cursor: initial;
+  color: #427273;
+}
+
+
 
 </style>

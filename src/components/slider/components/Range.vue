@@ -5,6 +5,7 @@
              v-bind:max="maxValue" v-bind:value="localFieldValue" v-on:input="update"
              v-on:mousedown="mouseDown" v-on:mouseup="mouseUp" v-on:keydown="mouseDown" v-on:keyup="mouseUp"
              :aria-label="title" :aria-description="title" :aria-valuetext="getReportedValue()" :step="step"
+             :disabled="disabled"
       />
     </div>
   </div>
@@ -32,6 +33,7 @@ export default {
 
     minValue: {type: Number, default: 0},
     maxValue: {type: Number, default: 100},
+    disabled: {type: Boolean, default: false},
     currentFieldValue: Number,
 
     storePath: {type: String, required: true},
