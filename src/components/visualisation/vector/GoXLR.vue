@@ -1,5 +1,6 @@
 <template>
-  <img svg-inline src="@/components/visualisation/vector/svg/GoXLR.svg" alt="GoXLR preview">
+  <img svg-inline v-if="!this.isDeviceMini" src="@/assets/preview/GoXLR.svg" alt="GoXLR preview">
+  <img svg-inline v-else src="@/assets/preview/GoXLR-Mini.svg" alt="GoXLR preview">
 </template>
 
 <script>
@@ -8,7 +9,6 @@ import {EffectLightingPresets, EffectPresets, MuteButtonNamesForFader} from "@/u
 
 export default {
   name: "GoXLR",
-
   methods: {
     // transforms a HEX string into a color object.
     transformColor(color) {
@@ -292,6 +292,7 @@ export default {
     isFader4Blinking() { return store.getActiveDevice().fader_status["D"].mute_state === "MutedToAll"; },
     isMuteBlinking() { return store.getActiveDevice().cough_button.state === "MutedToAll"; },
 
+    isDeviceMini() { return store.getActiveDevice().hardware.device_type === "Mini"; },
     muteInactiveColor() { return '#' + store.getActiveDevice().lighting.buttons.Cough.colours.colour_two; }
   },
   watch: {
@@ -313,6 +314,12 @@ export default {
 <style scoped>
 #GoXLR { width: 100%; height: 100%; }
 #Logo { color: v-bind("computeAccentColor()"); }
+
+@font-face {
+  font-family: "ropa-sans-regular";
+  src:url("@/assets/RopaSans-Regular.ttf") format("truetype");
+  font-display:auto;font-style:normal;font-weight:400;font-stretch:normal;
+}
 
 /* animations */
 @keyframes sampler-sample-blink-animation {
@@ -348,7 +355,10 @@ export default {
 .cough #Mute { color: v-bind('computeCoughButtonColor()'); }
 .cough #Mute.blink { animation: mute-blink-animation 1s infinite; }
 .cough #Bleep { color: v-bind('computeBleepButtonColor()'); }
-/* TODO: animation */
+
+/* selection overlay */
+/* TODO: disabled due to missing implementation */
+.selection { display: none; }
 
 /* effects area: buttons */
 .effects .buttons #Megaphone { color: v-bind('computeEffectButtonColor("EffectMegaphone", "megaphone")'); }

@@ -74,46 +74,54 @@
           <polygon points="294.72 377.97 294.72 378.76 304.5 389.24 546 389.24 555.74 378.76 555.74 377.97 554.98 377.97 545.25 388.49 305.24 388.49 295.48 377.97 294.72 377.97" style="fill: #565656;"/>
           <polygon points="292.84 375.74 293.6 375.74 293.6 242.99 303.72 233.23 303.72 232.52 302.98 232.52 292.84 242.24 292.84 375.74" style="fill: #565656;"/>
           <polygon points="554.98 241.5 545.25 231 306.74 231 306.74 230.24 546 230.24 555.74 240.74 555.74 241.5 554.98 241.5" style="fill: #565656;"/>
-          <text transform="translate(444.74 386.04) scale(1.01 1)" style="fill: #565656; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 9.75px;">Sampler</text>
+          <text transform="translate(444.74 386.04) scale(1.01 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9.75px;">Sampler</text>
         </g>
         <g class="effects">
-          <text transform="translate(446.98 227.82) scale(1.05 1)" style="fill: #565656; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 9.59px;">Effects</text>
+          <text transform="translate(446.98 227.82) scale(1.05 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9.59px;">Effects</text>
           <polygon points="292.84 45 293.6 45 293.6 218.28 303.72 227.99 303.72 228.76 302.98 228.76 292.84 218.99 292.84 45" style="fill: #565656;"/>
         </g>
         <g class="mixer">
           <polygon points="64.49 388.49 281.22 388.49 290.98 377.97 291.71 377.97 291.71 378.76 281.98 389.24 64.49 389.24 64.49 388.49" style="fill: #565656;"/>
-          <text transform="translate(150.71 386.26) scale(.97 1)" style="fill: #565656; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 9.17px;">Mixer</text>
+          <text transform="translate(150.71 386.26) scale(.97 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9.17px;">Mixer</text>
         </g>
       </g>
       <g id="Logo">
-        <text transform="translate(436.34 58.54) scale(1.05 1)" style="fill: #fff; font-family: UniwarsSb-Regular, Uniwars; font-size: 8.41px; letter-spacing: .05em;">Utility</text>
         <path d="m492.57,28.83h13.78s3.26.7,3.26,3.46v3.21c0,1.85-1.62,3.84-3.26,3.84s-.57.69-.57.69c0,0,3.83,2.26,3.83,3.42v2.45h-3.26v-1.75c-.05-1.39-3.99-4.12-5.84-4.12s-4.74,0-4.74,0v-2.65h5.97l3.28-.03c1.33,0,1.33-1.9,1.33-1.94v-1.97s0-2.03-1.33-2.03h-9.25v14.49h-3.21v-17.06Z" style="fill: #fff;"/>
         <path d="m475.01,28.65h3.32v11.2s-.32,3.93,3.93,3.93,9.19,0,9.19,0v2.63h-9.19s-7.25.79-7.25-6.56v-11.2Z" style="fill: #fff;"/>
         <path fill="currentColor" d="m471.53,24.56c.54-.54,1.42-.54,1.96,0,.54.54.54,1.42,0,1.96l-8.98,8.98c-.54.54-1.42.54-1.96,0-.54-.54-.54-1.42,0-1.96l8.98-8.98Zm-24.08,0c-.54.54-.54,1.42,0,1.96l8.98,8.98c.54.54,1.42.54,1.96,0,.54-.54.54-1.42,0-1.96l-8.98-8.98c-.54-.54-1.42-.54-1.96,0Zm15.11,15.11c-.54.54-.54,1.42,0,1.96l8.98,8.98c.54.54,1.42.54,1.96,0,.54-.54.54-1.42,0-1.96l-8.98-8.98c-.54-.54-1.42-.54-1.96,0h0Zm-4.17,0c-.54-.54-1.42-.54-1.96,0l-8.98,8.98c-.54.54-.54,1.42,0,1.96.54.54,1.42.54,1.96,0l8.98-8.98c.54-.54.54-1.42,0-1.96h0Z" style="fill-rule: evenodd;"/>
         <path d="m437.08,28.61c-4.88,0-8.84,3.96-8.84,8.84s3.96,8.84,8.84,8.84,8.84-3.96,8.84-8.84-3.96-8.84-8.84-8.84Zm0,14.84c-3.3,0-5.98-2.68-5.98-5.98s2.68-5.98,5.98-5.98,5.98,2.68,5.98,5.98-2.68,5.98-5.98,5.98Z" style="fill: #fff;"/>
         <path d="m418.55,42.86h5.95v-3.93h-5.3v-2.64h7.92v9.87h-5.25s-2.17,0-3.32,0c-4.6,0-7.87-3.51-7.87-6.55,0-.67,0-3.34,0-3.94s.35-7.29,7.87-7.29h8.57v3.27h-8.57s-4.59,0-4.59,4.02v3.27c0,3.93,4.59,3.93,4.59,3.93" style="fill: #fff;"/>
+        <g style="fill: none; isolation: isolate;">
+          <path d="m438.6,58.54c-1.24,0-1.83-.62-1.83-1.85v-3.84h1.41v3.71c0,.5.24.77.72.77h4.13v-4.47h1.37v5.69h-5.8Z" style="fill: #fff;"/>
+          <path d="m448.61,58.54v-4.48h-3.11v-1.21h7.62v1.21h-3.13v4.48h-1.38Z" style="fill: #fff;"/>
+          <path d="m454.19,58.54v-5.69h1.39v5.69h-1.39Z" style="fill: #fff;"/>
+          <path d="m458.73,58.54c-1.25,0-1.83-.61-1.83-1.85v-3.84h1.39v3.71c0,.5.24.77.73.77h4.47v1.22h-4.76Z" style="fill: #fff;"/>
+          <path d="m464.59,58.54v-5.69h1.39v5.69h-1.39Z" style="fill: #fff;"/>
+          <path d="m470.16,58.54v-4.48h-3.11v-1.21h7.62v1.21h-3.13v4.48h-1.38Z" style="fill: #fff;"/>
+          <path d="m479.22,58.54v-1.86l-3.88-3.83h1.79l2.81,2.82,2.8-2.82h1.71l-3.84,3.85v1.84h-1.39Z" style="fill: #fff;"/>
+        </g>
       </g>
     </g>
     <g class="selection">
-      <path id="Cough" d="m640.2,388.46l15.6-15.6c.27-.27.42-.63.42-1.02v-139.8c0-.79-.64-1.44-1.44-1.44h-84.61c-.38,0-.75.15-1.01.42l-11.53,11.53c-.27.27-.42.63-.42,1.02v132.35c0,.38.16.75.42,1.02l11.53,11.53c.27.27.63.42,1.02.42h69.01c.38,0,.75-.15,1.02-.42Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10; display: none;"/>
+      <path id="Cough" d="m640.2,388.46l15.6-15.6c.27-.27.42-.63.42-1.02v-139.8c0-.79-.64-1.44-1.44-1.44h-84.61c-.38,0-.75.15-1.01.42l-11.53,11.53c-.27.27-.42.63-.42,1.02v132.35c0,.38.16.75.42,1.02l11.53,11.53c.27.27.63.42,1.02.42h69.01c.38,0,.75-.15,1.02-.42Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
       <g class="channels">
-        <rect id="Channel4" x="217.73" y="40.96" width="61" height="347.92" rx="2.44" ry="2.44" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10; display: none;"/>
-        <rect id="Channel3" x="157.21" y="40.96" width="61" height="347.92" rx="2.44" ry="2.44" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10; display: none;"/>
-        <rect id="Channel2" x="95.73" y="40.96" width="61" height="347.92" rx="2.44" ry="2.44" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10; display: none;"/>
-        <rect id="Channel1" x="34.73" y="40.96" width="61" height="347.92" rx="2.44" ry="2.44" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10; display: none;"/>
+        <rect id="Channel4" x="217.73" y="40.96" width="61" height="347.92" rx="2.44" ry="2.44" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
+        <rect id="Channel3" x="157.21" y="40.96" width="61" height="347.92" rx="2.44" ry="2.44" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
+        <rect id="Channel2" x="95.73" y="40.96" width="61" height="347.92" rx="2.44" ry="2.44" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
+        <rect id="Channel1" x="34.73" y="40.96" width="61" height="347.92" rx="2.44" ry="2.44" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
       </g>
       <g class="presets">
-        <path id="Preset1" d="m295.67,40.96h65.7c1.35,0,2.44-1.09,2.44-2.44v-14.31c0-1.35,1.09-2.44,2.44-2.44h272.52c.65,0,1.27.26,1.73.71l15.02,15.03c.46.46.71,1.08.71,1.72v188.93c0,1.35-1.09,2.44-2.44,2.44h-287.54c-1.35,0-2.44-1.09-2.44-2.44V69.98c0-1.35-1.09-2.44-2.44-2.44l-65.69.09c-1.35,0-2.44-1.09-2.44-2.44v-21.8c0-1.35,1.09-2.44,2.44-2.44Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10; display: none;"/>
-        <path id="Preset2" d="m295.68,67.54l65.69.09c1.35,0,2.44-1.09,2.44-2.44V24.21c0-1.35,1.09-2.44,2.44-2.44h272.52c.65,0,1.27.26,1.73.71l15.02,15.03c.46.46.71,1.08.71,1.72v188.93c0,1.35-1.09,2.44-2.44,2.44h-287.54c-1.35,0-2.44-1.09-2.44-2.44V99.3c0-1.35-1.09-2.44-2.44-2.44h-65.7c-1.35,0-2.44-1.09-2.44-2.44v-24.44c0-1.35,1.09-2.44,2.44-2.44Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10; display: none;"/>
-        <path id="Preset3" d="m293.23,123.74v-24.44c0-1.35,1.09-2.44,2.44-2.44h65.7c1.35,0,2.44-1.09,2.44-2.44V24.21c0-1.35,1.09-2.44,2.44-2.44h272.52c.65,0,1.27.26,1.73.71l15.02,15.03c.46.46.71,1.08.71,1.72v188.93c0,1.35-1.09,2.44-2.44,2.44h-287.54c-1.35,0-2.44-1.09-2.44-2.44v-99.54c0-1.35-1.09-2.44-2.44-2.44h-65.7c-1.35,0-2.44-1.09-2.44-2.44Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10; display: none;"/>
-        <path id="Preset4" d="m293.23,153.19v-24.57c0-1.35,1.09-2.44,2.44-2.44h65.7c1.35,0,2.44-1.09,2.44-2.44V24.21c0-1.35,1.09-2.44,2.44-2.44h272.52c.65,0,1.27.26,1.73.71l15.02,15.03c.46.46.71,1.08.71,1.72v188.93c0,1.35-1.09,2.44-2.44,2.44h-287.54c-1.35,0-2.44-1.09-2.44-2.44v-70.21c0-1.35-1.09-2.44-2.44-2.44l-65.69.12c-1.35,0-2.44-1.09-2.44-2.44Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10; display: none;"/>
-        <path id="Preset5" d="m293.23,182.38v-24.31c0-1.35,1.09-2.44,2.43-2.44l65.71-.12c1.35,0,2.43-1.09,2.43-2.44V24.21c0-1.35,1.09-2.44,2.44-2.44h272.52c.65,0,1.27.26,1.73.71l15.02,15.03c.46.46.71,1.08.71,1.72v188.93c0,1.35-1.09,2.44-2.44,2.44h-287.54c-1.35,0-2.44-1.09-2.44-2.44v-40.9c0-1.35-1.09-2.44-2.44-2.44h-65.7c-1.35,0-2.44-1.09-2.44-2.44Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10; display: none;"/>
-        <path id="Preset6" d="m295.67,214.14h65.7c1.35,0,2.44,1.09,2.44,2.44v11.58c0,1.35,1.09,2.44,2.44,2.44h287.54c1.35,0,2.44-1.09,2.44-2.44V39.23c0-.65-.26-1.27-.71-1.72l-15.02-15.03c-.46-.46-1.08-.71-1.73-.71h-272.52c-1.35,0-2.44,1.09-2.44,2.44v158.18c0,1.35-1.09,2.44-2.44,2.44h-65.7c-1.35,0-2.44,1.09-2.44,2.44v24.44c0,1.35,1.09,2.44,2.44,2.44Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10; display: none;"/>
+        <path id="Preset1" d="m295.67,40.96h65.7c1.35,0,2.44-1.09,2.44-2.44v-14.31c0-1.35,1.09-2.44,2.44-2.44h272.52c.65,0,1.27.26,1.73.71l15.02,15.03c.46.46.71,1.08.71,1.72v188.93c0,1.35-1.09,2.44-2.44,2.44h-287.54c-1.35,0-2.44-1.09-2.44-2.44V69.98c0-1.35-1.09-2.44-2.44-2.44l-65.69.09c-1.35,0-2.44-1.09-2.44-2.44v-21.8c0-1.35,1.09-2.44,2.44-2.44Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
+        <path id="Preset2" d="m295.68,67.54l65.69.09c1.35,0,2.44-1.09,2.44-2.44V24.21c0-1.35,1.09-2.44,2.44-2.44h272.52c.65,0,1.27.26,1.73.71l15.02,15.03c.46.46.71,1.08.71,1.72v188.93c0,1.35-1.09,2.44-2.44,2.44h-287.54c-1.35,0-2.44-1.09-2.44-2.44V99.3c0-1.35-1.09-2.44-2.44-2.44h-65.7c-1.35,0-2.44-1.09-2.44-2.44v-24.44c0-1.35,1.09-2.44,2.44-2.44Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
+        <path id="Preset3" d="m293.23,123.74v-24.44c0-1.35,1.09-2.44,2.44-2.44h65.7c1.35,0,2.44-1.09,2.44-2.44V24.21c0-1.35,1.09-2.44,2.44-2.44h272.52c.65,0,1.27.26,1.73.71l15.02,15.03c.46.46.71,1.08.71,1.72v188.93c0,1.35-1.09,2.44-2.44,2.44h-287.54c-1.35,0-2.44-1.09-2.44-2.44v-99.54c0-1.35-1.09-2.44-2.44-2.44h-65.7c-1.35,0-2.44-1.09-2.44-2.44Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
+        <path id="Preset4" d="m293.23,153.19v-24.57c0-1.35,1.09-2.44,2.44-2.44h65.7c1.35,0,2.44-1.09,2.44-2.44V24.21c0-1.35,1.09-2.44,2.44-2.44h272.52c.65,0,1.27.26,1.73.71l15.02,15.03c.46.46.71,1.08.71,1.72v188.93c0,1.35-1.09,2.44-2.44,2.44h-287.54c-1.35,0-2.44-1.09-2.44-2.44v-70.21c0-1.35-1.09-2.44-2.44-2.44l-65.69.12c-1.35,0-2.44-1.09-2.44-2.44Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
+        <path id="Preset5" d="m293.23,182.38v-24.31c0-1.35,1.09-2.44,2.43-2.44l65.71-.12c1.35,0,2.43-1.09,2.43-2.44V24.21c0-1.35,1.09-2.44,2.44-2.44h272.52c.65,0,1.27.26,1.73.71l15.02,15.03c.46.46.71,1.08.71,1.72v188.93c0,1.35-1.09,2.44-2.44,2.44h-287.54c-1.35,0-2.44-1.09-2.44-2.44v-40.9c0-1.35-1.09-2.44-2.44-2.44h-65.7c-1.35,0-2.44-1.09-2.44-2.44Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
+        <path id="Preset6" d="m295.67,214.14h65.7c1.35,0,2.44,1.09,2.44,2.44v11.58c0,1.35,1.09,2.44,2.44,2.44h287.54c1.35,0,2.44-1.09,2.44-2.44V39.23c0-.65-.26-1.27-.71-1.72l-15.02-15.03c-.46-.46-1.08-.71-1.73-.71h-272.52c-1.35,0-2.44,1.09-2.44,2.44v158.18c0,1.35-1.09,2.44-2.44,2.44h-65.7c-1.35,0-2.44,1.09-2.44,2.44v24.44c0,1.35,1.09,2.44,2.44,2.44Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
       </g>
       <g class="sampler">
-        <path id="BankA" d="m295.69,246.94h65.67c1.35,0,2.45-1.1,2.45-2.45v-11.44c0-1.35,1.1-2.45,2.45-2.45h178.28c.68,0,1.32.28,1.79.77l10.22,10.89c.43.45.66,1.05.66,1.68v131.6c0,.62-.23,1.22-.66,1.68l-10.23,10.89c-.46.49-1.11.77-1.79.77h-178.28c-1.35,0-2.45-1.1-2.45-2.45v-97.65c0-1.35-1.1-2.45-2.45-2.45h-65.67c-1.35,0-2.45-1.1-2.45-2.45v-34.47c0-1.35,1.1-2.45,2.45-2.45Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10; display: none;"/>
-        <path id="BankB" d="m293.23,323.23v-34.46c0-1.35,1.1-2.45,2.45-2.45h65.67c1.35,0,2.45-1.1,2.45-2.45v-50.82c0-1.35,1.1-2.45,2.45-2.45h178.28c.68,0,1.32.28,1.79.77l10.22,10.89c.43.45.66,1.05.66,1.68v131.6c0,.62-.23,1.22-.66,1.68l-10.23,10.89c-.46.49-1.11.77-1.79.77h-178.28c-1.35,0-2.45-1.1-2.45-2.45v-58.29c0-1.35-1.1-2.45-2.45-2.45h-65.67c-1.35,0-2.45-1.1-2.45-2.45Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10; display: none;"/>
-        <path id="BankC" d="m293.23,362.61v-34.47c0-1.35,1.1-2.45,2.45-2.45h65.67c1.35,0,2.45-1.1,2.45-2.45v-90.19c0-1.35,1.1-2.45,2.45-2.45h178.28c.68,0,1.32.28,1.79.77l10.22,10.89c.43.45.66,1.05.66,1.68v131.6c0,.62-.23,1.22-.66,1.68l-10.23,10.89c-.46.49-1.11.77-1.79.77h-178.28c-1.35,0-2.45-1.1-2.45-2.45v-18.91c0-1.35-1.1-2.45-2.45-2.45h-65.67c-1.35,0-2.45-1.1-2.45-2.45Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10; display: none;"/>
+        <path id="BankA" d="m295.69,246.94h65.67c1.35,0,2.45-1.1,2.45-2.45v-11.44c0-1.35,1.1-2.45,2.45-2.45h178.28c.68,0,1.32.28,1.79.77l10.22,10.89c.43.45.66,1.05.66,1.68v131.6c0,.62-.23,1.22-.66,1.68l-10.23,10.89c-.46.49-1.11.77-1.79.77h-178.28c-1.35,0-2.45-1.1-2.45-2.45v-97.65c0-1.35-1.1-2.45-2.45-2.45h-65.67c-1.35,0-2.45-1.1-2.45-2.45v-34.47c0-1.35,1.1-2.45,2.45-2.45Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
+        <path id="BankB" d="m293.23,323.23v-34.46c0-1.35,1.1-2.45,2.45-2.45h65.67c1.35,0,2.45-1.1,2.45-2.45v-50.82c0-1.35,1.1-2.45,2.45-2.45h178.28c.68,0,1.32.28,1.79.77l10.22,10.89c.43.45.66,1.05.66,1.68v131.6c0,.62-.23,1.22-.66,1.68l-10.23,10.89c-.46.49-1.11.77-1.79.77h-178.28c-1.35,0-2.45-1.1-2.45-2.45v-58.29c0-1.35-1.1-2.45-2.45-2.45h-65.67c-1.35,0-2.45-1.1-2.45-2.45Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
+        <path id="BankC" d="m293.23,362.61v-34.47c0-1.35,1.1-2.45,2.45-2.45h65.67c1.35,0,2.45-1.1,2.45-2.45v-90.19c0-1.35,1.1-2.45,2.45-2.45h178.28c.68,0,1.32.28,1.79.77l10.22,10.89c.43.45.66,1.05.66,1.68v131.6c0,.62-.23,1.22-.66,1.68l-10.23,10.89c-.46.49-1.11.77-1.79.77h-178.28c-1.35,0-2.45-1.1-2.45-2.45v-18.91c0-1.35-1.1-2.45-2.45-2.45h-65.67c-1.35,0-2.45-1.1-2.45-2.45Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
       </g>
     </g>
     <g class="area">
@@ -124,7 +132,7 @@
         </g>
         <g id="Bleep">
           <rect x="572.22" y="243.01" width="69" height="39" rx="1.73" ry="1.73" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-          <text transform="translate(591.79 266)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 10px;">!@#$?*</text>
+          <text transform="translate(591.79 266)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 10px;">!@#$?*</text>
         </g>
       </g>
       <g class="sampler">
@@ -134,64 +142,64 @@
         <path id="TopLeft" d="m379.21,243.01h70.28c1.52,0,2.75,1.23,2.75,2.75v25.25c0,1.52-1.23,2.75-2.75,2.75h-29.76c-1.52,0-2.75,1.23-2.75,2.75v19.26c0,1.52-1.23,2.75-2.75,2.75h-35.03c-1.52,0-2.75-1.23-2.75-2.75v-50c0-1.52,1.23-2.75,2.75-2.75Z" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
         <g id="Clear">
           <rect x="431.98" y="288.76" width="54" height="34.5" rx="2.75" ry="2.75" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-          <text transform="translate(448.38 309.51)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 11px;">Clear</text>
+          <text transform="translate(448.38 309.51)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 11px;">Clear</text>
         </g>
         <g id="BankA">
           <rect x="310.48" y="253.5" width="36" height="26.26" rx="1.67" ry="1.67" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-          <text transform="translate(325.29 270.13)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 12px;">A</text>
+          <text transform="translate(325.29 270.13)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 12px;">A</text>
         </g>
         <g id="BankB">
           <rect x="310.48" y="292.88" width="36" height="26.26" rx="1.67" ry="1.67" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-          <text id="bankb_label" transform="translate(325.31 309.51)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 12px;">B</text>
+          <text id="bankb_label" transform="translate(325.31 309.51)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 12px;">B</text>
         </g>
         <g id="BankC">
           <rect x="310.48" y="332.24" width="36" height="26.26" rx="1.67" ry="1.67" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-          <text transform="translate(325.6 348.87)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 12px;">C</text>
+          <text transform="translate(325.6 348.87)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 12px;">C</text>
         </g>
       </g>
       <g class="effects">
         <g class="buttons">
           <g id="Megaphone">
             <rect x="572.22" y="44.24" width="69" height="26.26" rx="3.16" ry="3.16" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-            <text transform="translate(584.64 60.87)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 10px;">Megaphone</text>
+            <text transform="translate(584.64 60.87)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 10px;">Megaphone</text>
           </g>
           <g id="Robot">
             <rect x="572.22" y="84" width="69" height="26.24" rx="3.16" ry="3.16" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-            <text transform="translate(595.18 100.62)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 10px;">Robot</text>
+            <text transform="translate(595.18 100.62)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 10px;">Robot</text>
           </g>
           <g id="HardTune">
             <rect x="572.22" y="122.99" width="69" height="26.27" rx="3.16" ry="3.16" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-            <text transform="translate(588.84 139.62)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 10px;">Hardtune</text>
+            <text transform="translate(588.84 139.62)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 10px;">Hardtune</text>
           </g>
           <g id="FX">
             <rect x="572.22" y="162.74" width="69" height="42.74" rx="3.16" ry="3.16" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-            <text id="fx_label" transform="translate(601.85 187.62)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 10px;">FX</text>
+            <text id="fx_label" transform="translate(601.85 187.62)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 10px;">FX</text>
           </g>
         </g>
         <g class="presets">
           <g id="Preset1">
             <rect x="310.48" y="45" width="36" height="15.76" rx="2.31" ry="2.31" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-            <text transform="translate(326.86 56.38)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 10px;">1</text>
+            <text transform="translate(326.86 56.38)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 10px;">1</text>
           </g>
           <g id="Preset2">
             <rect x="310.48" y="74.32" width="36" height="15.76" rx="2.31" ry="2.31" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-            <text transform="translate(326.47 85.7)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 10px;">2</text>
+            <text transform="translate(326.47 85.7)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 10px;">2</text>
           </g>
           <g id="Preset3">
             <rect x="310.56" y="103.64" width="36" height="15.76" rx="2.31" ry="2.31" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-            <text transform="translate(326.48 115.02)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 10px;">3</text>
+            <text transform="translate(326.48 115.02)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 10px;">3</text>
           </g>
           <g id="Preset4">
             <rect x="310.48" y="132.96" width="36" height="15.76" rx="2.31" ry="2.31" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-            <text transform="translate(326.42 144.34)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 10px;">4</text>
+            <text transform="translate(326.42 144.34)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 10px;">4</text>
           </g>
           <g id="Preset5">
             <rect x="310.48" y="162.28" width="36" height="15.76" rx="2.31" ry="2.31" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-            <text transform="translate(326.28 173.66)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 10px;">5</text>
+            <text transform="translate(326.28 173.66)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 10px;">5</text>
           </g>
           <g id="Preset6">
             <rect x="310.48" y="191.6" width="35.95" height="15.76" rx="2.31" ry="2.31" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-            <text transform="translate(326.08 202.88)" style="fill: currentColor; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 10px;">6</text>
+            <text transform="translate(326.08 202.88)" style="fill: currentColor; font-family: ropa-sans-regular; font-size: 10px;">6</text>
           </g>
         </g>
         <g class="encoders">
@@ -227,7 +235,7 @@
               <line x1="514.12" y1="190.8" x2="514.12" y2="186.03" style="fill: currentColor; stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
             </g>
             <circle cx="514.12" cy="174.63" r="12" style="fill: url(#GenderEncoderTopGradient);"/>
-            <text transform="translate(500.13 216.13) scale(1.05 1)" style="fill: #565656; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 9.59px;">Gender</text>
+            <text transform="translate(500.13 216.13) scale(1.05 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9.59px;">Gender</text>
           </g>
           <g class="echo">
             <g class="base">
@@ -261,7 +269,7 @@
               <line x1="406.12" y1="190.8" x2="406.12" y2="186.03" style="fill: backgroundColor; stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
             </g>
             <circle cx="406.12" cy="174.63" r="12" style="fill: url(#EchoEncoderTopGradient);"/>
-            <text transform="translate(396.71 216.13) scale(1.05 1)" style="fill: #565656; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 9.59px;">Echo</text>
+            <text transform="translate(396.71 216.13) scale(1.05 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9.59px;">Echo</text>
           </g>
           <g class="pitch">
             <g class="base">
@@ -295,7 +303,7 @@
               <line x1="514.12" y1="102.8" x2="514.12" y2="98.03" style="fill: currentColor; stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
             </g>
             <circle cx="514.12" cy="86.63" r="12" style="fill: url(#PitchEncoderTopGradient);"/>
-            <text transform="translate(504.11 128.13) scale(1.05 1)" style="fill: #565656; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 9.59px;">Pitch</text>
+            <text transform="translate(504.11 128.13) scale(1.05 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9.59px;">Pitch</text>
           </g>
           <g class="reverb">
             <g class="base">
@@ -329,7 +337,7 @@
               <line x1="406.12" y1="102.8" x2="406.12" y2="98.03" style="fill: currentColor; stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
             </g>
             <circle cx="406.12" cy="86.63" r="12" style="fill: url(#ReverbEncoderTopGradient);"/>
-            <text transform="translate(392.55 128.13) scale(1.05 1)" style="fill: #565656; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 9.59px;">Reverb</text>
+            <text transform="translate(392.55 128.13) scale(1.05 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9.59px;">Reverb</text>
           </g>
         </g>
       </g>
