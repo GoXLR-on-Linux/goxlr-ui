@@ -7,10 +7,14 @@ import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.v
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
+import RangeSelector from "@/components/slider/components/Range.vue";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 export default {
   name: "LightingGlobal",
   components: {
+    FontAwesomeIcon,
+    RangeSelector,
     CenteredContainer,
     ContentContainer,
     GroupContainer,
@@ -30,7 +34,36 @@ export default {
           label: 'Accent'
         }
       ],
-      selected: 'Global'
+      animation_mode_options: [
+        {
+          id: 'None',
+          label: 'None',
+        },
+        {
+          id: 'RetroRainbow',
+          label: 'Rainbow Retro'
+        },
+        {
+          id: 'RainbowBright',
+          label: 'Rainbow Bright'
+        },
+        {
+          id: 'RainbowDark',
+          label: 'Rainbow Dark'
+        },
+        {
+          id: 'Simple',
+          label: 'Simple'
+        },
+        {
+          id: 'Ripple',
+          label: 'Ripple'
+        }
+      ],
+
+      selected: 'Global',
+      mod1Value: 0,
+      mod2Value: 0,
     }
   },
 
@@ -50,6 +83,92 @@ export default {
         websocket.send_command(store.getActiveSerial(), {"SetGlobalColour": value.substr(1, 6)});
       }
     },
+
+    animationSupported() {
+      return store.getActiveDevice().lighting.animation.supported;
+    },
+
+    animationModeSelected() {
+      return store.getActiveDevice().lighting.animation.mode;
+    },
+
+    onAnimationModeChange(id) {
+      websocket.send_command(store.getActiveSerial(), {"SetAnimationMode": id});
+    },
+
+    // Range Helpers
+    getRangeColour(enabled) {
+      console.log(enabled);
+      if (enabled) {
+        return "#82CFD0";
+      }
+      return "#3b7679";
+    },
+
+    // Mod1 Settings..
+    isMod1Enabled() {
+      return this.animationModeSelected() !== "None";
+    },
+
+    getMod1StorePath() {
+      return "/mixers/S201200586CQK/lighting/animation/mod1"
+    },
+
+    getMod1Value() {
+      return store.getActiveDevice().lighting.animation.mod1;
+    },
+
+    setMod1Value(value) {
+      value = parseInt(value);
+      this.mod1Value = value;
+
+      store.getActiveDevice().lighting.animation.mod1 = value;
+      websocket.send_command(store.getActiveSerial(), {"SetAnimationMod1": value});
+    },
+
+    // Mod2 Settings..
+    isMod2Enabled() {
+      let mode = this.animationModeSelected();
+      return mode === "RainbowBright" || mode === "RainbowDark";
+    },
+
+    getMod2StorePath() {
+      return "/mixers/S201200586CQK/lighting/animation/mod2"
+    },
+
+    getMod2Value() {
+      return store.getActiveDevice().lighting.animation.mod2;
+    },
+
+    setMod2Value(value) {
+      value = parseInt(value);
+      this.mod2Value = value;
+
+      store.getActiveDevice().lighting.animation.mod2 = value;
+      websocket.send_command(store.getActiveSerial(), {"SetAnimationMod2": value});
+    },
+
+    // Waterfall Settings..
+    isWaterfallEnabled() {
+      let mode = this.animationModeSelected();
+      return mode !== "None" && mode !== "RetroRainbow";
+    },
+
+    isWaterFallActive(type) {
+      return store.getActiveDevice().lighting.animation.waterfall_direction === type;
+    },
+
+    setWaterfall(mode) {
+      if (!this.isWaterfallEnabled()) {
+        return;
+      }
+      websocket.send_command(store.getActiveSerial(), {"SetAnimationWaterfall": mode});
+    }
+
+  },
+  mounted() {
+    this.mod1Value = store.getActiveDevice().lighting.animation.mod1;
+    this.mod2Value = store.getActiveDevice().lighting.animation.mod2;
   }
 }
 </script>
@@ -62,6 +181,122 @@ export default {
                         @selection-changed="onSelectionChange"/>
         <ColourPicker title="Colour" :color-value="color()" @colour-changed="onColourChange"/>
       </GroupContainer>
+      <GroupContainer v-if="animationSupported()" title="Animations">
+        <RadioSelection title="Animation Mode" group="lighting_animation" :options="this.animation_mode_options"
+                        :selected="this.animationModeSelected()" @selection-changed="onAnimationModeChange"/>
+
+        <div style="text-align: center; color: #fff; padding-left: 8px">
+          <div class="title" :class="{ disabled: !isMod1Enabled()}">GRADIENT MOD 1</div>
+          <RangeSelector
+              :store-path=getMod1StorePath()
+              :current-field-value=mod1Value
+              @value-updated="setMod1Value"
+              :needs-rotation="false" :height=180
+              :disabled="!isMod1Enabled()"
+              :colour="getRangeColour(isMod1Enabled())"
+          />
+          <div class="modValue" :class="{ disabled: !isMod1Enabled()}">{{ getMod1Value() }}</div>
+
+          <div class="title" :class="{ disabled: !isMod2Enabled()}">GRADIENT MOD 2</div>
+          <RangeSelector
+              :store-path=getMod2StorePath()
+              :current-field-value=mod2Value
+              @value-updated="setMod2Value"
+              :needs-rotation="false" :height=180
+              :disabled="!isMod2Enabled()"
+              :colour="getRangeColour(isMod2Enabled())"
+          />
+          <div class="modValue" :class="{ disabled: !isMod2Enabled()}">{{ getMod2Value() }}</div>
+
+          <div>
+            <div class="title" :class="{ disabled: !isWaterfallEnabled()}">WATERFALL SETTINGS</div>
+            <div class="waterfall" :class="{ active: isWaterFallActive('Up'), disabled: !isWaterfallEnabled() }" @click="setWaterfall('Up')">
+              <font-awesome-icon icon="fa-solid fa-up-long"/>
+            </div>
+            <div class="waterfall" :class="{ active: isWaterFallActive('Down'), disabled: !isWaterfallEnabled() }" @click="setWaterfall('Down')">
+              <font-awesome-icon icon="fa-solid fa-down-long"/>
+            </div>
+            <div class="wf-button" :class="{ disabled: !isWaterfallEnabled() }">
+              <button :class="{ active: isWaterFallActive('Off') }" style="width: 100%" @click="setWaterfall('Off')" :disabled="!isWaterfallEnabled()">
+                Off
+              </button>
+            </div>
+          </div>
+        </div>
+      </GroupContainer>
     </ContentContainer>
   </CenteredContainer>
 </template>
+
+<style scoped>
+.title {
+  margin-bottom: 10px;
+  margin-top: 1px;
+}
+.title.disabled {
+  color: #818483;
+}
+
+.modValue {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  color: #82CFD0;
+}
+.modValue.disabled {
+  color: #3C6061;
+}
+
+.waterfall {
+  cursor: pointer;
+  display: inline-block;
+  width: 50%;
+  font-size: 40px
+}
+
+.waterfall.active {
+  color: #59B1B6;
+
+}
+
+.waterfall.active.disabled {
+  cursor: initial;
+  color: #427273;
+}
+
+.waterfall:not(.active) {
+  color: #447475;
+}
+
+.waterfall:not(.active).disabled {
+  cursor: initial;
+  color: #385352;
+}
+
+.wf-button > button {
+  border: none;
+  width: 100%;
+  font-size: 12px;
+  background-color: #447475;
+  color: #fff;
+  font-family: LeagueMonoCondensed, sans-serif;
+  padding: 3px;
+  cursor: pointer;
+}
+
+.wf-button > button.active {
+  background-color: #59B1B6;
+}
+
+.wf-button > button:disabled {
+  cursor: initial;
+  background-color: #385352;
+}
+
+.wf-button > button.active:disabled {
+  cursor: initial;
+  color: #427273;
+}
+
+
+
+</style>
