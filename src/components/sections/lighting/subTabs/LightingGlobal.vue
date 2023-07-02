@@ -120,6 +120,7 @@ export default {
 
     setMod1Value(value) {
       value = parseInt(value);
+      this.mod1Value = value;
 
       store.getActiveDevice().lighting.animation.mod1 = value;
       websocket.send_command(store.getActiveSerial(), {"SetAnimationMod1": value});
@@ -141,6 +142,7 @@ export default {
 
     setMod2Value(value) {
       value = parseInt(value);
+      this.mod2Value = value;
 
       store.getActiveDevice().lighting.animation.mod2 = value;
       websocket.send_command(store.getActiveSerial(), {"SetAnimationMod2": value});
