@@ -31,7 +31,7 @@ export default {
 .base {
   display: flex;
   flex-direction: row;
-  height: 560px;
+  height: 410px;
   //background-color: #151515
 }
 

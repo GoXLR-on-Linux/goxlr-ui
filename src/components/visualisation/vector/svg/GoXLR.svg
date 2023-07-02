@@ -328,7 +328,7 @@
               <line x1="417.55" y1="97.77" x2="414.18" y2="94.4" style="fill: currentColor; stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
               <line x1="406.12" y1="102.8" x2="406.12" y2="98.03" style="fill: currentColor; stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
             </g>
-            <circle cx="406.12" cy="86.63" r="12" style="fill: url(#linear-gradient-13);"/>
+            <circle cx="406.12" cy="86.63" r="12" style="fill: url(#ReverbEncoderTopGradient);"/>
             <text transform="translate(392.55 128.13) scale(1.05 1)" style="fill: #565656; font-family: RopaSoftPro-Regular, &apos;Ropa Soft Pro&apos;; font-size: 9.59px;">Reverb</text>
           </g>
         </g>

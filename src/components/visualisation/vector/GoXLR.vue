@@ -6,23 +6,51 @@
 import {store} from "@/store";
 import {EffectLightingPresets, EffectPresets, MuteButtonNamesForFader} from "@/util/mixerMapping";
 
-console.log(store.getActiveDevice())
 export default {
   name: "GoXLR",
 
   methods: {
+    // transforms a HEX string into a color object.
     transformColor(color) {
       let r = parseInt(color.substring(0, 2), 16);
       let g = parseInt(color.substring(2, 4), 16);
       let b = parseInt(color.substring(4, 6), 16);
       return { r, g, b};
     },
+    // calculate the color at a given position in a gradient with two points
     calculateGradientColor(startColor, endColor, position) {
       return {
         r: Math.round(startColor.r + (endColor.r - startColor.r) * position),
         g: Math.round(startColor.g + (endColor.g - startColor.g) * position),
         b: Math.round(startColor.b + (endColor.b - startColor.b) * position),
       }
+    },
+    // gets the modified off-style color
+    getOffStyleColor(state, color, color2) {
+      switch (state) {
+        case "Dimmed":
+          return `rgba(${color.r}, ${color.g}, ${color.b}, 0.4)`;
+        case "Colour2":
+          return `rgba(${color2.r}, ${color2.g}, ${color2.b}, 1)`;
+        case "DimmedColour2":
+          return `rgba(${color2.r}, ${color2.g}, ${color2.b}, 0.4)`;
+        default:
+          return `rgba(${color.r}, ${color.g}, ${color.b}, 1)`;
+      }
+    },
+    // sets or unsets the .blink class
+    setBlinkClass(selector, isBlinking) {
+      const elem = document.querySelector(selector);
+      if (elem === null) return;
+
+      if (isBlinking) elem.classList.add("blink");
+      else elem.classList.remove("blink");
+    },
+    // checks if one of the sample buttons is recording
+    isSampleRecording(sample) {
+      let activeBank = store.getActiveDevice().sampler.active_bank;
+      let sampleState = store.getActiveDevice().sampler.banks[activeBank][sample];
+      return sampleState.is_recording;
     },
 
     computeAccentColor() {
@@ -66,6 +94,7 @@ export default {
     },
     computeMixerMuteColor(fader) {
       const colors = store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[fader]].colours,
+          offStyle = store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[fader]].off_style,
           state = store.getActiveDevice().fader_status[fader].mute_state,
           colorOne = this.transformColor(colors.colour_one),
           colorTwo = this.transformColor(colors.colour_two);
@@ -73,20 +102,10 @@ export default {
       if (state !== "Unmuted")
         return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
 
-      switch (store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[fader]].off_style) {
-        case "Dimmed":
-          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 0.4)`;
-        case "Colour2":
-          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 1)`;
-        case "DimmedColour2":
-          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 0.4)`;
-        default:
-          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
-      }
+      return this.getOffStyleColor(offStyle, colorOne, colorTwo);
     },
     computeMixerMuteBlinkColor(fader) {
-      const colors = store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[fader]].colours;
-      return '#' + colors.colour_two
+      return '#' + store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[fader]].colours;
     },
     isMixerMuteBlinking(fader) {
       store.getActiveDevice().fader_status[fader].mute_state === "MutedToAll";
@@ -97,44 +116,25 @@ export default {
 
     computeCoughButtonColor() {
       const colors = store.getActiveDevice().lighting.buttons.Cough.colours,
+          offStyle = store.getActiveDevice().lighting.buttons.Cough.off_style,
           colorOne = this.transformColor(colors.colour_one),
           colorTwo = this.transformColor(colors.colour_two);
 
       if ("Unmuted" !== store.getActiveDevice().cough_button.state)
         return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
 
-      switch (store.getActiveDevice().lighting.buttons.Cough.off_style) {
-        case "Dimmed":
-          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 0.4)`;
-        case "Colour2":
-          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 1)`;
-        case "DimmedColour2":
-          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 0.4)`;
-        default:
-          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
-      }
-
-      // TODO: can be simplified
+      return this.getOffStyleColor(offStyle, colorOne, colorTwo);
     },
-
     computeBleepButtonColor() {
       const colors = store.getActiveDevice().lighting.buttons.Bleep.colours,
-            isPressed = store.getActiveDevice().button_down.Bleep,
+          isPressed = store.getActiveDevice().button_down.Bleep,
+          offStyle = store.getActiveDevice().lighting.buttons.Bleep.off_style,
           colorOne = this.transformColor(colors.colour_one),
           colorTwo = this.transformColor(colors.colour_two);
 
       if (isPressed) return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
 
-      switch (store.getActiveDevice().lighting.buttons.Bleep.off_style) {
-        case "Dimmed":
-          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 0.4)`;
-        case "Colour2":
-          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 1)`;
-        case "DimmedColour2":
-          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 0.4)`;
-        default:
-          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
-      }
+      return this.getOffStyleColor(offStyle, colorOne, colorTwo);
     },
 
     computeEffectButtonColor(effectButtonName, effectStateName) {
@@ -146,16 +146,7 @@ export default {
 
       if (active) return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
 
-      switch (offStyle) {
-        case "Dimmed":
-          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 0.4)`;
-        case "Colour2":
-          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 1)`;
-        case "DimmedColour2":
-          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 0.4)`;
-        default:
-          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
-      }
+      return this.getOffStyleColor(offStyle, colorOne, colorTwo);
     },
     computeEffectPresetColor(presetIndex) {
       const colors = store.getActiveDevice().lighting.buttons[`EffectSelect${presetIndex}`].colours,
@@ -167,16 +158,7 @@ export default {
       if (activePreset === `EffectSelect${presetIndex}`)
         return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
 
-      switch (offStyle) {
-        case "Dimmed":
-          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 0.4)`;
-        case "Colour2":
-          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 1)`;
-        case "DimmedColour2":
-          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 0.4)`;
-        default:
-          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
-      }
+      return this.getOffStyleColor(offStyle, colorOne, colorTwo);
     },
 
     computeEncoderRotation(effectName, centerMode = false) {
@@ -248,16 +230,7 @@ export default {
 
       if (active) return `rgb(${colorOne.r}, ${colorOne.g}, ${colorOne.b})`;
 
-      switch (offStyle) {
-        case "Dimmed":
-          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 0.4)`;
-        case "Colour2":
-          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 1)`;
-        case "DimmedColour2":
-          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 0.4)`;
-        default:
-          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
-      }
+      return this.getOffStyleColor(offStyle, colorOne, colorTwo);
     },
     computeSamplerSampleColor(button) {
       const activeBank = store.getActiveDevice().sampler.active_bank,
@@ -307,100 +280,32 @@ export default {
     }
   },
   computed: {
-    isTopLeftSampleRecording() {
-      let activeBank = store.getActiveDevice().sampler.active_bank;
-      let sampleState = store.getActiveDevice().sampler.banks[activeBank]["TopLeft"];
-      return sampleState.is_recording;
-    },
-    isTopRightSampleRecording() {
-      let activeBank = store.getActiveDevice().sampler.active_bank;
-      let sampleState = store.getActiveDevice().sampler.banks[activeBank]["TopRight"];
-      return sampleState.is_recording;
-    },
-    isBottomLeftSampleRecording() {
-      let activeBank = store.getActiveDevice().sampler.active_bank;
-      let sampleState = store.getActiveDevice().sampler.banks[activeBank]["BottomLeft"];
-      return sampleState.is_recording;
-    },
-    isBottomRightSampleRecording() {
-      let activeBank = store.getActiveDevice().sampler.active_bank;
-      let sampleState = store.getActiveDevice().sampler.banks[activeBank]["BottomRight"];
-      return sampleState.is_recording;
-    },
-    isClearActive() {
-      return store.getActiveDevice().sampler.clear_active;
-    },
-    isFader1Blinking() {
-      return store.getActiveDevice().fader_status["A"].mute_state === "MutedToAll";
-    },
-    isFader2Blinking() {
-      return store.getActiveDevice().fader_status["B"].mute_state === "MutedToAll";
-    },
-    isFader3Blinking() {
-      return store.getActiveDevice().fader_status["C"].mute_state === "MutedToAll";
-    },
-    isFader4Blinking() {
-      return store.getActiveDevice().fader_status["D"].mute_state === "MutedToAll";
-    },
-    isMuteBlinking() {
-      return store.getActiveDevice().cough_button.state === "MutedToAll";
-    },
-    muteInactiveColor() {
-      return '#' + store.getActiveDevice().lighting.buttons.Cough.colours.colour_two;
-    }
+    // variables required for watch
+    isTopLeftSampleRecording() { return this.isSampleRecording("TopLeft"); },
+    isTopRightSampleRecording() { return this.isSampleRecording("TopRight"); },
+    isBottomLeftSampleRecording() { return this.isSampleRecording("BottomLeft"); },
+    isBottomRightSampleRecording() { return this.isSampleRecording("BottomRight"); },
+    isClearActive() { return store.getActiveDevice().sampler.clear_active; },
+    isFader1Blinking() { return store.getActiveDevice().fader_status["A"].mute_state === "MutedToAll"; },
+    isFader2Blinking() { return store.getActiveDevice().fader_status["B"].mute_state === "MutedToAll"; },
+    isFader3Blinking() { return store.getActiveDevice().fader_status["C"].mute_state === "MutedToAll"; },
+    isFader4Blinking() { return store.getActiveDevice().fader_status["D"].mute_state === "MutedToAll"; },
+    isMuteBlinking() { return store.getActiveDevice().cough_button.state === "MutedToAll"; },
+
+    muteInactiveColor() { return '#' + store.getActiveDevice().lighting.buttons.Cough.colours.colour_two; }
   },
   watch: {
-    // TODO: implement error handling if query fails (mini svg is missing some features)
-    isTopLeftSampleRecording(active) {
-      const elem = document.querySelector(".sampler #TopLeft");
-      if (active) elem.classList.add("blink");
-      else elem.classList.remove("blink");
-    },
-    isTopRightSampleRecording(active) {
-      const elem = document.querySelector(".sampler #TopRight");
-      if (active) elem.classList.add("blink");
-      else elem.classList.remove("blink");
-    },
-    isBottomLeftSampleRecording(active) {
-      const elem = document.querySelector(".sampler #BottomLeft");
-      if (active) elem.classList.add("blink");
-      else elem.classList.remove("blink");
-    },
-    isBottomRightSampleRecording(active) {
-      const elem = document.querySelector(".sampler #BottomRight");
-      if (active) elem.classList.add("blink");
-      else elem.classList.remove("blink");
-    },
-    isClearActive(active) {
-      const elem = document.querySelector(".sampler #Clear");
-      if (active) elem.classList.add("blink");
-      else elem.classList.remove("blink");
-    },
-    isMuteBlinking(active) {
-      const elem = document.querySelector(".cough #Mute");
-      if (active) elem.classList.add("blink");
-      else elem.classList.remove("blink");
-    },
-    isFader1Blinking(active) {
-      const elem = document.querySelector("#Channel1 #Mute");
-      if (active) elem.classList.add("blink");
-      else elem.classList.remove("blink");
-    },
-    isFader2Blinking(active) {
-      const elem = document.querySelector("#Channel2 #Mute");
-      if (active) elem.classList.add("blink");
-      else elem.classList.remove("blink");
-    },
-    isFader3Blinking(active) {
-      const elem = document.querySelector("#Channel3 #Mute");
-      if (active) elem.classList.add("blink");
-      else elem.classList.remove("blink");
-    },
-    isFader4Blinking(active) {
-      const elem = document.querySelector("#Channel4 #Mute");
-      if (active) elem.classList.add("blink");
-      else elem.classList.remove("blink");
-    }
+    // toggle .blink class if required
+    isTopLeftSampleRecording(active) { this.setBlinkClass(".sampler #TopLeft", active); },
+    isTopRightSampleRecording(active) { this.setBlinkClass(".sampler #TopRight", active); },
+    isBottomLeftSampleRecording(active) { this.setBlinkClass(".sampler #BottomLeft", active); },
+    isBottomRightSampleRecording(active) { this.setBlinkClass(".sampler #BottomRight", active); },
+    isClearActive(active) { this.setBlinkClass(".sampler #Clear", active); },
+    isMuteBlinking(active) { this.setBlinkClass(".cough #Mute", active); },
+    isFader1Blinking(active) { this.setBlinkClass("#Channel1 #Mute", active); },
+    isFader2Blinking(active) { this.setBlinkClass("#Channel2 #Mute", active); },
+    isFader3Blinking(active) { this.setBlinkClass("#Channel3 #Mute", active); },
+    isFader4Blinking(active) { this.setBlinkClass("#Channel4 #Mute", active); },
   }
 }
 </script>
