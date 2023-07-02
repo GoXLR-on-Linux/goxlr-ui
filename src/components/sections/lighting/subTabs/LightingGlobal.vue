@@ -8,10 +8,12 @@ import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import RangeSelector from "@/components/slider/components/Range.vue";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 export default {
   name: "LightingGlobal",
   components: {
+    FontAwesomeIcon,
     RangeSelector,
     CenteredContainer,
     ContentContainer,
@@ -91,7 +93,7 @@ export default {
     },
 
     onAnimationModeChange(id) {
-      websocket.send_command(store.getActiveSerial(), { "SetAnimationMode": id });
+      websocket.send_command(store.getActiveSerial(), {"SetAnimationMode": id});
     },
 
     // Mod1 Settings..
@@ -107,7 +109,7 @@ export default {
       value = parseInt(value);
 
       store.getActiveDevice().lighting.animation.mod1 = value;
-      websocket.send_command(store.getActiveSerial(), { "SetAnimationMod1": value });
+      websocket.send_command(store.getActiveSerial(), {"SetAnimationMod1": value});
     },
 
     getMod2StorePath() {
@@ -122,7 +124,16 @@ export default {
       value = parseInt(value);
 
       store.getActiveDevice().lighting.animation.mod2 = value;
-      websocket.send_command(store.getActiveSerial(), { "SetAnimationMod2": value });
+      websocket.send_command(store.getActiveSerial(), {"SetAnimationMod2": value});
+    },
+
+    isWaterFallActive(type) {
+      return store.getActiveDevice().lighting.animation.waterfall_direction === type;
+    },
+
+    setWaterfall(mode) {
+      console.log(mode);
+      websocket.send_command(store.getActiveSerial(), {"SetAnimationWaterfall": mode});
     }
 
   },
@@ -146,27 +157,72 @@ export default {
                         :selected="this.animationModeSelected()" @selection-changed="onAnimationModeChange"/>
 
         <div style="text-align: center; color: #fff; padding-left: 8px">
-          <div style="margin-bottom: 10px">Gradient Mod 1</div>
+          <div style="margin-bottom: 10px">GRADIENT MOD 1</div>
           <RangeSelector
               :store-path=getMod1StorePath()
               :current-field-value=mod1Value
               @value-updated="setMod1Value"
               :needs-rotation="false" :height=180
-              />
-          <div style="margin-top: 12px; margin-bottom: 20px; color: #82CFD0">{{getMod1Value()}}</div>
+          />
+          <div style="margin-top: 12px; margin-bottom: 20px; color: #82CFD0">{{ getMod1Value() }}</div>
 
-          <div style="margin-bottom: 10px">Gradient Mod 2</div>
+          <div style="margin-bottom: 10px">GRADIENT MOD 2</div>
           <RangeSelector
               :store-path=getMod2StorePath()
               :current-field-value=mod2Value
               @value-updated="setMod2Value"
               :needs-rotation="false" :height=180
           />
-          <div style="margin-top: 12px; color: #82CFD0">{{getMod2Value()}}</div>
+          <div style="margin-top: 12px; color: #82CFD0">{{ getMod2Value() }}</div>
 
+          <div style="margin-top: 10px">
+            <div style="margin-bottom: 5px">WATERFALL SETTINGS</div>
+            <div class="waterfall" :class="{ active: isWaterFallActive('Up') }" @click="setWaterfall('Up')">
+              <font-awesome-icon icon="fa-solid fa-up-long"/>
+            </div>
+            <div class="waterfall" :class="{ active: isWaterFallActive('Down') }" @click="setWaterfall('Down')">
+              <font-awesome-icon icon="fa-solid fa-down-long"/>
+            </div>
+            <div class="wf-button">
+              <button style="width: 100%" :class="{ active: isWaterFallActive('Off')}" @click="setWaterfall('Off')">
+                Off
+              </button>
+            </div>
+          </div>
         </div>
       </GroupContainer>
-
     </ContentContainer>
   </CenteredContainer>
 </template>
+
+<style scoped>
+.waterfall {
+  cursor: pointer;
+  display: inline-block;
+  width: 50%;
+  font-size: 40px
+}
+
+.waterfall.active {
+  color: #59B1B6;
+}
+
+.waterfall:not(.active) {
+  color: #447475;
+}
+
+.wf-button > button {
+  border: none;
+  width: 100%;
+  font-size: 12px;
+  background-color: #447475;
+  color: #fff;
+  font-family: LeagueMonoCondensed, sans-serif;
+  padding: 3px;
+}
+
+.wf-button > button.active {
+  background-color: #59B1B6;
+}
+
+</style>
