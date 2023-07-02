@@ -129,7 +129,7 @@
       </g>
       <g class="sampler">
         <path id="BottomRight" d="m468.47,338.25h29c1.52,0,2.75-1.23,2.75-2.75v-19.27c0-1.52,1.23-2.75,2.75-2.75h35.01c1.52,0,2.75,1.23,2.75,2.75v50c0,1.52-1.23,2.75-2.75,2.75h-69.5c-1.52,0-2.75-1.23-2.75-2.75v-25.24c0-1.52,1.23-2.75,2.75-2.75Z" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
-        <path id="Bottomleft" d="m449.49,338.25h-29.76c-1.52,0-2.75-1.23-2.75-2.75v-19.27c0-1.52-1.23-2.75-2.75-2.75h-35.03c-1.52,0-2.75,1.23-2.75,2.75v50c0,1.52,1.23,2.75,2.75,2.75h70.28c1.52,0,2.75-1.23,2.75-2.75v-25.24c0-1.52-1.23-2.75-2.75-2.75Z" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
+        <path id="BottomLeft" d="m449.49,338.25h-29.76c-1.52,0-2.75-1.23-2.75-2.75v-19.27c0-1.52-1.23-2.75-2.75-2.75h-35.03c-1.52,0-2.75,1.23-2.75,2.75v50c0,1.52,1.23,2.75,2.75,2.75h70.28c1.52,0,2.75-1.23,2.75-2.75v-25.24c0-1.52-1.23-2.75-2.75-2.75Z" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
         <path id="TopRight" d="m465.73,245.76v25.25c0,1.52,1.23,2.75,2.75,2.75h29c1.52,0,2.75,1.23,2.75,2.75v19.26c0,1.52,1.23,2.75,2.75,2.75h35.01c1.52,0,2.75-1.23,2.75-2.75v-50c0-1.52-1.23-2.75-2.75-2.75h-69.5c-1.52,0-2.75,1.23-2.75,2.75Z" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
         <path id="TopLeft" d="m379.21,243.01h70.28c1.52,0,2.75,1.23,2.75,2.75v25.25c0,1.52-1.23,2.75-2.75,2.75h-29.76c-1.52,0-2.75,1.23-2.75,2.75v19.26c0,1.52-1.23,2.75-2.75,2.75h-35.03c-1.52,0-2.75-1.23-2.75-2.75v-50c0-1.52,1.23-2.75,2.75-2.75Z" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
         <g id="Clear">
@@ -350,64 +350,64 @@
             <text id="LabelSmall" transform="translate(232.62 86.63)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">Demo Text</text>
             <text id="ChannelNumber" transform="translate(224.53 65.2)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">4</text>
           </g>
-          <g class="levels">
-            <g id="1">
+          <g class="level">
+            <g id="Level1">
               <rect x="263.23" y="279.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="223.46" y="279.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="2">
+            <g id="Level2">
               <rect x="223.46" y="269.23" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="263.23" y="269.23" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="3">
+            <g id="Level3">
               <rect x="223.46" y="258.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="263.23" y="258.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="4">
+            <g id="Level4">
               <rect x="223.46" y="248.23" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="263.23" y="248.23" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="5">
+            <g id="Level5">
               <rect x="223.46" y="237.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="263.23" y="237.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="6">
+            <g id="Level6">
               <rect x="223.46" y="227.23" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="263.23" y="227.23" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="7">
+            <g id="Level7">
               <rect x="223.46" y="216.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="263.23" y="216.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="8">
+            <g id="Level8">
               <rect x="223.46" y="206.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="263.23" y="206.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="9">
+            <g id="Level9">
               <rect x="223.46" y="195.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="263.23" y="195.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="10">
+            <g id="Level10">
               <rect x="223.46" y="185.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="263.23" y="185.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="11">
+            <g id="Level11">
               <rect x="223.46" y="174.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="263.23" y="174.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="12">
+            <g id="Level12">
               <rect x="223.46" y="164.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="263.23" y="164.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="13">
+            <g id="Level13">
               <rect x="223.46" y="153.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="263.23" y="153.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="14">
+            <g id="Level14">
               <rect x="223.46" y="143.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="263.23" y="143.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="15">
+            <g id="Level15">
               <rect x="223.46" y="132.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="263.23" y="132.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
@@ -433,64 +433,64 @@
             <text id="LabelSmall" transform="translate(171.62 86.63)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">Demo Text</text>
             <text id="ChannelNumber" transform="translate(163.53 65.2)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">3</text>
           </g>
-          <g class="levels">
-            <g id="1">
+          <g class="level">
+            <g id="Level1">
               <rect x="202.23" y="279.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="162.46" y="279.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="2">
+            <g id="Level2">
               <rect x="162.46" y="269.23" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="202.23" y="269.23" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="3 ">
+            <g id="Level3">
               <rect x="162.46" y="258.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="202.23" y="258.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="4 ">
+            <g id="Level4">
               <rect x="162.46" y="248.23" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="202.23" y="248.23" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="5 ">
+            <g id="Level5">
               <rect x="162.46" y="237.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="202.23" y="237.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="6 ">
+            <g id="Level6">
               <rect x="162.46" y="227.23" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="202.23" y="227.23" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="7 ">
+            <g id="Level7">
               <rect x="162.46" y="216.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="202.23" y="216.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="8 ">
+            <g id="Level8">
               <rect x="162.46" y="206.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="202.23" y="206.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="9 ">
+            <g id="Level9">
               <rect x="162.46" y="195.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="202.23" y="195.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="10 ">
+            <g id="Level10">
               <rect x="162.46" y="185.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="202.23" y="185.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="11 ">
+            <g id="Level11">
               <rect x="162.46" y="174.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="202.23" y="174.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="12 ">
+            <g id="Level12">
               <rect x="162.46" y="164.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="202.23" y="164.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="13 ">
+            <g id="Level13">
               <rect x="162.46" y="153.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="202.23" y="153.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="14 ">
+            <g id="Level14">
               <rect x="162.46" y="143.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="202.23" y="143.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="15 ">
+            <g id="Level15">
               <rect x="162.46" y="132.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="202.23" y="132.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
@@ -516,64 +516,64 @@
             <text id="LabelSmall" transform="translate(110.62 86.63)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">Demo Text</text>
             <text id="ChannelNumber" transform="translate(102.53 65.2)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">2</text>
           </g>
-          <g class="levels">
-            <g id="1">
+          <g class="level">
+            <g id="Level1">
               <rect x="141.23" y="279.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="101.46" y="279.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="2">
+            <g id="Level2">
               <rect x="101.46" y="269.23" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="141.23" y="269.23" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="3">
+            <g id="Level3">
               <rect x="101.46" y="258.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="141.23" y="258.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="4">
+            <g id="Level4">
               <rect x="101.46" y="248.23" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="141.23" y="248.23" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="5">
+            <g id="Level5">
               <rect x="101.46" y="237.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="141.23" y="237.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="6">
+            <g id="Level6">
               <rect x="101.46" y="227.23" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="141.23" y="227.23" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="7">
+            <g id="Level7">
               <rect x="101.46" y="216.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="141.23" y="216.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="8">
+            <g id="Level8">
               <rect x="101.46" y="206.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="141.23" y="206.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="9">
+            <g id="Level9">
               <rect x="101.46" y="195.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="141.23" y="195.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="10">
+            <g id="Level10">
               <rect x="101.46" y="185.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="141.23" y="185.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="11">
+            <g id="Level11">
               <rect x="101.46" y="174.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="141.23" y="174.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="12">
+            <g id="Level12">
               <rect x="101.46" y="164.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="141.23" y="164.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="13">
+            <g id="Level13">
               <rect x="101.46" y="153.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="141.23" y="153.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="14">
+            <g id="Level14">
               <rect x="101.46" y="143.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="141.23" y="143.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="15">
+            <g id="Level15">
               <rect x="101.46" y="132.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="141.23" y="132.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
@@ -599,64 +599,64 @@
             <text id="LabelSmall" transform="translate(49.62 86.63)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">Demo Text</text>
             <text id="ChannelNumber" transform="translate(41.53 65.2)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">1</text>
           </g>
-          <g class="levels">
-            <g id="1">
+          <g class="level">
+            <g id="Level1">
               <rect x="80.23" y="279.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="40.46" y="279.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="2">
+            <g id="Level2">
               <rect x="40.46" y="269.23" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="80.23" y="269.23" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="3">
+            <g id="Level3">
               <rect x="40.46" y="258.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="80.23" y="258.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="4">
+            <g id="Level4">
               <rect x="40.46" y="248.23" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="80.23" y="248.23" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="5">
+            <g id="Level5">
               <rect x="40.46" y="237.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="80.23" y="237.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="6">
+            <g id="Level6">
               <rect x="40.46" y="227.23" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="80.23" y="227.23" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="7">
+            <g id="Level7">
               <rect x="40.46" y="216.73" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="80.23" y="216.73" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="8">
+            <g id="Level8">
               <rect x="40.46" y="206.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="80.23" y="206.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="9">
+            <g id="Level9">
               <rect x="40.46" y="195.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="80.23" y="195.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="10">
+            <g id="Level10">
               <rect x="40.46" y="185.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="80.23" y="185.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="11">
+            <g id="Level11">
               <rect x="40.46" y="174.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="80.23" y="174.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="12">
+            <g id="Level12">
               <rect x="40.46" y="164.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="80.23" y="164.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="13">
+            <g id="Level13">
               <rect x="40.46" y="153.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="80.23" y="153.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="14">
+            <g id="Level14">
               <rect x="40.46" y="143.24" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="80.23" y="143.24" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>
-            <g id="15">
+            <g id="Level15">
               <rect x="40.46" y="132.74" width="10.5" height="6.02" style="fill: currentColor;"/>
               <rect x="80.23" y="132.74" width="10.5" height="6.02" style="fill: currentColor;"/>
             </g>

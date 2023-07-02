@@ -4,7 +4,7 @@
 
 <script>
 import {store} from "@/store";
-import {EffectLightingPresets, EffectPresets} from "@/util/mixerMapping";
+import {EffectLightingPresets, EffectPresets, MuteButtonNamesForFader} from "@/util/mixerMapping";
 
 console.log(store.getActiveDevice())
 export default {
@@ -17,18 +17,72 @@ export default {
       let b = parseInt(color.substring(4, 6), 16);
       return { r, g, b};
     },
+    calculateGradientColor(startColor, endColor, position) {
+      return {
+        r: Math.round(startColor.r + (endColor.r - startColor.r) * position),
+        g: Math.round(startColor.g + (endColor.g - startColor.g) * position),
+        b: Math.round(startColor.b + (endColor.b - startColor.b) * position),
+      }
+    },
 
     computeAccentColor() {
       return `#${store.getActiveDevice().lighting.simple.Accent.colour_one}`;
     },
 
-    computeFaderPosition(fader) {
+    computeMixerFaderPosition(fader) {
       let channel = store.getActiveDevice().fader_status[fader].channel;
       let faderPosition = store.getActiveDevice().levels.volumes[channel];
 
       let height = 110;
       let transform = Math.ceil(height / 255 * faderPosition);
       return `translateY(-${transform}pt)`
+    },
+    computeMixerLevelColor(fader, level) {
+      const channel = store.getActiveDevice().fader_status[fader].channel,
+          volume = store.getActiveDevice().levels.volumes[channel],
+          colors = store.getActiveDevice().lighting.faders[fader].colours,
+          topColor = this.transformColor(colors.colour_one),
+          bottomColor = this.transformColor(colors.colour_two),
+          indicatorDots = 15,
+          offset = 0.25; // required to correctly align fader to indicators.
+
+      const computedLevel = Math.ceil(indicatorDots / 255 * volume + offset);
+      switch (store.getActiveDevice().lighting.faders[fader].style) {
+        case "GradientMeter": // TODO: implement meter visualization
+        case "Gradient":
+          if (level >= computedLevel) return `rgb(0,0,0)`;
+          // eslint-disable-next-line no-case-declarations
+          let gradientColor = this.calculateGradientColor(bottomColor, topColor, level / indicatorDots );
+          return `rgb(${gradientColor.r}, ${gradientColor.g}, ${gradientColor.b})`;
+
+        case "TwoColour":
+        default:
+          if (level >= computedLevel)
+            return `rgb(${topColor.r}, ${topColor.g}, ${topColor.b})`;
+          else
+            return `rgb(${bottomColor.r}, ${bottomColor.g}, ${bottomColor.b})`;
+      }
+
+    },
+    computeMixerMuteColor(fader) {
+      const colors = store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[fader]].colours,
+          state = store.getActiveDevice().fader_status[fader].mute_state,
+          colorOne = this.transformColor(colors.colour_one),
+          colorTwo = this.transformColor(colors.colour_two);
+
+      if (state !== "Unmuted")
+        return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
+
+      switch (store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[fader]].off_style) {
+        case "Dimmed":
+          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 0.4)`;
+        case "Colour2":
+          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 1)`;
+        case "DimmedColour2":
+          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 0.4)`;
+        default:
+          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
+      }
     },
 
     computeCoughButtonColor() {
@@ -114,16 +168,19 @@ export default {
       }
     },
 
-    computeEncoderRotation(effectName) {
+    computeEncoderRotation(effectName, affectedByHardTune = false) {
       const effectAmount = store.getActiveDevice().effects.current[effectName].amount,
-          transfromRotationLimit = 270;
+          hardTuneActive = store.getActiveDevice().effects.current.hard_tune.is_enabled;
 
-      return `rotate(${Math.ceil(transfromRotationLimit / 100 * effectAmount)}deg)`;
+      let transformRotationLimit = 270;
+      if (hardTuneActive && affectedByHardTune) transformRotationLimit /= 2;
+
+      return `rotate(${Math.ceil(transformRotationLimit / 100 * effectAmount)}deg)`;
     },
     computeEncoderColor(effectName) {
       return `#${store.getActiveDevice().lighting.encoders[effectName].colour_three}`;
     },
-    computerEncoderLevelColor(effectEncoderName, effectLightingName, indicatorLevel, centerMode = false, affectedByHardTune = false) {
+    computeEncoderLevelColor(effectEncoderName, effectLightingName, indicatorLevel, centerMode = false, affectedByHardTune = false) {
       const colors = store.getActiveDevice().lighting.encoders[effectLightingName],
         effectAmount = store.getActiveDevice().effects.current[effectEncoderName].amount,
         hardTuneActive = store.getActiveDevice().effects.current.hard_tune.is_enabled,
@@ -156,6 +213,49 @@ export default {
         else
           return `#000`;
       }
+    },
+
+    computeSamplerBankColor(bank) {
+      const active = store.getActiveDevice().sampler.active_bank === bank,
+        colors = store.getActiveDevice().lighting.sampler[`SamplerSelect${bank}`].colours,
+        offStyle = store.getActiveDevice().lighting.sampler[`SamplerSelect${bank}`].off_style,
+        colorOne = this.transformColor(colors.colour_one),
+        colorTwo = this.transformColor(colors.colour_two);
+
+      if (active) return `rgb(${colorOne.r}, ${colorOne.g}, ${colorOne.b})`;
+
+      switch (offStyle) {
+        case "Dimmed":
+          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 0.4)`;
+        case "Colour2":
+          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 1)`;
+        case "DimmedColour2":
+          return `rgba(${colorTwo.r}, ${colorTwo.g}, ${colorTwo.b}, 0.4)`;
+        default:
+          return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
+      }
+    },
+    computeSamplerSampleColor(button) {
+      const activeBank = store.getActiveDevice().sampler.active_bank,
+          colors = store.getActiveDevice().lighting.sampler[`SamplerSelect${activeBank}`].colours,
+          sampleState = store.getActiveDevice().sampler.banks[activeBank][button],
+          colorOne = this.transformColor(colors.colour_one),
+          colorThree = this.transformColor(colors.colour_three),
+          dimMin = 125; // min-brightness if empty color set to black (aka. disable lighting)
+
+      // no longer needs special treatment for #000
+      if (sampleState.samples.length === 0 && !sampleState.is_recording) {
+        // set to somewhat gray-ish color if set to a very dark color
+        if(colorThree.r < dimMin && colorThree.r === colorThree.g && colorThree.g === colorThree.b && colorThree.g === colorThree.b)
+          return `rgba(${dimMin}, ${dimMin}, ${dimMin}, 0.4)`
+        else
+          return `rgba(${colorThree.r}, ${colorThree.g}, ${colorThree.b}, 0.4)`;
+      }
+
+      if (sampleState.is_playing || sampleState.is_recording)
+        return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
+
+      return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 0.4)`;
     }
   }
 }
@@ -165,17 +265,12 @@ export default {
 #GoXLR { width: 100%; height: 100%; }
 #Logo { color: v-bind("computeAccentColor()"); }
 
-/* fader */
-.mixer #Channel1 .rail #Fader { transform: v-bind('computeFaderPosition("A")'); }
-.mixer #Channel2 .rail #Fader { transform: v-bind('computeFaderPosition("B")'); }
-.mixer #Channel3 .rail #Fader { transform: v-bind('computeFaderPosition("C")'); }
-.mixer #Channel4 .rail #Fader { transform: v-bind('computeFaderPosition("D")'); }
-
 /* cough area */
 .cough #Mute { color: v-bind('computeCoughButtonColor()'); }
 .cough #Bleep { color: v-bind('computeBleepButtonColor()'); }
+/* TODO: animation */
 
-/* effect area buttons */
+/* effects area: buttons */
 .effects .buttons #Megaphone { color: v-bind('computeEffectButtonColor("EffectMegaphone", "megaphone")'); }
 .effects .buttons #Robot { color: v-bind('computeEffectButtonColor("EffectRobot", "robot")'); }
 .effects .buttons #HardTune { color: v-bind('computeEffectButtonColor("EffectHardTune", "hard_tune")'); }
@@ -187,80 +282,170 @@ export default {
 .effects .presets #Preset5 { color: v-bind('computeEffectPresetColor(5)'); }
 .effects .presets #Preset6 { color: v-bind('computeEffectPresetColor(6)'); }
 
-/* reverb encoder */
+/* effects area: reverb encoder */
 .effects .encoders .reverb #Encoder {
   transform: v-bind('computeEncoderRotation("reverb")');
   color: v-bind('computeEncoderColor("Reverb")');
 }
-.effects .encoders .reverb .level #Level1 { color: v-bind('computerEncoderLevelColor("reverb", "Reverb", 1)'); }
-.effects .encoders .reverb .level #Level2 { color: v-bind('computerEncoderLevelColor("reverb", "Reverb", 2)'); }
-.effects .encoders .reverb .level #Level3 { color: v-bind('computerEncoderLevelColor("reverb", "Reverb", 3)'); }
-.effects .encoders .reverb .level #Level4 { color: v-bind('computerEncoderLevelColor("reverb", "Reverb", 4)'); }
-.effects .encoders .reverb .level #Level5 { color: v-bind('computerEncoderLevelColor("reverb", "Reverb", 5)'); }
-.effects .encoders .reverb .level #Level6 { color: v-bind('computerEncoderLevelColor("reverb", "Reverb", 6)'); }
-.effects .encoders .reverb .level #Level7 { color: v-bind('computerEncoderLevelColor("reverb", "Reverb", 7)'); }
-.effects .encoders .reverb .level #Level8 { color: v-bind('computerEncoderLevelColor("reverb", "Reverb", 8)'); }
-.effects .encoders .reverb .level #Level9 { color: v-bind('computerEncoderLevelColor("reverb", "Reverb", 9)'); }
-.effects .encoders .reverb .level #Level10 { color: v-bind('computerEncoderLevelColor("reverb", "Reverb", 10)'); }
-.effects .encoders .reverb .level #Level11 { color: v-bind('computerEncoderLevelColor("reverb", "Reverb", 11)'); }
-.effects .encoders .reverb .level #Level12 { color: v-bind('computerEncoderLevelColor("reverb", "Reverb", 12)'); }
-.effects .encoders .reverb .level #Level13 { color: v-bind('computerEncoderLevelColor("reverb", "Reverb", 13)'); }
+.effects .encoders .reverb .level #Level1 { color: v-bind('computeEncoderLevelColor("reverb", "Reverb", 1)'); }
+.effects .encoders .reverb .level #Level2 { color: v-bind('computeEncoderLevelColor("reverb", "Reverb", 2)'); }
+.effects .encoders .reverb .level #Level3 { color: v-bind('computeEncoderLevelColor("reverb", "Reverb", 3)'); }
+.effects .encoders .reverb .level #Level4 { color: v-bind('computeEncoderLevelColor("reverb", "Reverb", 4)'); }
+.effects .encoders .reverb .level #Level5 { color: v-bind('computeEncoderLevelColor("reverb", "Reverb", 5)'); }
+.effects .encoders .reverb .level #Level6 { color: v-bind('computeEncoderLevelColor("reverb", "Reverb", 6)'); }
+.effects .encoders .reverb .level #Level7 { color: v-bind('computeEncoderLevelColor("reverb", "Reverb", 7)'); }
+.effects .encoders .reverb .level #Level8 { color: v-bind('computeEncoderLevelColor("reverb", "Reverb", 8)'); }
+.effects .encoders .reverb .level #Level9 { color: v-bind('computeEncoderLevelColor("reverb", "Reverb", 9)'); }
+.effects .encoders .reverb .level #Level10 { color: v-bind('computeEncoderLevelColor("reverb", "Reverb", 10)'); }
+.effects .encoders .reverb .level #Level11 { color: v-bind('computeEncoderLevelColor("reverb", "Reverb", 11)'); }
+.effects .encoders .reverb .level #Level12 { color: v-bind('computeEncoderLevelColor("reverb", "Reverb", 12)'); }
+.effects .encoders .reverb .level #Level13 { color: v-bind('computeEncoderLevelColor("reverb", "Reverb", 13)'); }
 
-/* pitch encoder */
+/* effects area: pitch encoder */
 .effects .encoders .pitch #Encoder {
-  transform: v-bind('computeEncoderRotation("pitch")');
+  transform: v-bind('computeEncoderRotation("pitch", true)');
   color: v-bind('computeEncoderColor("Pitch")');
 }
-.effects .encoders .pitch .level #Level1 { color: v-bind('computerEncoderLevelColor("pitch", "Pitch", -6, true, true)'); }
-.effects .encoders .pitch .level #Level2 { color: v-bind('computerEncoderLevelColor("pitch", "Pitch", -5, true, true)'); }
-.effects .encoders .pitch .level #Level3 { color: v-bind('computerEncoderLevelColor("pitch", "Pitch", -4, true, true)'); }
-.effects .encoders .pitch .level #Level4 { color: v-bind('computerEncoderLevelColor("pitch", "Pitch", -3, true, true)'); }
-.effects .encoders .pitch .level #Level5 { color: v-bind('computerEncoderLevelColor("pitch", "Pitch", -2, true, true)'); }
-.effects .encoders .pitch .level #Level6 { color: v-bind('computerEncoderLevelColor("pitch", "Pitch", -1, true, true)'); }
-.effects .encoders .pitch .level #Level7 { color: v-bind('computerEncoderLevelColor("pitch", "Pitch", 0, true, true)'); }
-.effects .encoders .pitch .level #Level8 { color: v-bind('computerEncoderLevelColor("pitch", "Pitch", 1, true, true)'); }
-.effects .encoders .pitch .level #Level9 { color: v-bind('computerEncoderLevelColor("pitch", "Pitch", 2, true, true)'); }
-.effects .encoders .pitch .level #Level10 { color: v-bind('computerEncoderLevelColor("pitch", "Pitch", 3, true, true)'); }
-.effects .encoders .pitch .level #Level11 { color: v-bind('computerEncoderLevelColor("pitch", "Pitch", 4, true, true)'); }
-.effects .encoders .pitch .level #Level12 { color: v-bind('computerEncoderLevelColor("pitch", "Pitch", 5, true, true)'); }
-.effects .encoders .pitch .level #Level13 { color: v-bind('computerEncoderLevelColor("pitch", "Pitch", 6, true, true)'); }
+.effects .encoders .pitch .level #Level1 { color: v-bind('computeEncoderLevelColor("pitch", "Pitch", -6, true, true)'); }
+.effects .encoders .pitch .level #Level2 { color: v-bind('computeEncoderLevelColor("pitch", "Pitch", -5, true, true)'); }
+.effects .encoders .pitch .level #Level3 { color: v-bind('computeEncoderLevelColor("pitch", "Pitch", -4, true, true)'); }
+.effects .encoders .pitch .level #Level4 { color: v-bind('computeEncoderLevelColor("pitch", "Pitch", -3, true, true)'); }
+.effects .encoders .pitch .level #Level5 { color: v-bind('computeEncoderLevelColor("pitch", "Pitch", -2, true, true)'); }
+.effects .encoders .pitch .level #Level6 { color: v-bind('computeEncoderLevelColor("pitch", "Pitch", -1, true, true)'); }
+.effects .encoders .pitch .level #Level7 { color: v-bind('computeEncoderLevelColor("pitch", "Pitch", 0, true, true)'); }
+.effects .encoders .pitch .level #Level8 { color: v-bind('computeEncoderLevelColor("pitch", "Pitch", 1, true, true)'); }
+.effects .encoders .pitch .level #Level9 { color: v-bind('computeEncoderLevelColor("pitch", "Pitch", 2, true, true)'); }
+.effects .encoders .pitch .level #Level10 { color: v-bind('computeEncoderLevelColor("pitch", "Pitch", 3, true, true)'); }
+.effects .encoders .pitch .level #Level11 { color: v-bind('computeEncoderLevelColor("pitch", "Pitch", 4, true, true)'); }
+.effects .encoders .pitch .level #Level12 { color: v-bind('computeEncoderLevelColor("pitch", "Pitch", 5, true, true)'); }
+.effects .encoders .pitch .level #Level13 { color: v-bind('computeEncoderLevelColor("pitch", "Pitch", 6, true, true)'); }
 
-/* echo encoder */
+/* effects area: echo encoder */
 .effects .encoders .echo #Encoder {
   transform: v-bind('computeEncoderRotation("echo")');
   color: v-bind('computeEncoderColor("Echo")');
 }
-.effects .encoders .echo .level #Level1 { color: v-bind('computerEncoderLevelColor("echo", "Echo", 1)'); }
-.effects .encoders .echo .level #Level2 { color: v-bind('computerEncoderLevelColor("echo", "Echo", 2)'); }
-.effects .encoders .echo .level #Level3 { color: v-bind('computerEncoderLevelColor("echo", "Echo", 3)'); }
-.effects .encoders .echo .level #Level4 { color: v-bind('computerEncoderLevelColor("echo", "Echo", 4)'); }
-.effects .encoders .echo .level #Level5 { color: v-bind('computerEncoderLevelColor("echo", "Echo", 5)'); }
-.effects .encoders .echo .level #Level6 { color: v-bind('computerEncoderLevelColor("echo", "Echo", 6)'); }
-.effects .encoders .echo .level #Level7 { color: v-bind('computerEncoderLevelColor("echo", "Echo", 7)'); }
-.effects .encoders .echo .level #Level8 { color: v-bind('computerEncoderLevelColor("echo", "Echo", 8)'); }
-.effects .encoders .echo .level #Level9 { color: v-bind('computerEncoderLevelColor("echo", "Echo", 9)'); }
-.effects .encoders .echo .level #Level10 { color: v-bind('computerEncoderLevelColor("echo", "Echo", 10)'); }
-.effects .encoders .echo .level #Level11 { color: v-bind('computerEncoderLevelColor("echo", "Echo", 11)'); }
-.effects .encoders .echo .level #Level12 { color: v-bind('computerEncoderLevelColor("echo", "Echo", 12)'); }
-.effects .encoders .echo .level #Level13 { color: v-bind('computerEncoderLevelColor("echo", "Echo", 13)'); }
+.effects .encoders .echo .level #Level1 { color: v-bind('computeEncoderLevelColor("echo", "Echo", 1)'); }
+.effects .encoders .echo .level #Level2 { color: v-bind('computeEncoderLevelColor("echo", "Echo", 2)'); }
+.effects .encoders .echo .level #Level3 { color: v-bind('computeEncoderLevelColor("echo", "Echo", 3)'); }
+.effects .encoders .echo .level #Level4 { color: v-bind('computeEncoderLevelColor("echo", "Echo", 4)'); }
+.effects .encoders .echo .level #Level5 { color: v-bind('computeEncoderLevelColor("echo", "Echo", 5)'); }
+.effects .encoders .echo .level #Level6 { color: v-bind('computeEncoderLevelColor("echo", "Echo", 6)'); }
+.effects .encoders .echo .level #Level7 { color: v-bind('computeEncoderLevelColor("echo", "Echo", 7)'); }
+.effects .encoders .echo .level #Level8 { color: v-bind('computeEncoderLevelColor("echo", "Echo", 8)'); }
+.effects .encoders .echo .level #Level9 { color: v-bind('computeEncoderLevelColor("echo", "Echo", 9)'); }
+.effects .encoders .echo .level #Level10 { color: v-bind('computeEncoderLevelColor("echo", "Echo", 10)'); }
+.effects .encoders .echo .level #Level11 { color: v-bind('computeEncoderLevelColor("echo", "Echo", 11)'); }
+.effects .encoders .echo .level #Level12 { color: v-bind('computeEncoderLevelColor("echo", "Echo", 12)'); }
+.effects .encoders .echo .level #Level13 { color: v-bind('computeEncoderLevelColor("echo", "Echo", 13)'); }
 
-/* gender encoder */
+/* effects area: gender encoder */
 .effects .encoders .gender #Encoder {
-  transform: v-bind('computeEncoderRotation("gender")');
+  transform: v-bind('computeEncoderRotation("gender", true)');
   color: v-bind('computeEncoderColor("Gender")');
 }
-.effects .encoders .gender .level #Level1 { color: v-bind('computerEncoderLevelColor("gender", "Gender", -6, true)'); }
-.effects .encoders .gender .level #Level2 { color: v-bind('computerEncoderLevelColor("gender", "Gender", -5, true)'); }
-.effects .encoders .gender .level #Level3 { color: v-bind('computerEncoderLevelColor("gender", "Gender", -4, true)'); }
-.effects .encoders .gender .level #Level4 { color: v-bind('computerEncoderLevelColor("gender", "Gender", -3, true)'); }
-.effects .encoders .gender .level #Level5 { color: v-bind('computerEncoderLevelColor("gender", "Gender", -2, true)'); }
-.effects .encoders .gender .level #Level6 { color: v-bind('computerEncoderLevelColor("gender", "Gender", -1, true)'); }
-.effects .encoders .gender .level #Level7 { color: v-bind('computerEncoderLevelColor("gender", "Gender", 0, true)'); }
-.effects .encoders .gender .level #Level8 { color: v-bind('computerEncoderLevelColor("gender", "Gender", 1, true)'); }
-.effects .encoders .gender .level #Level9 { color: v-bind('computerEncoderLevelColor("gender", "Gender", 2, true)'); }
-.effects .encoders .gender .level #Level10 { color: v-bind('computerEncoderLevelColor("gender", "Gender", 3, true)'); }
-.effects .encoders .gender .level #Level11 { color: v-bind('computerEncoderLevelColor("gender", "Gender", 4, true)'); }
-.effects .encoders .gender .level #Level12 { color: v-bind('computerEncoderLevelColor("gender", "Gender", 5, true)'); }
-.effects .encoders .gender .level #Level13 { color: v-bind('computerEncoderLevelColor("gender", "Gender", 6, true)'); }
+.effects .encoders .gender .level #Level1 { color: v-bind('computeEncoderLevelColor("gender", "Gender", -6, true)'); }
+.effects .encoders .gender .level #Level2 { color: v-bind('computeEncoderLevelColor("gender", "Gender", -5, true)'); }
+.effects .encoders .gender .level #Level3 { color: v-bind('computeEncoderLevelColor("gender", "Gender", -4, true)'); }
+.effects .encoders .gender .level #Level4 { color: v-bind('computeEncoderLevelColor("gender", "Gender", -3, true)'); }
+.effects .encoders .gender .level #Level5 { color: v-bind('computeEncoderLevelColor("gender", "Gender", -2, true)'); }
+.effects .encoders .gender .level #Level6 { color: v-bind('computeEncoderLevelColor("gender", "Gender", -1, true)'); }
+.effects .encoders .gender .level #Level7 { color: v-bind('computeEncoderLevelColor("gender", "Gender", 0, true)'); }
+.effects .encoders .gender .level #Level8 { color: v-bind('computeEncoderLevelColor("gender", "Gender", 1, true)'); }
+.effects .encoders .gender .level #Level9 { color: v-bind('computeEncoderLevelColor("gender", "Gender", 2, true)'); }
+.effects .encoders .gender .level #Level10 { color: v-bind('computeEncoderLevelColor("gender", "Gender", 3, true)'); }
+.effects .encoders .gender .level #Level11 { color: v-bind('computeEncoderLevelColor("gender", "Gender", 4, true)'); }
+.effects .encoders .gender .level #Level12 { color: v-bind('computeEncoderLevelColor("gender", "Gender", 5, true)'); }
+.effects .encoders .gender .level #Level13 { color: v-bind('computeEncoderLevelColor("gender", "Gender", 6, true)'); }
 
+/* sampler area */
+/* TODO: animation */
+/* TODO: clear button */
+.sampler #BankA { color: v-bind('computeSamplerBankColor("A")'); }
+.sampler #BankB { color: v-bind('computeSamplerBankColor("B")'); }
+.sampler #BankC { color: v-bind('computeSamplerBankColor("C")'); }
+.sampler #TopLeft { color: v-bind('computeSamplerSampleColor("TopLeft")'); }
+.sampler #TopRight { color: v-bind('computeSamplerSampleColor("TopRight")'); }
+.sampler #BottomLeft { color: v-bind('computeSamplerSampleColor("BottomLeft")'); }
+.sampler #BottomRight { color: v-bind('computeSamplerSampleColor("BottomRight")'); }
+
+/* mixer area: fader */
+#Channel1 .rail #Fader { transform: v-bind('computeMixerFaderPosition("A")'); }
+#Channel2 .rail #Fader { transform: v-bind('computeMixerFaderPosition("B")'); }
+#Channel3 .rail #Fader { transform: v-bind('computeMixerFaderPosition("C")'); }
+#Channel4 .rail #Fader { transform: v-bind('computeMixerFaderPosition("D")'); }
+
+/* mixer area: mute buttons */
+#Channel1 #Mute { color: v-bind('computeMixerMuteColor("A")'); }
+#Channel2 #Mute { color: v-bind('computeMixerMuteColor("B")'); }
+#Channel3 #Mute { color: v-bind('computeMixerMuteColor("C")'); }
+#Channel4 #Mute { color: v-bind('computeMixerMuteColor("D")'); }
+
+/* mixer area: fader 1 */
+#Channel1 .level #Level1 { color: v-bind('computeMixerLevelColor("A", 1)'); }
+#Channel1 .level #Level2 { color: v-bind('computeMixerLevelColor("A", 2)'); }
+#Channel1 .level #Level3 { color: v-bind('computeMixerLevelColor("A", 3)'); }
+#Channel1 .level #Level4 { color: v-bind('computeMixerLevelColor("A", 4)'); }
+#Channel1 .level #Level5 { color: v-bind('computeMixerLevelColor("A", 5)'); }
+#Channel1 .level #Level6 { color: v-bind('computeMixerLevelColor("A", 6)'); }
+#Channel1 .level #Level7 { color: v-bind('computeMixerLevelColor("A", 7)'); }
+#Channel1 .level #Level8 { color: v-bind('computeMixerLevelColor("A", 8)'); }
+#Channel1 .level #Level9 { color: v-bind('computeMixerLevelColor("A", 9)'); }
+#Channel1 .level #Level10 { color: v-bind('computeMixerLevelColor("A", 10)'); }
+#Channel1 .level #Level11 { color: v-bind('computeMixerLevelColor("A", 11)'); }
+#Channel1 .level #Level12 { color: v-bind('computeMixerLevelColor("A", 12)'); }
+#Channel1 .level #Level13 { color: v-bind('computeMixerLevelColor("A", 13)'); }
+#Channel1 .level #Level14 { color: v-bind('computeMixerLevelColor("A", 14)'); }
+#Channel1 .level #Level15 { color: v-bind('computeMixerLevelColor("A", 15)'); }
+
+/* mixer area: fader 2 */
+#Channel2 .level #Level1 { color: v-bind('computeMixerLevelColor("B", 1)'); }
+#Channel2 .level #Level2 { color: v-bind('computeMixerLevelColor("B", 2)'); }
+#Channel2 .level #Level3 { color: v-bind('computeMixerLevelColor("B", 3)'); }
+#Channel2 .level #Level4 { color: v-bind('computeMixerLevelColor("B", 4)'); }
+#Channel2 .level #Level5 { color: v-bind('computeMixerLevelColor("B", 5)'); }
+#Channel2 .level #Level6 { color: v-bind('computeMixerLevelColor("B", 6)'); }
+#Channel2 .level #Level7 { color: v-bind('computeMixerLevelColor("B", 7)'); }
+#Channel2 .level #Level8 { color: v-bind('computeMixerLevelColor("B", 8)'); }
+#Channel2 .level #Level9 { color: v-bind('computeMixerLevelColor("B", 9)'); }
+#Channel2 .level #Level10 { color: v-bind('computeMixerLevelColor("B", 10)'); }
+#Channel2 .level #Level11 { color: v-bind('computeMixerLevelColor("B", 11)'); }
+#Channel2 .level #Level12 { color: v-bind('computeMixerLevelColor("B", 12)'); }
+#Channel2 .level #Level13 { color: v-bind('computeMixerLevelColor("B", 13)'); }
+#Channel2 .level #Level14 { color: v-bind('computeMixerLevelColor("B", 14)'); }
+#Channel2 .level #Level15 { color: v-bind('computeMixerLevelColor("B", 15)'); }
+
+/* mixer area: fader 3 */
+#Channel3 .level #Level1 { color: v-bind('computeMixerLevelColor("C", 1)'); }
+#Channel3 .level #Level2 { color: v-bind('computeMixerLevelColor("C", 2)'); }
+#Channel3 .level #Level3 { color: v-bind('computeMixerLevelColor("C", 3)'); }
+#Channel3 .level #Level4 { color: v-bind('computeMixerLevelColor("C", 4)'); }
+#Channel3 .level #Level5 { color: v-bind('computeMixerLevelColor("C", 5)'); }
+#Channel3 .level #Level6 { color: v-bind('computeMixerLevelColor("C", 6)'); }
+#Channel3 .level #Level7 { color: v-bind('computeMixerLevelColor("C", 7)'); }
+#Channel3 .level #Level8 { color: v-bind('computeMixerLevelColor("C", 8)'); }
+#Channel3 .level #Level9 { color: v-bind('computeMixerLevelColor("C", 9)'); }
+#Channel3 .level #Level10 { color: v-bind('computeMixerLevelColor("C", 10)'); }
+#Channel3 .level #Level11 { color: v-bind('computeMixerLevelColor("C", 11)'); }
+#Channel3 .level #Level12 { color: v-bind('computeMixerLevelColor("C", 12)'); }
+#Channel3 .level #Level13 { color: v-bind('computeMixerLevelColor("C", 13)'); }
+#Channel3 .level #Level14 { color: v-bind('computeMixerLevelColor("C", 14)'); }
+#Channel3 .level #Level15 { color: v-bind('computeMixerLevelColor("C", 15)'); }
+
+/* mixer area: fader 4 */
+#Channel4 .level #Level1 { color: v-bind('computeMixerLevelColor("D", 1)'); }
+#Channel4 .level #Level2 { color: v-bind('computeMixerLevelColor("D", 2)'); }
+#Channel4 .level #Level3 { color: v-bind('computeMixerLevelColor("D", 3)'); }
+#Channel4 .level #Level4 { color: v-bind('computeMixerLevelColor("D", 4)'); }
+#Channel4 .level #Level5 { color: v-bind('computeMixerLevelColor("D", 5)'); }
+#Channel4 .level #Level6 { color: v-bind('computeMixerLevelColor("D", 6)'); }
+#Channel4 .level #Level7 { color: v-bind('computeMixerLevelColor("D", 7)'); }
+#Channel4 .level #Level8 { color: v-bind('computeMixerLevelColor("D", 8)'); }
+#Channel4 .level #Level9 { color: v-bind('computeMixerLevelColor("D", 9)'); }
+#Channel4 .level #Level10 { color: v-bind('computeMixerLevelColor("D", 10)'); }
+#Channel4 .level #Level11 { color: v-bind('computeMixerLevelColor("D", 11)'); }
+#Channel4 .level #Level12 { color: v-bind('computeMixerLevelColor("D", 12)'); }
+#Channel4 .level #Level13 { color: v-bind('computeMixerLevelColor("D", 13)'); }
+#Channel4 .level #Level14 { color: v-bind('computeMixerLevelColor("D", 14)'); }
+#Channel4 .level #Level15 { color: v-bind('computeMixerLevelColor("D", 15)'); }
 </style>
