@@ -30,6 +30,33 @@ export default {
           label: 'Accent'
         }
       ],
+      animation_mode_options: [
+        {
+          id: 'None',
+          label: 'None',
+        },
+        {
+          id: 'RetroRainbow',
+          label: 'Rainbow Retro'
+        },
+        {
+          id: 'RainbowBright',
+          label: 'Rainbow Bright'
+        },
+        {
+          id: 'RainbowDark',
+          label: 'Rainbow Dark'
+        },
+        {
+          id: 'Simple',
+          label: 'Simple'
+        },
+        {
+          id: 'Ripple',
+          label: 'Ripple'
+        }
+      ],
+
       selected: 'Global'
     }
   },
@@ -50,6 +77,18 @@ export default {
         websocket.send_command(store.getActiveSerial(), {"SetGlobalColour": value.substr(1, 6)});
       }
     },
+
+    animationSupported() {
+      return store.getActiveDevice().lighting.animation.supported;
+    },
+
+    animationModeSelected() {
+      return store.getActiveDevice().lighting.animation.mode;
+    },
+
+    onAnimationModeChange(id) {
+      websocket.send_command(store.getActiveSerial(), { "SetAnimationMode": id });
+    },
   }
 }
 </script>
@@ -62,6 +101,11 @@ export default {
                         @selection-changed="onSelectionChange"/>
         <ColourPicker title="Colour" :color-value="color()" @colour-changed="onColourChange"/>
       </GroupContainer>
+      <GroupContainer v-if="animationSupported()" title="Animations">
+        <RadioSelection title="Animation Mode" group="lighting_animation" :options="this.animation_mode_options"
+                        :selected="this.animationModeSelected()" @selection-changed="onAnimationModeChange"/>
+      </GroupContainer>
+
     </ContentContainer>
   </CenteredContainer>
 </template>
