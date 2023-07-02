@@ -110,7 +110,7 @@ export default {
       return '#' + store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[fader]].colours.colour_two;
     },
     isMixerMuteBlinking(fader) {
-      store.getActiveDevice().fader_status[fader].mute_state === "MutedToAll";
+      return store.getActiveDevice().fader_status[fader].mute_state === "MutedToAll";
     },
     computeMixerDisplayColour(display) {
       return '#' + store.getActiveDevice().lighting.simple[`Scribble${display}`].colour_one;
