@@ -171,14 +171,27 @@ export default {
       }
     },
 
-    computeEncoderRotation(effectName, affectedByHardTune = false) {
+    computeEncoderRotation(effectName, centerMode = false) {
       const effectAmount = store.getActiveDevice().effects.current[effectName].amount,
-          hardTuneActive = store.getActiveDevice().effects.current.hard_tune.is_enabled;
+          hardTuneActive = store.getActiveDevice().effects.current.hard_tune.is_enabled,
+          transformRotationLimit = 270;
 
-      let transformRotationLimit = 270;
-      if (hardTuneActive && affectedByHardTune) transformRotationLimit /= 2;
+      // basic encoders
+      if (!centerMode)
+        return `rotate(${Math.ceil(transformRotationLimit / 100 * effectAmount)}deg)`;
 
-      return `rotate(${Math.ceil(transformRotationLimit / 100 * effectAmount)}deg)`;
+      // hard tune is disabled
+      if (!hardTuneActive)
+        return `rotate(${Math.ceil(transformRotationLimit / 60 * effectAmount)}deg)`;
+
+      switch (Math.sign(effectAmount)) {
+        case 1:
+          return `rotate(${Math.ceil(transformRotationLimit / 4 * effectAmount)}deg)`;
+        case -1:
+          return `rotate(-${Math.ceil(transformRotationLimit / 4 * (effectAmount * -1))}deg)`;
+        default:
+          return `rotate(0deg)`;
+      }
     },
     computeEncoderColor(effectName) {
       return `#${store.getActiveDevice().lighting.encoders[effectName].colour_three}`;
