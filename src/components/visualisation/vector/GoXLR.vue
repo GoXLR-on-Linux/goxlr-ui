@@ -109,6 +109,7 @@ export default {
 
       // TODO: can be simplified
     },
+
     computeBleepButtonColor() {
       const colors = store.getActiveDevice().lighting.buttons.Bleep.colours,
             isPressed = store.getActiveDevice().button_down.Bleep,
@@ -321,9 +322,16 @@ export default {
     },
     isClearActive() {
       return store.getActiveDevice().sampler.clear_active;
+    },
+    isMuteBlinking() {
+      return store.getActiveDevice().cough_button.state === "MutedToAll";
+    },
+    muteInactiveColor() {
+      return '#' + store.getActiveDevice().lighting.buttons.Cough.colours.colour_two;
     }
   },
   watch: {
+    // TODO: implement error handling if query fails (mini svg is missing some features)
     isTopLeftSampleRecording(active) {
       const elem = document.querySelector(".sampler #TopLeft");
       if (active) elem.classList.add("blink");
@@ -348,6 +356,11 @@ export default {
       const elem = document.querySelector(".sampler #Clear");
       if (active) elem.classList.add("blink");
       else elem.classList.remove("blink");
+    },
+    isMuteBlinking(active) {
+      const elem = document.querySelector(".cough #Mute");
+      if (active) elem.classList.add("blink");
+      else elem.classList.remove("blink");
     }
   }
 }
@@ -366,9 +379,14 @@ export default {
   0%, 49% { color: v-bind('computeSamplerClearColor(1)'); }
   50%, 100% { color: v-bind('computeSamplerClearColor(2)'); }
 }
+@keyframes mute-blink-animation {
+  0%, 49% { color: v-bind('computeCoughButtonColor()'); }
+  50%, 100% { color: v-bind('muteInactiveColor'); }
+}
 
 /* cough area */
 .cough #Mute { color: v-bind('computeCoughButtonColor()'); }
+.cough #Mute.blink { animation: mute-blink-animation 1s infinite; }
 .cough #Bleep { color: v-bind('computeBleepButtonColor()'); }
 /* TODO: animation */
 
