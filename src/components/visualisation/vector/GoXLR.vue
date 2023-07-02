@@ -246,8 +246,7 @@ export default {
           colorThree = this.transformColor(colors.colour_three),
           dimMin = 125; // min-brightness if empty color set to black (aka. disable lighting)
 
-      // no longer needs special treatment for #000
-      if (sampleState.samples.length === 0 && !sampleState.is_recording) {
+      if (sampleState.samples.length === 0) {
         // set to somewhat gray-ish color if set to a very dark color
         if(colorThree.r < dimMin && colorThree.r === colorThree.g && colorThree.g === colorThree.b && colorThree.g === colorThree.b)
           return `rgba(${dimMin}, ${dimMin}, ${dimMin}, 0.4)`
@@ -259,6 +258,83 @@ export default {
         return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
 
       return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 0.4)`;
+    },
+    computeSamplerBlinkColor(colorState) {
+      const activeBank = store.getActiveDevice().sampler.active_bank,
+          colors = store.getActiveDevice().lighting.sampler[`SamplerSelect${activeBank}`].colours,
+          colorOne = this.transformColor(colors.colour_one),
+          colorThree = this.transformColor(colors.colour_three),
+          dimMin = 125; // min-brightness if empty color set to black (aka. disable lighting)
+
+      if (colorState === 1) return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
+
+      // set to somewhat gray-ish color if set to a very dark color
+      if(colorThree.r < dimMin && colorThree.r === colorThree.g && colorThree.g === colorThree.b && colorThree.g === colorThree.b)
+        return `rgba(${dimMin}, ${dimMin}, ${dimMin}, 0.4)`
+      else
+        return `rgba(${colorThree.r}, ${colorThree.g}, ${colorThree.b}, 0.4)`;
+    },
+    computeSamplerClearColor(colorState) {
+      const activeBank = store.getActiveDevice().sampler.active_bank,
+          colors = store.getActiveDevice().lighting.sampler[`SamplerSelect${activeBank}`].colours,
+          colorOne = this.transformColor(colors.colour_one);
+
+      if (colorState === 1)
+        return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 1)`;
+      else
+        return `rgba(${colorOne.r}, ${colorOne.g}, ${colorOne.b}, 0.4)`;
+    }
+  },
+  computed: {
+    isTopLeftSampleRecording() {
+      let activeBank = store.getActiveDevice().sampler.active_bank;
+      let sampleState = store.getActiveDevice().sampler.banks[activeBank]["TopLeft"];
+      return sampleState.is_recording;
+    },
+    isTopRightSampleRecording() {
+      let activeBank = store.getActiveDevice().sampler.active_bank;
+      let sampleState = store.getActiveDevice().sampler.banks[activeBank]["TopRight"];
+      return sampleState.is_recording;
+    },
+    isBottomLeftSampleRecording() {
+      let activeBank = store.getActiveDevice().sampler.active_bank;
+      let sampleState = store.getActiveDevice().sampler.banks[activeBank]["BottomLeft"];
+      return sampleState.is_recording;
+    },
+    isBottomRightSampleRecording() {
+      let activeBank = store.getActiveDevice().sampler.active_bank;
+      let sampleState = store.getActiveDevice().sampler.banks[activeBank]["BottomRight"];
+      return sampleState.is_recording;
+    },
+    isClearActive() {
+      return store.getActiveDevice().sampler.clear_active;
+    }
+  },
+  watch: {
+    isTopLeftSampleRecording(active) {
+      const elem = document.querySelector(".sampler #TopLeft");
+      if (active) elem.classList.add("blink");
+      else elem.classList.remove("blink");
+    },
+    isTopRightSampleRecording(active) {
+      const elem = document.querySelector(".sampler #TopRight");
+      if (active) elem.classList.add("blink");
+      else elem.classList.remove("blink");
+    },
+    isBottomLeftSampleRecording(active) {
+      const elem = document.querySelector(".sampler #BottomLeft");
+      if (active) elem.classList.add("blink");
+      else elem.classList.remove("blink");
+    },
+    isBottomRightSampleRecording(active) {
+      const elem = document.querySelector(".sampler #BottomRight");
+      if (active) elem.classList.add("blink");
+      else elem.classList.remove("blink");
+    },
+    isClearActive(active) {
+      const elem = document.querySelector(".sampler #Clear");
+      if (active) elem.classList.add("blink");
+      else elem.classList.remove("blink");
     }
   }
 }
@@ -267,6 +343,16 @@ export default {
 <style scoped>
 #GoXLR { width: 100%; height: 100%; }
 #Logo { color: v-bind("computeAccentColor()"); }
+
+/* animations */
+@keyframes sample-blink-animation {
+  0%, 49% { color: v-bind('computeSamplerBlinkColor(1)'); }
+  50%, 100% { color: v-bind('computeSamplerBlinkColor(2)'); }
+}
+@keyframes clear-blink-animation {
+  0%, 49% { color: v-bind('computeSamplerClearColor(1)'); }
+  50%, 100% { color: v-bind('computeSamplerClearColor(2)'); }
+}
 
 /* cough area */
 .cough #Mute { color: v-bind('computeCoughButtonColor()'); }
@@ -361,16 +447,20 @@ export default {
 .effects .encoders .gender .level #Level12 { color: v-bind('computeEncoderLevelColor("gender", "Gender", 5, true)'); }
 .effects .encoders .gender .level #Level13 { color: v-bind('computeEncoderLevelColor("gender", "Gender", 6, true)'); }
 
-/* sampler area */
-/* TODO: animation */
-/* TODO: clear button */
+/* sampler area: buttons */
 .sampler #BankA { color: v-bind('computeSamplerBankColor("A")'); }
 .sampler #BankB { color: v-bind('computeSamplerBankColor("B")'); }
 .sampler #BankC { color: v-bind('computeSamplerBankColor("C")'); }
+.sampler #Clear { color: v-bind('computeSamplerClearColor(2)'); }
+.sampler #Clear.blink { animation: clear-blink-animation 1s infinite; }
 .sampler #TopLeft { color: v-bind('computeSamplerSampleColor("TopLeft")'); }
+.sampler #TopLeft.blink { animation: sample-blink-animation 1s infinite; }
 .sampler #TopRight { color: v-bind('computeSamplerSampleColor("TopRight")'); }
+.sampler #TopRight.blink { animation: sample-blink-animation 1s infinite; }
 .sampler #BottomLeft { color: v-bind('computeSamplerSampleColor("BottomLeft")'); }
+.sampler #BottomLeft.blink { animation: sample-blink-animation 1s infinite; }
 .sampler #BottomRight { color: v-bind('computeSamplerSampleColor("BottomRight")'); }
+.sampler #BottomRight.blink { animation: sample-blink-animation 1s infinite; }
 
 /* mixer area: fader */
 #Channel1 .rail #Fader { transform: v-bind('computeMixerFaderPosition("A")'); }
