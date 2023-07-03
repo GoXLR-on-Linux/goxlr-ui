@@ -81,7 +81,7 @@ export default {
       const currentValue = this.getFaderValue();
       let newValue = increase ? currentValue + changeAmount : currentValue - changeAmount;
 
-      if(newValue > 255) {
+      if(newValue > 250) {
         newValue = 250;
       } else if(newValue < 0) {
         newValue = 0;
