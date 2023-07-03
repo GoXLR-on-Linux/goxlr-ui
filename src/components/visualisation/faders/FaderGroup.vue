@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 70px; display: flex; flex-direction: column; padding: 3px; border: 1px solid #353937">
+  <div style="width: 70px; display: flex; flex-direction: column; padding: 3px; border: 1px solid #353937" @wheel="handleScroll">
     <div v-if="!isDeviceMini()" class="scribble"></div>
     <div style="display: flex; flex-direction: row">
       <div style="margin-left: 7px; margin-top: 20px;">
@@ -27,6 +27,7 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {store} from "@/store";
 import {MuteButtonNamesForFader, ScribbleNames} from "@/util/mixerMapping";
 import {isDeviceMini} from "@/util/util";
+import {websocket} from "@/util/sockets";
 
 export default {
   name: "VisualisationFader",
@@ -40,15 +41,49 @@ export default {
     isDeviceMini,
     getFaderValue() {
       // Firstly, we need to get the item assigned to this fader...
-      let channel = store.getActiveDevice().fader_status[this.fader].channel;
+      let channel = this.getFaderChanel();
 
       // Get the current Volume value for that channel..
       return store.getActiveDevice().levels.volumes[channel];
     },
 
+    getFaderChanel() {
+      // Get current channel for fader
+      return store.getActiveDevice().fader_status[this.fader].channel;
+    },
+
+    setFaderValue(volume) {
+      // Get current channel for fader
+      const channel = this.getFaderChanel();
+      let command = undefined;
+
+      // Submit new volume to websocket
+      command = {
+        "SetVolume": [
+          channel,
+          volume
+        ]
+      };
+      websocket.send_command(store.getActiveSerial(), command);
+      store.getActiveDevice().levels.volumes[channel] = volume;
+    },
+
     isMuteBlink() {
       return store.getActiveDevice().fader_status[this.fader].mute_state === "MutedToAll";
-    }
+    },
+
+    handleScroll(e) {
+      // Watch for scrolling over the fader
+      const changeAmount = 10;
+      // Detect the direction of scroll
+      const increase = e.deltaY < 0;
+      // Calculate the new volume
+      const currentValue = this.getFaderValue();
+      const newValue = increase ? currentValue + changeAmount : currentValue - changeAmount;
+
+      // Submit the updated value
+      this.setFaderValue(newValue);
+    },
   },
 
   computed: {
