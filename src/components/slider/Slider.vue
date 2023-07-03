@@ -1,5 +1,5 @@
 <template>
-  <div class="sliderBox" role="group" :aria-label="title">
+  <div class="sliderBox" role="group" :aria-label="title" @wheel="handleScroll">
     <slot name="header"><Label v-bind:title="title" role="heading" aria-level="3"/></slot>
     <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
            :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
@@ -217,7 +217,26 @@ export default {
 
       // Emit the latest value..
       this.$emit('value-changed', this.id, this.fieldValue, true);
-    }
+    },
+
+    handleScroll(e) {
+      // Watch for scrolling over the fader
+      const changeAmount = 10;
+      // Detect the direction of scroll
+      const increase = e.deltaY < 0;
+      // Calculate the new volume
+      const currentValue = this.fieldValue;
+      let newValue = increase ? currentValue + changeAmount : currentValue - changeAmount;
+
+      if(newValue > this.getSliderMaxValue()) {
+        newValue = this.getSliderMaxValue();
+      } else if(newValue < this.getSliderMinValue()) {
+        newValue = this.getSliderMinValue();
+      }
+
+      // Submit the updated value
+      this.$emit('value-changed', this.id, newValue, false);
+    },
   },
 
   computed: {

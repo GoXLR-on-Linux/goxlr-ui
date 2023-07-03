@@ -79,7 +79,13 @@ export default {
       const increase = e.deltaY < 0;
       // Calculate the new volume
       const currentValue = this.getFaderValue();
-      const newValue = increase ? currentValue + changeAmount : currentValue - changeAmount;
+      let newValue = increase ? currentValue + changeAmount : currentValue - changeAmount;
+
+      if(newValue > 255) {
+        newValue = 250;
+      } else if(newValue < 0) {
+        newValue = 0;
+      }
 
       // Submit the updated value
       this.setFaderValue(newValue);
