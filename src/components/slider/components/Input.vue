@@ -178,6 +178,8 @@ export default {
       if (this.valueMap === undefined) {
         this.localTextValue = newValue;
         this.lastTextValue = newValue;
+      } else {
+        this.localTextValue = this.displayValue();
       }
     }
   },
