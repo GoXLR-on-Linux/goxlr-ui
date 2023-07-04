@@ -311,8 +311,9 @@ export default {
         // Get the current volume and calculate the new one
         const changeAmount = 10;
         const faderName = this.faderFromChannel(element.id);
-        const channelName = store.getActiveDevice().fader_status[faderName].channel;
-        const currentLevel = store.getActiveDevice().levels.volumes[channelName];
+        const activeDevice = store.getActiveDevice();
+        const channelName = activeDevice.fader_status[faderName].channel;
+        const currentLevel = activeDevice.levels.volumes[channelName];
         let newValue = increase ? currentLevel + changeAmount : currentLevel - changeAmount;
 
         // Cap at 0 and 255
