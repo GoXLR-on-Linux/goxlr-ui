@@ -8,6 +8,7 @@
 <script>
 import {store} from "@/store";
 import {EffectLightingPresets, EffectPresets, MuteButtonNamesForFader} from "@/util/mixerMapping";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "GoXLR",
@@ -113,6 +114,9 @@ export default {
       return store.getActiveDevice().fader_status[fader].mute_state === "MutedToAll";
     },
     computeMixerDisplayColour(display) {
+      if (isDeviceMini()) {
+        return '#000';
+      }
       return '#' + store.getActiveDevice().lighting.simple[`Scribble${display}`].colour_one;
     },
 
@@ -140,6 +144,10 @@ export default {
     },
 
     computeEffectButtonColour(effectButtonName, effectStateName) {
+      if (isDeviceMini()) {
+        return `rgb(0,0,0,1)`;
+      }
+
       const colours = store.getActiveDevice().lighting.buttons[effectButtonName].colours,
           offStyle = store.getActiveDevice().lighting.buttons[effectButtonName].off_style,
           active = (effectStateName) === null ? store.getActiveDevice().effects.is_enabled : store.getActiveDevice().effects.current[effectStateName].is_enabled,
@@ -151,6 +159,10 @@ export default {
       return this.getOffStyleColour(offStyle, colourOne, colourTwo);
     },
     computeEffectPresetColour(presetIndex) {
+      if (isDeviceMini()) {
+        return `rgba(0,0,0,1)`;
+      }
+
       const colours = store.getActiveDevice().lighting.buttons[`EffectSelect${presetIndex}`].colours,
           offStyle = store.getActiveDevice().lighting.buttons[`EffectSelect${presetIndex}`].off_style,
           activePreset = EffectLightingPresets[EffectPresets.indexOf(store.getActiveDevice().effects.active_preset)],
@@ -164,6 +176,10 @@ export default {
     },
 
     computeEncoderRotation(effectName, centerMode = false) {
+      if (isDeviceMini()) {
+        return `rotate(0deg)`;
+      }
+
       const effectAmount = store.getActiveDevice().effects.current[effectName].amount,
           hardTuneActive = store.getActiveDevice().effects.current.hard_tune.is_enabled,
           transformRotationLimit = 270;
@@ -186,9 +202,17 @@ export default {
       }
     },
     computeEncoderColour(effectName) {
+      if (isDeviceMini()) {
+        return "#000";
+      }
+
       return `#${store.getActiveDevice().lighting.encoders[effectName].colour_three}`;
     },
     computeEncoderLevelColour(effectEncoderName, effectLightingName, indicatorLevel, centerMode = false, affectedByHardTune = false) {
+      if (isDeviceMini()) {
+        return "#000";
+      }
+
       const colours = store.getActiveDevice().lighting.encoders[effectLightingName],
         effectAmount = store.getActiveDevice().effects.current[effectEncoderName].amount,
         hardTuneActive = store.getActiveDevice().effects.current.hard_tune.is_enabled,
@@ -224,6 +248,10 @@ export default {
     },
 
     computeSamplerBankColour(bank) {
+      if (isDeviceMini()) {
+        return `rgb(0,0,0)`;
+      }
+
       const active = store.getActiveDevice().sampler.active_bank === bank,
         colours = store.getActiveDevice().lighting.sampler[`SamplerSelect${bank}`].colours,
         offStyle = store.getActiveDevice().lighting.sampler[`SamplerSelect${bank}`].off_style,
@@ -235,6 +263,10 @@ export default {
       return this.getOffStyleColour(offStyle, colourOne, colourTwo);
     },
     computeSamplerSampleColour(button) {
+      if (isDeviceMini()) {
+        return `rgb(0,0,0)`;
+      }
+
       const activeBank = store.getActiveDevice().sampler.active_bank,
           colours = store.getActiveDevice().lighting.sampler[`SamplerSelect${activeBank}`].colours,
           sampleState = store.getActiveDevice().sampler.banks[activeBank][button],
@@ -256,6 +288,10 @@ export default {
       return `rgba(${colourOne.r}, ${colourOne.g}, ${colourOne.b}, 0.4)`;
     },
     computeSamplerBlinkColour(colourState) {
+      if (isDeviceMini()) {
+        return `rgba(0,0,0,1)`;
+      }
+
       const activeBank = store.getActiveDevice().sampler.active_bank,
           colours = store.getActiveDevice().lighting.sampler[`SamplerSelect${activeBank}`].colours,
           colourOne = this.transformColour(colours.colour_one),
@@ -271,6 +307,10 @@ export default {
         return `rgba(${colourThree.r}, ${colourThree.g}, ${colourThree.b}, 0.4)`;
     },
     computeSamplerClearColour(colourState) {
+      if (isDeviceMini()) {
+        return `rgba(0,0,0,1)`;
+      }
+
       const activeBank = store.getActiveDevice().sampler.active_bank,
           colours = store.getActiveDevice().lighting.sampler[`SamplerSelect${activeBank}`].colours,
           colourOne = this.transformColour(colours.colour_one);
@@ -283,11 +323,11 @@ export default {
   },
   computed: {
     // variables required for watch
-    isTopLeftSampleRecording() { return this.isSampleRecording("TopLeft"); },
-    isTopRightSampleRecording() { return this.isSampleRecording("TopRight"); },
-    isBottomLeftSampleRecording() { return this.isSampleRecording("BottomLeft"); },
-    isBottomRightSampleRecording() { return this.isSampleRecording("BottomRight"); },
-    isClearActive() { return store.getActiveDevice().sampler.clear_active; },
+    isTopLeftSampleRecording() { if (isDeviceMini()) {return false;} return this.isSampleRecording("TopLeft"); },
+    isTopRightSampleRecording() { if (isDeviceMini()) {return false;}return this.isSampleRecording("TopRight"); },
+    isBottomLeftSampleRecording() { if (isDeviceMini()) {return false;}return this.isSampleRecording("BottomLeft"); },
+    isBottomRightSampleRecording() { if (isDeviceMini()) {return false;} return this.isSampleRecording("BottomRight"); },
+    isClearActive() { if (isDeviceMini()) {return false;} return store.getActiveDevice().sampler.clear_active; },
     isFader1Blinking() { return store.getActiveDevice().fader_status["A"].mute_state === "MutedToAll"; },
     isFader2Blinking() { return store.getActiveDevice().fader_status["B"].mute_state === "MutedToAll"; },
     isFader3Blinking() { return store.getActiveDevice().fader_status["C"].mute_state === "MutedToAll"; },

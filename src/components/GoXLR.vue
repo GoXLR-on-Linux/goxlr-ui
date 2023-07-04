@@ -8,7 +8,7 @@
           <FileTabs />
         </div>
         <div aria-hidden="true" style="margin: auto">
-          <GoXLRVisualiser :refs="getRefs" />
+          <GoXLRVisualiser />
         </div>
       </div>
 
@@ -111,10 +111,6 @@ export default {
     isDeviceSet() {
       return store.hasActiveDevice() && store.isConnected();
     },
-
-    getRefs() {
-      return this.$refs;
-    }
   },
 
   created() {
