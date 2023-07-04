@@ -1,10 +1,10 @@
 <template>
   <div :class="{ 'rotation-wrapper': needsRotation }">
     <div :class="{ 'rotation': needsRotation }">
-      <input class="slider" type="range" v-bind:style="getCurrentStyle" v-bind:min="minValue"
+      <input class="slider" ref="slider" type="range" v-bind:style="getCurrentStyle" v-bind:min="minValue"
              v-bind:max="maxValue" v-bind:value="localFieldValue" v-on:input="update"
              v-on:mousedown="mouseDown" v-on:mouseup="mouseUp" v-on:keydown="mouseDown" v-on:keyup="mouseUp"
-             v-on:touchstart="mouseDown" v-on:touchend="mouseUp" v-on:touchcancel="mouseUp"
+             v-on:touchstart="mouseDown" v-on:touchend="mouseUp" v-on:touchcancel="mouseUp" v-on:touchmove="touchMove"
              :aria-label="title" :aria-description="title" :aria-valuetext="getReportedValue()" :step="step"
              :disabled="disabled"
       />
@@ -55,15 +55,56 @@ export default {
       return this.announceValue;
     },
 
-    mouseDown(e) {
-      console.log(e);
+    mouseDown() {
       store.pausePatchPath(this.storePath);
       store.pause();
       this.$emit("mouse-down", this.id)
     },
 
-    mouseUp(e) {
-      console.log(e);
+    touchMove(e) {
+      // Ok, so this is primarily here because Chrome doesn't seem to grab the 'handle' of the sliders correctly
+      // when they're in a vertical mode (horizontal works fine). So we try to do the calcuation ourselves, tracking
+      // what the finger is doing and where it is whenever it moves, and apply the update logic directly.
+
+      // This workaround is only needed for Chromium based browsers, when our sliders are vertical.
+      if (!(window.chrome) || !this.needsRotation) {
+        return;
+      }
+
+      // Get the 'Top' position, and height for the element being manipulated..
+      let ele = this.$refs.slider.getBoundingClientRect();
+      let y = ele.y;
+      let height = ele.height;
+
+      // Grab the current 'Y' position for the finger on the page..
+      let touch = e.touches[0] || e.changedTouches[0];
+      let yPosition = touch.pageY - y;
+
+      // Grab the total number of steps in this element..
+      let steps = Math.abs(this.maxValue - this.minValue);
+
+      // Calculate where our finger position is on those steps
+      let step = steps - ((yPosition / height) * steps);
+
+      // Grab our current value by simply adding the steps to the minValue
+      let currentValue = this.minValue + Math.round(step);
+
+      // Make sure we're in-bounds..
+      if (currentValue > this.maxValue) {
+        currentValue = this.maxValue;
+      }
+      if (currentValue < this.minValue) {
+        currentValue = this.minValue;
+      }
+
+      // Update the local value, and the slider value with the new data...
+      this.localFieldValue = currentValue;
+
+      // Trigger an update event on this change.
+      this.update(e);
+    },
+
+    mouseUp() {
       this.$emit("mouse-up", this.id)
       store.resumePatchPath(this.storePath);
       store.resume();
@@ -119,6 +160,7 @@ export default {
 .slider {
   background: linear-gradient(to right, v-bind(colour) 0%, v-bind(colour) 50%, v-bind(backgroundColour) 50%, v-bind(backgroundColour) 100%);
 
+  position: relative;
   border-radius: 2px;
   height: 3px;
   width: v-bind(heightString);
