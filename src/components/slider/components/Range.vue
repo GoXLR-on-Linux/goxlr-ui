@@ -4,6 +4,7 @@
       <input class="slider" type="range" v-bind:style="getCurrentStyle" v-bind:min="minValue"
              v-bind:max="maxValue" v-bind:value="localFieldValue" v-on:input="update"
              v-on:mousedown="mouseDown" v-on:mouseup="mouseUp" v-on:keydown="mouseDown" v-on:keyup="mouseUp"
+             v-on:touchstart="mouseDown" v-on:touchend="mouseUp" v-on:touchcancel="mouseUp"
              :aria-label="title" :aria-description="title" :aria-valuetext="getReportedValue()" :step="step"
              :disabled="disabled"
       />
@@ -54,13 +55,15 @@ export default {
       return this.announceValue;
     },
 
-    mouseDown() {
+    mouseDown(e) {
+      console.log(e);
       store.pausePatchPath(this.storePath);
       store.pause();
       this.$emit("mouse-down", this.id)
     },
 
-    mouseUp() {
+    mouseUp(e) {
+      console.log(e);
       this.$emit("mouse-up", this.id)
       store.resumePatchPath(this.storePath);
       store.resume();
@@ -124,6 +127,7 @@ export default {
   -webkit-appearance: none;
 
   display: block;
+  touch-action: none;
 }
 
 input[type='range']::-webkit-slider-thumb {
