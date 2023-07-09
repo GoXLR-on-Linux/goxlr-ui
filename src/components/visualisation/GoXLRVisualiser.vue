@@ -1,5 +1,5 @@
 <template>
-  <div class="preview">
+  <div class="preview" @wheel="handleScroll">
     <img svg-inline v-if="!this.isDeviceMini" src="../../assets/preview/GoXLR.svg" alt="GoXLR preview">
     <img svg-inline v-else src="../../assets/preview/GoXLR-Mini.svg" alt="GoXLR preview">
   </div>
@@ -8,6 +8,7 @@
 <script>
 import {store} from "@/store";
 import {EffectLightingPresets, EffectPresets, MuteButtonNamesForFader} from "@/util/mixerMapping";
+import {websocket} from "@/util/sockets";
 import {isDeviceMini} from "@/util/util";
 
 export default {
@@ -319,7 +320,67 @@ export default {
         return `rgba(${colourOne.r}, ${colourOne.g}, ${colourOne.b}, 1)`;
       else
         return `rgba(${colourOne.r}, ${colourOne.g}, ${colourOne.b}, 0.4)`;
-    }
+    },
+
+    faderFromChannel(channel) {
+      const channels = {
+        "Channel1": "A",
+        "Channel2": "B",
+        "Channel3": "C",
+        "Channel4": "D",
+      }
+
+      return channels[channel];
+    },
+
+    handleScroll(e) {
+      const increase = e.deltaY < 0;
+      let isWithinScrollDiv = false;
+      let element = e.target;
+
+      // Check what the user is hovering over
+      while (element) {
+        if (element.id.includes('Channel')) {
+          isWithinScrollDiv = true;
+          break;
+        }
+        element = element.parentElement;
+      }
+
+      if(isWithinScrollDiv) {
+        // Get the current volume and calculate the new one
+        const changeAmount = 10;
+        const faderName = this.faderFromChannel(element.id);
+        const activeDevice = store.getActiveDevice();
+        const channelName = activeDevice.fader_status[faderName].channel;
+        const currentLevel = activeDevice.levels.volumes[channelName];
+        let newValue = increase ? currentLevel + changeAmount : currentLevel - changeAmount;
+
+        // Cap at 0 and 255
+        if (newValue > 255) {
+          newValue = 255;
+        } else if(newValue < 0) {
+          newValue = 0;
+        }
+
+        // Set the new volume
+        return this.setChannelValue(channelName, newValue);
+      }
+    },
+
+    setChannelValue(channel, volume) {
+      let command = undefined;
+      // Submit new volume to websocket
+      command = {
+        "SetVolume": [
+          channel,
+          volume
+        ]
+      };
+
+      websocket.send_command(store.getActiveSerial(), command);
+      store.getActiveDevice().levels.volumes[channel] = volume;
+    },
   },
   computed: {
     // variables required for watch
