@@ -3,8 +3,9 @@
     <GroupContainer :title="'System'">
       <div class="buttons">
         <div><MicSetupButton /></div>
-        <div><SettingsButton /></div>
         <div><ShutdownButton /></div>
+        <div><DeviceSettingsButton /></div>
+        <div><SettingsButton /></div>
         <div><AboutButton /></div>
         <div><LicenseButton /></div>
         <div><HelpButton /></div>
@@ -22,10 +23,12 @@ import AboutButton from "@/components/sections/system/modals/AboutButton.vue";
 import SettingsButton from "@/components/sections/system/modals/SettingsButton.vue";
 import HelpButton from "@/components/sections/system/HelpButton.vue";
 import ShutdownButton from "@/components/sections/system/modals/ShutdownButton.vue";
+import DeviceSettingsButton from "@/components/sections/system/modals/DeviceSettingsButton.vue";
 
 export default {
   name: "SystemComponent",
   components: {
+    DeviceSettingsButton,
     ShutdownButton,
     HelpButton,
     SettingsButton,

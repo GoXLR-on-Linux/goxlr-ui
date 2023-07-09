@@ -2,7 +2,7 @@
   <BigButton
       id="settings_button"
       ref="button"
-      title="Settings"
+      title="Utility Settings"
       @button-clicked="$refs.modal.openModal(undefined, $refs.button)"
   >
     <font-awesome-icon icon="fa-solid fa-gear"/>
@@ -31,34 +31,6 @@
       </div>
 
       <div style="padding: 12px">
-        <span style="display: inline-block; width: 300px"
-        >Mute Button Hold to Mute All Duration:
-        </span>
-        <SimpleNumberInput
-            :min-value="0"
-            :max-value="5000"
-            @value-updated="updateHold"
-            :current-text-value="getHold()"
-            aria-label="Mute Button Hold to Mute All Duration"
-            aria-description="The duration in milliseconds that the mute button must be held to mute all channels"
-        />
-      </div>
-      <div v-if="!isDeviceMini()" style="padding: 12px">
-        <span style="display: inline-block; width: 300px"
-        >Sampler Pre-Record Buffer (in seconds):
-        </span>
-        <SimpleNumberInput
-            :min-value="0"
-            :max-value="30000"
-            :current-text-value="getSamplerPreRecord()"
-            aria-label="Sampler Pre-Record Buffer (in seconds)"
-            aria-description="The duration in seconds that the sampler will record before the button is pressed"
-            @on-blur="updateSamplerPreRecord"
-        />
-        <!--            @value-updated="updateSamplerPreRecord"-->
-
-      </div>
-      <div style="padding: 12px">
         <span style="display: inline-block; width: 360px"
         >Allow UI Network Access (Required Restart):</span
         >
@@ -68,18 +40,6 @@
             @change="set_allow_network_access"
             aria-label="Allow UI Network Access (Required Restart)"
             aria-description="Allow the UI to be accessed from other devices on the network"
-        />
-      </div>
-      <div style="padding: 12px">
-        <span style="display: inline-block; width: 360px"
-        >Voice Chat Mute All Also Mutes Mic To Chat Mic:</span
-        >
-        <input
-            type="checkbox"
-            :checked="get_vcmaammtcm()"
-            @change="set_vcmaammtcm"
-            aria-label="Voice Chat Mute All Also Mutes Mic To Chat Mic"
-            aria-description="When muting all channels, also mute the mic to chat mic"
         />
       </div>
       <div style="padding: 12px">
@@ -148,17 +108,14 @@
 <script>
 import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 import BigButton from "@/components/buttons/BigButton.vue";
-import SimpleNumberInput from "@/components/design/SimpleNumberInput.vue";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "SettingsButton",
-  components: {SimpleNumberInput, BigButton, AccessibleModal},
+  components: {BigButton, AccessibleModal},
 
   methods: {
-    isDeviceMini,
     getLogLevel() {
       return store.getConfig().log_level;
     },
@@ -171,25 +128,7 @@ export default {
       websocket.open_path("Logs");
     },
 
-
-    getHold() {
-      return store.getActiveDevice().settings.mute_hold_duration;
-    },
-
-    updateHold(value) {
-      websocket.send_command(store.getActiveSerial(), {SetMuteHoldDuration: value});
-    },
-
-    getSamplerPreRecord() {
-      return Math.ceil(store.getActiveDevice().sampler.record_buffer / 1000);
-    },
-
-    updateSamplerPreRecord(seconds) {
-      websocket.send_command(store.getActiveSerial(), {"SetSamplerPreBufferDuration": seconds * 1000});
-    },
-
     get_allow_network_access() {
-      // I hate this name :D
       if (!store.getActiveDevice()) {
         return false;
       }
@@ -198,18 +137,6 @@ export default {
 
     set_allow_network_access(event) {
       websocket.send_daemon_command({"SetAllowNetworkAccess": event.target.checked});
-    },
-
-    get_vcmaammtcm() {
-      // I hate this name :D
-      if (!store.getActiveDevice()) {
-        return false;
-      }
-      return store.getActiveDevice().settings.vc_mute_also_mute_cm;
-    },
-
-    set_vcmaammtcm(event) {
-      websocket.send_command(store.getActiveSerial(), {"SetVCMuteAlsoMuteCM": event.target.checked});
     },
 
     isAutostart() {
