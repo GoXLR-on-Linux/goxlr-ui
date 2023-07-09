@@ -1,5 +1,6 @@
 <template>
   <BigButton
+      v-if="store.getConfig() !== undefined"
       id="settings_button"
       ref="button"
       title="Utility Settings"
@@ -113,10 +114,18 @@ import {websocket} from "@/util/sockets";
 
 export default {
   name: "SettingsButton",
+  computed: {
+    store() {
+      return store
+    }
+  },
   components: {BigButton, AccessibleModal},
 
   methods: {
     getLogLevel() {
+      if (store.getConfig() === undefined) {
+        return "Debug";
+      }
       return store.getConfig().log_level;
     },
 
@@ -129,7 +138,7 @@ export default {
     },
 
     get_allow_network_access() {
-      if (!store.getActiveDevice()) {
+      if (store.getConfig() === undefined) {
         return false;
       }
       return store.getConfig().allow_network_access;
@@ -140,6 +149,10 @@ export default {
     },
 
     isAutostart() {
+      if (store.getConfig() === undefined) {
+        return false;
+      }
+
       return store.getConfig().autostart_enabled;
     },
 
@@ -148,6 +161,10 @@ export default {
     },
 
     isShowIcon() {
+      if (store.getConfig() === undefined) {
+        return true;
+      }
+
       return store.getConfig().show_tray_icon;
     },
 
@@ -156,6 +173,10 @@ export default {
     },
 
     isTTSAvailable() {
+      if (store.getConfig() === undefined) {
+        return false;
+      }
+
       return store.getConfig().tts_enabled !== null;
     },
 

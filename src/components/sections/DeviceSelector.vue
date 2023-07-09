@@ -16,6 +16,11 @@
       </div>
     </div>
   </div>
+  <div v-if="isConnected() && hasConfig()" class="buttonList" style="width: 170px">
+    <div class="buttonHolder" style="width: 170px; padding-top: 25px; overflow-y: initial">
+    <SettingsButton />
+    </div>
+  </div>
   </div>
 </template>
 
@@ -23,10 +28,11 @@
 
 import Button from "@/components/buttons/Button.vue";
 import {store} from "@/store";
+import SettingsButton from "@/components/sections/system/modals/SettingsButton.vue";
 
 export default {
   name: "DeviceSelector",
-  components: {Button},
+  components: {SettingsButton, Button},
   data() {
     return {
       devices: [],
@@ -51,6 +57,10 @@ export default {
   methods: {
     isConnected() {
       return store.isConnected();
+    },
+
+    hasConfig() {
+      return store.getConfig() !== undefined;
     },
 
     getMixers() {
