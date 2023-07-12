@@ -39,6 +39,7 @@ export default {
       selected: 'Global',
       mod1Value: 0,
       mod2Value: 0,
+      lock_updates: false,
     }
   },
 
@@ -107,7 +108,6 @@ export default {
 
     // Range Helpers
     getRangeColour(enabled) {
-      console.log(enabled);
       if (enabled) {
         return "#82CFD0";
       }
@@ -130,9 +130,15 @@ export default {
     setMod1Value(value) {
       value = parseInt(value);
       this.mod1Value = value;
+      if (this.lock_updates) {
+        return;
+      }
 
+      this.lock_updates = true;
       store.getActiveDevice().lighting.animation.mod1 = value;
-      websocket.send_command(store.getActiveSerial(), {"SetAnimationMod1": value});
+      websocket.send_command(store.getActiveSerial(), {"SetAnimationMod1": value}).then(() => {
+        this.lock_updates = false;
+      });
     },
 
     // Mod2 Settings..
@@ -153,8 +159,27 @@ export default {
       value = parseInt(value);
       this.mod2Value = value;
 
+      if (this.lock_updates) {
+        return;
+      }
+
+      this.lock_updates = true;
       store.getActiveDevice().lighting.animation.mod2 = value;
-      websocket.send_command(store.getActiveSerial(), {"SetAnimationMod2": value});
+      websocket.send_command(store.getActiveSerial(), {"SetAnimationMod2": value}).then(() => {
+        this.lock_updates = false;
+      });
+    },
+
+    mouseUp(id) {
+      if (id === "mod1") {
+        // Force an update with this value..
+        store.getActiveDevice().lighting.animation.mod1 = this.mod1Value;
+        websocket.send_command(store.getActiveSerial(), {"SetAnimationMod1": this.mod1Value});
+        return;
+      }
+
+      store.getActiveDevice().lighting.animation.mod2 = this.mod2Value;
+      websocket.send_command(store.getActiveSerial(), {"SetAnimationMod2": this.this.mod2Value});
     },
 
     // Waterfall Settings..
@@ -197,23 +222,28 @@ export default {
         <div style="text-align: center; color: #fff; padding-left: 8px">
           <div class="title" :class="{ disabled: !isMod1Enabled()}">GRADIENT MOD 1</div>
           <RangeSelector
+              id="mod1"
               :store-path=getMod1StorePath()
               :current-field-value=mod1Value
               @value-updated="setMod1Value"
               :needs-rotation="false" :height=180
               :disabled="!isMod1Enabled()"
               :colour="getRangeColour(isMod1Enabled())"
+              @mouse-up="mouseUp"
+
           />
           <div class="modValue" :class="{ disabled: !isMod1Enabled()}">{{ getMod1Value() }}</div>
 
           <div class="title" :class="{ disabled: !isMod2Enabled()}">GRADIENT MOD 2</div>
           <RangeSelector
+              id="mod2"
               :store-path=getMod2StorePath()
               :current-field-value=mod2Value
               @value-updated="setMod2Value"
               :needs-rotation="false" :height=180
               :disabled="!isMod2Enabled()"
               :colour="getRangeColour(isMod2Enabled())"
+              @mouse-up="mouseUp"
           />
           <div class="modValue" :class="{ disabled: !isMod2Enabled()}">{{ getMod2Value() }}</div>
 
