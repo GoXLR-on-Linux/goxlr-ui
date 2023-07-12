@@ -9,6 +9,7 @@ import {websocket} from "@/util/sockets";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import RangeSelector from "@/components/slider/components/Range.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {isDeviceMini} from "@/util/util";
 
 export default {
   name: "LightingGlobal",
@@ -34,7 +35,16 @@ export default {
           label: 'Accent'
         }
       ],
-      animation_mode_options: [
+
+      selected: 'Global',
+      mod1Value: 0,
+      mod2Value: 0,
+    }
+  },
+
+  methods: {
+    getAnimationOptions() {
+      let animations = [
         {
           id: 'None',
           label: 'None',
@@ -55,19 +65,18 @@ export default {
           id: 'Simple',
           label: 'Simple'
         },
-        {
+      ];
+
+      // Apparently Ripple isn't supported on the mini..
+      if (!isDeviceMini()) {
+        animations.push({
           id: 'Ripple',
           label: 'Ripple'
-        }
-      ],
+        });
+      }
+      return animations;
+    },
 
-      selected: 'Global',
-      mod1Value: 0,
-      mod2Value: 0,
-    }
-  },
-
-  methods: {
     color() {
       return "#" + store.getActiveDevice().lighting.simple[this.selected].colour_one;
     },
@@ -182,7 +191,7 @@ export default {
         <ColourPicker title="Colour" :color-value="color()" @colour-changed="onColourChange"/>
       </GroupContainer>
       <GroupContainer v-if="animationSupported()" title="Animations">
-        <RadioSelection title="Animation Mode" group="lighting_animation" :options="this.animation_mode_options"
+        <RadioSelection title="Animation Mode" group="lighting_animation" :options="getAnimationOptions()"
                         :selected="this.animationModeSelected()" @selection-changed="onAnimationModeChange"/>
 
         <div style="text-align: center; color: #fff; padding-left: 8px">
@@ -210,14 +219,17 @@ export default {
 
           <div>
             <div class="title" :class="{ disabled: !isWaterfallEnabled()}">WATERFALL SETTINGS</div>
-            <div class="waterfall" :class="{ active: isWaterFallActive('Up'), disabled: !isWaterfallEnabled() }" @click="setWaterfall('Up')">
+            <div class="waterfall" :class="{ active: isWaterFallActive('Up'), disabled: !isWaterfallEnabled() }"
+                 @click="setWaterfall('Up')">
               <font-awesome-icon icon="fa-solid fa-up-long"/>
             </div>
-            <div class="waterfall" :class="{ active: isWaterFallActive('Down'), disabled: !isWaterfallEnabled() }" @click="setWaterfall('Down')">
+            <div class="waterfall" :class="{ active: isWaterFallActive('Down'), disabled: !isWaterfallEnabled() }"
+                 @click="setWaterfall('Down')">
               <font-awesome-icon icon="fa-solid fa-down-long"/>
             </div>
             <div class="wf-button" :class="{ disabled: !isWaterfallEnabled() }">
-              <button :class="{ active: isWaterFallActive('Off') }" style="width: 100%" @click="setWaterfall('Off')" :disabled="!isWaterfallEnabled()">
+              <button :class="{ active: isWaterFallActive('Off') }" style="width: 100%" @click="setWaterfall('Off')"
+                      :disabled="!isWaterfallEnabled()">
                 Off
               </button>
             </div>
@@ -233,6 +245,7 @@ export default {
   margin-bottom: 10px;
   margin-top: 1px;
 }
+
 .title.disabled {
   color: #818483;
 }
@@ -242,6 +255,7 @@ export default {
   margin-bottom: 12px;
   color: #82CFD0;
 }
+
 .modValue.disabled {
   color: #3C6061;
 }
@@ -296,7 +310,6 @@ export default {
   cursor: initial;
   color: #427273;
 }
-
 
 
 </style>
