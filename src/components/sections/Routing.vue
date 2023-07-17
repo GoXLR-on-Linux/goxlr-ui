@@ -78,10 +78,7 @@ export default {
     canRoute(output, input) {
       input = InputDevice[input];
       output = OutputDevice[output];
-      if (output === "ChatMic" && input === "Chat") {
-        return false;
-      }
-      return !(output === "Sampler" && input === "Samples");
+      return !(output === "ChatMic" && input === "Chat");
     },
 
     // eslint-disable-next-line no-unused-vars
