@@ -12,6 +12,9 @@ export default {
       hexString: "#000000",
       canvasContext: undefined,
       hoverContainer: undefined,
+
+      active: false,
+      outside: false,
     }
   },
 
@@ -21,6 +24,80 @@ export default {
   },
 
   methods: {
+    mouseDown() {
+      this.$refs.target.classList.add("active");
+      this.active = true;
+    },
+
+    mouseOut() {
+      this.$refs.target.classList.remove("active");
+      this.active = false;
+
+      // Check if the cursor is outside the image...
+      if (this.outside) {
+        this.hoverContainer.style.left = "-30px";
+        this.hoverContainer.style.top = "-30px";
+      }
+    },
+
+    mouseUp(event) {
+      this.$refs.target.classList.remove("active");
+      this.active = false;
+
+      if (this.outside) {
+        this.hoverContainer.style.left = "-30px";
+        this.hoverContainer.style.top = "-30px";
+
+        // We need to set the colour released..
+        let position = this.getOutsidePosition(event);
+        const color = this.color(position[0], position[1]);
+        this.updateText(color);
+      }
+    },
+
+    mouseMoveOutside(event) {
+      const hoverContainerCenterOffset = 12
+
+      if (this.active) {
+        // mudtsu on discord is entirely responsible for making me do math.
+
+        // Firstly, calculate the central position of the image (top spacer + half height)
+        let position = this.getOutsidePosition(event);
+
+
+        // Shove the dot there.
+        this.hoverContainer.style.left = (position[2] - hoverContainerCenterOffset) + "px";
+        this.hoverContainer.style.top = (position[3] - hoverContainerCenterOffset) + "px";
+
+        // Update the colour for these coordinates..
+        const color = this.color(position[0], position[1])
+        this.hoverContainer.style.backgroundColor = color;
+      }
+    },
+
+    getOutsidePosition(event) {
+      let radius = 60;
+
+      let middleY = this.$refs.target.clientHeight / 2;
+      let middleX = this.$refs.target.clientWidth / 2;
+
+      // These are the relative X,Y relative to the middle of the image
+      let relativeX = (event.pageX - this.$refs.target.offsetLeft - middleX);
+      let relativeY = (event.pageY - this.$refs.target.offsetTop - middleY);
+
+      // Get the distance between the middle and our cursor
+      let distance = Math.sqrt(Math.pow(relativeX, 2) + Math.pow(relativeY, 2));
+      let normalX = relativeX / distance;
+      let normalY = relativeY / distance;
+
+      let resultX = (normalX * radius);
+      let resultY = (normalY * radius);
+
+      let positionX = this.$refs.target.offsetLeft + middleX + resultX;
+      let positionY = this.$refs.target.offsetTop + middleY + resultY;
+
+      return [resultX + radius, resultY + radius, positionX, positionY];
+    },
 
     mouseMove(event) {
       const hoverContainerCenterOffset = 12
@@ -34,8 +111,11 @@ export default {
     },
 
     mouseLeave() {
-      this.hoverContainer.style.left = "-30px";
-      this.hoverContainer.style.top = "-30px";
+      if (!this.active) {
+        this.hoverContainer.style.left = "-30px";
+        this.hoverContainer.style.top = "-30px";
+      }
+      this.outside = true;
     },
 
     mouseClick(event) {
@@ -99,18 +179,21 @@ export default {
 <template>
   <WidgetContainer :title="title">
     <slot>
-      <div class="spacer"></div>
-      <img src="wheel.png" draggable="false" @mousemove.stop="mouseMove" @mouseleave="mouseLeave" @click="mouseClick"
-        role="button" tabindex="0" :aria-label="`${title}, Colour Picker`" />
-      <div class="spacer"></div>
+      <div class="colourTarget" ref="target" @mouseleave="mouseOut" @mouseup="mouseUp" @mousemove="mouseMoveOutside">
+        <div class="spacer"></div>
+        <img src="wheel.png" ref="circle" draggable="false" @mousedown="mouseDown" @mousemove.stop="mouseMove"
+             @mouseleave="mouseLeave" @click="mouseClick"
+             role="button" tabindex="0" :aria-label="`${title}, Colour Picker`"/>
+        <div class="spacer"></div>
+      </div>
       <div class="controls">
         <div class="colourPreview"></div>
-
-        <input type="text" :value="hexString" @keyup="updateColour" :aria-label="title" />
+        <input type="text" :value="hexString" @keyup="updateColour" :aria-label="title"/>
 
         <button @click="clearColour" :aria-label="`Clear ${title}`">
-          <font-awesome-icon title="Clear" icon="fa-solid fa-xmark" />
+          <font-awesome-icon title="Clear" icon="fa-solid fa-xmark"/>
         </button>
+
       </div>
     </slot>
   </WidgetContainer>
@@ -123,7 +206,8 @@ export default {
 }
 
 .spacer {
-  flex-grow: 1;
+  /*flex-grow: 1;*/
+  height: 14px;
 }
 
 .controls {
@@ -175,6 +259,15 @@ img {
 }
 
 img:hover {
+  cursor: none;
+}
+
+.colourTarget {
+  width: 100%;
+  text-align: center;
+}
+
+.colourTarget.active, .colourTarget.active > * {
   cursor: none;
 }
 </style>
