@@ -271,7 +271,4 @@ img:hover {
   text-align: center;
 }
 
-.colourTarget.active, .colourTarget.active > * {
-  cursor: none;
-}
 </style>
