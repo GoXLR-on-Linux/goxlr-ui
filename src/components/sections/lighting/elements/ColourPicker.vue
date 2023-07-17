@@ -41,6 +41,10 @@ export default {
     },
 
     mouseUp(event) {
+      if (!this.active) {
+        return;
+      }
+
       this.$refs.target.classList.remove("active");
       this.active = false;
 
