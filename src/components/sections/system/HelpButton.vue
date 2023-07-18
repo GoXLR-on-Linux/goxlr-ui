@@ -1,5 +1,5 @@
 <template>
-  <a :href="'https://discord.gg/BRBjkkbvmZ'">
+  <a href="https://discord.gg/BRBjkkbvmZ" target="_blank">
     <BigButton id="help" :title="'Help'">
       <font-awesome-icon icon="fa-solid fa-circle-question"/>
     </BigButton>
