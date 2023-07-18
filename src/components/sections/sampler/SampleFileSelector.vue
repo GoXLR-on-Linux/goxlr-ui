@@ -17,7 +17,7 @@
           ref="sampleList"
           :padding="padding"
           :background="background"
-          group="sample_list"
+          :group="`${this.prefix}_sample_list`"
           :options="getSampleList()"
           :selected="getSelectedSample()"
           @selection-changed="selectSample"
@@ -43,6 +43,7 @@ export default {
   components: {RadioList, ButtonItem, VerticalScrollingContainer},
 
   props: {
+    prefix: { type: String, optional: false },
     maxHeight: {type: String, optional: true, default: "inherit"},
     padding: {type: String, required: false, default: "8px"},
     background: {type: String, required: false, default: "#3b413f"},
@@ -69,7 +70,7 @@ export default {
       let samples = [];
       if (this.current_path.length > 0) {
         samples.push({
-          id: '*',
+          id: this.prefix + '*',
           icon: "turn-up",
           label: "Parent Directory"
         });
@@ -77,7 +78,7 @@ export default {
 
       for (let directory of this.getFileList(true).sort(Intl.Collator().compare)) {
         samples.push({
-          id: directory,
+          id: this.prefix + directory,
           icon: "fa-solid fa-folder",
           label: directory
         });
@@ -89,7 +90,7 @@ export default {
       let samples = [];
       for (let file of this.getFileList(false).sort(Intl.Collator().compare)) {
         samples.push({
-          id: file,
+          id: this.prefix + file,
           icon: "fa-solid fa-music",
           label: file
         });
@@ -201,6 +202,8 @@ export default {
       this.stopPlayback();
       this.selectedSample = undefined;
 
+      id = id.substring(this.prefix.length);
+
       if (id === "*") {
         this.current_path.pop();
       } else {
@@ -216,7 +219,7 @@ export default {
 
     selectSample(sample) {
       this.stopPlayback();
-      this.selectedSample = sample;
+      this.selectedSample = sample.substring(this.prefix.length);
       this.audio_player.src = this.getSampleUrl();
 
       // Changing the src will stop playback, but wont trigger the stop events.
@@ -224,7 +227,10 @@ export default {
     },
 
     getSelectedSample() {
-      return this.selectedSample;
+      if (this.selectedSample === undefined) {
+        return undefined;
+      }
+      return this.prefix + this.selectedSample;
     },
 
     getSelectedSampleName() {

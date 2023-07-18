@@ -77,7 +77,7 @@
       </button>
     </template>
 
-    <SampleFileSelector ref="sample_selector" max-height="300px" group="add_sample_list"/>
+    <SampleFileSelector ref="sample_selector" max-height="300px" group="add_sample_list" prefix="add_sample_"/>
 
     <template v-slot:footer>
       <div style="display: flex; flex-direction: row">
