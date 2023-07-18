@@ -3,6 +3,7 @@
     <GroupContainer :title="'System'">
       <div class="buttons">
         <div><MicSetupButton /></div>
+        <div v-if="store.getDeviceCount() > 1"><SwitchDeviceButton /></div>
         <div><ShutdownButton /></div>
         <div><DeviceSettingsButton /></div>
         <div><SettingsButton /></div>
@@ -24,10 +25,18 @@ import SettingsButton from "@/components/sections/system/modals/SettingsButton.v
 import HelpButton from "@/components/sections/system/HelpButton.vue";
 import ShutdownButton from "@/components/sections/system/modals/ShutdownButton.vue";
 import DeviceSettingsButton from "@/components/sections/system/modals/DeviceSettingsButton.vue";
+import SwitchDeviceButton from "@/components/sections/system/modals/SwitchDeviceButton.vue";
+import {store} from "@/store";
 
 export default {
   name: "SystemComponent",
+  computed: {
+    store() {
+      return store
+    }
+  },
   components: {
+    SwitchDeviceButton,
     DeviceSettingsButton,
     ShutdownButton,
     HelpButton,

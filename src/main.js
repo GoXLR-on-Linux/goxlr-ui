@@ -18,14 +18,14 @@ import {
     faMicrophoneLines, faCircleQuestion, faFloppyDisk, faFileCirclePlus, faCopy, faTrash, faCheckCircle, faCheck,
     faFolder, faEllipsisVertical, faPlay, faStop, faXmark, faGear, faBookOpen, faCircleInfo, faChevronLeft,
     faChevronRight, faPowerOff, faLink, faLinkSlash, faVolumeXmark, faMicrophoneSlash, faMusic, faTurnUp, faHeadphones,
-    faUpLong, faDownLong
+    faUpLong, faDownLong, faRepeat
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
     faMicrophoneLines, faCircleQuestion, faFloppyDisk, faEllipsisVertical, faFileCirclePlus, faCopy, faTrash,
     faCheckCircle, faCheck, faFolder, faTrash, faPlay, faStop, faXmark, faGear, faBookOpen, faCircleInfo,
     faChevronLeft, faChevronRight, faPowerOff, faLink, faLinkSlash, faVolumeXmark, faMicrophoneSlash, faMusic,
-    faTurnUp, faHeadphones, faUpLong, faDownLong
+    faTurnUp, faHeadphones, faUpLong, faDownLong, faRepeat
 );
 
 websocket.connect().then(() => {
