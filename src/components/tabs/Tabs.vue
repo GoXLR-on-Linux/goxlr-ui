@@ -59,11 +59,12 @@ export default {
         },
         //keyboard navigation
         onTabKeydown(event) {
+            if(this.label!=="Device Settings")return;
             const tabs = this.tabs;
             const activeTab = this.getActiveTab();
             const activeTabIndex = tabs.indexOf(activeTab);
             let nextTab;
-
+            console.log(event);
             if(event.shiftKey){
                 // Shift(Number) have different symbol between US keyboard and Other language. 
                 switch(event.code){
