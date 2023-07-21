@@ -64,7 +64,6 @@ export default {
             const activeTab = this.getActiveTab();
             const activeTabIndex = tabs.indexOf(activeTab);
             let nextTab;
-            console.log(event);
             if(event.shiftKey){
                 // Shift(Number) have different symbol between US keyboard and Other language. 
                 switch(event.code){
