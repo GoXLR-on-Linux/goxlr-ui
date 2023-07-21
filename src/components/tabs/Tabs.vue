@@ -10,7 +10,6 @@
                 role="tab"
                 :aria-selected="tab.isActive"
                 :tabindex="tab.isActive ? 0 : -1"
-                @keydown="onTabKeydown"
                 :ref="tab.name"
             >
                 {{ tab.name }}
@@ -41,8 +40,8 @@ export default {
         },
     },
 
-    created() {},
-
+    created() {window.addEventListener("keydown",this.onTabKeydown)},
+    unmounted(){window.removeEventListener("keydown",this.onTabKeydown)},
     methods: {
         selectTab(selectedTab) {
             this.tabs.forEach((tab) => {
@@ -65,17 +64,61 @@ export default {
             const activeTabIndex = tabs.indexOf(activeTab);
             let nextTab;
 
-            if (event.key === "ArrowRight" || event.key === "ArrowDown") {
-                nextTab = tabs[(activeTabIndex + 1) % tabs.length];
-                //explanation: if activeTabIndex is 0, then 0+1 % 3 = 1, so nextTab is tabs[1]
-            } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
-                nextTab =
-                    tabs[(activeTabIndex - 1 + tabs.length) % tabs.length];
-                //explanation: if activeTabIndex is 0, then 0-1+3 % 3 = 2, so nextTab is tabs[2]
-            } else if (event.key === "Home") {
-                nextTab = tabs[0];
-            } else if (event.key === "End") {
-                nextTab = tabs[tabs.length - 1];
+            if(event.shiftKey){
+                // Shift(Number) have different symbol between US keyboard and Other language. 
+                switch(event.code){
+                    case "Digit1":
+                    case "Digit2":
+                    case "Digit3":
+                    case "Digit4":
+                    case "Digit5":
+                    case "Digit6":
+                    case "Digit7":
+                    case "Digit8":
+                        nextTab = tabs[Number(event.code[5])-1];
+                        break;
+                    default:
+                        break;
+                }
+                switch(event.key){
+                    case "S":
+                    case "D":
+                        nextTab = tabs[(activeTabIndex + 1) % tabs.length];
+                        break;
+                    case "W":
+                    case "A":
+                        nextTab = tabs[(activeTabIndex - 1 + tabs.length) % tabs.length];
+                        break;
+                    case "Q":
+                        nextTab = tabs[0];
+                        break;
+                    case "E":
+                        nextTab = tabs[tabs.length-1];
+                        break;
+                    default:
+                        break;
+                }
+            } else {  
+                switch(event.key){
+                    case "ArrowRight":
+                    case "ArrowDown":
+                    case "PageDown":
+                        nextTab = tabs[(activeTabIndex + 1) % tabs.length];
+                        break;
+                    case "ArrowLeft":
+                    case "ArrowUp":
+                    case "PageUp":
+                        nextTab = tabs[(activeTabIndex - 1 + tabs.length) % tabs.length];
+                        break;
+                    case "Home":
+                        nextTab = tabs[0];
+                        break;
+                    case "End":
+                        nextTab = tabs[tabs.length-1];
+                        break;
+                    default:
+                        break;
+                }
             }
 
             if (nextTab) {
