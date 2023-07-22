@@ -7,6 +7,7 @@
                 :class="{ active: tab.isActive }"
                 v-show="!tab.hidden"
                 @click="selectTab(tab)"
+                @keydown="onTabKeydown"
                 role="tab"
                 :aria-selected="tab.isActive"
                 :tabindex="tab.isActive ? 0 : -1"
@@ -40,8 +41,8 @@ export default {
         },
     },
 
-    created() {window.addEventListener("keydown",this.onTabKeydown)},
-    unmounted(){window.removeEventListener("keydown",this.onTabKeydown)},
+    created() {window.addEventListener("keydown",this.onTabKeydownGlobal)},
+    unmounted(){window.removeEventListener("keydown",this.onTabKeydownGlobal)},
     methods: {
         selectTab(selectedTab) {
             this.tabs.forEach((tab) => {
@@ -63,8 +64,43 @@ export default {
             const tabs = this.tabs;
             const activeTab = this.getActiveTab();
             const activeTabIndex = tabs.indexOf(activeTab);
+            let nextTab; 
+            switch(event.key){
+                case "ArrowRight":
+                case "ArrowDown":
+                case "PageDown":
+                    nextTab = tabs[(activeTabIndex + 1) % tabs.length];
+                    break;
+                case "ArrowLeft":
+                case "ArrowUp":
+                case "PageUp":
+                    nextTab = tabs[(activeTabIndex - 1 + tabs.length) % tabs.length];
+                    break;
+                case "Home":
+                    nextTab = tabs[0];
+                    break;
+                case "End":
+                    nextTab = tabs[tabs.length-1];
+                    break;
+                default:
+                    break;
+            }
+        
+
+            if (nextTab) {
+                this.selectTab(nextTab);
+                //nextTab.$el is the button element
+                //we need a ref on the button element to focus it
+                this.$refs[nextTab.name][0].focus();
+            }
+        },
+        onTabKeydownGlobal(event) {
+            if(this.label!=="Device Settings")return;
+            const tabs = this.tabs;
+            // const activeTab = this.getActiveTab();
+            // const activeTabIndex = tabs.indexOf(activeTab);
             let nextTab;
-            if(event.shiftKey){
+            if(event.shiftKey && event.ctrlKey){
                 // Shift(Number) have different symbol between US keyboard and Other language. 
                 switch(event.code){
                     case "Digit1":
@@ -76,45 +112,6 @@ export default {
                     case "Digit7":
                     case "Digit8":
                         nextTab = tabs[Number(event.code[5])-1];
-                        break;
-                    default:
-                        break;
-                }
-                switch(event.key){
-                    case "S":
-                    case "D":
-                        nextTab = tabs[(activeTabIndex + 1) % tabs.length];
-                        break;
-                    case "W":
-                    case "A":
-                        nextTab = tabs[(activeTabIndex - 1 + tabs.length) % tabs.length];
-                        break;
-                    case "Q":
-                        nextTab = tabs[0];
-                        break;
-                    case "E":
-                        nextTab = tabs[tabs.length-1];
-                        break;
-                    default:
-                        break;
-                }
-            } else {  
-                switch(event.key){
-                    case "ArrowRight":
-                    case "ArrowDown":
-                    case "PageDown":
-                        nextTab = tabs[(activeTabIndex + 1) % tabs.length];
-                        break;
-                    case "ArrowLeft":
-                    case "ArrowUp":
-                    case "PageUp":
-                        nextTab = tabs[(activeTabIndex - 1 + tabs.length) % tabs.length];
-                        break;
-                    case "Home":
-                        nextTab = tabs[0];
-                        break;
-                    case "End":
-                        nextTab = tabs[tabs.length-1];
                         break;
                     default:
                         break;
