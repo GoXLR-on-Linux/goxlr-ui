@@ -7,10 +7,10 @@
                 :class="{ active: tab.isActive }"
                 v-show="!tab.hidden"
                 @click="selectTab(tab)"
-                @keydown="onTabKeydown"
                 role="tab"
                 :aria-selected="tab.isActive"
                 :tabindex="tab.isActive ? 0 : -1"
+                @keydown="onTabKeydown"
                 :ref="tab.name"
             >
                 {{ tab.name }}
@@ -60,7 +60,6 @@ export default {
         },
         //keyboard navigation
         onTabKeydown(event) {
-            if(this.label!=="Device Settings")return;
             const tabs = this.tabs;
             const activeTab = this.getActiveTab();
             const activeTabIndex = tabs.indexOf(activeTab);
