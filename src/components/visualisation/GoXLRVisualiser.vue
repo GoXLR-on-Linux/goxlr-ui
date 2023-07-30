@@ -1,6 +1,6 @@
 <template>
-  <div class="preview" @wheel="handleScroll">
-    <img svg-inline v-if="!this.isDeviceMini" src="../../assets/preview/GoXLR.svg" alt="GoXLR preview">
+  <div class="preview" @wheel="handleScroll" @mouseover="handleHover">
+    <img svg-inline v-if="!this.useMiniPreview" src="../../assets/preview/GoXLR.svg" alt="GoXLR preview">
     <img svg-inline v-else src="../../assets/preview/GoXLR-Mini.svg" alt="GoXLR preview">
   </div>
 </template>
@@ -9,52 +9,40 @@
 import {store} from "@/store";
 import {EffectLightingPresets, EffectPresets, MuteButtonNamesForFader} from "@/util/mixerMapping";
 import {websocket} from "@/util/sockets";
-import {isDeviceMini} from "@/util/util";
+import {ButtonSelector, CaptureSelector, HighlightSelector} from "@/components/visualisation/selectors";
+import {
+  isDeviceMini,
+  calculateGradientColour,
+  getOffStyleColour,
+  transformColour,
+  isSampleRecording,
+  setClassState
+} from "@/util/util";
 
 export default {
   name: "GoXLR",
   methods: {
-    // transforms a HEX string into a colour object.
-    transformColour(colour) {
-      let r = parseInt(colour.substring(0, 2), 16);
-      let g = parseInt(colour.substring(2, 4), 16);
-      let b = parseInt(colour.substring(4, 6), 16);
-      return { r, g, b};
-    },
-    // calculate the colour at a given position in a gradient with two points
-    calculateGradientColour(startColour, endColour, position) {
-      return {
-        r: Math.round(startColour.r + (endColour.r - startColour.r) * position),
-        g: Math.round(startColour.g + (endColour.g - startColour.g) * position),
-        b: Math.round(startColour.b + (endColour.b - startColour.b) * position),
-      }
-    },
-    // gets the modified off-style colour
-    getOffStyleColour(state, colour, colour2) {
-      switch (state) {
-        case "Dimmed":
-          return `rgba(${colour.r}, ${colour.g}, ${colour.b}, 0.4)`;
-        case "Colour2":
-          return `rgba(${colour2.r}, ${colour2.g}, ${colour2.b}, 1)`;
-        case "DimmedColour2":
-          return `rgba(${colour2.r}, ${colour2.g}, ${colour2.b}, 0.4)`;
-        default:
-          return `rgba(${colour.r}, ${colour.g}, ${colour.b}, 1)`;
-      }
-    },
-    // sets or unsets the .blink class
-    setBlinkClass(selector, isBlinking) {
-      const elem = document.querySelector(selector);
-      if (elem === null) return;
+    handleHover(e) {
+      if (!e.target.matches(`${CaptureSelector.GLOBAL} *`)) return;
+      console.log("Captured!");
 
-      if (isBlinking) elem.classList.add("blink");
-      else elem.classList.remove("blink");
-    },
-    // checks if one of the sample buttons is recording
-    isSampleRecording(sample) {
-      let activeBank = store.getActiveDevice().sampler.active_bank;
-      let sampleState = store.getActiveDevice().sampler.banks[activeBank][sample];
-      return sampleState.is_recording;
+      // unset hover
+      document.querySelectorAll("#GoXLR .highlight .hover").forEach(elem => elem.classList.remove("hover"))
+
+      // handle mixer
+      if (e.target.matches(`${CaptureSelector.GROUP_MIXER} *`)) {
+        if (e.target.matches(`${CaptureSelector.CHANNEL1}`))
+          return document.querySelector(HighlightSelector.CHANNEL1).classList.add("show");
+
+        if (e.target.matches(`${CaptureSelector.CHANNEL2}`))
+          return document.querySelector(HighlightSelector.CHANNEL2).classList.add("hover");
+
+        if (e.target.matches(`${CaptureSelector.CHANNEL3}`))
+          return document.querySelector(HighlightSelector.CHANNEL3).classList.add("hover");
+
+        if (e.target.matches(`${CaptureSelector.CHANNEL4}`))
+          return document.querySelector(HighlightSelector.CHANNEL4).classList.add("hover");
+      }
     },
 
     computeAccentColour() {
@@ -73,8 +61,8 @@ export default {
       const channel = store.getActiveDevice().fader_status[fader].channel,
           volume = store.getActiveDevice().levels.volumes[channel],
           colours = store.getActiveDevice().lighting.faders[fader].colours,
-          topColour = this.transformColour(colours.colour_one),
-          bottomColour = this.transformColour(colours.colour_two),
+          topColour = transformColour(colours.colour_one),
+          bottomColour = transformColour(colours.colour_two),
           indicatorDots = 15,
           offset = 0.25; // required to correctly align fader to indicators.
 
@@ -84,7 +72,7 @@ export default {
         case "Gradient":
           if (level >= computedLevel) return `rgb(0,0,0)`;
           // eslint-disable-next-line no-case-declarations
-          let gradientColour = this.calculateGradientColour(bottomColour, topColour, level / indicatorDots );
+          let gradientColour = calculateGradientColour(bottomColour, topColour, level / indicatorDots );
           return `rgb(${gradientColour.r}, ${gradientColour.g}, ${gradientColour.b})`;
 
         case "TwoColour":
@@ -100,13 +88,13 @@ export default {
       const colours = store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[fader]].colours,
           offStyle = store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[fader]].off_style,
           state = store.getActiveDevice().fader_status[fader].mute_state,
-          colourOne = this.transformColour(colours.colour_one),
-          colourTwo = this.transformColour(colours.colour_two);
+          colourOne = transformColour(colours.colour_one),
+          colourTwo = transformColour(colours.colour_two);
 
       if (state !== "Unmuted")
         return `rgba(${colourOne.r}, ${colourOne.g}, ${colourOne.b}, 1)`;
 
-      return this.getOffStyleColour(offStyle, colourOne, colourTwo);
+      return getOffStyleColour(offStyle, colourOne, colourTwo);
     },
     computeMixerMuteBlinkColour(fader) {
       return '#' + store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[fader]].colours.colour_two;
@@ -124,24 +112,24 @@ export default {
     computeCoughButtonColour() {
       const colours = store.getActiveDevice().lighting.buttons.Cough.colours,
           offStyle = store.getActiveDevice().lighting.buttons.Cough.off_style,
-          colourOne = this.transformColour(colours.colour_one),
-          colourTwo = this.transformColour(colours.colour_two);
+          colourOne = transformColour(colours.colour_one),
+          colourTwo = transformColour(colours.colour_two);
 
       if ("Unmuted" !== store.getActiveDevice().cough_button.state)
         return `rgba(${colourOne.r}, ${colourOne.g}, ${colourOne.b}, 1)`;
 
-      return this.getOffStyleColour(offStyle, colourOne, colourTwo);
+      return getOffStyleColour(offStyle, colourOne, colourTwo);
     },
     computeBleepButtonColour() {
       const colours = store.getActiveDevice().lighting.buttons.Bleep.colours,
           isPressed = store.getActiveDevice().button_down.Bleep,
           offStyle = store.getActiveDevice().lighting.buttons.Bleep.off_style,
-          colourOne = this.transformColour(colours.colour_one),
-          colourTwo = this.transformColour(colours.colour_two);
+          colourOne = transformColour(colours.colour_one),
+          colourTwo = transformColour(colours.colour_two);
 
       if (isPressed) return `rgba(${colourOne.r}, ${colourOne.g}, ${colourOne.b}, 1)`;
 
-      return this.getOffStyleColour(offStyle, colourOne, colourTwo);
+      return getOffStyleColour(offStyle, colourOne, colourTwo);
     },
 
     computeEffectButtonColour(effectButtonName, effectStateName) {
@@ -152,12 +140,12 @@ export default {
       const colours = store.getActiveDevice().lighting.buttons[effectButtonName].colours,
           offStyle = store.getActiveDevice().lighting.buttons[effectButtonName].off_style,
           active = (effectStateName) === null ? store.getActiveDevice().effects.is_enabled : store.getActiveDevice().effects.current[effectStateName].is_enabled,
-          colourOne = this.transformColour(colours.colour_one),
-          colourTwo = this.transformColour(colours.colour_two);
+          colourOne = transformColour(colours.colour_one),
+          colourTwo = transformColour(colours.colour_two);
 
       if (active) return `rgba(${colourOne.r}, ${colourOne.g}, ${colourOne.b}, 1)`;
 
-      return this.getOffStyleColour(offStyle, colourOne, colourTwo);
+      return getOffStyleColour(offStyle, colourOne, colourTwo);
     },
     computeEffectPresetColour(presetIndex) {
       if (isDeviceMini()) {
@@ -167,13 +155,13 @@ export default {
       const colours = store.getActiveDevice().lighting.buttons[`EffectSelect${presetIndex}`].colours,
           offStyle = store.getActiveDevice().lighting.buttons[`EffectSelect${presetIndex}`].off_style,
           activePreset = EffectLightingPresets[EffectPresets.indexOf(store.getActiveDevice().effects.active_preset)],
-          colourOne = this.transformColour(colours.colour_one),
-          colourTwo = this.transformColour(colours.colour_two);
+          colourOne = transformColour(colours.colour_one),
+          colourTwo = transformColour(colours.colour_two);
 
       if (activePreset === `EffectSelect${presetIndex}`)
         return `rgba(${colourOne.r}, ${colourOne.g}, ${colourOne.b}, 1)`;
 
-      return this.getOffStyleColour(offStyle, colourOne, colourTwo);
+      return getOffStyleColour(offStyle, colourOne, colourTwo);
     },
 
     computeEncoderRotation(effectName, centerMode = false) {
@@ -256,12 +244,12 @@ export default {
       const active = store.getActiveDevice().sampler.active_bank === bank,
         colours = store.getActiveDevice().lighting.sampler[`SamplerSelect${bank}`].colours,
         offStyle = store.getActiveDevice().lighting.sampler[`SamplerSelect${bank}`].off_style,
-        colourOne = this.transformColour(colours.colour_one),
-        colourTwo = this.transformColour(colours.colour_two);
+        colourOne = transformColour(colours.colour_one),
+        colourTwo = transformColour(colours.colour_two);
 
       if (active) return `rgb(${colourOne.r}, ${colourOne.g}, ${colourOne.b})`;
 
-      return this.getOffStyleColour(offStyle, colourOne, colourTwo);
+      return getOffStyleColour(offStyle, colourOne, colourTwo);
     },
     computeSamplerSampleColour(button) {
       if (isDeviceMini()) {
@@ -271,8 +259,8 @@ export default {
       const activeBank = store.getActiveDevice().sampler.active_bank,
           colours = store.getActiveDevice().lighting.sampler[`SamplerSelect${activeBank}`].colours,
           sampleState = store.getActiveDevice().sampler.banks[activeBank][button],
-          colourOne = this.transformColour(colours.colour_one),
-          colourThree = this.transformColour(colours.colour_three),
+          colourOne = transformColour(colours.colour_one),
+          colourThree = transformColour(colours.colour_three),
           dimMin = 125; // min-brightness if empty colour set to black (aka. disable lighting)
 
       if (sampleState.samples.length === 0) {
@@ -295,8 +283,8 @@ export default {
 
       const activeBank = store.getActiveDevice().sampler.active_bank,
           colours = store.getActiveDevice().lighting.sampler[`SamplerSelect${activeBank}`].colours,
-          colourOne = this.transformColour(colours.colour_one),
-          colourThree = this.transformColour(colours.colour_three),
+          colourOne = transformColour(colours.colour_one),
+          colourThree = transformColour(colours.colour_three),
           dimMin = 125; // min-brightness if empty colour set to black (aka. disable lighting)
 
       if (colourState === 1) return `rgba(${colourOne.r}, ${colourOne.g}, ${colourOne.b}, 1)`;
@@ -314,7 +302,7 @@ export default {
 
       const activeBank = store.getActiveDevice().sampler.active_bank,
           colours = store.getActiveDevice().lighting.sampler[`SamplerSelect${activeBank}`].colours,
-          colourOne = this.transformColour(colours.colour_one);
+          colourOne = transformColour(colours.colour_one);
 
       if (colourState === 1)
         return `rgba(${colourOne.r}, ${colourOne.g}, ${colourOne.b}, 1)`;
@@ -384,32 +372,32 @@ export default {
   },
   computed: {
     // variables required for watch
-    isTopLeftSampleRecording() { if (isDeviceMini()) {return false;} return this.isSampleRecording("TopLeft"); },
-    isTopRightSampleRecording() { if (isDeviceMini()) {return false;}return this.isSampleRecording("TopRight"); },
-    isBottomLeftSampleRecording() { if (isDeviceMini()) {return false;}return this.isSampleRecording("BottomLeft"); },
-    isBottomRightSampleRecording() { if (isDeviceMini()) {return false;} return this.isSampleRecording("BottomRight"); },
-    isClearActive() { if (isDeviceMini()) {return false;} return store.getActiveDevice().sampler.clear_active; },
+    isTopLeftSampleRecording() { return !isDeviceMini() && isSampleRecording("TopLeft");},
+    isTopRightSampleRecording() { return !isDeviceMini() && isSampleRecording("TopRight"); },
+    isBottomLeftSampleRecording() { return !isDeviceMini() && isSampleRecording("BottomLeft"); },
+    isBottomRightSampleRecording() { return !isDeviceMini() && isSampleRecording("BottomRight"); },
+    isClearActive() { return !isDeviceMini() && store.getActiveDevice().sampler.clear_active; },
     isFader1Blinking() { return store.getActiveDevice().fader_status["A"].mute_state === "MutedToAll"; },
     isFader2Blinking() { return store.getActiveDevice().fader_status["B"].mute_state === "MutedToAll"; },
     isFader3Blinking() { return store.getActiveDevice().fader_status["C"].mute_state === "MutedToAll"; },
     isFader4Blinking() { return store.getActiveDevice().fader_status["D"].mute_state === "MutedToAll"; },
     isMuteBlinking() { return store.getActiveDevice().cough_button.state === "MutedToAll"; },
+    muteInactiveColour() { return '#' + store.getActiveDevice().lighting.buttons.Cough.colours.colour_two; },
 
-    isDeviceMini() { return store.getActiveDevice().hardware.device_type === "Mini"; },
-    muteInactiveColour() { return '#' + store.getActiveDevice().lighting.buttons.Cough.colours.colour_two; }
+    useMiniPreview() { return isDeviceMini(); }
   },
   watch: {
     // toggle .blink class if required
-    isTopLeftSampleRecording(active) { this.setBlinkClass(".sampler #TopLeft", active); },
-    isTopRightSampleRecording(active) { this.setBlinkClass(".sampler #TopRight", active); },
-    isBottomLeftSampleRecording(active) { this.setBlinkClass(".sampler #BottomLeft", active); },
-    isBottomRightSampleRecording(active) { this.setBlinkClass(".sampler #BottomRight", active); },
-    isClearActive(active) { this.setBlinkClass(".sampler #Clear", active); },
-    isMuteBlinking(active) { this.setBlinkClass(".cough #Mute", active); },
-    isFader1Blinking(active) { this.setBlinkClass("#Channel1 #Mute", active); },
-    isFader2Blinking(active) { this.setBlinkClass("#Channel2 #Mute", active); },
-    isFader3Blinking(active) { this.setBlinkClass("#Channel3 #Mute", active); },
-    isFader4Blinking(active) { this.setBlinkClass("#Channel4 #Mute", active); },
+    isTopLeftSampleRecording(active) { setClassState(ButtonSelector.SAMPLER_TOP_LEFT, "blink", active); },
+    isTopRightSampleRecording(active) { setClassState(ButtonSelector.SAMPLER_TOP_RIGHT, "blink", active); },
+    isBottomLeftSampleRecording(active) { setClassState(ButtonSelector.SAMPLER_BOTTOM_LEFT, "blink", active); },
+    isBottomRightSampleRecording(active) { setClassState(ButtonSelector.SAMPLER_BOTTOM_RIGHT, "blink", active); },
+    isClearActive(active) { setClassState(ButtonSelector.SAMPLER_CLEAR, "blink", active); },
+    isMuteBlinking(active) { setClassState(ButtonSelector.MUTE, "blink", active); },
+    isFader1Blinking(active) { setClassState(ButtonSelector.CHANNEL1_MUTE, "blink", active); },
+    isFader2Blinking(active) { setClassState(ButtonSelector.CHANNEL2_MUTE, "blink", active); },
+    isFader3Blinking(active) { setClassState(ButtonSelector.CHANNEL3_MUTE, "blink", active); },
+    isFader4Blinking(active) { setClassState(ButtonSelector.CHANNEL4_MUTE, "blink", active); },
   }
 }
 </script>
@@ -465,7 +453,9 @@ export default {
 
 /* selection overlay */
 /* TODO: disabled due to missing implementation */
-.selection { display: none; }
+.highlight rect, .highlight path { opacity: 0; }
+.highlight .show {  opacity: 1; }
+.highlight .hover { opacity: 0.5; }
 
 /* effects area: buttons */
 .effects .buttons #Megaphone { color: v-bind('computeEffectButtonColour("EffectMegaphone", "megaphone")'); }
