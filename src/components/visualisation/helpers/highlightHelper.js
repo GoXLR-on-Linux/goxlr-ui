@@ -129,7 +129,7 @@ function getCurrentTab(tabType) {
         .forEach(group => {
             if (group.tab.classList.contains(ACTIVE_CLASS))
                 return currentTab = tabType[group.key];
-            if (group.tab.classList.contains(HOVER_CLASS))
+            if (group.tab.classList.contains(HOVER_CLASS) && currentTab === undefined)
                 return currentTab = tabType[group.key];
         });
 
@@ -215,10 +215,6 @@ export function handlePreviewHover(e) {
                 .forEach(key => setAreaState(HighlightArea[key], HighlightState.NONE, true))
             break;
     }
-
-    // unset last* information
-    if (!e.target.matches(`${CaptureSelector.GROUP_SAMPLER} *`)) lastSamplerTab = DEFAULT_SAMPLER_TAB;
-    if (!e.target.matches(`${CaptureSelector.GROUP_EFFECTS} *`)) lastEffectsTab = DEFAULT_EFFECTS_TAB;
 }
 
 
@@ -266,7 +262,7 @@ export function handlePreviewClick(e) {
             break;
         case CaptureSelector.SAMPLER_BODY:
             // TODO: add code to switch to view
-            setTabState(SamplerTabBank[lastSamplerTab], HighlightState.ACTIVE, SamplerTabBank);
+            setTabState(lastSamplerTab, HighlightState.ACTIVE, SamplerTabBank);
             break;
 
         // Effects
@@ -295,7 +291,7 @@ export function handlePreviewClick(e) {
             break;
         case CaptureSelector.EFFECTS_BODY:
             // TODO: add code to switch to view
-            setTabState(EffectsTabPreset[`PRESET${lastEffectsTab}`], HighlightState.ACTIVE, EffectsTabPreset);
+            setTabState(lastEffectsTab, HighlightState.ACTIVE, EffectsTabPreset);
             break;
 
         // Cough
