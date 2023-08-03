@@ -1,5 +1,5 @@
 <template>
-  <div class="preview" @wheel="handleScroll" @mouseover="handleHover">
+  <div class="preview" @wheel="handleScroll" @mouseover="handleHover" @click="handleClick">
     <img svg-inline v-if="!this.useMiniPreview" src="../../assets/preview/GoXLR.svg" alt="GoXLR preview">
     <img svg-inline v-else src="../../assets/preview/GoXLR-Mini.svg" alt="GoXLR preview">
   </div>
@@ -9,7 +9,7 @@
 import {store} from "@/store";
 import {EffectLightingPresets, EffectPresets, MuteButtonNamesForFader} from "@/util/mixerMapping";
 import {websocket} from "@/util/sockets";
-import {ButtonSelector, CaptureSelector, HighlightSelector} from "@/components/visualisation/selectors";
+import {ButtonSelector, CaptureSelector} from "@/components/visualisation/helpers/selectors";
 import {
   isDeviceMini,
   calculateGradientColour,
@@ -18,31 +18,17 @@ import {
   isSampleRecording,
   setClassState
 } from "@/util/util";
+import {handleHover} from "@/components/visualisation/helpers/highlightHelper";
 
 export default {
   name: "GoXLR",
   methods: {
-    handleHover(e) {
+    handleHover, // see highlightHelper.js
+
+    handleClick(e) {
       if (!e.target.matches(`${CaptureSelector.GLOBAL} *`)) return;
-      console.log("Captured!");
 
-      // unset hover
-      document.querySelectorAll("#GoXLR .highlight .hover").forEach(elem => elem.classList.remove("hover"))
 
-      // handle mixer
-      if (e.target.matches(`${CaptureSelector.GROUP_MIXER} *`)) {
-        if (e.target.matches(`${CaptureSelector.CHANNEL1}`))
-          return document.querySelector(HighlightSelector.CHANNEL1).classList.add("show");
-
-        if (e.target.matches(`${CaptureSelector.CHANNEL2}`))
-          return document.querySelector(HighlightSelector.CHANNEL2).classList.add("hover");
-
-        if (e.target.matches(`${CaptureSelector.CHANNEL3}`))
-          return document.querySelector(HighlightSelector.CHANNEL3).classList.add("hover");
-
-        if (e.target.matches(`${CaptureSelector.CHANNEL4}`))
-          return document.querySelector(HighlightSelector.CHANNEL4).classList.add("hover");
-      }
     },
 
     computeAccentColour() {

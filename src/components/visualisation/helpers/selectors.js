@@ -112,4 +112,3 @@ export const TunableSelector = {
 export const MiscSelector = {
     LOGO:                   "#GoXLR .faceplate #Logo"
 }
-
