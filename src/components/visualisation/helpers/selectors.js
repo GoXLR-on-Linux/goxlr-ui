@@ -2,7 +2,7 @@
  * CSS selectors for the input capture layer.
  */
 export const CaptureSelector = {
-    COUGH:                  "#GoXLR .capture .cough",
+    COUGH:                  "#GoXLR .capture #Cough",
     CHANNEL1:               "#GoXLR .capture .mixer #Channel1",
     CHANNEL2:               "#GoXLR .capture .mixer #Channel2",
     CHANNEL3:               "#GoXLR .capture .mixer #Channel3",
