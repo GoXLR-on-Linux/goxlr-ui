@@ -23,6 +23,7 @@ import {
   handlePreviewHover,
 } from "@/components/visualisation/helpers/highlightHelper";
 
+// TODO: most of this can be placed in its own file
 export default {
   name: "GoXLR",
   methods: {
@@ -387,6 +388,8 @@ export default {
 </script>
 
 <style scoped>
+/* TODO: place css in (maybe multiple) dedicated file/s */
+
 .preview {
   height: 408px;
 }

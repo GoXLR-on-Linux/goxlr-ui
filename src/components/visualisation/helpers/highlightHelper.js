@@ -192,8 +192,13 @@ export function handlePreviewHover(e) {
             break;
 
         default:
-            Object.keys(HighlightArea)
-                .filter(key => HighlightArea[key].filter(query => document.querySelector(query).classList.contains(ACTIVE_CLASS)).length === 0)
+            Object
+                .keys(HighlightArea)
+                .filter(key => HighlightArea[key]
+                    .map(query => document.querySelector(query))                    // query elements of current area,
+                    .filter(elem => elem !== null)                                  // remove null(s) - GoXLR Mini,
+                    .filter(elem => !elem.classList.contains(ACTIVE_CLASS))         // remove active elems.
+                    .length > 0)                                                    // filter out active areas
                 .forEach(key => setAreaState(HighlightArea[key], HighlightState.NONE, true))
             break;
     }
