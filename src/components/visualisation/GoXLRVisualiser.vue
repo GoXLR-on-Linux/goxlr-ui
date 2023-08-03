@@ -1,5 +1,5 @@
 <template>
-  <div class="preview" @wheel="handleScroll" @mouseover="handleHover" @click="handleClick">
+  <div class="preview" @wheel="handleScroll" @mouseover="handlePreviewHover" @click="handlePreviewClick">
     <img svg-inline v-if="!this.useMiniPreview" src="../../assets/preview/GoXLR.svg" alt="GoXLR preview">
     <img svg-inline v-else src="../../assets/preview/GoXLR-Mini.svg" alt="GoXLR preview">
   </div>
@@ -9,7 +9,7 @@
 import {store} from "@/store";
 import {EffectLightingPresets, EffectPresets, MuteButtonNamesForFader} from "@/util/mixerMapping";
 import {websocket} from "@/util/sockets";
-import {ButtonSelector, CaptureSelector} from "@/components/visualisation/helpers/selectors";
+import {ButtonSelector} from "@/components/visualisation/helpers/selectors";
 import {
   isDeviceMini,
   calculateGradientColour,
@@ -18,18 +18,16 @@ import {
   isSampleRecording,
   setClassState
 } from "@/util/util";
-import {handleHover} from "@/components/visualisation/helpers/highlightHelper";
+import {
+  handlePreviewClick,
+  handlePreviewHover,
+} from "@/components/visualisation/helpers/highlightHelper";
 
 export default {
   name: "GoXLR",
   methods: {
-    handleHover, // see highlightHelper.js
-
-    handleClick(e) {
-      if (!e.target.matches(`${CaptureSelector.GLOBAL} *`)) return;
-
-
-    },
+    handlePreviewHover, // see highlightHelper.js
+    handlePreviewClick, // see highlightHelper.js
 
     computeAccentColour() {
       return `#${store.getActiveDevice().lighting.simple.Accent.colour_one}`;

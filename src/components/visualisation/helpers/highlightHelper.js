@@ -5,8 +5,8 @@ const ACTIVE_CLASS = "show";
 const HOVER_CLASS = "hover"
 
 // change this to set a default tab
-const defaultSamplerTab = "A";
-const defaultEffectsTab = 1;
+const DEFAULT_SAMPLER_TAB = "A";
+const DEFAULT_EFFECTS_TAB = 1;
 
 function setElementState(selector, state) {
     let elem = document.querySelector(selector);
@@ -14,6 +14,7 @@ function setElementState(selector, state) {
     switch (state) {
         case HighlightState.ACTIVE:
             elem.classList.add(ACTIVE_CLASS);
+            elem.classList.remove(HOVER_CLASS);
             return;
 
         case HighlightState.HOVER:
@@ -70,18 +71,21 @@ export const EffectsTabPreset = {
 }
 
 export function setTabState(tab, state, tabType) {
-    let isSomethingActive = false;
+    let isOtherTabActive = false;
+    let isOwnTabActive = false;
 
     if (state === HighlightState.HOVER) {
         Object.keys(tabType).forEach(keyName => {
             if (document.querySelector(tabType[keyName][1]).classList.contains(ACTIVE_CLASS))
-                isSomethingActive = true;
+                isOtherTabActive = true;
         });
+
+        isOwnTabActive = document.querySelector(tab[0]).classList.contains(ACTIVE_CLASS);
     }
 
     // only change body if nothing is set to ACTIVE_CLASS
-    if (!isSomethingActive) setAreaState(tab, state);
-    else setElementState([ ...tab[0] ], state);
+    if (!isOtherTabActive && !isOwnTabActive) setAreaState(tab, state);
+    else if (!isOwnTabActive) setAreaState([ tab[0] ], state);
 }
 
 export function setAreaState(area, state, skipUnset = false) {
@@ -101,6 +105,9 @@ export function setAreaState(area, state, skipUnset = false) {
         });
     }
 
+    // don't set hover if already active
+    if (state === HighlightState.HOVER && area.filter(query => document.querySelector(query).classList.contains(ACTIVE_CLASS)).length > 0) return;
+
     // set new
     area.forEach(selector => setElementState(selector, state));
 }
@@ -108,17 +115,17 @@ export function setAreaState(area, state, skipUnset = false) {
 
 
 // store last used tab
-let lastSamplerTab = defaultSamplerTab;
-let lastEffectsTab = defaultEffectsTab;
+let lastSamplerTab = DEFAULT_SAMPLER_TAB;
+let lastEffectsTab = DEFAULT_EFFECTS_TAB;
 
 /**
  * Completely handles the hover effect for the preview image.
  * @param e event args
  */
-export function handleHover(e) {
+export function handlePreviewHover(e) {
     // find correct function for highlight area
-    let hoveringCaptureZone = Object.keys(CaptureSelector).filter(key => e.target.matches(`${CaptureSelector[key]}`))[0];
-    switch (CaptureSelector[hoveringCaptureZone]) {
+    let captureZone = Object.keys(CaptureSelector).filter(key => e.target.matches(`${CaptureSelector[key]}`))[0];
+    switch (CaptureSelector[captureZone]) {
         // Mixer
         case CaptureSelector.CHANNEL1:
             setAreaState(HighlightArea.CHANNEL1, HighlightState.HOVER);
@@ -185,11 +192,98 @@ export function handleHover(e) {
             break;
 
         default:
-            Object.keys(HighlightArea).forEach(keyName => setAreaState(HighlightArea[keyName], HighlightState.NONE));
+            Object.keys(HighlightArea)
+                .filter(key => HighlightArea[key].filter(query => document.querySelector(query).classList.contains(ACTIVE_CLASS)).length === 0)
+                .forEach(key => setAreaState(HighlightArea[key], HighlightState.NONE, true))
             break;
     }
 
     // unset last* information
-    if (!e.target.matches(`${CaptureSelector.GROUP_SAMPLER} *`)) lastSamplerTab = defaultSamplerTab;
-    if (!e.target.matches(`${CaptureSelector.GROUP_EFFECTS} *`)) lastEffectsTab = defaultEffectsTab;
+    if (!e.target.matches(`${CaptureSelector.GROUP_SAMPLER} *`)) lastSamplerTab = DEFAULT_SAMPLER_TAB;
+    if (!e.target.matches(`${CaptureSelector.GROUP_EFFECTS} *`)) lastEffectsTab = DEFAULT_EFFECTS_TAB;
+}
+
+
+/**
+ * Completely handles the click event for the preview image.
+ * @param e event args
+ */
+export function handlePreviewClick(e) {
+    // find correct function for highlight area
+    let captureZone = Object.keys(CaptureSelector).filter(key => e.target.matches(`${CaptureSelector[key]}`))[0];
+    switch (CaptureSelector[captureZone]) {
+        // Mixer
+        case CaptureSelector.CHANNEL1:
+            // TODO: add code to switch to view
+            setAreaState(HighlightArea.CHANNEL1, HighlightState.ACTIVE);
+            break;
+        case CaptureSelector.CHANNEL2:
+            // TODO: add code to switch to view
+            setAreaState(HighlightArea.CHANNEL2, HighlightState.ACTIVE);
+            break;
+        case CaptureSelector.CHANNEL3:
+            // TODO: add code to switch to view
+            setAreaState(HighlightArea.CHANNEL3, HighlightState.ACTIVE);
+            break;
+        case CaptureSelector.CHANNEL4:
+            // TODO: add code to switch to view
+            setAreaState(HighlightArea.CHANNEL4, HighlightState.ACTIVE);
+            break;
+
+        // Sampler
+        case CaptureSelector.SAMPLER_BANK_A:
+            // TODO: add code to switch to view
+            setTabState(SamplerTabBank.A, HighlightState.ACTIVE, SamplerTabBank);
+            break;
+        case CaptureSelector.SAMPLER_BANK_B:
+            // TODO: add code to switch to view
+            setTabState(SamplerTabBank.B, HighlightState.ACTIVE, SamplerTabBank);
+            break;
+        case CaptureSelector.SAMPLER_BANK_C:
+            // TODO: add code to switch to view
+            setTabState(SamplerTabBank.C, HighlightState.ACTIVE, SamplerTabBank);
+            break;
+        case CaptureSelector.SAMPLER_BODY:
+            // TODO: add code to switch to view
+            setTabState(SamplerTabBank[lastSamplerTab], HighlightState.ACTIVE, SamplerTabBank);
+            break;
+
+        // Effects
+        case CaptureSelector.EFFECTS_PRESET1:
+            // TODO: add code to switch to view
+            setTabState(EffectsTabPreset.PRESET1, HighlightState.ACTIVE, EffectsTabPreset);
+            break;
+        case CaptureSelector.EFFECTS_PRESET2:
+            // TODO: add code to switch to view
+            setTabState(EffectsTabPreset.PRESET2, HighlightState.ACTIVE, EffectsTabPreset);
+            break;
+        case CaptureSelector.EFFECTS_PRESET3:
+            // TODO: add code to switch to view
+            setTabState(EffectsTabPreset.PRESET3, HighlightState.ACTIVE, EffectsTabPreset);
+            break;
+        case CaptureSelector.EFFECTS_PRESET4:
+            // TODO: add code to switch to view
+            setTabState(EffectsTabPreset.PRESET4, HighlightState.ACTIVE, EffectsTabPreset);
+            break;
+        case CaptureSelector.EFFECTS_PRESET5:
+            // TODO: add code to switch to view
+            setTabState(EffectsTabPreset.PRESET5, HighlightState.ACTIVE, EffectsTabPreset);
+            break;
+        case CaptureSelector.EFFECTS_PRESET6:
+            setTabState(EffectsTabPreset.PRESET6, HighlightState.ACTIVE, EffectsTabPreset);
+            break;
+        case CaptureSelector.EFFECTS_BODY:
+            // TODO: add code to switch to view
+            setTabState(EffectsTabPreset[`PRESET${lastEffectsTab}`], HighlightState.ACTIVE, EffectsTabPreset);
+            break;
+
+        // Cough
+        case CaptureSelector.COUGH:
+            // TODO: add code to switch to view
+            setAreaState(HighlightArea.COUGH, HighlightState.ACTIVE);
+            break;
+
+        default:
+            break;
+    }
 }
