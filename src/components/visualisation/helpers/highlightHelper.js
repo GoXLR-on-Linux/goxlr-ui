@@ -112,17 +112,39 @@ export function setAreaState(area, state, skipUnset = false) {
     area.forEach(selector => setElementState(selector, state));
 }
 
+function getCurrentTab(tabType) {
+    let currentTab = undefined;
 
+    // find current selected tab (hover < active)
+    Object
+        .keys(tabType)
+        .map(key => {
+            return {
+                tab: document.querySelector(tabType[key][0]),
+                // body: document.querySelector(tabType[key][1]),
+                key
+            };
+        })
+        .filter(group => group.tab !== undefined)
+        .forEach(group => {
+            if (group.tab.classList.contains(ACTIVE_CLASS))
+                return currentTab = tabType[group.key];
+            if (group.tab.classList.contains(HOVER_CLASS))
+                return currentTab = tabType[group.key];
+        });
 
-// store last used tab
-let lastSamplerTab = DEFAULT_SAMPLER_TAB;
-let lastEffectsTab = DEFAULT_EFFECTS_TAB;
+    return currentTab;
+}
+
 
 /**
  * Completely handles the hover effect for the preview image.
  * @param e event args
  */
 export function handlePreviewHover(e) {
+    let lastSamplerTab = getCurrentTab(SamplerTabBank) || SamplerTabBank[`${DEFAULT_SAMPLER_TAB}`];
+    let lastEffectsTab = getCurrentTab(EffectsTabPreset) || EffectsTabPreset[`PRESET${DEFAULT_EFFECTS_TAB}`];
+
     // find correct function for highlight area
     let captureZone = Object.keys(CaptureSelector).filter(key => e.target.matches(`${CaptureSelector[key]}`))[0];
     switch (CaptureSelector[captureZone]) {
@@ -142,48 +164,39 @@ export function handlePreviewHover(e) {
 
         // Sampler
         case CaptureSelector.SAMPLER_BANK_A:
-            lastSamplerTab = "A";
             setTabState(SamplerTabBank.A, HighlightState.HOVER, SamplerTabBank);
             break;
         case CaptureSelector.SAMPLER_BANK_B:
-            lastSamplerTab = "B";
             setTabState(SamplerTabBank.B, HighlightState.HOVER, SamplerTabBank);
             break;
         case CaptureSelector.SAMPLER_BANK_C:
-            lastSamplerTab = "C";
             setTabState(SamplerTabBank.C, HighlightState.HOVER, SamplerTabBank);
             break;
         case CaptureSelector.SAMPLER_BODY:
-            setTabState(SamplerTabBank[lastSamplerTab], HighlightState.HOVER, SamplerTabBank);
+            setTabState(lastSamplerTab, HighlightState.HOVER, SamplerTabBank);
             break;
 
         // Effects
         case CaptureSelector.EFFECTS_PRESET1:
-            lastEffectsTab = 1;
             setTabState(EffectsTabPreset.PRESET1, HighlightState.HOVER, EffectsTabPreset);
             break;
         case CaptureSelector.EFFECTS_PRESET2:
-            lastEffectsTab = 2;
             setTabState(EffectsTabPreset.PRESET2, HighlightState.HOVER, EffectsTabPreset);
             break;
         case CaptureSelector.EFFECTS_PRESET3:
-            lastEffectsTab = 3;
             setTabState(EffectsTabPreset.PRESET3, HighlightState.HOVER, EffectsTabPreset);
             break;
         case CaptureSelector.EFFECTS_PRESET4:
-            lastEffectsTab = 4;
             setTabState(EffectsTabPreset.PRESET4, HighlightState.HOVER, EffectsTabPreset);
             break;
         case CaptureSelector.EFFECTS_PRESET5:
-            lastEffectsTab = 5;
             setTabState(EffectsTabPreset.PRESET5, HighlightState.HOVER, EffectsTabPreset);
             break;
         case CaptureSelector.EFFECTS_PRESET6:
-            lastEffectsTab = 6;
             setTabState(EffectsTabPreset.PRESET6, HighlightState.HOVER, EffectsTabPreset);
             break;
         case CaptureSelector.EFFECTS_BODY:
-            setTabState(EffectsTabPreset[`PRESET${lastEffectsTab}`], HighlightState.HOVER, EffectsTabPreset);
+            setTabState(lastEffectsTab, HighlightState.HOVER, EffectsTabPreset);
             break;
 
         // Cough
@@ -196,7 +209,7 @@ export function handlePreviewHover(e) {
                 .keys(HighlightArea)
                 .filter(key => HighlightArea[key]
                     .map(query => document.querySelector(query))                    // query elements of current area,
-                    .filter(elem => elem !== null)                                  // remove null(s) - GoXLR Mini,
+                    .filter(elem => elem !== undefined)                                  // remove null(s) - GoXLR Mini,
                     .filter(elem => !elem.classList.contains(ACTIVE_CLASS))         // remove active elems.
                     .length > 0)                                                    // filter out active areas
                 .forEach(key => setAreaState(HighlightArea[key], HighlightState.NONE, true))
@@ -214,6 +227,9 @@ export function handlePreviewHover(e) {
  * @param e event args
  */
 export function handlePreviewClick(e) {
+    let lastSamplerTab = getCurrentTab(SamplerTabBank) ?? DEFAULT_SAMPLER_TAB;
+    let lastEffectsTab = getCurrentTab(EffectsTabPreset) ?? DEFAULT_EFFECTS_TAB;
+
     // find correct function for highlight area
     let captureZone = Object.keys(CaptureSelector).filter(key => e.target.matches(`${CaptureSelector[key]}`))[0];
     switch (CaptureSelector[captureZone]) {
