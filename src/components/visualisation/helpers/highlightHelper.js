@@ -113,19 +113,20 @@ export function setAreaState(area, state, skipUnset = false) {
 }
 
 function getCurrentTab(tabType) {
-    let currentTab = undefined;
+    let currentTab = null;
 
     // find current selected tab (hover < active)
     Object
         .keys(tabType)
         .map(key => {
+            console.log(key)
             return {
                 tab: document.querySelector(tabType[key][0]),
                 // body: document.querySelector(tabType[key][1]),
                 key
             };
         })
-        .filter(group => group.tab !== undefined)
+        .filter(group => group.tab !== null)
         .forEach(group => {
             if (group.tab.classList.contains(ACTIVE_CLASS))
                 return currentTab = tabType[group.key];
@@ -209,7 +210,7 @@ export function handlePreviewHover(e) {
                 .keys(HighlightArea)
                 .filter(key => HighlightArea[key]
                     .map(query => document.querySelector(query))                    // query elements of current area,
-                    .filter(elem => elem !== undefined)                                  // remove null(s) - GoXLR Mini,
+                    .filter(elem => elem !== null)                                  // remove null(s) - GoXLR Mini,
                     .filter(elem => !elem.classList.contains(ACTIVE_CLASS))         // remove active elems.
                     .length > 0)                                                    // filter out active areas
                 .forEach(key => setAreaState(HighlightArea[key], HighlightState.NONE, true))
@@ -223,8 +224,8 @@ export function handlePreviewHover(e) {
  * @param e event args
  */
 export function handlePreviewClick(e) {
-    let lastSamplerTab = getCurrentTab(SamplerTabBank) ?? DEFAULT_SAMPLER_TAB;
-    let lastEffectsTab = getCurrentTab(EffectsTabPreset) ?? DEFAULT_EFFECTS_TAB;
+    let lastSamplerTab = getCurrentTab(SamplerTabBank) || DEFAULT_SAMPLER_TAB;
+    let lastEffectsTab = getCurrentTab(EffectsTabPreset) || DEFAULT_EFFECTS_TAB;
 
     // find correct function for highlight area
     let captureZone = Object.keys(CaptureSelector).filter(key => e.target.matches(`${CaptureSelector[key]}`))[0];
