@@ -56,9 +56,9 @@
         </g>
       </g>
     </g>
-    <g class="highlight">
+    <g class="selection">
       <path id="Cough" d="m252.74,381.43l-183.17-.07c-1.36,0-2.47-1.1-2.47-2.46l-.08-35.83c0-1.37,1.1-2.48,2.47-2.48l183.25.03c1.36,0,2.47,1.11,2.47,2.47v35.87c0,1.36-1.11,2.47-2.47,2.47Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
-      <g class="channels">
+      <g id="channels">
         <rect id="Channel4" x="222.8" y="61.93" width="61.91" height="278.7" rx="2.47" ry="2.47" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
         <rect id="Channel3" x="160.96" y="61.93" width="61.84" height="278.7" rx="2.47" ry="2.47" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
         <path id="Channel2" d="m158.48,340.63l-56.97-.02c-1.37,0-2.47-1.11-2.47-2.47V64.4c0-1.37,1.11-2.47,2.47-2.47h56.97c1.37,0,2.47,1.11,2.47,2.47v273.75c0,1.37-1.11,2.47-2.47,2.47Z" style="fill: rgba(255, 255, 255, .15); stroke: rgba(36, 255, 255, .5); stroke-miterlimit: 10;"/>
@@ -373,15 +373,6 @@
           </g>
           <text transform="translate(62.24 76.66) scale(1.05 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9px;"><tspan x="0" y="0">Mic</tspan></text>
         </g>
-      </g>
-    </g>
-    <g class="capture">
-      <path id="Cough" d="m252.74,381.43l-183.17-.07c-1.36,0-2.47-1.1-2.47-2.46l-.08-35.83c0-1.37,1.1-2.48,2.47-2.48l183.25.03c1.36,0,2.47,1.11,2.47,2.47v35.87c0,1.36-1.11,2.47-2.47,2.47Z" style="fill: rgba(0, 0, 0, 0);"/>
-      <g class="mixer">
-        <rect id="Channel4" x="222.8" y="61.93" width="61.91" height="278.7" rx="2.47" ry="2.47" style="fill: rgba(0, 0, 0, 0);"/>
-        <rect id="Channel3" x="160.96" y="61.93" width="61.84" height="278.7" rx="2.47" ry="2.47" style="fill: rgba(0, 0, 0, 0);"/>
-        <path id="Channel2" d="m158.48,340.63l-56.97-.02c-1.37,0-2.47-1.11-2.47-2.47V64.4c0-1.37,1.11-2.47,2.47-2.47h56.97c1.37,0,2.47,1.11,2.47,2.47v273.75c0,1.37-1.11,2.47-2.47,2.47Z" style="fill: rgba(0, 0, 0, 0);"/>
-        <path id="Channel1" d="m39.61,340.61l56.97-.02c1.37,0,2.47-1.11,2.47-2.47V64.4c0-1.37-1.11-2.47-2.47-2.47h-56.97c-1.37,0-2.47,1.11-2.47,2.47v273.74c0,1.37,1.11,2.47,2.47,2.47Z" style="fill: rgba(0, 0, 0, 0);"/>
       </g>
     </g>
   </g>
