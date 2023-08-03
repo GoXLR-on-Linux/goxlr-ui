@@ -56,6 +56,18 @@
             aria-description="When muting all channels, also mute the mic to chat mic"
         />
       </div>
+      <div style="padding: 12px" v-if="!isDeviceMini()">
+        <span style="display: inline-block; width: 360px"
+        >Enable Mic Monitoring when FX is enabled:</span
+        >
+        <input
+            type="checkbox"
+            :checked="get_mic_monitor_with_fx()"
+            @change="set_mic_monitor_with_fx"
+            aria-label="Enable Mic Monitoring when FX is enabled"
+            aria-description="Activates Mic Monitoring when FX is enabled"
+        />
+      </div>
     </div>
   </AccessibleModal>
 
@@ -102,6 +114,17 @@ export default {
     set_vcmaammtcm(event) {
       websocket.send_command(store.getActiveSerial(), {"SetVCMuteAlsoMuteCM": event.target.checked});
     },
+
+    get_mic_monitor_with_fx() {
+      if (!store.getActiveDevice()) {
+        return false;
+      }
+      return store.getActiveDevice().settings.enable_monitor_with_fx;
+    },
+
+    set_mic_monitor_with_fx(event) {
+      websocket.send_command(store.getActiveSerial(), {"SetMonitorWithFx": event.target.checked});
+    }
   }
 }
 </script>
