@@ -224,8 +224,8 @@ export function handlePreviewHover(e) {
  * @param e event args
  */
 export function handlePreviewClick(e) {
-    let lastSamplerTab = getCurrentTab(SamplerTabBank) || DEFAULT_SAMPLER_TAB;
-    let lastEffectsTab = getCurrentTab(EffectsTabPreset) || DEFAULT_EFFECTS_TAB;
+    let lastSamplerTab = getCurrentTab(SamplerTabBank) || SamplerTabBank[`${DEFAULT_SAMPLER_TAB}`];
+    let lastEffectsTab = getCurrentTab(EffectsTabPreset) || EffectsTabPreset[`PRESET${DEFAULT_EFFECTS_TAB}`];
 
     // find correct function for highlight area
     let captureZone = Object.keys(CaptureSelector).filter(key => e.target.matches(`${CaptureSelector[key]}`))[0];
