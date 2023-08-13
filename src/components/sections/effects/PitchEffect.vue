@@ -92,6 +92,8 @@ export default {
           base_value -= 24;
         }
       }
+
+      store.getActiveDevice().effects.current.pitch.amount = Math.round(base_value);
       websocket.send_command(store.getActiveSerial(), {"SetPitchAmount": Math.round(base_value)});
     },
 

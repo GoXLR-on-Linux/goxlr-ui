@@ -52,6 +52,7 @@ export default {
       return store.getActiveDevice().effects.current.gender.amount;
     },
     setAmountValue(id, value) {
+      store.getActiveDevice().effects.current.gender.amount = value;
       websocket.send_command(store.getActiveSerial(), {"SetGenderAmount": value});
     },
 

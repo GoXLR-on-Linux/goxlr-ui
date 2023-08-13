@@ -52,6 +52,7 @@ export default {
       return store.getActiveDevice().effects.current.echo.amount;
     },
     setAmountValue(id, value) {
+      store.getActiveDevice().effects.current.echo.amount = value;
       websocket.send_command(store.getActiveSerial(), { "SetEchoAmount": value });
     },
 

@@ -72,6 +72,7 @@ export default {
       return store.getActiveDevice().effects.current.reverb.amount;
     },
     setAmountValue(id, value) {
+      store.getActiveDevice().effects.current.reverb.amount = value;
       websocket.send_command(store.getActiveSerial(), {"SetReverbAmount": value})
     },
 
