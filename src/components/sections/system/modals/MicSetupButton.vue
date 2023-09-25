@@ -1,8 +1,8 @@
 <template>
-  <BigButton id="mic_setup" ref="mic_setup_button" :title="setupTitle" @button-clicked="$refs.micSetupModal.openModal($refs.setup, $refs.mic_setup_button)">
+  <BigButton id="mic_setup" ref="mic_setup_button" :title="setupTitle" @click="openModal">
     <font-awesome-icon icon="fa-solid fa-microphone-lines" />
   </BigButton>
-  <AccessibleModal ref="micSetupModal" id="mic_setup" body-padding="0px" :show_footer=false>
+  <AccessibleModal ref="micSetupModal" id="mic_setup" body-padding="0px" :show_footer=false @modal-close="closeModal">
     <template v-slot:title>MIC SETUP</template>
     <SetupModel ref="setup" />
   </AccessibleModal>
@@ -22,6 +22,17 @@ export default {
     return {
       showModal: false,
       setupTitle: "Mic Setup"
+    }
+  },
+
+  methods: {
+    openModal() {
+      this.$refs.micSetupModal.openModal(this.$refs.setup, this.$refs.mic_setup_button);
+      this.$refs.setup.opened();
+    },
+
+    closeModal() {
+      this.$refs.setup.closed();
     }
   }
 }

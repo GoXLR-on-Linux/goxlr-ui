@@ -6,6 +6,8 @@
 
       <Slider title="Gain" :slider-min-value=0 :slider-max-value=72 text-suffix="dB"
               :slider-value=getGainValue() :store-path="getStorePath()" @value-changed="setGain" />
+
+      <vu-meter :val="current_value" :show-peaks="true" style="height: 220px" />
     </ContentContainer>
   </CenteredContainer>
 </template>
@@ -17,17 +19,21 @@ import {websocket} from "@/util/sockets";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
+import VuMeter from "@/components/sections/mic/vu-meter.vue";
 
 export default {
   name: "SetupModel",
-  components: {CenteredContainer, ContentContainer, RadioSelection, Slider},
+  components: {VuMeter, CenteredContainer, ContentContainer, RadioSelection, Slider},
   data: function() {
     return {
       microphone_options: [
         {id: "Dynamic", label: "Dynamic"},
         {id: "Condenser", label: "Condenser (+48V)"},
         {id: "Jack", label: "3.5mm"}
-      ]
+      ],
+
+      polling: false,
+      current_value: -72,
     }
   },
 
@@ -67,8 +73,27 @@ export default {
       let activeType = store.getActiveDevice().mic_status.mic_type;
       let button = this.$refs.selection.getButtonByRef(activeType);
       button.focus();
+    },
+
+    poll() {
+      websocket.get_mic_level(store.getActiveSerial()).then((data) => {
+        if (this.polling) {
+          this.current_value = data['MicLevel'];
+          setTimeout(this.poll, 10);
+        }
+      });
+    },
+
+    opened() {
+      this.polling = true;
+      this.poll();
+      console.log("Opened..");
+    },
+    closed() {
+      this.polling = false;
+      console.log("Closed..");
     }
-  }
+  },
 }
 </script>
 

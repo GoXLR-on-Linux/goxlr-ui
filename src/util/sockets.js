@@ -54,6 +54,8 @@ export class Websocket {
             } else if (message_data["Patch"] !== undefined) {
                 // Nothing ever requests patch data, so we can ignore this.
                 store.patchData(message_data);
+            } else if (message_data["MicLevel"] !== undefined) {
+                self.#fulfill_promise(message_id, message_data, true);
             } else if (message_data === "Ok") {
                 self.#fulfill_promise(message_id, message_data, true);
             } else {
@@ -116,6 +118,13 @@ export class Websocket {
                 serial,
                 command
             ]
+        }
+        return this.#sendRequest(request);
+    }
+
+    get_mic_level(serial) {
+        let request = {
+            "GetMicLevel": serial,
         }
         return this.#sendRequest(request);
     }
