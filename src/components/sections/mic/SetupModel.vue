@@ -82,8 +82,8 @@ export default {
           this.current_value = data['MicLevel'];
 
           // Realistically a mini should be able to handle 10ms, but due to it being a generally slower
-          // device, we bump it to 20 just to try and keep things happier.
-          setTimeout(this.poll, isDeviceMini() ? 20 : 10);
+          // device, we bump it to 30 just to try and keep things happier.
+          setTimeout(this.poll, isDeviceMini() ? 30 : 10);
         }
       });
     },
