@@ -68,6 +68,17 @@
             aria-description="Activates Mic Monitoring when FX is enabled"
         />
       </div>
+      <div style="padding: 12px" v-if="!isDeviceMini()">
+        <span style="display: inline-block; width: 360px"
+        >Lock Fader Positions when Muting to All:</span>
+        <input
+            type="checkbox"
+            :checked="get_locked_faders()"
+            @change="set_locked_faders"
+            aria-label="Lock Fader Positions when Muting to All"
+            aria-description="Prevents the faders from moving down when Mute to All is active"
+        />
+      </div>
     </div>
   </AccessibleModal>
 
@@ -124,6 +135,17 @@ export default {
 
     set_mic_monitor_with_fx(event) {
       websocket.send_command(store.getActiveSerial(), {"SetMonitorWithFx": event.target.checked});
+    },
+
+    get_locked_faders() {
+      if (!store.getActiveDevice()) {
+        return false;
+      }
+      return store.getActiveDevice().settings.lock_faders;
+    },
+
+    set_locked_faders(event) {
+      websocket.send_command(store.getActiveSerial(), {"SetLockFaders": event.target.checked});
     }
   }
 }
