@@ -25,6 +25,7 @@ export default {
 
     deEssValueChanged(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetDeeser": value });
+      store.getActiveDevice().levels.deess = value;
     },
 
     getBleepValue() {
@@ -33,6 +34,7 @@ export default {
 
     bleepValueChanged(id, value) {
       websocket.send_command(store.getActiveSerial(), { "SetSwearButtonVolume": value });
+      store.getActiveDevice().levels.bleep = value;
     },
 
     getStorePath(name) {
