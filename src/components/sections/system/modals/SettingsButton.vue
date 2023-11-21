@@ -57,6 +57,18 @@
       </div>
       <div style="padding: 12px">
         <span style="display: inline-block; width: 360px"
+        >Show the UI on Launch:</span
+        >
+        <input
+            type="checkbox"
+            :checked="isShowUi()"
+            @change="setShowUi"
+            aria-label="Autostart on Login"
+            aria-description="Start the GoXLR Utility when the user logs in"
+        />
+      </div>
+      <div style="padding: 12px">
+        <span style="display: inline-block; width: 360px"
         >Show Tray Icon (requires restart):</span
         >
         <input
@@ -158,6 +170,18 @@ export default {
 
     setAutoStart(event) {
       websocket.send_daemon_command({"SetAutoStartEnabled": event.target.checked});
+    },
+
+    isShowUi() {
+      if (store.getConfig() === undefined) {
+        return false;
+      }
+
+      return store.getConfig().open_ui_on_launch;
+    },
+
+    setShowUi(event) {
+       websocket.send_daemon_command({"SetUiLaunchOnLoad": event.target.checked});
     },
 
     isShowIcon() {
