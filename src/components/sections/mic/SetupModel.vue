@@ -2,7 +2,7 @@
   <!-- Build the Modal -->
   <CenteredContainer>
     <ContentContainer>
-      <RadioSelection ref="selection" title="Mic Type" group="mic_type" :options="microphone_options" :selected="getActiveMicType()" @selection-changed="handleButtonPress" />
+      <RadioSelection ref="selection" title="Mic Type" group="mic_type" :options="getMicrophoneOptions()" :selected="getActiveMicType()" @selection-changed="handleButtonPress" />
 
       <Slider title="Gain" :slider-min-value=0 :slider-max-value=72 text-suffix="dB"
               :slider-value=getGainValue() :store-path="getStorePath()" @value-changed="setGain" />
@@ -28,8 +28,8 @@ export default {
   data: function() {
     return {
       microphone_options: [
-        {id: "Dynamic", label: "Dynamic"},
-        {id: "Condenser", label: "Condenser (+48V)"},
+        {id: "Dynamic", label: "XLR Microphone"},
+        {id: "Condenser", label: "XLR + Phantom (+48v)"},
         {id: "Jack", label: "3.5mm"}
       ],
 
@@ -39,6 +39,19 @@ export default {
   },
 
   methods: {
+    getMicrophoneOptions() {
+      let voltage = "48";
+      if (isDeviceMini()) {
+        voltage = "24";
+      }
+
+      return [
+        {id: "Dynamic", label: "XLR Microphone"},
+        {id: "Condenser", label: "XLR + Phantom (+"+ voltage + "V)"},
+        {id: "Jack", label: "3.5mm"}
+      ];
+    },
+
     getActiveMicType() {
       return store.getActiveDevice().mic_status.mic_type
     },
