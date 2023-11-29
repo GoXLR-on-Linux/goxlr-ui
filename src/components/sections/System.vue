@@ -23,7 +23,7 @@ import LicenseButton from "@/components/sections/system/modals/LicenseButton.vue
 import AboutButton from "@/components/sections/system/modals/AboutButton.vue";
 import SettingsButton from "@/components/sections/system/modals/SettingsButton.vue";
 import HelpButton from "@/components/sections/system/HelpButton.vue";
-import ShutdownButton from "@/components/sections/system/modals/ShutdownButton.vue";
+import ShutdownButton from "@/components/sections/system/modals/PowerButton.vue";
 import DeviceSettingsButton from "@/components/sections/system/modals/DeviceSettingsButton.vue";
 import SwitchDeviceButton from "@/components/sections/system/modals/SwitchDeviceButton.vue";
 import {store} from "@/store";
