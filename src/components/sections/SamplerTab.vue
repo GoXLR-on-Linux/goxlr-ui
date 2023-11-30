@@ -50,6 +50,11 @@
           @click="this.$refs.add_sample_modal.openModal($refs.sample_selector, $refs.add_sample_button);"
       >+</ButtonItem>
     </RadioSelection>
+    <Slider title="Volume" :id=0 :slider-min-value=0 :slider-max-value=200 text-suffix="%"
+            :slider-value=getSampleVolume() @value-changed="setVolume" :store-path="getStorePath()"
+            :disabled="activeSample === '-1'" @blur="commitValue"
+    />
+
 
     <AudioVisualiser
         :active-bank="activeBank"
@@ -145,10 +150,12 @@ import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 import ModalButton from "@/components/design/modal/ModalButton.vue";
 import {websocket} from "@/util/sockets";
 import SampleFileSelector from "@/components/sections/sampler/SampleFileSelector.vue";
+import Slider from "@/components/slider/Slider.vue";
 
 export default {
   name: "SamplerTab",
   components: {
+    Slider,
     SampleFileSelector,
 
     ModalButton,
@@ -320,6 +327,38 @@ export default {
         });
       }
     },
+
+    getSampleVolume() {
+      console.log(store.status.files);
+      if (this.activeSample !== "-1") {
+        let sample_name = this.getActiveSampleName(this.activeSample);
+
+        // eslint-disable-next-line no-unused-vars
+        for (let [key, sample] of Object.entries(store.getSampleFiles())) {
+          if (sample.name === sample_name) {
+            return sample.gain_pct;
+          }
+        }
+      }
+      // Not found, or not selected, either way, hit the default.
+      return 100;
+    },
+
+    setVolume(id, volume) {
+      // Get the Selected Sample Name..
+      let sample_name = this.getActiveSampleName(this.activeSample);
+
+      websocket.send_daemon_command({
+        "SetSampleGainPct": [sample_name, volume]
+      })
+    },
+    getStorePath() {
+      return "";
+    },
+    commitValue() {
+      websocket.send_daemon_command("ApplySampleChange");
+      console.log("COMMITTING");
+    }
   },
 
   computed: {

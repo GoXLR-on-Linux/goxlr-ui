@@ -12,7 +12,7 @@
            :textSuffix="textSuffix" :value-map="valueMap" :current-field-value=fieldValue
            :editable="isEditable()" @value-updated="inputValueUpdated"
            style="margin-top: 15px" :background-colour="inputBackgroundColour" :title="title"
-           :disabled="disabled"
+           :disabled="disabled" @blur="$emit('blur')"
     />
   </div>
 </template>
@@ -220,6 +220,7 @@ export default {
 
       // Emit the latest value..
       this.$emit('value-changed', this.id, this.fieldValue, true);
+      this.$emit('blur');
     },
 
     handleScroll(e) {

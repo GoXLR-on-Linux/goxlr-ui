@@ -118,6 +118,7 @@ export default {
       // Value has changed, emit something upwards..
       let value = (this.allowFloat) ? parseFloat(newValue) : parseInt(newValue);
       this.$emit("value-updated", value, this.id);
+      this.$emit("blur");
     },
 
     focus() {
@@ -143,6 +144,8 @@ export default {
         this.localTextValue = this.maxValue;
         this.$emit("value-updated", this.maxValue, this.id);
       }
+
+      this.$emit("blur");
     },
 
     isNumber(str) {
