@@ -5,13 +5,14 @@
            :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
            @mouse-up="setMouseUp" :background-colour="rangeBackgroundColour" :title="title"
            :reported-value="getTextValue()"
-           :height="rangeHeight" :transform="rangeTransform"
+           :height="rangeHeight" :transform="rangeTransform" :disabled="disabled"
     />
 
     <Input :current-text-value="textValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
            :textSuffix="textSuffix" :value-map="valueMap" :current-field-value=fieldValue
            :editable="isEditable()" @value-updated="inputValueUpdated"
            style="margin-top: 15px" :background-colour="inputBackgroundColour" :title="title"
+           :disabled="disabled"
     />
   </div>
 </template>
@@ -65,6 +66,8 @@ export default {
     rangeTransform: {type: Number, required: false},
 
     valueMap: Array,
+
+    disabled: { type: Boolean, required: false, default: false }
   },
 
   methods: {
