@@ -52,7 +52,7 @@
     </RadioSelection>
     <Slider title="Volume" :id=0 :slider-min-value=0 :slider-max-value=200 text-suffix="%"
             :slider-value=getSampleVolume() @value-changed="setVolume" :store-path="getStorePath()"
-            :disabled="activeSample === '-1'" @blur="commitValue"
+            :disabled="isVolumeDisabled()" @blur="commitValue"
     />
 
 
@@ -329,7 +329,6 @@ export default {
     },
 
     getSampleVolume() {
-      console.log(store.status.files);
       if (this.activeSample !== "-1") {
         let sample_name = this.getActiveSampleName(this.activeSample);
 
@@ -357,8 +356,21 @@ export default {
     },
     commitValue() {
       websocket.send_daemon_command("ApplySampleChange");
-      console.log("COMMITTING");
-    }
+    },
+
+    isVolumeDisabled() {
+      if (this.activeSample === '-1') {
+        return true;
+      }
+
+      if (store.getActiveDevice().sampler.banks[this.activeBank][
+          this.activeButton
+          ].is_playing) {
+        return true;
+      }
+      return false;
+
+    },
   },
 
   computed: {
