@@ -63,8 +63,8 @@
             type="checkbox"
             :checked="isShowUi()"
             @change="setShowUi"
-            aria-label="Autostart on Login"
-            aria-description="Start the GoXLR Utility when the user logs in"
+            aria-label="Show UI on Load"
+            aria-description="Automatically launches the UI on startup"
         />
       </div>
       <div style="padding: 12px">
