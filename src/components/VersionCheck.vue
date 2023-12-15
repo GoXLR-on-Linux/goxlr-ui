@@ -1,7 +1,7 @@
 <template>
   <div v-if="hasVersion()" class="version">
     GoXLR Utility v{{getVersion()}}
-    <span v-if="outdated()"> - <a :href="release_path"> Update Available</a></span>
+    <span v-if="outdated()"> - <a :href="release_path" target="_blank"> Update Available</a></span>
   </div>
 </template>
 
