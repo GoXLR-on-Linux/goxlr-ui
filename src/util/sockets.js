@@ -41,10 +41,8 @@ export class Websocket {
     #command_index = 0;
 
     connect() {
-        console.log("Beginning Connection..");
         this.#websocket = new WebSocket(getWebsocketAddress());
 
-        console.log("Setting Events..");
         let self = this;
         self.#websocket.addEventListener('message', function (event) {
             // A message can be one of two things, either a DaemonStatus, or an error..
@@ -102,7 +100,6 @@ export class Websocket {
             self.#websocket.close();
         });
 
-        console.log("Returning Promise..")
         return new Promise((resolve, reject) => {
             self.#connection_promise[0] = resolve;
             self.#connection_promise[1] = reject;
