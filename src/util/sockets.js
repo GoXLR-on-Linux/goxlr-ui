@@ -35,15 +35,18 @@ import {store} from "@/store";
 // TODO: Error checking and handling!
 export class Websocket {
     #connection_promise = [];
+    #disconnect_callback = undefined;
     #message_queue = []
     #websocket = undefined;
     #command_index = 0;
 
     connect() {
+        console.log("Beginning Connection..");
         this.#websocket = new WebSocket(getWebsocketAddress());
 
+        console.log("Setting Events..");
         let self = this;
-        self.#websocket.addEventListener('message', function(event) {
+        self.#websocket.addEventListener('message', function (event) {
             // A message can be one of two things, either a DaemonStatus, or an error..
             let json = JSON.parse(event.data);
 
@@ -64,31 +67,50 @@ export class Websocket {
             }
         });
 
-        self.#websocket.addEventListener('open', function() {
-            self.#connection_promise[0]();
-            self.#connection_promise[0] = undefined;
-        });
-
-        self.#websocket.addEventListener('close', function() {
+        self.#websocket.addEventListener('open', function () {
+            console.log("OPEN");
             if (self.#connection_promise[0] !== undefined) {
                 self.#connection_promise[0]();
-                self.#connection_promise[0] = undefined;
             }
-            store.socketDisconnected();
+            self.#connection_promise = [];
         });
 
-        self.#websocket.addEventListener('error', function() {
-            if (self.#connection_promise[0] !== undefined) {
-                self.#connection_promise[0]();
-                self.#connection_promise[0] = undefined;
+        self.#websocket.addEventListener('close', function () {
+            if (self.#connection_promise[1] !== undefined) {
+                self.#connection_promise[1]();
             }
-            store.socketDisconnected();
+            self.#connection_promise = [];
+
+            if (self.#disconnect_callback !== undefined) {
+                self.#disconnect_callback();
+                self.#disconnect_callback = undefined;
+            }
+
+            self.#websocket.close();
         });
 
+        self.#websocket.addEventListener('error', function () {
+            if (self.#connection_promise[1] !== undefined) {
+                self.#connection_promise[1]();
+            }
+            self.#connection_promise = [];
+
+            if (self.#disconnect_callback !== undefined) {
+                self.#disconnect_callback();
+                self.#disconnect_callback = undefined;
+            }
+            self.#websocket.close();
+        });
+
+        console.log("Returning Promise..")
         return new Promise((resolve, reject) => {
             self.#connection_promise[0] = resolve;
             self.#connection_promise[1] = reject;
         });
+    }
+
+    on_disconnect(func) {
+        this.#disconnect_callback = func;
     }
 
     get_status() {
@@ -106,7 +128,7 @@ export class Websocket {
     send_daemon_command(command) {
         let request = {
             "Daemon":
-                command
+            command
 
         }
         return this.#sendRequest(request);
@@ -156,7 +178,27 @@ export class Websocket {
         }
     }
 }
+
 export const websocket = new Websocket();
+
+export function runWebsocket() {
+    console.log("Connecting..");
+    // Let's attempt to connect the websocket...
+    websocket.connect().then(() => {
+        // We got a connection, try fetching the status...
+        websocket.get_status().then((data) => {
+            store.socketConnected(data);
+
+            websocket.on_disconnect(() => {
+                store.socketDisconnected();
+                setTimeout(runWebsocket, 1000);
+            })
+        });
+    }).catch(() => {
+        // Wait 1 second, then try again..
+        setTimeout(runWebsocket, 1000);
+    });
+}
 
 /*
  * This function simply sends a command via HTTP and returns a promise of a response.

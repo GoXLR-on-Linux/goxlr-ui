@@ -3,7 +3,8 @@ import { applyOperation } from "fast-json-patch";
 
 
 export const store = reactive({
-    has_disconnected: false,
+    is_connected: false,
+    has_connected: false,
     have_device: false,
     active: true,
     activeSerial: "",
@@ -24,14 +25,20 @@ export const store = reactive({
     },
 
     socketDisconnected() {
-        this.has_disconnected = true;
         this.activeSerial = "";
         this.status = {
             "mixers": {},
             "files": {}
         };
 
-        this.has_disconnected = true;
+        this.is_connected = false;
+    },
+
+
+    socketConnected(status) {
+        this.has_connected = true;
+        this.replaceData(status);
+        this.is_connected = true;
     },
 
     daemonVersion() {
@@ -46,7 +53,12 @@ export const store = reactive({
     },
 
     isConnected() {
-        return !this.has_disconnected;
+        return this.is_connected;
+    },
+
+    // These methods determine whether at any point in the past we've connected..
+    hasConnected() {
+        return this.has_connected;
     },
 
     getConfig() {

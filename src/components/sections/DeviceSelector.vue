@@ -3,10 +3,18 @@
   <div class="buttonList">
     <div>
       <div class="label">Select Device</div>
-      <div v-if="!isConnected()">
-        <div class="no-device">Unable to connect to the GoXLR Utility.<br /><br /> Please ensure the utility is running and
-        refresh this page.</div>
+
+      <!-- If we've never connected before, and we're not connected now.. -->
+      <div v-if="!hasConnected() && !isConnected()">
+        <div class="no-device">Attempting to Connect to the GoXLR Utility..</div>
       </div>
+
+      <!-- We *HAVE* connected before, but we're not connected now.. -->
+      <div v-else-if="hasConnected() && !isConnected()">
+        <div class="no-device">Unable to connect to the GoXLR Utility, please check it's running.<br /><br /> This page will automatically try to reconnect..</div>
+      </div>
+
+      <!-- We should be connected here! -->
       <div v-else>
         <div class="buttonHolder" v-if="deviceCount > 0">
           <Button v-for="(device, key) in getMixers()" :key=key :button-id=key :is-active=false
@@ -18,7 +26,7 @@
   </div>
   <div v-if="isConnected() && hasConfig()" class="buttonList" style="width: 170px">
     <div class="buttonHolder" style="width: 170px; padding-top: 25px; overflow-y: initial">
-    <SettingsButton />
+      <SettingsButton />
     </div>
   </div>
   </div>
@@ -55,6 +63,10 @@ export default {
   },
 
   methods: {
+    hasConnected() {
+      return store.hasConnected();
+    },
+
     isConnected() {
       return store.isConnected();
     },

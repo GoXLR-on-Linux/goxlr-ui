@@ -1,61 +1,61 @@
 <template>
   <div id="main">
-    <DeviceSelector v-if="!isDeviceSet()" />
+    <DeviceSelector v-if="!isDeviceSet()"/>
     <template v-if="isDeviceSet()">
       <h1 class="screenreader-only">Profiles and Files</h1>
       <div style="display: flex; flex-direction: row; column-gap: 30px">
         <div>
-          <FileTabs />
+          <FileTabs/>
         </div>
-        <div aria-hidden="true" style="margin: auto; width: 100%" >
-          <GoXLRVisualiser />
+        <div aria-hidden="true" style="margin: auto; width: 100%">
+          <GoXLRVisualiser/>
         </div>
       </div>
 
-      <div style="height: 25px; background-color: #3b413f" />
+      <div style="height: 25px; background-color: #3b413f"/>
       <h1 class="sr-only">Device Settings</h1>
       <Tabs ref="device-tabs" label="Device Settings">
         <Tab name="Mic">
-          <Mic />
+          <Mic/>
         </Tab>
         <Tab name="Mixer" selected>
           <ContentContainer>
-            <Mixer />
+            <Mixer/>
           </ContentContainer>
         </Tab>
         <Tab name="Configuration">
           <ContentContainer>
             <CenteredContainer>
-              <Faders ref="faders" />
-              <Cough />
+              <Faders ref="faders"/>
+              <Cough/>
             </CenteredContainer>
           </ContentContainer>
         </Tab>
         <Tab v-if="!isDeviceMini()" name="Effects">
-          <EffectsTab />
+          <EffectsTab/>
         </Tab>
         <Tab v-if="!isDeviceMini()" name="Sampler">
           <ContentContainer>
-            <SamplerTab />
+            <SamplerTab/>
           </ContentContainer>
         </Tab>
         <Tab name="Lighting">
-          <LightingTab />
+          <LightingTab/>
         </Tab>
         <Tab name="Routing">
           <ContentContainer>
-            <Routing />
+            <Routing/>
           </ContentContainer>
         </Tab>
         <Tab name="System">
           <ContentContainer>
-            <SystemComponent />
+            <SystemComponent/>
           </ContentContainer>
         </Tab>
       </Tabs>
     </template>
-    <VersionCheck />
-    <A11yNotifications />
+    <VersionCheck/>
+    <A11yNotifications/>
   </div>
 </template>
 
@@ -68,13 +68,13 @@ import Tab from "@/components/tabs/Tab";
 import Routing from "@/components/sections/Routing";
 import Mic from "@/components/sections/Mic";
 import DeviceSelector from "@/components/sections/DeviceSelector";
-import { store } from "@/store";
+import {store} from "@/store";
 import Cough from "@/components/sections/Cough";
-import { websocket } from "@/util/sockets";
+import {runWebsocket} from "@/util/sockets";
 import SystemComponent from "@/components/sections/System";
 import FileTabs from "@/components/sections/files/FileTabs";
 import EffectsTab from "@/components/sections/EffectsTab";
-import { isDeviceMini } from "@/util/util";
+import {isDeviceMini} from "@/util/util";
 import LightingTab from "@/components/sections/lighting/LightingTab";
 import SamplerTab from "@/components/sections/SamplerTab";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
@@ -114,9 +114,7 @@ export default {
   },
 
   created() {
-    websocket.get_status().then((data) => {
-      store.replaceData(data);
-    });
+    runWebsocket();
   },
 };
 </script>
