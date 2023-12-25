@@ -50,7 +50,7 @@
           @click="this.$refs.add_sample_modal.openModal($refs.sample_selector, $refs.add_sample_button);"
       >+</ButtonItem>
     </RadioSelection>
-    <Slider title="Volume" :id=0 :slider-min-value=0 :slider-max-value=200 text-suffix="%"
+    <Slider title="Gain" :id=0 :slider-min-value=0 :slider-max-value=200 text-suffix="%"
             :slider-value=getSampleVolume() @value-changed="setVolume" :store-path="getStorePath()"
             :disabled="isVolumeDisabled()" @blur="commitValue"
     />
