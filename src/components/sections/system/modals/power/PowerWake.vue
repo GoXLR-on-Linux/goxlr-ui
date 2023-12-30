@@ -66,13 +66,16 @@ export default {
       this.generateActions();
     },
 
-    getSelectedProfile() {
+    getSelectedColourProfile() {
       let profile = this.getValue("LoadProfileColours");
       if (profile !== undefined) {
         return profile.LoadProfileColours;
       }
 
-      return this.getProfiles()[0];
+      if (this.$refs.colourProfile === undefined) {
+        return this.getProfiles()[0];
+      }
+      return this.$refs.colourProfile.value;
     },
 
     getSelectedFullProfile() {
@@ -81,7 +84,10 @@ export default {
         return profile.LoadProfile[0];
       }
 
-      return this.getProfiles()[0];
+      if (this.$refs.fullProfile === undefined) {
+        return this.getProfiles()[0];
+      }
+      return this.$refs.fullProfile.value;
     },
 
     getSelectedMicProfile() {
@@ -90,7 +96,10 @@ export default {
         return profile.LoadMicProfile[0];
       }
 
-      return this.getMicProfiles()[0];
+      if (this.$refs.micProfile === undefined) {
+        return this.getMicProfiles()[0];
+      }
+      return this.$refs.micProfile.value;
     },
 
     getValue(command) {
@@ -176,7 +185,7 @@ export default {
       <input type="checkbox" ref="loadColourProfile" id="loadColourProfile" :checked="isActive('LoadProfileColours')"
              @change="changed"><label for="loadColourProfile">Load Colour Profile: </label>
       </span>
-      <select ref="colourProfile" @change="profileChanged" :value="getSelectedProfile()">
+      <select ref="colourProfile" @change="profileChanged" :value="getSelectedColourProfile()">
         <option v-for="value in getProfiles()" :key="value">{{ value }}</option>
       </select>
     </div>

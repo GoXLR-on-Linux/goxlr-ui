@@ -78,13 +78,16 @@ export default {
       this.generateActions();
     },
 
-    getSelectedProfile() {
+    getSelectedColourProfile() {
       let profile = this.getValue("LoadProfileColours");
       if (profile !== undefined) {
         return profile.LoadProfileColours;
       }
 
-      return this.getProfiles()[0];
+      if (this.$refs.colourProfile === undefined) {
+        return this.getProfiles()[0];
+      }
+      return this.$refs.colourProfile.value;
     },
 
     getSelectedFullProfile() {
@@ -93,7 +96,13 @@ export default {
         return profile.LoadProfile[0];
       }
 
-      return this.getProfiles()[0];
+      // If this element hasn't been loaded yet, set a default value..
+      if (this.$refs.fullProfile === undefined) {
+        return this.getProfiles()[0];
+      }
+
+      // If the option isn't enabled, we shouldn't need to change what the user has selected.
+      return this.$refs.fullProfile.value;
     },
 
     getSelectedMicProfile() {
@@ -102,7 +111,10 @@ export default {
         return profile.LoadMicProfile[0];
       }
 
-      return this.getMicProfiles()[0];
+      if (this.$refs.micProfile === undefined) {
+        return this.getMicProfiles()[0];
+      }
+      return this.$refs.micProfile.value;
     },
 
     getValue(command) {
@@ -178,12 +190,14 @@ export default {
              @change="changed"><label :for="this.getId('saveProfile')">Save Profile</label>
     </div>
     <div>
-      <input type="checkbox" ref="saveMicProfile" :id="this.getId('saveMicProfile')" :checked="isActive('SaveMicProfile')"
+      <input type="checkbox" ref="saveMicProfile" :id="this.getId('saveMicProfile')"
+             :checked="isActive('SaveMicProfile')"
              @change="changed"><label :for="this.getId('saveMicProfile')">Save Mic Profile</label>
     </div>
     <div>
       <span style="display: inline-block; width: 200px">
-      <input type="checkbox" ref="loadMicProfile" :id="this.getId('loadMicProfile')" :checked="isActive('LoadMicProfile')"
+      <input type="checkbox" ref="loadMicProfile" :id="this.getId('loadMicProfile')"
+             :checked="isActive('LoadMicProfile')"
              @change="changed"><label :for="this.getId('loadMicProfile')">Load Mic Profile: </label>
       </span>
       <select ref="micProfile" @change="micProfileChanged" :value="getSelectedMicProfile()">
@@ -192,7 +206,8 @@ export default {
     </div>
     <div>
       <span style="display: inline-block; width: 200px">
-      <input type="checkbox" ref="loadFullProfile" :id="this.getId('loadFullProfile')" :checked="isActive('LoadProfile')"
+      <input type="checkbox" ref="loadFullProfile" :id="this.getId('loadFullProfile')"
+             :checked="isActive('LoadProfile')"
              @change="changed"><label :for="this.getId('loadFullProfile')">Load Full Profile: </label>
       </span>
       <select ref="fullProfile" @change="fullProfileChanged" :value="getSelectedFullProfile()">
@@ -201,10 +216,11 @@ export default {
     </div>
     <div>
       <span style="display: inline-block; width: 200px">
-      <input type="checkbox" ref="loadColourProfile" :id="this.getId('loadColourProfile')" :checked="isActive('LoadProfileColours')"
+      <input type="checkbox" ref="loadColourProfile" :id="this.getId('loadColourProfile')"
+             :checked="isActive('LoadProfileColours')"
              @change="changed"><label :for="this.getId('loadColourProfile')">Load Colour Profile: </label>
       </span>
-      <select ref="colourProfile" @change="profileChanged" :value="getSelectedProfile()">
+      <select ref="colourProfile" @change="profileChanged" :value="getSelectedColourProfile()">
         <option v-for="value in getProfiles()" :key="value">{{ value }}</option>
       </select>
     </div>
