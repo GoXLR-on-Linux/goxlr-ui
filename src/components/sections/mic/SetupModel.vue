@@ -7,7 +7,7 @@
       <Slider title="Gain" :slider-min-value=0 :slider-max-value=72 text-suffix="dB"
               :slider-value=getGainValue() :store-path="getStorePath()" @value-changed="setGain" />
 
-      <vu-meter :val="current_value" :show-peaks="true" style="height: 220px" />
+      <AudioMeter :active="polling" />
     </ContentContainer>
   </CenteredContainer>
 </template>
@@ -19,12 +19,12 @@ import {websocket} from "@/util/sockets";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
-import VuMeter from "@/components/sections/mic/vu-meter.vue";
 import {isDeviceMini} from "@/util/util";
+import AudioMeter from "@/components/sections/mic/AudioMeter.vue";
 
 export default {
   name: "SetupModel",
-  components: {VuMeter, CenteredContainer, ContentContainer, RadioSelection, Slider},
+  components: {AudioMeter, CenteredContainer, ContentContainer, RadioSelection, Slider},
   data: function() {
     return {
       microphone_options: [
@@ -89,26 +89,11 @@ export default {
       button.focus();
     },
 
-    poll() {
-      websocket.get_mic_level(store.getActiveSerial()).then((data) => {
-        if (this.polling) {
-          this.current_value = data['MicLevel'];
-
-          // Realistically a mini should be able to handle 10ms, but due to it being a generally slower
-          // device, we bump it to 30 just to try and keep things happier.
-          setTimeout(this.poll, isDeviceMini() ? 30 : 10);
-        }
-      });
-    },
-
     opened() {
       this.polling = true;
-      this.poll();
-      console.log("Opened..");
     },
     closed() {
       this.polling = false;
-      console.log("Closed..");
     }
   },
 }
