@@ -63,7 +63,7 @@ export default {
       return store.getActiveDevice().mic_status.noise_gate.threshold + 13;
     },
     closeWaveForm() {
-      if (this.$refs.audioMeter !== undefined) {
+      if (this.$refs.audioMeter !== undefined && this.$refs.audioMeter !== null) {
         this.$refs.audioMeter.active_local = false;
       }
       this.showWaveForm = false;
