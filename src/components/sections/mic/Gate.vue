@@ -41,7 +41,6 @@ export default {
       if (this.showWaveForm === true) {
         // Forcefully End the Graph for the Gate..
         this.showWaveForm = false;
-        this.$refs.audioMeter.active_local = false;
         clearTimeout(this.timeout);
       }
     },
@@ -63,9 +62,6 @@ export default {
       return store.getActiveDevice().mic_status.noise_gate.threshold + 13;
     },
     closeWaveForm() {
-      if (this.$refs.audioMeter !== undefined && this.$refs.audioMeter !== null) {
-        this.$refs.audioMeter.active_local = false;
-      }
       this.showWaveForm = false;
     },
 

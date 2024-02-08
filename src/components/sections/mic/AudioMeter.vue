@@ -246,6 +246,10 @@ export default {
     }
   },
 
+  unmounted() {
+    this.stop();
+  },
+
   watch: {
     active(newValue) {
       console.log("Local Active Starting..");
