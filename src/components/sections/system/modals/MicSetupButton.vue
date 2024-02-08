@@ -15,6 +15,7 @@ import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 export default {
+  emits: ["mic-setup-open"],
   name: "MicSetupButton",
   components: {FontAwesomeIcon, AccessibleModal, BigButton, SetupModel},
 
@@ -27,6 +28,8 @@ export default {
 
   methods: {
     openModal() {
+      this.$emit('mic-setup-open');
+
       this.$refs.micSetupModal.openModal(this.$refs.setup, this.$refs.mic_setup_button);
       this.$refs.setup.opened();
     },

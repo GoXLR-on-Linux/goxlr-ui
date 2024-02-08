@@ -6,11 +6,14 @@ export default {
   name: "AudioMeter",
 
   props: {
-    active: {type: Boolean, required: true}
+    active: {type: Boolean, required: true},
+    fade_below: {type: Number, required: false}
   },
 
   data() {
     return {
+      active_local: false,
+
       canvas: undefined,
       canvas_size: {
         width: 0,
@@ -28,6 +31,10 @@ export default {
   },
 
   methods: {
+    stop: function() {
+      this.active_local = false;
+    },
+
     pollData: function () {
       let self = this
 
@@ -49,9 +56,10 @@ export default {
           self.points.shift()
         }
 
-        if (self.active) {
+        if (self.active_local) {
           setTimeout(this.pollData, this.poll_rate)
         } else {
+          console.log("STOPPED..");
           this.points = []
         }
       })
@@ -59,7 +67,7 @@ export default {
 
     draw: function (timestamp) {
       // Work out if we should draw...
-      if (!this.active || this.points.length === 0) {
+      if (!this.active_local || this.points.length === 0) {
         requestAnimationFrame(this.draw)
         return
       }
@@ -117,6 +125,10 @@ export default {
       }
       this.canvas.stroke()
 
+      if (this.fade_below !== undefined) {
+        this.draw_fade_below();
+      }
+
       // Update the last paint time..
       this.last_paint = timestamp
 
@@ -155,6 +167,20 @@ export default {
       this.canvas.fillText(text, 10, position);
     },
 
+    draw_fade_below: function() {
+      this.canvas.fillStyle = 'rgba(0,0,0,0.5)';
+
+      let start = this.get_db_position(this.fade_below);
+      this.canvas.fillRect(0, start, this.canvas_size.width, this.canvas_size.height);
+
+      this.canvas.strokeStyle = '#fff';
+      this.canvas.beginPath();
+      this.canvas.moveTo(0, start);
+      this.canvas.lineTo(this.canvas_size.width, start);
+      this.canvas.stroke();
+
+    },
+
     draw_db_lines: function () {
       for (let i = 0; i < 7; i++) {
         let value = i * -10
@@ -171,17 +197,6 @@ export default {
     get_db_position: function (dB) {
       let minimum_value = this.minimum_value * -1
       return (dB / minimum_value) * -1 * this.canvas_size.height
-    },
-
-    get_alignment_position: function (ref, dB) {
-      let top = this.get_db_position(dB)
-      let reference = this.$refs[ref]
-      if (reference === undefined) {
-        // Probably not rendered yet..
-        return 0
-      }
-
-      return top - reference.clientHeight / 2
     },
 
     // A simple method which will move the canvas X pixels, dictated by 'speed'
@@ -226,12 +241,15 @@ export default {
     this.draw()
 
     if (this.active) {
+      this.active_local = true;
       this.pollData();
     }
   },
 
   watch: {
     active(newValue) {
+      console.log("Local Active Starting..");
+      this.active_local = newValue;
       if (newValue === true) {
         this.pollData();
       }

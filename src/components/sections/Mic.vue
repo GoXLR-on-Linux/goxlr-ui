@@ -5,9 +5,9 @@
     </div>
     <ContentContainer :no-left-pad="true">
       <ContentBox>
-        <MicSetupButton />
+        <MicSetupButton @mic-setup-open="mic_open" />
       </ContentBox>
-      <Gate/>
+      <Gate ref="gate" />
       <Equaliser/>
       <Compressor/>
       <MicExtra />
@@ -30,6 +30,12 @@ export default {
   components: {
     ContentContainer,
     ContentBox, MicSetupButton, MicProfileHandler, MicExtra, Compressor, Equaliser, Gate},
+
+  methods: {
+    mic_open: function() {
+      this.$refs.gate.force_stop_graph();
+    }
+  }
 }
 </script>
 

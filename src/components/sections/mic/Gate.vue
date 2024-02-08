@@ -1,10 +1,10 @@
 <template>
   <ExpandoGroupContainer title="Gate" @expando-clicked="toggleAdvanced" :expanded="isAdvanced()">
-      <Slider v-show="!isAdvanced()" title="Amount" :id=0 :slider-min-value=0 :slider-max-value=100 text-suffix=""
-              :slider-value=getAmount() @value-changed="setValue" :store-path="getStorePath('threshold')"/>
-
-      <Slider v-show="isAdvanced()" title="Threshold" :id=1 :slider-min-value=-59 :slider-max-value=0 text-suffix="dB"
+      <Slider title="Threshold" :id=1 :slider-min-value=-59 :slider-max-value=0 text-suffix="dB"
               :slider-value=getThreshold() @value-changed="setValue" :store-path="getStorePath('threshold')"/>
+      <ExpandoBox v-if="!showWaveForm" expand_right="fa-wave-square" @expando-clicked="toggleWaveForm" />
+      <AudioMeter ref="audioMeter" v-if="showWaveForm" :active="showWaveForm" :fade_below="getAdjustedThreshold()" />
+
       <Slider v-show="isAdvanced()" title="Attenuation" :id=2 :slider-min-value=0 :slider-max-value=100 text-suffix="%"
               :slider-value=getAttenuation() @value-changed="setValue" :store-path="getStorePath('attenuation')"/>
       <Slider v-show="isAdvanced()" title="Attack" :id=3 :slider-min-value=10 :slider-max-value=2000 text-suffix="ms"
@@ -21,24 +21,52 @@ import Slider from "../../slider/Slider";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";
+import ExpandoBox from "@/components/design/ExpandoBox.vue";
+import AudioMeter from "@/components/sections/mic/AudioMeter.vue";
 
 export default {
   name: "MicGate",
-  components: {ExpandoGroupContainer, Slider },
+  components: {AudioMeter, ExpandoBox, ExpandoGroupContainer, Slider },
 
   data() {
     return {
       updatesPaused: false,
+      showWaveForm: false,
+      timeout: undefined,
     }
   },
 
   methods: {
+    force_stop_graph() {
+      if (this.showWaveForm === true) {
+        // Forcefully End the Graph for the Gate..
+        this.showWaveForm = false;
+        this.$refs.audioMeter.active_local = false;
+        clearTimeout(this.timeout);
+      }
+    },
+
     getAmount() {
       return Math.round((this.getThreshold() + 59) / 59 * 100)
     },
 
     getThreshold() {
       return store.getActiveDevice().mic_status.noise_gate.threshold;
+    },
+
+    getAdjustedThreshold() {
+      let value = store.getActiveDevice().mic_status.noise_gate.threshold;
+      if (value + 13 >= 0) {
+        return 0;
+      }
+
+      return store.getActiveDevice().mic_status.noise_gate.threshold + 13;
+    },
+    closeWaveForm() {
+      if (this.$refs.audioMeter !== undefined) {
+        this.$refs.audioMeter.active_local = false;
+      }
+      this.showWaveForm = false;
     },
 
     getAttack() {
@@ -62,6 +90,11 @@ export default {
       websocket.send_command(store.getActiveSerial(), {"SetElementDisplayMode": ["NoiseGate", mode]})
     },
 
+    toggleWaveForm() {
+      this.showWaveForm = true;
+      this.timeout = setTimeout(this.closeWaveForm, 15000);
+    },
+
     setValue: function (id, value, last) {
       if (this.updatesPaused && !last) {
         return;
@@ -74,6 +107,10 @@ export default {
           break
         case 1:
           this.commitValue("SetGateThreshold", value);
+          if (this.timeout !== undefined) {
+            clearTimeout(this.timeout);
+          }
+          this.timeout = setTimeout(this.closeWaveForm, 15000)
           break
         case 2:
           this.commitValue("SetGateAttenuation", value);
