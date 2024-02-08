@@ -263,6 +263,11 @@ export default {
 </script>
 
 <template>
+  <!--
+  So we kinda cheat here, when a new value comes in there's a 'jerky' motion when the line is created between
+  the previous point, and the new point.. So we simply use CSS to hide the last 30 pixes which can be as jerky as
+  they want, but without them, we have a smooth experience.
+   -->
   <div style="width: 420px; overflow: hidden" aria-hidden="true">
         <canvas
             ref="canvas"
