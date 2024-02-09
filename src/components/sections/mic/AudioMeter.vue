@@ -7,7 +7,8 @@ export default {
 
   props: {
     active: {type: Boolean, required: true},
-    fade_below: {type: Number, required: false}
+    fade_below: {type: Number, required: false},
+    show_estimated: {type: Boolean, required: false, default: false}
   },
 
   data() {
@@ -84,7 +85,9 @@ export default {
       this.draw_good()
       this.draw_text("Speaking Area", -20, -10);
 
-      this.render_text("Volume is Estimated", this.canvas_size.width - 40, this.canvas_size.height - 10, "#888", "right", "middle");
+      if (this.show_estimated) {
+        this.render_text("Gate is Estimated", this.canvas_size.width - 40, this.canvas_size.height - 10, "#888", "right", "middle");
+      }
 
       this.draw_db_lines()
 

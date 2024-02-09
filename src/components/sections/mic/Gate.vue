@@ -3,7 +3,7 @@
       <Slider title="Threshold" :id=1 :slider-min-value=-59 :slider-max-value=0 text-suffix="dB"
               :slider-value=getThreshold() @value-changed="setValue" :store-path="getStorePath('threshold')"/>
       <ExpandoBox v-if="!showWaveForm" expand_right="fa-wave-square" @expando-clicked="toggleWaveForm" />
-      <AudioMeter ref="audioMeter" v-if="showWaveForm" :active="showWaveForm" :fade_below="getAdjustedThreshold()" />
+      <AudioMeter ref="audioMeter" v-if="showWaveForm" :active="showWaveForm" :fade_below="getAdjustedThreshold()" :show_estimated=true />
 
       <Slider v-show="isAdvanced()" title="Attenuation" :id=2 :slider-min-value=0 :slider-max-value=100 text-suffix="%"
               :slider-value=getAttenuation() @value-changed="setValue" :store-path="getStorePath('attenuation')"/>
