@@ -84,6 +84,8 @@ export default {
       this.draw_good()
       this.draw_text("Speaking Area", -20, -10);
 
+      this.render_text("Volume is Estimated", this.canvas_size.width - 40, this.canvas_size.height - 10, "#888", "right", "middle");
+
       this.draw_db_lines()
 
       // Draw the Points..
@@ -154,17 +156,21 @@ export default {
     },
 
     draw_text: function(text, min, max) {
-      this.canvas.fillStyle = '#fff';
-      this.canvas.font = "12px LeagueMonoCondensed";
-      this.canvas.textBaseline = "middle";
-
       let top = this.get_db_position(max)
       let bottom = this.get_db_position(min)
       let middle = (bottom - top) / 2
-
       let position = top + (middle)
 
-      this.canvas.fillText(text, 10, position);
+      this.render_text(text, 10, position);
+    },
+
+    render_text: function(text, x, y, color = "#fff", text_align = "left", text_baseline = "middle") {
+      this.canvas.fillStyle = color;
+      this.canvas.textAlign = text_align;
+      this.canvas.font = "12px LeagueMonoCondensed";
+      this.canvas.textBaseline = text_baseline;
+
+      this.canvas.fillText(text, x, y);
     },
 
     draw_fade_below: function() {
