@@ -17,6 +17,15 @@
     <template v-slot:title>Settings (Work in Progress)</template>
     <div style="text-align: left" role="region" aria-label="settings">
       <div style="padding: 12px">
+        UI Handler:
+        <select @change="setUiHandler" style="margin-right: 15px">
+          <option :selected="getActivePath() === null" value="">Web Browser</option>
+          <option v-if="getAppPath() !== null" :selected="getActivePath() === getAppPath()" :value="getAppPath()">Application</option>
+          <option v-if="isCustomPath()" :selected="getActivePath() !== null && getActivePath() !== getAppPath()" :value="getActivePath()">Custom</option>
+        </select>
+      </div>
+
+      <div style="padding: 12px">
         Log Level (Requires Restart):
         <select @change="setLogLevel" style="margin-right: 15px">
           <option :selected="getLogLevel() === 'Off'" value="Off">Off</option>
@@ -134,6 +143,35 @@ export default {
   components: {BigButton, AccessibleModal},
 
   methods: {
+    getActivePath() {
+      if (store.getConfig() === undefined) {
+        return null;
+      }
+      return store.getConfig().activation.active_path;
+    },
+    getAppPath() {
+      if (store.getConfig() === undefined) {
+        return "";
+      }
+      return store.getConfig().activation.app_path;
+    },
+    isCustomPath() {
+      if (store.getConfig() === undefined) {
+        return false;
+      }
+      let active_path = store.getConfig().activation.active_path;
+      let app_path = store.getConfig().activation.app_path;
+      return active_path !== null && active_path !== app_path;
+
+    },
+    setUiHandler(e) {
+      let path = e.target.value;
+      if (path === "") {
+        path = null;
+      }
+      websocket.send_daemon_command({"SetActivatorPath": path});
+    },
+
     getLogLevel() {
       if (store.getConfig() === undefined) {
         return "Debug";
