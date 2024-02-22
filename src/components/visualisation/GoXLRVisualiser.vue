@@ -217,11 +217,32 @@ export default {
       const colours = store.getActiveDevice().lighting.encoders[effectLightingName],
         effectAmount = store.getActiveDevice().effects.current[effectEncoderName].amount,
         hardTuneActive = store.getActiveDevice().effects.current.hard_tune.is_enabled,
-        maxEffectLevel = (centerMode ? 50 : 100),
         maxLevel = 12;  // the goxlr only has 12 levels as the first one is always on
 
+      // set the maximum effect range
+      let effectLevelRange = (centerMode ? 50 : 100);
+
+      // the gender encoder requires special treatment
+      if (effectEncoderName === "gender") {
+        const encoderStyle = store.getActiveDevice().effects.current[effectEncoderName].style
+
+        switch (encoderStyle) {
+          case "Narrow":
+            effectLevelRange = 25; // range from -12 to +12 = 24
+            break;
+
+          case "Medium":
+            effectLevelRange = 51; // range from -25 to +25 = 50
+            break;
+
+          case "Wide":
+            effectLevelRange = 100; // range from -50 to +50 = 100
+            break;
+        }
+      }
+
       // very high iq math that is definitely not a workaround
-      const rawCurrentLevel = (maxLevel / maxEffectLevel * effectAmount) + (centerMode ? 0 : 1);
+      const rawCurrentLevel = (maxLevel / effectLevelRange * effectAmount) + (centerMode ? 0 : 1);
       const currentLevel = (affectedByHardTune && hardTuneActive) ? (maxLevel / 2) * (rawCurrentLevel * 2) : rawCurrentLevel;
       const normalizedCurrentLevel = currentLevel > 0 ? Math.ceil(currentLevel) : Math.floor(currentLevel);
 
