@@ -4,9 +4,9 @@
 
     <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" text-suffix="%" />
     <SliderInput title="Feedback" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackValue()" :store-path="getStorePath('feedback')" v-show="is_expanded" @value-changed="setFeedbackValue" />
-    <SliderInput title="Tempo" :slider-min-value=45 :slider-max-value=300 text-suffix="BPM" :slider-value="getTempoValue()" :store-path="getStorePath('tempo')" v-show="is_expanded" @value-changed="setTempoValue"/>
-    <SliderInput title="Delay L" :slider-min-value=0 :slider-max-value=2500 text-suffix="ms" :slider-value="getDelayLValue()" :store-path="getStorePath('delay_left')" v-show="is_expanded" @value-changed="setDelayLValue"/>
-    <SliderInput title="Delay R" :slider-min-value=0 :slider-max-value=2500 text-suffix="ms" :slider-value="getDelayRValue()" :store-path="getStorePath('delay_right')" v-show="is_expanded" @value-changed="setDelayRValue"/>
+    <SliderInput title="Tempo" :disabled="isTempoDisabled()" :background-colour="getBackgroundColour(isTempoDisabled())" :input-background-colour="getInputBackgroundColour(isTempoDisabled())" :text-colour="getSliderColour(isTempoDisabled())" :range-colour="getSliderColour(isTempoDisabled())" :label-colour="getLabelColour(isTempoDisabled())" :slider-min-value=45 :slider-max-value=300 text-suffix="BPM" :slider-value="getTempoValue()" :store-path="getStorePath('tempo')" v-show="is_expanded" @value-changed="setTempoValue"/>
+    <SliderInput title="Delay L" :disabled="isDelayDisabled()" :background-colour="getBackgroundColour(isDelayDisabled())" :input-background-colour="getInputBackgroundColour(isDelayDisabled())" :text-colour="getSliderColour(isDelayDisabled())" :range-colour="getSliderColour(isDelayDisabled())" :label-colour="getLabelColour(isDelayDisabled())" :slider-min-value=0 :slider-max-value=2500 text-suffix="ms" :slider-value="getDelayLValue()" :store-path="getStorePath('delay_left')" v-show="is_expanded" @value-changed="setDelayLValue"/>
+    <SliderInput title="Delay R" :disabled="isDelayDisabled()" :background-colour="getBackgroundColour(isDelayDisabled())" :input-background-colour="getInputBackgroundColour(isDelayDisabled())" :text-colour="getSliderColour(isDelayDisabled())" :range-colour="getSliderColour(isDelayDisabled())" :label-colour="getLabelColour(isDelayDisabled())" :slider-min-value=0 :slider-max-value=2500 text-suffix="ms" :slider-value="getDelayRValue()" :store-path="getStorePath('delay_right')" v-show="is_expanded" @value-changed="setDelayRValue"/>
     <SliderInput title="Feedback L" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackLValue()" :store-path="getStorePath('feedback_left')" v-show="is_expanded" @value-changed="setFeedbackLValue"/>
     <SliderInput title="XFB L to R" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getXFBLtoRValue()" :store-path="getStorePath('feedback_xfb_l_to_r')" v-show="is_expanded" @value-changed="setXFBLtoRValue"/>
     <SliderInput title="Feedback R" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackRValue()" :store-path="getStorePath('feedback_right')" v-show="is_expanded" @value-changed="setFeedbackRValue"/>
@@ -40,6 +40,28 @@ export default {
   },
 
   methods: {
+    isTempoDisabled() {
+      return this.getActiveStyle() === "ClassicSlap";
+    },
+
+    isDelayDisabled() {
+      return this.getActiveStyle() !== "ClassicSlap";
+    },
+
+    getBackgroundColour(disabled) {
+      return (disabled) ? "#303533" : "#353937";
+    },
+    getInputBackgroundColour(disabled) {
+      return (disabled) ? "#333937" : "#3b413f";
+    },
+    getSliderColour(disabled) {
+      return (disabled) ? "#3b7679" : "#59b1b6";
+    },
+    getLabelColour(disabled) {
+      return (disabled) ? "#838584" : "#fff";
+    },
+
+
     getActiveStyle() {
       return store.getActiveDevice().effects.current.echo.style;
     },

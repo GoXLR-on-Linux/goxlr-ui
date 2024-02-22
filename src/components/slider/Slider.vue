@@ -1,18 +1,18 @@
 <template>
   <div class="sliderBox" role="group" :aria-label="title" @wheel="handleScroll">
-    <slot name="header"><Label v-bind:title="title" role="heading" aria-level="3"/></slot>
+    <slot name="header"><Label v-bind:title="title" :text-colour="labelColour" role="heading" aria-level="3"/></slot>
     <Range :current-field-value=fieldValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
            :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
            @mouse-up="setMouseUp" :background-colour="rangeBackgroundColour" :title="title"
            :reported-value="getTextValue()"
-           :height="rangeHeight" :transform="rangeTransform" :disabled="disabled"
+           :height="rangeHeight" :transform="rangeTransform" :disabled="disabled" :colour="rangeColour"
     />
 
     <Input :current-text-value="textValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
            :textSuffix="textSuffix" :value-map="valueMap" :current-field-value=fieldValue
            :editable="isEditable()" @value-updated="inputValueUpdated"
            style="margin-top: 15px" :background-colour="inputBackgroundColour" :title="title"
-           :disabled="disabled" @blur="$emit('blur')"
+           :disabled="disabled" @blur="$emit('blur')" :colour="textColour"
     />
   </div>
 </template>
@@ -51,6 +51,9 @@ export default {
     backgroundColour: {type: String, required: false, default: "#353937"},
     inputBackgroundColour: {type: String, required: false, default: "#3b413f"},
     rangeBackgroundColour: {type: String, required: false, default: '#252927'},
+    rangeColour: { type: String, required: false, default: '#59b1b6' },
+    textColour: {type: String, required: false, default: '#59b1b6' },
+    labelColour: {type: String, required: false, default: '#fff'},
 
     title: {type: String, default: ""},
 
