@@ -25,7 +25,7 @@ export default {
       mute_behaviour: [
         {id: "All", label: "Mute All"},
         {id: "ToStream", label: "Mute to Stream"},
-        {id: "ToVoiceChat", label: "Mute to Voice Chat"},
+        {id: "ToVoiceChat", label: "Mute to Chat Mic"},
         {id: "ToPhones", label: "Mute to Phones"},
         {id: "ToLineOut", label: "Mute to Line Out"},
       ]
