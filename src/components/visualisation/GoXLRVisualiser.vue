@@ -209,41 +209,28 @@ export default {
 
       return `#${store.getActiveDevice().lighting.encoders[effectName].colour_three}`;
     },
-    computeEncoderLevelColour(effectEncoderName, effectLightingName, indicatorLevel, centerMode = false, affectedByHardTune = false) {
+    computeEncoderLevelColour(effectEncoderName, effectLightingName, indicatorLevel, centerMode = false) {
       if (isDeviceMini()) {
         return "#000";
       }
 
       const colours = store.getActiveDevice().lighting.encoders[effectLightingName],
-        effectAmount = store.getActiveDevice().effects.current[effectEncoderName].amount,
-        hardTuneActive = store.getActiveDevice().effects.current.hard_tune.is_enabled,
+        effectAmount = store.getActiveDevice().effects.current[effectEncoderName].raw_encoder,
         maxLevel = 12;  // the goxlr only has 12 levels as the first one is always on
 
       // set the maximum effect range
-      let effectLevelRange = (centerMode ? 50 : 100);
+      let effectLevelRange = (centerMode ? 48 : 24);
 
-      // the gender encoder requires special treatment
-      if (effectEncoderName === "gender") {
-        const encoderStyle = store.getActiveDevice().effects.current[effectEncoderName].style
-
-        switch (encoderStyle) {
-          case "Narrow":
-            effectLevelRange = 25; // range from -12 to +12 = 24
-            break;
-
-          case "Medium":
-            effectLevelRange = 51; // range from -25 to +25 = 50
-            break;
-
-          case "Wide":
-            effectLevelRange = 100; // range from -50 to +50 = 100
-            break;
+      if (effectEncoderName === "pitch") {
+        const hardTuneActive = store.getActiveDevice().effects.current.hard_tune.is_enabled;
+        const encoderStyle = store.getActiveDevice().effects.current[effectEncoderName].style;
+        if (hardTuneActive) {
+          effectLevelRange = (encoderStyle === "Narrow") ? 2 : 4;
         }
       }
 
       // very high iq math that is definitely not a workaround
-      const rawCurrentLevel = (maxLevel / effectLevelRange * effectAmount) + (centerMode ? 0 : 1);
-      const currentLevel = (affectedByHardTune && hardTuneActive) ? (maxLevel / 2) * (rawCurrentLevel * 2) : rawCurrentLevel;
+      const currentLevel = (maxLevel / effectLevelRange * effectAmount) + (centerMode ? 0 : 1);
       const normalizedCurrentLevel = currentLevel > 0 ? Math.ceil(currentLevel) : Math.floor(currentLevel);
 
       if (centerMode) {
