@@ -155,8 +155,6 @@ export default {
     },
 
     isSubmixDimmed(name) {
-      console.log(name);
-
       // Get the Active Monitor...
       let monitor = store.getActiveDevice().levels.output_monitor;
       return !store.getActiveDevice().router[channelNameToInputDevice(name)][monitor];
