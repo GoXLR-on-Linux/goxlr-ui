@@ -181,7 +181,7 @@ export default {
         return `rotate(0deg)`;
       }
 
-      const effectAmount = store.getActiveDevice().effects.current[effectName].raw_encoder,
+      const effectAmount = store.getActiveDevice().effects.current[effectName].amount,
           hardTuneActive = store.getActiveDevice().effects.current.hard_tune.is_enabled,
           transformRotationLimit = 270;
 
