@@ -20,8 +20,8 @@
         UI Handler:
         <select @change="setUiHandler" style="margin-right: 15px">
           <option :selected="getActivePath() === null" value="">Web Browser</option>
-          <option v-if="getAppPath() !== null" :selected="getActivePath() === getAppPath()" :value="getAppPath()">Application</option>
-          <option v-if="isCustomPath()" :selected="getActivePath() !== null && getActivePath() !== getAppPath()" :value="getActivePath()">Custom</option>
+          <option v-if="getAppPath() !== null" :selected="isActivePath()" :value="getAppPath()">Application</option>
+          <option v-if="isCustomPath()" :selected="getActivePath() !== null && !isActivePath()" :value="getActivePath()">Custom</option>
         </select>
       </div>
 
@@ -160,9 +160,14 @@ export default {
         return false;
       }
       let active_path = store.getConfig().activation.active_path;
-      let app_path = store.getConfig().activation.app_path;
-      return active_path !== null && active_path !== app_path;
-
+      return (active_path !== null && !this.isActivePath());
+    },
+    isActivePath() {
+      if (store.getConfig() === undefined || this.getActivePath() === null) {
+        return false;
+      }
+      // Thanks to Windows Case-Insensitive paths :D
+      return this.getActivePath().localeCompare(this.getAppPath(), undefined, { sensitivity: 'base' }) === 0;
     },
     setUiHandler(e) {
       let path = e.target.value;
