@@ -291,6 +291,12 @@ export default {
       if (id === "-1") {
         return "";
       }
+
+      // If a sample button is cleared, the active sample disappears, we need to return nothing..
+      if (store.getActiveDevice().sampler.banks[this.activeBank][this.activeButton].samples[id] === undefined) {
+        return "";
+      }
+
       return store.getActiveDevice().sampler.banks[this.activeBank][
           this.activeButton
           ].samples[id].name;
