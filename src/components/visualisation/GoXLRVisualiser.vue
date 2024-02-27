@@ -1,7 +1,6 @@
 <template>
-  <div class="preview" @wheel="handleScroll">
-    <img svg-inline v-if="!this.isDeviceMini" src="../../assets/preview/GoXLR.svg" alt="GoXLR preview">
-    <img svg-inline v-else src="../../assets/preview/GoXLR-Mini.svg" alt="GoXLR preview">
+  <div class="preview" @wheel="handleScroll" v-html="getGoXLRSvg()">
+
   </div>
 </template>
 
@@ -11,9 +10,17 @@ import {EffectLightingPresets, EffectPresets, MuteButtonNamesForFader} from "@/u
 import {websocket} from "@/util/sockets";
 import {isDeviceMini} from "@/util/util";
 
+import GoXLRFull from "@/assets/preview/GoXLR.svg?raw";
+import GoXLRMini from "@/assets/preview/GoXLR-Mini.svg?raw";
+
 export default {
-  name: "GoXLR",
+  name: "GoXLRVisualiser",
+  components: [GoXLRFull],
   methods: {
+    getGoXLRSvg() {
+      return (isDeviceMini()) ? GoXLRMini : GoXLRFull;
+    },
+
     // transforms a HEX string into a colour object.
     transformColour(colour) {
       let r = parseInt(colour.substring(0, 2), 16);
