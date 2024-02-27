@@ -1,13 +1,13 @@
 <script>
-import GroupContainer from "@/components/containers/GroupContainer";
-import ContentContainer from "@/components/containers/ContentContainer";
+import GroupContainer from "@/components/containers/GroupContainer.vue";
+import ContentContainer from "@/components/containers/ContentContainer.vue";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
-import ColourPicker from "@/components/sections/lighting/elements/ColourPicker";
+import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
+import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import {LightingInactiveOptions} from "@/util/mixerMapping";
-import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
   name: "LightingSampler",

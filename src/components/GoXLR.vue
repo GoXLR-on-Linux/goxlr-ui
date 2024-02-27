@@ -60,23 +60,23 @@
 </template>
 
 <script>
-import A11yNotifications from "./A11yNotifications";
-import Faders from "./sections/Faders";
-import Mixer from "./sections/Mixer";
-import Tabs from "@/components/tabs/Tabs";
-import Tab from "@/components/tabs/Tab";
-import Routing from "@/components/sections/Routing";
-import Mic from "@/components/sections/Mic";
-import DeviceSelector from "@/components/sections/DeviceSelector";
+import A11yNotifications from "./A11yNotifications.vue";
+import Faders from "./sections/Faders.vue";
+import Mixer from "./sections/Mixer.vue";
+import Tabs from "@/components/tabs/Tabs.vue";
+import Tab from "@/components/tabs/Tab.vue";
+import Routing from "@/components/sections/Routing.vue";
+import Mic from "@/components/sections/Mic.vue";
+import DeviceSelector from "@/components/sections/DeviceSelector.vue";
 import {store} from "@/store";
-import Cough from "@/components/sections/Cough";
+import Cough from "@/components/sections/Cough.vue";
 import {runWebsocket} from "@/util/sockets";
-import SystemComponent from "@/components/sections/System";
-import FileTabs from "@/components/sections/files/FileTabs";
-import EffectsTab from "@/components/sections/EffectsTab";
+import SystemComponent from "@/components/sections/System.vue";
+import FileTabs from "@/components/sections/files/FileTabs.vue";
+import EffectsTab from "@/components/sections/EffectsTab.vue";
 import {isDeviceMini} from "@/util/util";
-import LightingTab from "@/components/sections/lighting/LightingTab";
-import SamplerTab from "@/components/sections/SamplerTab";
+import LightingTab from "@/components/sections/lighting/LightingTab.vue";
+import SamplerTab from "@/components/sections/SamplerTab.vue";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import GoXLRVisualiser from "@/components/visualisation/GoXLRVisualiser.vue";

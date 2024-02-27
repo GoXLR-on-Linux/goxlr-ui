@@ -8,7 +8,7 @@
 
 <script>
 import {store} from "@/store";
-import SliderInput from "@/components/slider/Slider";
+import SliderInput from "@/components/slider/Slider.vue";
 import {websocket} from "@/util/sockets";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import RadioSelection from "@/components/lists/RadioSelection.vue";

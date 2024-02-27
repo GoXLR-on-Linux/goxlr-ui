@@ -18,7 +18,7 @@
 <script>
 import {sendHttpCommand, websocket} from "@/util/sockets";
 import {store} from "@/store";
-import ProfileButton from "@/components/profiles/ProfileButton";
+import ProfileButton from "@/components/profiles/ProfileButton.vue";
 
 export default {
   name: "PresetHandler",

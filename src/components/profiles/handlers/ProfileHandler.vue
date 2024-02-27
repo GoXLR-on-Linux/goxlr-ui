@@ -56,9 +56,9 @@
 <script>
 import { store } from "@/store";
 import { sendHttpCommand, websocket } from "@/util/sockets";
-import ProfileManager from "@/components/profiles/ProfileManager";
-import AccessibleModal from "@/components/design/modal/AccessibleModal";
-import ModalButton from "@/components/design/modal/ModalButton";
+import ProfileManager from "@/components/profiles/ProfileManager.vue";
+import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
+import ModalButton from "@/components/design/modal/ModalButton.vue";
 
 export default {
   name: "ProfileHandler",

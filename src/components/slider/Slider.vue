@@ -26,9 +26,9 @@
  * definitions provided.
  */
 
-import Label from "./components/Label";
-import Range from "./components/Range";
-import Input from "./components/Input";
+import Label from "./components/Label.vue";
+import Range from "./components/Range.vue";
+import Input from "./components/Input.vue";
 
 export default {
   name: "SliderInput",

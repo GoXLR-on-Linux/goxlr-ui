@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import SliderInput from "@/components/slider/Slider";
+import SliderInput from "@/components/slider/Slider.vue";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import RadioSelection from "@/components/lists/RadioSelection.vue";

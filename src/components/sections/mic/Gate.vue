@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Slider from "../../slider/Slider";
+import Slider from "@/components/slider/Slider.vue";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer.vue";

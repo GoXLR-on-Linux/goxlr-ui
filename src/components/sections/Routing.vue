@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import Cell from "@/components/sections/routing/Cell";
+import Cell from "@/components/sections/routing/Cell.vue";
 import {store} from "@/store";
 import {InputDevice, OutputDevice} from "@/util/mixerMapping";
 import {websocket} from "@/util/sockets";

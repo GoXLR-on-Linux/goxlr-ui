@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import Slider from "../slider/Slider";
+import Slider from "../slider/Slider.vue";
 import {
   ChannelName,
   ChannelNameReadable,
