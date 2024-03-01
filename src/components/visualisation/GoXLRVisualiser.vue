@@ -5,7 +5,7 @@
 <script>
 import {store} from "@/store";
 import {EffectLightingPresets, EffectPresets, MuteButtonNamesForFader} from "@/util/mixerMapping";
-import {websocket} from "@/util/sockets";
+import {getBaseHTTPAddress, websocket} from "@/util/sockets";
 import {isDeviceMini} from "@/util/util";
 
 import GoXLRFull from "@/assets/preview/GoXLR.svg?raw";
@@ -59,6 +59,19 @@ export default {
       let activeBank = store.getActiveDevice().sampler.active_bank;
       let sampleState = store.getActiveDevice().sampler.banks[activeBank][sample];
       return sampleState.is_recording;
+    },
+
+    // Gets the URL of a specified scribble
+    getScribbleUrl(fader) {
+      if (isDeviceMini()) {
+        return ""
+      }
+
+      // We need to cheese this slightly, if the user changes the settings, we need to note that
+      // they've changed, so we just spam all of the options as query parameters, which will change.
+      let scribble = store.getActiveDevice().fader_status[fader].scribble;
+      let query = `?i=${scribble.file_name}&b=${scribble.bottom_text}&l=${scribble.left_text}&in=${scribble.inverted}`;
+      return getBaseHTTPAddress() + "files/scribble/" + store.getActiveSerial() + "/" + fader + ".png" + query;
     },
 
     computeAccentColour() {
@@ -408,7 +421,12 @@ export default {
     isMuteBlinking() { return store.getActiveDevice().cough_button.state === "MutedToAll"; },
 
     isDeviceMini() { return store.getActiveDevice().hardware.device_type === "Mini"; },
-    muteInactiveColour() { return '#' + store.getActiveDevice().lighting.buttons.Cough.colours.colour_two; }
+    muteInactiveColour() { return '#' + store.getActiveDevice().lighting.buttons.Cough.colours.colour_two; },
+
+    getFader1Scribble() { return this.getScribbleUrl("A"); },
+    getFader2Scribble() { return this.getScribbleUrl("B"); },
+    getFader3Scribble() { return this.getScribbleUrl("C"); },
+    getFader4Scribble() { return this.getScribbleUrl("D"); },
   },
   watch: {
     // toggle .blink class if required
@@ -422,6 +440,23 @@ export default {
     isFader2Blinking(active) { this.setBlinkClass("#Channel2 #Mute", active); },
     isFader3Blinking(active) { this.setBlinkClass("#Channel3 #Mute", active); },
     isFader4Blinking(active) { this.setBlinkClass("#Channel4 #Mute", active); },
+
+    getFader1Scribble(url) { document.querySelector(".mixer > #Channel1 > .display > #Image").setAttribute("href", this.getScribbleUrl("A")); },
+    getFader2Scribble(url) { document.querySelector(".mixer > #Channel2 > .display > #Image").setAttribute("href", this.getScribbleUrl("B")); },
+    getFader3Scribble(url) { document.querySelector(".mixer > #Channel3 > .display > #Image").setAttribute("href", this.getScribbleUrl("C")); },
+    getFader4Scribble(url) { document.querySelector(".mixer > #Channel4 > .display > #Image").setAttribute("href", this.getScribbleUrl("D")); },
+  },
+  mounted() {
+    if (isDeviceMini()) {
+      return;
+    }
+
+    // Set the initial display URLs..
+    document.querySelector(".mixer > #Channel1 > .display > #Image").setAttribute("href", this.getScribbleUrl("A"));
+    document.querySelector(".mixer > #Channel2 > .display > #Image").setAttribute("href", this.getScribbleUrl("B"));
+    document.querySelector(".mixer > #Channel3 > .display > #Image").setAttribute("href", this.getScribbleUrl("C"));
+    document.querySelector(".mixer > #Channel4 > .display > #Image").setAttribute("href", this.getScribbleUrl("D"));
+
   }
 }
 </script>
@@ -600,7 +635,7 @@ export default {
 
 /* mixer area: fader 1 */
 #goxlr-visualiser #Channel1 .display text { display: none; } /* disabled because of missing implementation */
-#goxlr-visualiser #Channel1 .display image { display: none; }
+//#goxlr-visualiser #Channel1 .display image { display: none; }
 #goxlr-visualiser #Channel1 .display #Backlight { color: v-bind('computeMixerDisplayColour(1)'); }
 #goxlr-visualiser #Channel1 .level #Level1 { color: v-bind('computeMixerLevelColour("A", 1)'); }
 #goxlr-visualiser #Channel1 .level #Level2 { color: v-bind('computeMixerLevelColour("A", 2)'); }
@@ -620,7 +655,7 @@ export default {
 
   /* mixer area: fader 2 */
 #goxlr-visualiser #Channel2 .display text { display: none; } /* disabled because of missing implementation */
-#goxlr-visualiser #Channel2 .display image { display: none; }
+//#goxlr-visualiser #Channel2 .display image { display: none; }
 #goxlr-visualiser #Channel2 .display #Backlight { color: v-bind('computeMixerDisplayColour(2)'); }
 #goxlr-visualiser #Channel2 .level #Level1 { color: v-bind('computeMixerLevelColour("B", 1)'); }
 #goxlr-visualiser #Channel2 .level #Level2 { color: v-bind('computeMixerLevelColour("B", 2)'); }
@@ -640,7 +675,7 @@ export default {
 
 /* mixer area: fader 3 */
 #goxlr-visualiser #Channel3 .display text { display: none; } /* disabled because of missing implementation */
-#goxlr-visualiser #Channel3 .display image { display: none; }
+//#goxlr-visualiser #Channel3 .display image { display: none; }
 #goxlr-visualiser #Channel3 .display #Backlight { color: v-bind('computeMixerDisplayColour(3)'); }
 #goxlr-visualiser #Channel3 .level #Level1 { color: v-bind('computeMixerLevelColour("C", 1)'); }
 #goxlr-visualiser #Channel3 .level #Level2 { color: v-bind('computeMixerLevelColour("C", 2)'); }
@@ -660,7 +695,7 @@ export default {
 
 /* mixer area: fader 4 */
 #goxlr-visualiser #Channel4 .display text { display: none; } /* disabled because of missing implementation */
-#goxlr-visualiser #Channel4 .display image { display: none; }
+//#goxlr-visualiser #Channel4 .display image { display: none; }
 #goxlr-visualiser #Channel4 .display #Backlight { color: v-bind('computeMixerDisplayColour(4)'); }
 #goxlr-visualiser #Channel4 .level #Level1 { color: v-bind('computeMixerLevelColour("D", 1)'); }
 #goxlr-visualiser #Channel4 .level #Level2 { color: v-bind('computeMixerLevelColour("D", 2)'); }

@@ -350,13 +350,7 @@
           </g>
           <g class="display">
             <rect id="Backlight" x="223.46" y="59.32" width="49.5" height="29.18" style="fill: currentColor;"/>
-
-<!--            <image id="ImageSmall" x="238.01" y="60.34" width="20.41" height="20.41" href="../icons/music.png"/>-->
-<!--            <image id="ImageLarge" x="234.64" y="60.34" width="27.14" height="27.14" href="../icons/music.png"/>-->
-
-            <text id="LabelLarge" transform="translate(241.47 77.41)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 9px;">Mic</text>
-            <text id="LabelSmall" transform="translate(232.62 86.63)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">Demo Text</text>
-            <text id="ChannelNumber" transform="translate(224.53 65.2)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">4</text>
+            <image id="Image" x="223.46" y="59.32" width="49.5" height="29.18" href=""  preserveAspectRatio="none"/>
           </g>
           <g class="level">
             <g id="Level1">
@@ -433,13 +427,7 @@
           </g>
           <g class="display">
             <rect id="Backlight" x="162.46" y="59.32" width="49.5" height="29.18" fill="currentColor" />
-
-<!--            <image id="ImageLarge" x="173.64" y="60.34" width="27.14" height="27.14" href="../icons/music.png"/>-->
-<!--            <image id="ImageSmall" x="177.01" y="60.34" width="20.41" height="20.41" href="../icons/music.png"/>-->
-
-            <text id="LabelLarge" transform="translate(180.47 77.41)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 9px;">Mic</text>
-            <text id="LabelSmall" transform="translate(171.62 86.63)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">Demo Text</text>
-            <text id="ChannelNumber" transform="translate(163.53 65.2)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">3</text>
+            <image id="Image" x="162.46" y="59.32" width="49.5" height="29.18" href="" preserveAspectRatio="none"/>
           </g>
           <g class="level">
             <g id="Level1">
@@ -516,13 +504,7 @@
           </g>
           <g class="display">
             <rect id="Backlight" x="101.46" y="59.32" width="49.5" height="29.18" fill="currentColor"/>
-
-<!--            <image id="ImageLarge" x="112.64" y="60.34" width="27.14" height="27.14" href="../icons/music.png"/>-->
-<!--            <image id="ImageSmall" x="116.01" y="60.34" width="20.41" height="20.41" href="../icons/music.png"/>-->
-
-            <text id="LabelLarge" transform="translate(119.47 77.41)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 9px;">Mic</text>
-            <text id="LabelSmall" transform="translate(110.62 86.63)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">Demo Text</text>
-            <text id="ChannelNumber" transform="translate(102.53 65.2)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">2</text>
+            <image id="Image" x="101.46" y="59.32" width="49.5" height="29.18" href=""  preserveAspectRatio="none"/>
           </g>
           <g class="level">
             <g id="Level1">
@@ -599,13 +581,7 @@
           </g>
           <g class="display">
             <rect id="Backlight" x="40.46" y="59.32" width="49.5" height="29.18" fill="currentColor"/>
-
-<!--            <image id="ImageLarge" x="51.64" y="60.34" width="27.14" height="27.14" href="../icons/music.png"/>-->
-<!--            <image id="ImageSmall" x="55.01" y="60.34" width="20.41" height="20.41" href="../icons/music.png"/>-->
-
-            <text id="LabelLarge" transform="translate(58.47 77.41)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 9px;">Mic</text>
-            <text id="LabelSmall" transform="translate(49.62 86.63)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">Demo Text</text>
-            <text id="ChannelNumber" transform="translate(41.53 65.2)" style="font-family: MyriadPro-Regular, &apos;Myriad Pro&apos;; font-size: 7px;">1</text>
+            <image id="Image" x="40.46" y="59.32" width="49.5" height="29.18" href="" preserveAspectRatio="none"/>
           </g>
           <g class="level">
             <g id="Level1">
