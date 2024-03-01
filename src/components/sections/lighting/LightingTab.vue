@@ -9,6 +9,8 @@ import {isDeviceMini} from "@/util/util";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
+  emits: ["on-lighting-changed"],
+
   name: "LightingTab",
   components: {
     CenteredContainer,
@@ -49,10 +51,22 @@ export default {
       }
 
       if (nextTab) {
-        this.currentTab = nextTab;
+        this.setTab(nextTab);
+
         //we need a ref on the button element to focus it
         this.$refs[nextTab][0].focus();
       }
+    },
+    setTab(tab) {
+      this.currentTab = tab;
+      this.$nextTick(() => this.$emit("on-lighting-changed"));
+    },
+    navUpdated() {
+      this.$nextTick(() => this.$emit("on-lighting-changed"));
+    },
+    getNodes() {
+        return [this.currentTab].concat(this.$refs.component.getNodes());
+
     }
   }
 }
@@ -61,12 +75,12 @@ export default {
 <template>
   <CenteredContainer class="sections" role="tablist" aria-label="Lighting Settings">
     <button v-for="tab in getTabs()" :key="tab" :class="['button', { active: currentTab === tab }]"
-            @click="currentTab = tab" role="tab" :aria-selected="currentTab === tab" :aria-controls="tab.toLowerCase()"
+            @click="setTab(tab)" role="tab" :aria-selected="currentTab === tab" :aria-controls="tab.toLowerCase()"
             :tabindex="currentTab === tab ? 0 : -1" :ref="tab" @keydown="onTabKeydown">
       {{ tab }}
     </button>
   </CenteredContainer>
-  <component :is="currentTab" role="tabpanel" :aria-label="currentTab"/>
+  <component @nav-updated="navUpdated" ref="component" :is="currentTab" role="tabpanel" :aria-label="currentTab"/>
 </template>
 
 <style scoped>

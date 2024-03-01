@@ -8,13 +8,13 @@
           <FileTabs/>
         </div>
         <div aria-hidden="true" style="margin: auto; width: 100%">
-          <GoXLRVisualiser/>
+          <GoXLRVisualiser :active-display="active" />
         </div>
       </div>
 
       <div style="height: 25px; background-color: #3b413f"/>
       <h1 class="sr-only">Device Settings</h1>
-      <Tabs ref="device-tabs" label="Device Settings">
+      <Tabs ref="device-tabs" @on-change="onTabChange" label="Device Settings">
         <Tab id="mic" name="Mic">
           <Mic/>
         </Tab>
@@ -26,21 +26,21 @@
         <Tab id="configuration" name="Configuration">
           <ContentContainer>
             <CenteredContainer>
-              <Faders ref="faders"/>
+              <Faders ref="faders" @on-fader-channel-change="onFaderChannelChange"/>
               <Cough/>
             </CenteredContainer>
           </ContentContainer>
         </Tab>
         <Tab id="effects" v-if="!isDeviceMini()" name="Effects">
-          <EffectsTab/>
+          <EffectsTab ref="effects" @on-effect-preset-change="onEffectPresetChange" />
         </Tab>
         <Tab id="sampler" v-if="!isDeviceMini()" name="Sampler">
           <ContentContainer>
-            <SamplerTab/>
+            <SamplerTab ref="sampler" @on-sample-bank-change="onSampleBankChange" />
           </ContentContainer>
         </Tab>
         <Tab id="lighting" name="Lighting">
-          <LightingTab/>
+          <LightingTab ref="lighting" @on-lighting-changed="onLightingDataChange" />
         </Tab>
         <Tab id="routing" name="Routing">
           <ContentContainer>
@@ -105,12 +105,52 @@ export default {
     Mic,
   },
 
+  data() {
+    return {
+      active: [],
+    }
+  },
+
   methods: {
     isDeviceMini,
 
     isDeviceSet() {
       return store.hasActiveDevice() && store.isConnected();
     },
+
+    onTabChange(tab) {
+      let id = tab.id;
+      if (id === "configuration") {
+        this.active = [id, "cough", this.$refs.faders.activeChannel];
+      } else if (id === "effects") {
+        // This one comes initially from the store...
+        this.active = [id, this.$refs.effects.getActivePreset()];
+      } else if (id === "sampler") {
+        this.active = [id, this.$refs.sampler.activeBank];
+      } else if (id === "lighting") {
+        this.active = [id].concat(this.$refs.lighting.getNodes());
+      } else {
+        this.active = [id];
+      }
+    },
+
+    onFaderChannelChange(activeChannel) {
+      this.active[2] = activeChannel;
+    },
+
+    onEffectPresetChange(activePreset) {
+      console.log(activePreset);
+      this.active[1] = activePreset;
+    },
+
+    onSampleBankChange(activeBank) {
+      this.active[1] = activeBank;
+    },
+
+    onLightingDataChange() {
+      this.active = ["lighting"].concat(this.$refs.lighting.getNodes());
+      console.log(this.active);
+    }
   },
 
   created() {
@@ -127,18 +167,6 @@ export default {
   width: 1px;
   height: 1px;
   overflow: hidden;
-
-  /**
-    position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-   */
 }
 
 #main {

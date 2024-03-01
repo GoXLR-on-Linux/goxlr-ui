@@ -13,6 +13,11 @@ import GoXLRMini from "@/assets/preview/GoXLR-Mini.svg?raw";
 
 export default {
   name: "GoXLRVisualiser",
+
+  props: {
+    activeDisplay: {type: Array, required: true},
+  },
+
   methods: {
     getGoXLRSvg() {
       return (isDeviceMini()) ? GoXLRMini : GoXLRFull;

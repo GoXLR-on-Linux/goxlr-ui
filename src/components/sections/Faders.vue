@@ -21,6 +21,7 @@ export default {
    * Everything here focuses around the 'Channel' input,
    */
 
+  emits: ["on-fader-channel-change"],
   components: { GroupContainer, RadioSelection },
   name: "MicFaders",
 
@@ -61,6 +62,7 @@ export default {
   methods: {
     channelChanged: function (id) {
       this.activeChannel = id;
+      this.$emit("on-fader-channel-change", id);
     },
 
     sourceChanged: function (channelName) {
@@ -142,7 +144,7 @@ export default {
     },
     getActiveChannelName: function () {
       return this.fader_options.find((option) => option.id === this.activeChannel).label;
-    }
+    },
   },
 }
 </script>

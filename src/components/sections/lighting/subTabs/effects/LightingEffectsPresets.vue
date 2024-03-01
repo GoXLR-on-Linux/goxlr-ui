@@ -13,6 +13,8 @@ import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 
 export default {
+  emits: ["nav-updated"],
+
   name: "LightingEffectsPresets",
   components: {
     GroupContainer,
@@ -59,6 +61,7 @@ export default {
 
     onButtonSelectionChange(id) {
       this.activePreset = EffectLightingPresets[EffectPresets.indexOf(id)];
+      this.$emit("nav-updated");
     },
 
     onInactiveSelectionChange(id) {

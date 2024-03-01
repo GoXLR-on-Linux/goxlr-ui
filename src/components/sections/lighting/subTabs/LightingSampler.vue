@@ -10,6 +10,7 @@ import {websocket} from "@/util/sockets";
 import {LightingInactiveOptions} from "@/util/mixerMapping";
 
 export default {
+  emits: ["nav-updated"],
   name: "LightingSampler",
   components: {
     CenteredContainer,
@@ -41,6 +42,10 @@ export default {
   },
 
   methods: {
+    getNodes() {
+      return [this.selectedButtonOption];
+    },
+
     activeColor() {
       return "#" + store.getActiveDevice().lighting.sampler[this.selectedButtonOption].colours["colour_one"];
     },
@@ -59,6 +64,7 @@ export default {
 
     onButtonSelectionChange(id) {
       this.selectedButtonOption = id
+      this.$emit("nav-updated");
     },
 
     onInactiveSelectionChange(id) {

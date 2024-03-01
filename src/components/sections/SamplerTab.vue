@@ -153,6 +153,8 @@ import SampleFileSelector from "@/components/sections/sampler/SampleFileSelector
 import Slider from "@/components/slider/Slider.vue";
 
 export default {
+  emits: ["on-sample-bank-change"],
+
   name: "SamplerTab",
   components: {
     Slider,
@@ -222,6 +224,8 @@ export default {
     setActiveBank(bank) {
       this.activeBank = bank;
       this.activeSample = "-1";
+
+      this.$emit("on-sample-bank-change", bank);
     },
 
     setActiveButton(button) {

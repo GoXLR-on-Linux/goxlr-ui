@@ -50,6 +50,10 @@ export default {
   methods: {
     isDeviceMini,
 
+    getNodes: function() {
+      return [this.activeChannel];
+    },
+
     /* Channel Selection */
     selectedChannel: function () {
       return this.activeChannel;
@@ -61,6 +65,8 @@ export default {
       if (!isDeviceMini()) {
         this.textValue = this.getBottomText();
       }
+
+      this.$emit("nav-updated");
     },
 
     /***************************/

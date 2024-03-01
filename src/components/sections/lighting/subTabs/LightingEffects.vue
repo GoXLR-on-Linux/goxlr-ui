@@ -12,13 +12,19 @@ export default {
     LightingEffectsEncoders,
     LightingEffectsEffects,
   },
+
+  methods: {
+    getNodes() {
+      return [this.$refs.presets.activePreset];
+    },
+  }
 };
 </script>
 
 <template>
   <div style="display: flex">
     <ContentContainer style="padding-top: 15px; padding-bottom: 20px">
-      <Presets />
+      <Presets ref="presets" @nav-updated="$emit('nav-updated')" />
       <LightingEffectsEncoders />
       <LightingEffectsEffects />
     </ContentContainer>

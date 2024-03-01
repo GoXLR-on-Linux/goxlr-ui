@@ -6,7 +6,7 @@
             title="Group"
             group="preset_select"
             :options="getEffectOptions()"
-            :selected="getSelectedEffectOption()"
+            :selected="getActivePreset()"
             :menu="menu_options"
             menu_id="preset_buttons"
             @menu-opened="menuOpened"
@@ -118,6 +118,8 @@ import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 import ScrollingRadioList from "@/components/lists/ScrollingRadioList.vue";
 
 export default {
+  emits: ["on-effect-preset-change"],
+
   name: "EffectsTab",
   components: {
     ScrollingRadioList,
@@ -222,9 +224,10 @@ export default {
       if (!this.isActive(id)) {
         websocket.send_command(store.getActiveSerial(), {"SetActiveEffectPreset": id});
       }
+      this.$emit("on-effect-preset-change", id);
     },
 
-    getSelectedEffectOption() {
+    getActivePreset() {
       return store.getActiveDevice().effects.active_preset;
     },
 

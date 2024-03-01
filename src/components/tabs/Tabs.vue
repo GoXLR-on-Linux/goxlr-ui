@@ -49,7 +49,9 @@ export default    {
             this.tabs.forEach((tab) => {
                 tab.isActive = tab.name === selectedTab.name;
             });
-            this.$emit("on-change", selectedTab);
+
+            // Make sure we mount the tab before we call an update..
+            this.$nextTick(() => this.$emit("on-change", selectedTab));
         },
         getActiveTab() {
             //return the active tab

@@ -44,6 +44,10 @@ export default {
   },
 
   methods: {
+    getNodes() {
+      return [];
+    },
+
     getAnimationOptions() {
       let animations = [
         {

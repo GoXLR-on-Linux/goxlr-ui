@@ -37,6 +37,10 @@ export default {
   },
 
   methods: {
+    getNodes() {
+      return ["cough"];
+    },
+
     activeColor() {
       return "#" + store.getActiveDevice().lighting.buttons[this.selectedButtonOption].colours["colour_one"];
     },
