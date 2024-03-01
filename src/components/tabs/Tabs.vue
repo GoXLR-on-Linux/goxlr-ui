@@ -27,7 +27,8 @@
 </template>
 
 <script>
-export default {
+export default    {
+  emits: ["on-change"],
     name: "TabList",
 
     data() {
@@ -48,6 +49,7 @@ export default {
             this.tabs.forEach((tab) => {
                 tab.isActive = tab.name === selectedTab.name;
             });
+            this.$emit("on-change", selectedTab);
         },
         getActiveTab() {
             //return the active tab
@@ -63,7 +65,7 @@ export default {
             const tabs = this.tabs;
             const activeTab = this.getActiveTab();
             const activeTabIndex = tabs.indexOf(activeTab);
-            let nextTab; 
+            let nextTab;
             switch(event.key){
                 case "ArrowRight":
                 case "ArrowDown":
@@ -84,7 +86,7 @@ export default {
                 default:
                     break;
             }
-        
+
 
             if (nextTab) {
                 this.selectTab(nextTab);
@@ -100,7 +102,7 @@ export default {
             // const activeTabIndex = tabs.indexOf(activeTab);
             let nextTab;
             if(event.shiftKey && event.ctrlKey){
-                // Shift(Number) have different symbol between US keyboard and Other language. 
+                // Shift(Number) have different symbol between US keyboard and Other language.
                 switch(event.code){
                     case "Digit1":
                     case "Digit2":
@@ -125,6 +127,9 @@ export default {
             }
         },
     },
+  mounted() {
+    this.$emit("on-change", this.getActiveTab());
+  }
 };
 </script>
 
