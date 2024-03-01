@@ -114,7 +114,7 @@ export default {
       this.$nextTick(() => this.$emit("on-lighting-changed"));
     },
     getNodes() {
-      return [this.currentTab].concat(this.$refs.component.getNodes());
+      return [this.currentTab.id].concat(this.$refs.component.getNodes());
     }
   },
 

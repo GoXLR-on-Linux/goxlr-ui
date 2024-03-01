@@ -38,7 +38,7 @@ export default {
 
   methods: {
     getNodes() {
-      return ["cough"];
+      return [];
     },
 
     activeColor() {
