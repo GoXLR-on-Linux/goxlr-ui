@@ -550,23 +550,23 @@ export default {
 #goxlr-visualiser .cough #Bleep { color: v-bind('computeBleepButtonColour()'); }
 
 /* selection overlay */
-.selection .channels #Channel1 { display: v-bind('computeChannelSelected("A")'); }
-.selection .channels #Channel2 { display: v-bind('computeChannelSelected("B")'); }
-.selection .channels #Channel3 { display: v-bind('computeChannelSelected("C")'); }
-.selection .channels #Channel4 { display: v-bind('computeChannelSelected("D")'); }
+#goxlr-visualiser .selection .channels #Channel1 { display: v-bind('computeChannelSelected("A")'); }
+#goxlr-visualiser .selection .channels #Channel2 { display: v-bind('computeChannelSelected("B")'); }
+#goxlr-visualiser .selection .channels #Channel3 { display: v-bind('computeChannelSelected("C")'); }
+#goxlr-visualiser .selection .channels #Channel4 { display: v-bind('computeChannelSelected("D")'); }
 
-.selection #Cough { display: v-bind('computeCoughSelected()'); }
+#goxlr-visualiser .selection #Cough { display: v-bind('computeCoughSelected()'); }
 
-.selection #Preset1 { display: v-bind('computePresetSelected("1")'); }
-.selection #Preset2 { display: v-bind('computePresetSelected("2")'); }
-.selection #Preset3 { display: v-bind('computePresetSelected("3")'); }
-.selection #Preset4 { display: v-bind('computePresetSelected("4")'); }
-.selection #Preset5 { display: v-bind('computePresetSelected("5")'); }
-.selection #Preset6 { display: v-bind('computePresetSelected("6")'); }
+#goxlr-visualiser .selection #Preset1 { display: v-bind('computePresetSelected("1")'); }
+#goxlr-visualiser .selection #Preset2 { display: v-bind('computePresetSelected("2")'); }
+#goxlr-visualiser .selection #Preset3 { display: v-bind('computePresetSelected("3")'); }
+#goxlr-visualiser .selection #Preset4 { display: v-bind('computePresetSelected("4")'); }
+#goxlr-visualiser .selection #Preset5 { display: v-bind('computePresetSelected("5")'); }
+#goxlr-visualiser .selection #Preset6 { display: v-bind('computePresetSelected("6")'); }
 
-.selection #BankA { display: v-bind('computeSampleSelected("A")'); }
-.selection #BankB { display: v-bind('computeSampleSelected("B")'); }
-.selection #BankC { display: v-bind('computeSampleSelected("C")'); }
+#goxlr-visualiser .selection #BankA { display: v-bind('computeSampleSelected("A")'); }
+#goxlr-visualiser .selection #BankB { display: v-bind('computeSampleSelected("B")'); }
+#goxlr-visualiser .selection #BankC { display: v-bind('computeSampleSelected("C")'); }
 
 /* effects area: buttons */
 #goxlr-visualiser .effects .buttons #Megaphone { color: v-bind('computeEffectButtonColour("EffectMegaphone", "megaphone")'); }
