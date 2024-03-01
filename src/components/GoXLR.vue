@@ -15,15 +15,15 @@
       <div style="height: 25px; background-color: #3b413f"/>
       <h1 class="sr-only">Device Settings</h1>
       <Tabs ref="device-tabs" label="Device Settings">
-        <Tab name="Mic">
+        <Tab id="mic" name="Mic">
           <Mic/>
         </Tab>
-        <Tab name="Mixer" selected>
+        <Tab id="mixer" name="Mixer" selected>
           <ContentContainer>
             <Mixer/>
           </ContentContainer>
         </Tab>
-        <Tab name="Configuration">
+        <Tab id="configuration" name="Configuration">
           <ContentContainer>
             <CenteredContainer>
               <Faders ref="faders"/>
@@ -31,23 +31,23 @@
             </CenteredContainer>
           </ContentContainer>
         </Tab>
-        <Tab v-if="!isDeviceMini()" name="Effects">
+        <Tab id="effects" v-if="!isDeviceMini()" name="Effects">
           <EffectsTab/>
         </Tab>
-        <Tab v-if="!isDeviceMini()" name="Sampler">
+        <Tab id="sampler" v-if="!isDeviceMini()" name="Sampler">
           <ContentContainer>
             <SamplerTab/>
           </ContentContainer>
         </Tab>
-        <Tab name="Lighting">
+        <Tab id="lighting" name="Lighting">
           <LightingTab/>
         </Tab>
-        <Tab name="Routing">
+        <Tab id="routing" name="Routing">
           <ContentContainer>
             <Routing/>
           </ContentContainer>
         </Tab>
-        <Tab name="System">
+        <Tab id="system" name="System">
           <ContentContainer>
             <SystemComponent/>
           </ContentContainer>

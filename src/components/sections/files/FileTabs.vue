@@ -1,12 +1,12 @@
 <template>
     <Tabs style="width: 480px" label="Profiles and Files">
-        <Tab name="Profiles" :selected="true">
+        <Tab id="profiles" name="Profiles" :selected="true">
             <ProfileHandler />
         </Tab>
-        <Tab v-if="!isDeviceMini()" name="Samples">
+        <Tab id="samples" v-if="!isDeviceMini()" name="Samples">
             <SampleHandler />
         </Tab>
-        <Tab v-if="!isDeviceMini()" name="Presets">
+        <Tab id="presets" v-if="!isDeviceMini()" name="Presets">
             <PresetHandler />
         </Tab>
     </Tabs>
