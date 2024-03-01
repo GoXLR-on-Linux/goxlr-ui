@@ -7,6 +7,15 @@ import Global from "@/components/sections/lighting/subTabs/LightingGlobal.vue";
 
 import {isDeviceMini} from "@/util/util";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
+import {shallowRef} from "vue";
+
+// We need to shallowRef these to avoid overheads..
+const LightingMixer = shallowRef(Mixer);
+const LightingEffects = shallowRef(Effects);
+const LightingSampler = shallowRef(Sampler);
+const LightingCough = shallowRef(Cough);
+const LightingGlobal = shallowRef(Global);
+
 
 export default {
   emits: ["on-lighting-changed"],
@@ -14,22 +23,62 @@ export default {
   name: "LightingTab",
   components: {
     CenteredContainer,
-    Mixer,
-    Effects,
-    Sampler,
-    Cough,
-    Global,
+    LightingMixer,
+    LightingEffects,
+    LightingSampler,
+    LightingCough,
+    LightingGlobal,
   },
 
   data() {
     return {
-      currentTab: 'Global',
+      tabs: [
+        {
+          id: "global",
+          type: LightingGlobal,
+          display: "Global",
+        },
+        {
+          id: "mixer",
+          type: LightingMixer,
+          display: "Mixer",
+        },
+        {
+          id: "effects",
+          type: LightingEffects,
+          display: "Effects",
+        },
+        {
+          id: "sampler",
+          type: LightingSampler,
+          display: "Sampler",
+        },
+        {
+          id: "cough",
+          type: LightingCough,
+          display: "Cough",
+        },
+      ],
+
+      currentTab: {
+        id: "global",
+        type: LightingGlobal,
+        display: "Global",
+      },
     }
   },
 
   methods: {
+    getTabById(id) {
+      for (let tab of this.tabs) {
+        if (tab.id === id) {
+          return tab;
+        }
+      }
+    },
+
     getTabs() {
-      return isDeviceMini() ? ['Global', 'Mixer', 'Cough'] : ['Global', 'Mixer', 'Effects', 'Sampler', 'Cough']
+      return isDeviceMini() ? [this.getTabById("global"), this.getTabById("mixer"), this.getTabById("cough")] : this.tabs;
     },
     onTabKeydown(event) {
       const tabs = this.getTabs();
@@ -54,7 +103,7 @@ export default {
         this.setTab(nextTab);
 
         //we need a ref on the button element to focus it
-        this.$refs[nextTab][0].focus();
+        this.$refs[nextTab.id][0].focus();
       }
     },
     setTab(tab) {
@@ -65,22 +114,25 @@ export default {
       this.$nextTick(() => this.$emit("on-lighting-changed"));
     },
     getNodes() {
-        return [this.currentTab].concat(this.$refs.component.getNodes());
-
+      return [this.currentTab].concat(this.$refs.component.getNodes());
     }
+  },
+
+  mounted() {
+    this.currentTab = this.getTabById("global");
   }
 }
 </script>
 
 <template>
   <CenteredContainer class="sections" role="tablist" aria-label="Lighting Settings">
-    <button v-for="tab in getTabs()" :key="tab" :class="['button', { active: currentTab === tab }]"
-            @click="setTab(tab)" role="tab" :aria-selected="currentTab === tab" :aria-controls="tab.toLowerCase()"
-            :tabindex="currentTab === tab ? 0 : -1" :ref="tab" @keydown="onTabKeydown">
-      {{ tab }}
+    <button v-for="tab in getTabs()" :key="tab.id" :class="['button', { active: currentTab === tab }]"
+            @click="setTab(tab)" role="tab" :aria-selected="currentTab === tab" :aria-controls="tab.id"
+            :tabindex="currentTab === tab ? 0 : -1" :ref="tab.id" @keydown="onTabKeydown">
+      {{ tab.display }}
     </button>
   </CenteredContainer>
-  <component @nav-updated="navUpdated" ref="component" :is="currentTab" role="tabpanel" :aria-label="currentTab"/>
+  <component @nav-updated="navUpdated" ref="component" :is="currentTab.type" role="tabpanel" :aria-label="currentTab.display"/>
 </template>
 
 <style scoped>
