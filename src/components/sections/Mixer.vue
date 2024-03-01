@@ -44,7 +44,6 @@
 import Slider from "../slider/Slider.vue";
 import {
   ChannelName,
-  ChannelNameReadable,
   channelNameToInputDevice,
   InputMixer,
   OutputDevice,
@@ -69,7 +68,6 @@ export default {
       submixHide: OutputMixerSubmixHidden,
       outputDevices: OutputDevice,
       channelNames: ChannelName,
-      channelNamesReadable: ChannelNameReadable,
 
       isVisible: false,
       volumes: [],
