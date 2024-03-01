@@ -79,6 +79,40 @@ export default {
       return getBaseHTTPAddress() + "files/scribble/" + store.getActiveSerial() + "/" + fader + ".png" + query;
     },
 
+    // These occur first in the SVG, so top of the compute section :p
+    computeChannelSelected(channel) {
+      // We need to be on the configuration page, or the Lighting -> Mixer page, and have our channel in the mix..
+      return (
+          this.activeDisplay.includes("configuration") ||
+          (this.activeDisplay.includes("lighting") && this.activeDisplay.includes("mixer"))) ?
+          (this.activeDisplay.includes(channel) ? "initial" : "none") :
+          "none";
+    },
+    computeCoughSelected() { return this.activeDisplay.includes("cough") ? "initial" : "none" },
+    computePresetSelected(preset) {
+      if (!this.activeDisplay.includes("effects") &&
+          !(this.activeDisplay.includes("lighting") && this.activeDisplay.includes("effects"))) {
+        return "none";
+      }
+
+      if (this.activeDisplay.includes(`Preset${preset}`) || this.activeDisplay.includes(`EffectSelect${preset}`)) {
+        return "initial";
+      }
+      return "none";
+    },
+    computeSampleSelected(bank) {
+      if (!this.activeDisplay.includes("sampler") &&
+          !(this.activeDisplay.includes("lighting") && this.activeDisplay.includes("sampler"))) {
+        return "none";
+      }
+
+      if (this.activeDisplay.includes(bank) || this.activeDisplay.includes(`SamplerSelect${bank}`)) {
+        return "initial";
+      }
+      return "none";
+    },
+
+
     computeAccentColour() {
       return `#${store.getActiveDevice().lighting.simple.Accent.colour_one}`;
     },
@@ -516,8 +550,23 @@ export default {
 #goxlr-visualiser .cough #Bleep { color: v-bind('computeBleepButtonColour()'); }
 
 /* selection overlay */
-/* TODO: disabled due to missing implementation */
-.selection { display: none; }
+.selection .channels #Channel1 { display: v-bind('computeChannelSelected("A")'); }
+.selection .channels #Channel2 { display: v-bind('computeChannelSelected("B")'); }
+.selection .channels #Channel3 { display: v-bind('computeChannelSelected("C")'); }
+.selection .channels #Channel4 { display: v-bind('computeChannelSelected("D")'); }
+
+.selection #Cough { display: v-bind('computeCoughSelected()'); }
+
+.selection #Preset1 { display: v-bind('computePresetSelected("1")'); }
+.selection #Preset2 { display: v-bind('computePresetSelected("2")'); }
+.selection #Preset3 { display: v-bind('computePresetSelected("3")'); }
+.selection #Preset4 { display: v-bind('computePresetSelected("4")'); }
+.selection #Preset5 { display: v-bind('computePresetSelected("5")'); }
+.selection #Preset6 { display: v-bind('computePresetSelected("6")'); }
+
+.selection #BankA { display: v-bind('computeSampleSelected("A")'); }
+.selection #BankB { display: v-bind('computeSampleSelected("B")'); }
+.selection #BankC { display: v-bind('computeSampleSelected("C")'); }
 
 /* effects area: buttons */
 #goxlr-visualiser .effects .buttons #Megaphone { color: v-bind('computeEffectButtonColour("EffectMegaphone", "megaphone")'); }
@@ -639,8 +688,6 @@ export default {
 #goxlr-visualiser #Channel4 #Mute.blink { animation: fader4-mute-blink-animation 1s infinite; }
 
 /* mixer area: fader 1 */
-#goxlr-visualiser #Channel1 .display text { display: none; } /* disabled because of missing implementation */
-//#goxlr-visualiser #Channel1 .display image { display: none; }
 #goxlr-visualiser #Channel1 .display #Backlight { color: v-bind('computeMixerDisplayColour(1)'); }
 #goxlr-visualiser #Channel1 .level #Level1 { color: v-bind('computeMixerLevelColour("A", 1)'); }
 #goxlr-visualiser #Channel1 .level #Level2 { color: v-bind('computeMixerLevelColour("A", 2)'); }
@@ -658,9 +705,7 @@ export default {
 #goxlr-visualiser #Channel1 .level #Level14 { color: v-bind('computeMixerLevelColour("A", 14)'); }
 #goxlr-visualiser #Channel1 .level #Level15 { color: v-bind('computeMixerLevelColour("A", 15)'); }
 
-  /* mixer area: fader 2 */
-#goxlr-visualiser #Channel2 .display text { display: none; } /* disabled because of missing implementation */
-//#goxlr-visualiser #Channel2 .display image { display: none; }
+/* mixer area: fader 2 */
 #goxlr-visualiser #Channel2 .display #Backlight { color: v-bind('computeMixerDisplayColour(2)'); }
 #goxlr-visualiser #Channel2 .level #Level1 { color: v-bind('computeMixerLevelColour("B", 1)'); }
 #goxlr-visualiser #Channel2 .level #Level2 { color: v-bind('computeMixerLevelColour("B", 2)'); }
@@ -679,8 +724,6 @@ export default {
 #goxlr-visualiser #Channel2 .level #Level15 { color: v-bind('computeMixerLevelColour("B", 15)'); }
 
 /* mixer area: fader 3 */
-#goxlr-visualiser #Channel3 .display text { display: none; } /* disabled because of missing implementation */
-//#goxlr-visualiser #Channel3 .display image { display: none; }
 #goxlr-visualiser #Channel3 .display #Backlight { color: v-bind('computeMixerDisplayColour(3)'); }
 #goxlr-visualiser #Channel3 .level #Level1 { color: v-bind('computeMixerLevelColour("C", 1)'); }
 #goxlr-visualiser #Channel3 .level #Level2 { color: v-bind('computeMixerLevelColour("C", 2)'); }
@@ -699,8 +742,6 @@ export default {
 #goxlr-visualiser #Channel3 .level #Level15 { color: v-bind('computeMixerLevelColour("C", 15)'); }
 
 /* mixer area: fader 4 */
-#goxlr-visualiser #Channel4 .display text { display: none; } /* disabled because of missing implementation */
-//#goxlr-visualiser #Channel4 .display image { display: none; }
 #goxlr-visualiser #Channel4 .display #Backlight { color: v-bind('computeMixerDisplayColour(4)'); }
 #goxlr-visualiser #Channel4 .level #Level1 { color: v-bind('computeMixerLevelColour("D", 1)'); }
 #goxlr-visualiser #Channel4 .level #Level2 { color: v-bind('computeMixerLevelColour("D", 2)'); }

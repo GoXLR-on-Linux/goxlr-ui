@@ -139,7 +139,6 @@ export default {
     },
 
     onEffectPresetChange(activePreset) {
-      console.log(activePreset);
       this.active[1] = activePreset;
     },
 
