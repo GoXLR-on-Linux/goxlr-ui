@@ -1,20 +1,26 @@
 <template>
-  <ExpandoGroupContainer title="Compressor" @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()">
-    <Slider v-show="!isAdvanced()" title="Amount" :slider-min-value=0 :slider-max-value=100 text-suffix=""
-            :slider-value="getAmount()" @value-changed="updateAmount" :store-path="getAmountStorePath()"/>
+  <ExpandoGroupContainer :title="$t('message.microphone.compressor.title')" @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()">
+    <Slider v-show="!isAdvanced()" :title="$t('message.microphone.compressor.amount')" :slider-min-value=0
+            :slider-max-value=100 text-suffix="" :slider-value="getAmount()" @value-changed="updateAmount"
+            :store-path="getAmountStorePath()"/>
 
-    <Slider v-show="isAdvanced()" title="Threshold" :id=0 :slider-min-value=-40 :slider-max-value=0 text-suffix="dB"
-            :slider-value="getThresholdValue()" :store-path="getStorePath('threshold')" @value-changed="setValue"/>
-    <Slider v-show="isAdvanced()" title="Ratio" :id=1 :slider-min-value=1 :slider-max-value=64 text-suffix=":1"
-            :value-map="ratioValueMap()"
-            :slider-value="getRatioValue()" :store-path="getStorePath('ratio')" @value-changed="setValue"/>
-    <Slider v-show="isAdvanced()" title="Attack" :id=2 :slider-min-value=0 :slider-max-value=40 text-suffix="ms"
-            :value-map="attackValueMap()" :slider-value="getAttackValue()" :store-path="getStorePath('attack')"
+    <Slider v-show="isAdvanced()" :title="$t('message.microphone.compressor.threshold')" :id=0
+            :slider-min-value=-40 :slider-max-value=0 :text-suffix="$t('message.suffixes.decibels')"
+            :slider-value="getThresholdValue()" :store-path="getStorePath('threshold')"
             @value-changed="setValue"/>
-    <Slider v-show="isAdvanced()" title="Release" :id=3 :slider-min-value=0 :slider-max-value=3000 text-suffix="ms"
+    <Slider v-show="isAdvanced()" :title="$t('message.microphone.compressor.ratio')" :id=1 :slider-min-value=1
+            :slider-max-value=64 :text-suffix="$t('message.suffixes.ratio', {'value': '1'})"
+            :value-map="ratioValueMap()" :slider-value="getRatioValue()" :store-path="getStorePath('ratio')"
+            @value-changed="setValue"/>
+    <Slider v-show="isAdvanced()" :title="$t('message.microphone.compressor.attack')" :id=2 :slider-min-value=0
+            :slider-max-value=40 :text-suffix="$t('message.suffixes.milliseconds')" :value-map="attackValueMap()"
+            :slider-value="getAttackValue()" :store-path="getStorePath('attack')" @value-changed="setValue"/>
+    <Slider v-show="isAdvanced()" :title="$t('message.microphone.compressor.release')" :id=3 :slider-min-value=0
+            :slider-max-value=3000 :text-suffix="$t('message.suffixes.milliseconds')"
             :value-map="releaseValueMap()" :slider-value="getReleaseValue()" :store-path="getStorePath('release')"
             @value-changed="setValue"/>
-    <Slider v-show="isAdvanced()" title="Make-up Gain" :id=4 :slider-min-value=0 :slider-max-value=24 text-suffix="dB"
+    <Slider v-show="isAdvanced()" :title="$t('message.microphone.compressor.makeUpGain')" :id=4
+            :slider-min-value=0 :slider-max-value=24 :text-suffix="$t('message.suffixes.decibels')"
             :slider-value="getGainValue()" :store-path="getStorePath('makeup_gain')" @value-changed="setValue"/>
   </ExpandoGroupContainer>
 </template>

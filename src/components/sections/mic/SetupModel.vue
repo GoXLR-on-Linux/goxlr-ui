@@ -2,9 +2,9 @@
   <!-- Build the Modal -->
   <CenteredContainer>
     <ContentContainer>
-      <RadioSelection ref="selection" title="Mic Type" group="mic_type" :options="getMicrophoneOptions()" :selected="getActiveMicType()" @selection-changed="handleButtonPress" />
+      <RadioSelection ref="selection" :title="$t('message.microphone.setup.type')" group="mic_type" :options="getMicrophoneOptions()" :selected="getActiveMicType()" @selection-changed="handleButtonPress" />
 
-      <Slider title="Gain" :slider-min-value=0 :slider-max-value=72 text-suffix="dB"
+      <Slider :title="$t('message.microphone.setup.gain')" :slider-min-value=0 :slider-max-value=72 :text-suffix="$t('message.suffixes.decibels')"
               :slider-value=getGainValue() :store-path="getStorePath()" @value-changed="setGain" />
 
       <AudioMeter :active="polling" />
@@ -27,12 +27,6 @@ export default {
   components: {AudioMeter, CenteredContainer, ContentContainer, RadioSelection, Slider},
   data: function() {
     return {
-      microphone_options: [
-        {id: "Dynamic", label: "XLR Microphone"},
-        {id: "Condenser", label: "XLR + Phantom (+48v)"},
-        {id: "Jack", label: "3.5mm"}
-      ],
-
       polling: false,
       current_value: -72,
     }
@@ -46,9 +40,9 @@ export default {
       }
 
       return [
-        {id: "Dynamic", label: "XLR Microphone"},
-        {id: "Condenser", label: "XLR + Phantom (+"+ voltage + "V)"},
-        {id: "Jack", label: "3.5mm"}
+        {id: "Dynamic", label: this.$t('message.microphone.setup.xlr')},
+        {id: "Condenser", label: this.$t('message.microphone.setup.phantom', {voltage: voltage})},
+        {id: "Jack", label: this.$t('message.microphone.setup.jack')}
       ];
     },
 

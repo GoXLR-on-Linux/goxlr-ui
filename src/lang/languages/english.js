@@ -31,6 +31,14 @@ export default {
             sampler: "Sampler",
         },
 
+        suffixes: {
+            decibels: "dB",
+            percentage: "%",
+            milliseconds: "ms",
+            hertz: "Hz",
+            kilohertz: "KHz",
+            ratio: ":{value}",
+        },
 
         // These Strings appear in the tabs throughout the pages
         navigation: {
@@ -64,12 +72,23 @@ export default {
 
         // Strings that appear in the Mic tab, note that the Profile Strings are handled in 'profileManager'
         microphone: {
-            mic_setup: {
+            setup: {
                 button: "Mic Setup",
                 title: "Mic Setup",
-                microphoneType: "Mic Type",
-                microphoneGain: "Gain",
+                type: "Mic Type",
+                gain: "Gain",
+
+                // Microphone Types
+                xlr: "XLR Microphone",
+                phantom: "XLR + Phantom (+{voltage}V)",
+                jack: "3.5mm",
             },
+            waveform: {
+                peaking: "Peaking",
+                speaking: "Speaking Area",
+                gate_estimated: "Gate is Estimated"
+            },
+
             gate: {
                 title: "Gate",
                 threshold: "Threshold",
@@ -89,6 +108,7 @@ export default {
 
             compressor: {
                 title: "Compressor",
+                amount: "Amount",
                 threshold: "Threshold",
                 ratio: "Ratio",
                 attack: "Attack",
@@ -97,13 +117,12 @@ export default {
             },
 
             extras: {
-                DeEsser: "De-Esser",
-                Bleep: "Bleep",
+                deEsser: "De-Esser",
+                bleep: "Bleep",
             }
         },
 
         mixer: {
-
             // Box Headers
             inputs: "Inputs",
             outputs: "Outputs",

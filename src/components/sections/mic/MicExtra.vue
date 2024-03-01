@@ -1,7 +1,13 @@
 <template>
   <GroupContainer title="Extras">
-      <Slider v-if="!isDeviceMini()" title="De-Esser" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getDeEssValue()" :store-path="getStorePath('deess')" @value-changed="deEssValueChanged" />
-      <Slider title="Bleep" :text-min-value=0 :text-max-value=100 :slider-min-value=-36 :slider-max-value=0 text-suffix="%" :slider-value="getBleepValue()" :store-path="getStorePath('bleep')" @value-changed="bleepValueChanged" />
+      <Slider v-if="!isDeviceMini()" :title="$t('message.microphone.extras.deEsser')" :slider-min-value=0
+              :slider-max-value=100 :text-suffix="$t('message.suffixes.percentage')"
+              :slider-value="getDeEssValue()" :store-path="getStorePath('deess')"
+              @value-changed="deEssValueChanged" />
+      <Slider :title="$t('message.microphone.extras.bleep')" :text-min-value=0 :text-max-value=100
+              :slider-min-value=-36 :slider-max-value=0 :text-suffix="$t('message.suffixes.percentage')"
+              :slider-value="getBleepValue()" :store-path="getStorePath('bleep')"
+              @value-changed="bleepValueChanged" />
   </GroupContainer>
 </template>
 

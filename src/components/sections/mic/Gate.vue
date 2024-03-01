@@ -1,16 +1,20 @@
 <template>
-  <ExpandoGroupContainer title="Gate" @expando-clicked="toggleAdvanced" :expanded="isAdvanced()">
-      <Slider title="Threshold" :id=1 :slider-min-value=-59 :slider-max-value=0 text-suffix="dB"
-              :slider-value=getThreshold() @value-changed="setValue" :store-path="getStorePath('threshold')"/>
+  <ExpandoGroupContainer :title="$t('message.microphone.gate.title')" @expando-clicked="toggleAdvanced" :expanded="isAdvanced()">
+      <Slider :title="$t('message.microphone.gate.threshold')" :id=1 :slider-min-value=-59 :slider-max-value=0
+              :text-suffix="$t('message.suffixes.decibels')" :slider-value=getThreshold() @value-changed="setValue"
+              :store-path="getStorePath('threshold')"/>
       <ExpandoBox v-if="!showWaveForm" expand_right="fa-wave-square" @expando-clicked="toggleWaveForm" />
       <AudioMeter ref="audioMeter" v-if="showWaveForm" :active="showWaveForm" :fade_below="getAdjustedThreshold()" :show_estimated=true />
 
-      <Slider v-show="isAdvanced()" title="Attenuation" :id=2 :slider-min-value=0 :slider-max-value=100 text-suffix="%"
-              :slider-value=getAttenuation() @value-changed="setValue" :store-path="getStorePath('attenuation')"/>
-      <Slider v-show="isAdvanced()" title="Attack" :id=3 :slider-min-value=10 :slider-max-value=2000 text-suffix="ms"
+      <Slider v-show="isAdvanced()" :title="$t('message.microphone.gate.attenuation')" :id=2 :slider-min-value=0
+              :slider-max-value=100 :text-suffix="$t('message.suffixes.percentage')" :slider-value=getAttenuation()
+              @value-changed="setValue" :store-path="getStorePath('attenuation')"/>
+      <Slider v-show="isAdvanced()" :title="$t('message.microphone.gate.attack')" :id=3 :slider-min-value=10
+              :slider-max-value=2000 :text-suffix="$t('message.suffixes.milliseconds')"
               :value-map="getGateValueMap()" :slider-value=getAttack() @value-changed="setValue"
               :store-path="getStorePath('attack')"/>
-      <Slider v-show="isAdvanced()" title="Release" :id=4 :slider-min-value=10 :slider-max-value=2000 text-suffix="ms"
+      <Slider v-show="isAdvanced()" :title="$t('message.microphone.gate.release')" :id=4 :slider-min-value=10
+              :slider-max-value=2000 :text-suffix="$t('message.suffixes.milliseconds')"
               :value-map="getGateValueMap()" :slider-value=getRelease() @value-changed="setValue"
               :store-path="getStorePath('release')"/>
   </ExpandoGroupContainer>

@@ -1,27 +1,27 @@
 <template>
-  <ExpandoGroupContainer title="Equalizer" @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()">
+  <ExpandoGroupContainer :title="$t('message.microphone.equaliser.title')" @expando-clicked="toggleAdvanced()" :expanded="isAdvanced()">
     <template #right>
       <div v-show="isAdvanced()" style="margin-bottom: 8px;">
-        <button class="reset" @click="resetEqValues()">RESET</button>
+        <button class="reset" @click="resetEqValues()">{{ $t('message.microphone.equaliser.reset') }}</button>
 
-        <label for="eq_fine">Enable Fine Tune</label><input type="checkbox" id="eq_fine" ref="fine_tune"
-                                                            :checked="fineTuneEnabled()" @change="setFineTuneEnabled">
+        <label for="eq_fine">{{ $t('message.microphone.equaliser.enableFineTune') }}</label><input type="checkbox"
+               id="eq_fine" ref="fine_tune" :checked="fineTuneEnabled()" @change="setFineTuneEnabled">
       </div>
     </template>
-    <Slider v-show="!isAdvanced()" :id=0 title="Bass" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
-            :slider-value=getBassValue() :store-path="getAggregateStorePaths(0)"
+    <Slider v-show="!isAdvanced()" :id=0 :title="$t('message.microphone.equaliser.bass')" :slider-min-value=-9
+            :slider-max-value=9 text-suffix="" :slider-value=getBassValue() :store-path="getAggregateStorePaths(0)"
             :background-colour="getBackgroundColour(1)"
             :input-background-colour="getInputBackgroundColour(1)"
             :range-background-colour="getRangeBackgroundColour(1)"
             @value-changed="aggregateChanged"/>
-    <Slider v-show="!isAdvanced()" :id=1 title="Mid" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
-            :slider-value=getMidValue() :store-path="getAggregateStorePaths(1)"
+    <Slider v-show="!isAdvanced()" :id=1 :title="$t('message.microphone.equaliser.mid')" :slider-min-value=-9
+            :slider-max-value=9 text-suffix="" :slider-value=getMidValue() :store-path="getAggregateStorePaths(1)"
             :background-colour="getBackgroundColour(5)"
             :input-background-colour="getInputBackgroundColour(5)"
             :range-background-colour="getRangeBackgroundColour(5)"
             @value-changed="aggregateChanged"/>
-    <Slider v-show="!isAdvanced()" :id=2 title="Treble" :slider-min-value=-9 :slider-max-value=9 text-suffix=""
-            :store-path="getAggregateStorePaths(2)" :slider-value=getTrebleValue()
+    <Slider v-show="!isAdvanced()" :id=2 :title="$t('message.microphone.equaliser.treble')" :slider-min-value=-9
+            :slider-max-value=9 text-suffix="" :store-path="getAggregateStorePaths(2)" :slider-value=getTrebleValue()
             :background-colour="getBackgroundColour(9)"
             :input-background-colour="getInputBackgroundColour(9)"
             :range-background-colour="getRangeBackgroundColour(9)"
@@ -293,20 +293,26 @@ export default {
     getTitle(id) {
       let value = this.getCurrentEqValue(id);
 
+      let hz = this.$t('message.suffixes.hertz');
+      let khz = this.$t('message.suffixes.kilohertz');
+
       if (isDeviceMini()) {
-        return (id < 3) ? value + "Hz" : value + "Khz";
+        return (id < 3) ? value + hz : value + khz;
       } else {
         if (!this.fineTuneEnabled()) {
           // In the official app, when fine tune isn't enabled, the values are 'sanitised' a bit so that things
           // like 0.5KHz become 500Hz, and decimals are removed when not needed. We'll do the same.
-          return (value < 1000) ? Math.round(value * 10) / 10 + "Hz" : Math.round(value) / 1000 + "Khz";
+          return (value < 1000) ? Math.round(value * 10) / 10 + hz : Math.round(value) / 1000 + khz;
         }
-        return (id < 5) ? value.toFixed(1) + "Hz" : (value / 1000).toFixed(1) + "KHz";
+        return (id < 5) ? value.toFixed(1) + hz : (value / 1000).toFixed(1) + khz;
       }
     },
 
     getFrequencySuffix(index) {
-      return (index < 5) ? "Hz" : "KHz";
+      let hz = this.$t('message.suffixes.hertz');
+      let khz = this.$t('message.suffixes.kilohertz');
+
+      return (index < 5) ? hz : khz;
     },
 
     valueChange(id, value) {
