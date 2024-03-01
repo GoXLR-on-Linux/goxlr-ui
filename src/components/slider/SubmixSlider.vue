@@ -17,12 +17,12 @@
     <div class="link" style="" @click="toggleSubmixLinked" role="checkbox" :aria-label="`Link ${title} Channels`"
          :aria-checked="submixLinked" tabindex="0" :style="{ color: getLabelColour() }">
       <div v-if="dimmed">
-        <img v-if="submixLinked" :src="`${publicPath}images/submix/linked-dimmed.png`" style="height: 20px">
-        <img v-else :src="`${publicPath}images/submix/unlinked-dimmed.png`" style="height: 20px" />
+        <img v-if="submixLinked" src="/images/submix/linked-dimmed.png" style="height: 20px">
+        <img v-else src="/images/submix/unlinked-dimmed.png" style="height: 20px" />
       </div>
       <div v-else>
-        <img v-if="submixLinked" :src="`${publicPath}images/submix/linked-white.png`" style="height: 20px" />
-        <img v-else :src="`${publicPath}images/submix/unlinked-white.png`" style="height: 20px" />
+        <img v-if="submixLinked" src="/images/submix/linked-white.png" style="height: 20px" />
+        <img v-else src="/images/submix/unlinked-white.png" style="height: 20px" />
       </div>
     </div>
     <div style="display: flex; flex-direction: row; margin-top: 5px">
@@ -61,8 +61,6 @@ export default {
       lastValue: 0,
       rangeSelected: undefined,
       timer: undefined,
-
-      publicPath: process.env.BASE_URL,
     }
   },
 
