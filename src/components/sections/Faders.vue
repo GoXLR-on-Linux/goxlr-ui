@@ -1,12 +1,16 @@
 <template>
-  <GroupContainer title="Faders">
-    <RadioSelection title="Channel" group="faders_channel" :options="fader_options" :selected="activeChannel"
-      @selection-changed="channelChanged" />
-    <RadioSelection title="Source" group="faders_source" :options="source_options" :selected="getActiveSource()"
-      @selection-changed="sourceChanged" :label="'Source for ' + getActiveChannelName()" />
-    <RadioSelection title="Mute Behaviour" group="faders_mute" :options="getMuteFunctions()"
-      :selected="getActiveMuteFunction()" @selection-changed="muteFunctionChanged"
-      :label="'Mute Behaviour for ' + getActiveChannelName()" />
+  <GroupContainer :title="$t('message.configuration.faders.title')">
+    <RadioSelection :title="$t('message.configuration.faders.channelTitle')" group="faders_channel"
+                    :options="fader_options" :selected="activeChannel" @selection-changed="channelChanged" />
+
+    <RadioSelection :title="$t('message.configuration.faders.sourceTitle')" group="faders_source"
+                    :options="source_options" :selected="getActiveSource()" @selection-changed="sourceChanged"
+                    :label="$t('message.configuration.faders.sourceLabel', { channel: getActiveChannelName() })" />
+
+    <RadioSelection :title="$t('message.configuration.muteBehaviourTitle')" group="faders_mute"
+                    :options="getMuteFunctions()" :selected="getActiveMuteFunction()"
+                    @selection-changed="muteFunctionChanged"
+                    :label="$t('message.configuration.muteBehaviourLabel', { channel: getActiveChannelName() })" />
   </GroupContainer>
 </template>
 
@@ -30,31 +34,31 @@ export default {
       activeChannel: "A",
 
       fader_options: [
-        { id: "A", label: "Channel 1" },
-        { id: "B", label: "Channel 2" },
-        { id: "C", label: "Channel 3" },
-        { id: "D", label: "Channel 4" }
+        { id: "A", label: this.$t('message.faders.A') },
+        { id: "B", label: this.$t('message.faders.B') },
+        { id: "C", label: this.$t('message.faders.C') },
+        { id: "D", label: this.$t('message.faders.D') }
       ],
 
       source_options: [
-        { id: "Mic", label: "Mic" },
-        { id: "Chat", label: "Voice Chat" },
-        { id: "Music", label: "Music" },
-        { id: "Game", label: "Game" },
-        { id: "Console", label: "Console" },
-        { id: "LineIn", label: "Line In" },
-        { id: "System", label: "System" },
-        { id: "Sample", label: "Sample" },
-        { id: "Headphones", label: "Headphones" },
-        { id: "LineOut", label: "Line Out" }
+        { id: "Mic", label: this.$t('message.channels.Mic') },
+        { id: "Chat", label: this.$t('message.channels.Chat') },
+        { id: "Music", label: this.$t('message.channels.Music') },
+        { id: "Game", label: this.$t('message.channels.Game') },
+        { id: "Console", label: this.$t('message.channels.Console') },
+        { id: "LineIn", label: this.$t('message.channels.LineIn') },
+        { id: "System", label: this.$t('message.channels.System') },
+        { id: "Sample", label: this.$t('message.channels.Sample') },
+        { id: "Headphones", label: this.$t('message.channels.Headphones') },
+        { id: "LineOut", label: this.$t('message.channels.LineOut') }
       ],
 
       mute_options: [
-        { id: "All", label: "Mute All" },
-        { id: "ToStream", label: "Mute to Stream" },
-        { id: "ToVoiceChat", label: "Mute to Chat Mic" },
-        { id: "ToPhones", label: "Mute to Phones" },
-        { id: "ToLineOut", label: "Mute to Line Out" },
+        { id: "All", label: this.$t('message.configuration.mute_behaviour.all') },
+        { id: "ToStream", label: this.$t('message.configuration.mute_behaviour.stream') },
+        { id: "ToVoiceChat", label: this.$t('message.configuration.mute_behaviour.chatMic') },
+        { id: "ToPhones", label: this.$t('message.configuration.mute_behaviour.headphones') },
+        { id: "ToLineOut", label: this.$t('message.configuration.mute_behaviour.lineOut') },
       ]
     }
   },

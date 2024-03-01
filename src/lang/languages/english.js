@@ -31,6 +31,13 @@ export default {
             Sampler: "Sampler",
         },
 
+        faders: {
+            A: "Channel 1",
+            B: "Channel 2",
+            C: "Channel 3",
+            D: "Channel 4"
+        },
+
         suffixes: {
             decibels: "dB",
             percentage: "%",
@@ -152,25 +159,20 @@ export default {
             // This is common between Faders and Cough Buttons
             mute_behaviour: {
                 all: "Mute to All",
-                stream: "Mute to @:message.channel.streamMix",
-                chatMic: "Mute to @:message.channel.chatMic",
-                headphones: "Mute to @:message.channel.headphones",
-                lineOut: "Mute to @:message.channel.lineOut",
+                stream: "Mute to @:message.channels.StreamMix",
+                chatMic: "Mute to @:message.channels.ChatMic",
+                headphones: "Mute to @:message.channels.Headphones",
+                lineOut: "Mute to @:message.channels.LineOut",
             },
             muteBehaviourTitle: "Mute Behaviour",
+            muteBehaviourLabel: "Mute Behaviour for {channel}",
 
             // Config for the Faders
             faders: {
-                channel: {
-                    title: "Channel",
-                    channelOne: "Channel 1",
-                    channelTwo: "Channel 2",
-                    channelThree: "Channel 3",
-                    channelFour: "Channel 4",
-                },
-
-                // The channel list for this section will come from 'channels' above.
+                title: "Faders",
+                channelTitle: "Channel",
                 sourceTitle: "Source",
+                sourceLabel: "Source for {channel}",
             },
 
             // Configuration for the Cough Button
@@ -181,6 +183,7 @@ export default {
                 },
 
                 title: "Cough Button Settings",
+                behaviourTitle: "Button Behaviour",
             }
         },
 
