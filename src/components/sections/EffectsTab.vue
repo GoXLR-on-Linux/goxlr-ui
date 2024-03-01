@@ -99,18 +99,18 @@
 </template>
 
 <script>
-import ReverbEffect from "@/components/sections/effects/ReverbEffect";
-import EchoEffect from "@/components/sections/effects/EchoEffect";
-import PitchEffect from "@/components/sections/effects/PitchEffect";
-import GenderEffect from "@/components/sections/effects/GenderEffect";
-import MegaphoneEffect from "@/components/sections/effects/MegaphoneEffect";
-import RobotEffect from "@/components/sections/effects/RobotEffect";
-import HardTuneEffect from "@/components/sections/effects/HardTuneEffect";
+import ReverbEffect from "@/components/sections/effects/ReverbEffect.vue";
+import EchoEffect from "@/components/sections/effects/EchoEffect.vue";
+import PitchEffect from "@/components/sections/effects/PitchEffect.vue";
+import GenderEffect from "@/components/sections/effects/GenderEffect.vue";
+import MegaphoneEffect from "@/components/sections/effects/MegaphoneEffect.vue";
+import RobotEffect from "@/components/sections/effects/RobotEffect.vue";
+import HardTuneEffect from "@/components/sections/effects/HardTuneEffect.vue";
 import {EffectPresets} from "@/util/mixerMapping";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import ModalButton from "@/components/design/modal/ModalButton";
-import ModalInput from "@/components/design/modal/ModalInput";
+import ModalButton from "@/components/design/modal/ModalButton.vue";
+import ModalInput from "@/components/design/modal/ModalInput.vue";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";

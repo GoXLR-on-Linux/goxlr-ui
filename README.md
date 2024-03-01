@@ -27,5 +27,5 @@ npm install
 Note, that when running in debug mode, the code expects the GoXLR daemon to be running on the default port (14564).
 
 ```
-npm run serve
+npm run dev
 ```

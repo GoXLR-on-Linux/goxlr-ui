@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import Slider from "../../slider/Slider";
+import Slider from "@/components/slider/Slider.vue";
 import {store} from "@/store";
 import {EqFreqs, EqMiniFreqs} from "@/util/mixerMapping";
 import {websocket} from "@/util/sockets";

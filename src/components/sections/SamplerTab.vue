@@ -142,7 +142,7 @@
 
 <script>
 import {store} from "@/store";
-import AudioVisualiser from "@/components/sections/sampler/AudioVisualiser";
+import AudioVisualiser from "@/components/sections/sampler/AudioVisualiser.vue";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import ButtonItem from "@/components/lists/ButtonItem.vue";

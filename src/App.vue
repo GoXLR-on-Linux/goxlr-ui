@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import GoXLR from "@/components/GoXLR";
+import GoXLR from "@/components/GoXLR.vue";
 
 export default {
   name: 'App',

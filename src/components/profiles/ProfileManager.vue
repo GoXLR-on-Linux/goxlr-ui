@@ -63,12 +63,12 @@
 </template>
 
 <script>
-import ProfileButtonList from "@/components/profiles/ProfileButtonList";
-import ProfileButton from "@/components/profiles/ProfileButton";
-import ModalButton from "@/components/design/modal/ModalButton";
-import ModalInput from "@/components/design/modal/ModalInput";
-import DropMenu from "@/components/design/DropMenu";
-import AccessibleModal from "@/components/design/modal/AccessibleModal";
+import ProfileButtonList from "@/components/profiles/ProfileButtonList.vue";
+import ProfileButton from "@/components/profiles/ProfileButton.vue";
+import ModalButton from "@/components/design/modal/ModalButton.vue";
+import ModalInput from "@/components/design/modal/ModalInput.vue";
+import DropMenu from "@/components/design/DropMenu.vue";
+import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 export default {

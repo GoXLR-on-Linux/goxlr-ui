@@ -13,11 +13,11 @@
 </template>
 
 <script>
-import Tabs from "@/components/tabs/Tabs";
-import Tab from "@/components/tabs/Tab";
-import ProfileHandler from "@/components/profiles/handlers/ProfileHandler";
-import PresetHandler from "@/components/sections/files/PresetHandler";
-import SampleHandler from "@/components/sections/files/SampleHandler";
+import Tabs from "@/components/tabs/Tabs.vue";
+import Tab from "@/components/tabs/Tab.vue";
+import ProfileHandler from "@/components/profiles/handlers/ProfileHandler.vue";
+import PresetHandler from "@/components/sections/files/PresetHandler.vue";
+import SampleHandler from "@/components/sections/files/SampleHandler.vue";
 import { isDeviceMini } from "@/util/util";
 
 export default {

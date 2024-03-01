@@ -185,7 +185,7 @@ export default {
     <slot>
       <div class="colourTarget" ref="target" @mouseleave="mouseOut" @mouseup="mouseUp" @mousemove="mouseMoveOutside">
         <div class="spacer"></div>
-        <img src="wheel.png" ref="circle" draggable="false" @mousedown="mouseDown" @mousemove.stop="mouseMove"
+        <img src="/wheel.png" ref="circle" draggable="false" @mousedown="mouseDown" @mousemove.stop="mouseMove"
              @mouseleave="mouseLeave" @click="mouseClick"
              role="button" tabindex="0" :aria-label="`${title}, Colour Picker`"/>
         <div class="spacer"></div>

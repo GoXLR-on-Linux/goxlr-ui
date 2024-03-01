@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Slider from "@/components/slider/Slider";
+import Slider from "@/components/slider/Slider.vue";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
