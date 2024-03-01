@@ -2,7 +2,7 @@
   <div id="main">
     <DeviceSelector v-if="!isDeviceSet()"/>
     <template v-if="isDeviceSet()">
-      <h1 class="screenreader-only">Profiles and Files</h1>
+      <h1 class="screenreader-only"> {{$t('message.navigation.accessibilityProfileSection')}}</h1>
       <div style="display: flex; flex-direction: row; column-gap: 30px">
         <div>
           <FileTabs/>
@@ -13,17 +13,17 @@
       </div>
 
       <div style="height: 25px; background-color: #3b413f"/>
-      <h1 class="sr-only">Device Settings</h1>
-      <Tabs ref="device-tabs" @on-change="onTabChange" label="Device Settings">
-        <Tab id="mic" name="Mic">
+      <h1 class="sr-only">{{ $t('message.navigation.accessibilityDeviceSection')  }}</h1>
+      <Tabs ref="device-tabs" @on-change="onTabChange" :label="$t('message.navigation.accessibilityDeviceSection')">
+        <Tab id="mic" :name="$t('message.navigation.microphone')">
           <Mic/>
         </Tab>
-        <Tab id="mixer" name="Mixer" selected>
+        <Tab id="mixer" :name="$t('message.navigation.mixer')" selected>
           <ContentContainer>
             <Mixer/>
           </ContentContainer>
         </Tab>
-        <Tab id="configuration" name="Configuration">
+        <Tab id="configuration" :name="$t('message.navigation.configuration')">
           <ContentContainer>
             <CenteredContainer>
               <Faders ref="faders" @on-fader-channel-change="onFaderChannelChange"/>
@@ -31,23 +31,23 @@
             </CenteredContainer>
           </ContentContainer>
         </Tab>
-        <Tab id="effects" v-if="!isDeviceMini()" name="Effects">
+        <Tab id="effects" v-if="!isDeviceMini()" :name="$t('message.navigation.effects')">
           <EffectsTab ref="effects" @on-effect-preset-change="onEffectPresetChange" />
         </Tab>
-        <Tab id="sampler" v-if="!isDeviceMini()" name="Sampler">
+        <Tab id="sampler" v-if="!isDeviceMini()" :name="$t('message.navigation.sampler')">
           <ContentContainer>
             <SamplerTab ref="sampler" @on-sample-bank-change="onSampleBankChange" />
           </ContentContainer>
         </Tab>
-        <Tab id="lighting" name="Lighting">
+        <Tab id="lighting" :name="$t('message.navigation.lighting')">
           <LightingTab ref="lighting" @on-lighting-changed="onLightingDataChange" />
         </Tab>
-        <Tab id="routing" name="Routing">
+        <Tab id="routing" :name="$t('message.navigation.routing')">
           <ContentContainer>
             <Routing/>
           </ContentContainer>
         </Tab>
-        <Tab id="system" name="System">
+        <Tab id="system" :name="$t('message.navigation.system')">
           <ContentContainer>
             <SystemComponent/>
           </ContentContainer>
@@ -115,7 +115,12 @@ export default {
     isDeviceMini,
 
     isDeviceSet() {
-      return store.hasActiveDevice() && store.isConnected();
+      let ready = store.hasActiveDevice() && store.isConnected();
+      if (ready) {
+        this.$i18n.locale = "en";
+      }
+
+      return ready;
     },
 
     onTabChange(tab) {

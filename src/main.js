@@ -19,6 +19,8 @@ import {
     faChevronRight, faPowerOff, faLink, faLinkSlash, faVolumeXmark, faMicrophoneSlash, faMusic, faTurnUp, faHeadphones,
     faUpLong, faDownLong, faRepeat, faWaveSquare
 } from "@fortawesome/free-solid-svg-icons";
+import {createI18n} from "vue-i18n";
+import {messages} from "@/lang/config.js";
 
 library.add(
     faMicrophoneLines, faCircleQuestion, faFloppyDisk, faEllipsisVertical, faFileCirclePlus, faCopy, faTrash,
@@ -31,4 +33,9 @@ library.add(
 let app = createApp(App);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.use(vClickOutside);
+app.use(createI18n({
+    locale: "en",
+    fallbackLocale: "en",
+    messages: messages
+}));
 app.mount('#app');

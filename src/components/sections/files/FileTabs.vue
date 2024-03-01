@@ -1,12 +1,12 @@
 <template>
-    <Tabs style="width: 480px" label="Profiles and Files">
-        <Tab id="profiles" name="Profiles" :selected="true">
+    <Tabs style="width: 480px" :label="$t('message.navigation.accessibilityProfileSection')">
+        <Tab id="profiles" :name="$t('message.navigation.profiles')" :selected="true">
             <ProfileHandler />
         </Tab>
-        <Tab id="samples" v-if="!isDeviceMini()" name="Samples">
+        <Tab id="samples" v-if="!isDeviceMini()" :name="$t('message.navigation.samples')">
             <SampleHandler />
         </Tab>
-        <Tab id="presets" v-if="!isDeviceMini()" name="Presets">
+        <Tab id="presets" v-if="!isDeviceMini()" :name="$t('message.navigation.presets')">
             <PresetHandler />
         </Tab>
     </Tabs>

@@ -59,6 +59,7 @@ export default {
             // Accessibility Messages (these are announced to screen readers)
             accessibilityProfileSection: "Profiles and Files",
             accessibilityDeviceSection: "Device Settings",
+            accessibilityLightingSection: "Lighting Settings",
         },
 
         // Strings that appear in the Mic tab, note that the Profile Strings are handled in 'profileManager'

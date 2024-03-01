@@ -36,34 +36,34 @@ export default {
         {
           id: "global",
           type: LightingGlobal,
-          display: "Global",
+          display: "message.navigation.lightingGlobal",
         },
         {
           id: "mixer",
           type: LightingMixer,
-          display: "Mixer",
+          display: "message.navigation.lightingMixer",
         },
         {
           id: "effects",
           type: LightingEffects,
-          display: "Effects",
+          display: "message.navigation.lightingEffects",
         },
         {
           id: "sampler",
           type: LightingSampler,
-          display: "Sampler",
+          display: "message.navigation.lightingSampler",
         },
         {
           id: "cough",
           type: LightingCough,
-          display: "Cough",
+          display: "message.navigation.lightingCough",
         },
       ],
 
       currentTab: {
         id: "global",
         type: LightingGlobal,
-        display: "Global",
+        display: "message.navigation.lightingGlobal",
       },
     }
   },
@@ -125,11 +125,11 @@ export default {
 </script>
 
 <template>
-  <CenteredContainer class="sections" role="tablist" aria-label="Lighting Settings">
+  <CenteredContainer class="sections" role="tablist" :aria-label="$t('message.navigation.accessibilityLightingSection')">
     <button v-for="tab in getTabs()" :key="tab.id" :class="['button', { active: currentTab === tab }]"
             @click="setTab(tab)" role="tab" :aria-selected="currentTab === tab" :aria-controls="tab.id"
             :tabindex="currentTab === tab ? 0 : -1" :ref="tab.id" @keydown="onTabKeydown">
-      {{ tab.display }}
+      {{ $t(tab.display) }}
     </button>
   </CenteredContainer>
   <component @nav-updated="navUpdated" ref="component" :is="currentTab.type" role="tabpanel" :aria-label="currentTab.display"/>
