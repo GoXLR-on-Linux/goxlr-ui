@@ -149,7 +149,6 @@ export default {
 
     onLightingDataChange() {
       this.active = ["lighting"].concat(this.$refs.lighting.getNodes());
-      console.log(this.active);
     }
   },
 
