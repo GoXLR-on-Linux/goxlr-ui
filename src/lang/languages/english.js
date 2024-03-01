@@ -13,22 +13,22 @@
 
 export default {
     message: {
-        // Firstly, a simple list of the Channels and their names
+        // For these, the keys map directly to their GoXLR Channel Names
         channels: {
-            microphone: "Mic",
-            voiceChat: "Voice Chat",
-            music: "Music",
-            game: "Game",
-            console: "Console",
-            lineIn: "Line In",
-            system: "System",
-            sample: "Sample",
-            lineOut: "Line Out",
-            headphones: "Headphones",
-            micMonitor: "Mic Monitor",
-            streamMix: "Stream Mix",
-            chatMic: "Chat Mic",
-            sampler: "Sampler",
+            Mic: "Mic",
+            Chat: "Voice Chat",
+            Music: "Music",
+            Game: "Game",
+            Console: "Console",
+            LineIn: "Line In",
+            System: "System",
+            Sample: "Sample",
+            LineOut: "Line Out",
+            Headphones: "Headphones",
+            MicMonitor: "Mic Monitor",
+            StreamMix: "Stream Mix",
+            ChatMic: "Chat Mic",
+            Sampler: "Sampler",
         },
 
         suffixes: {
@@ -41,7 +41,10 @@ export default {
         },
 
         modalButtons: {
-            ok: "Ok"
+            ok: "Ok",
+            yes: "Yes",
+            no: "No",
+            cancel: "Cancel"
         },
 
         // These Strings appear in the tabs throughout the pages
@@ -136,6 +139,9 @@ export default {
             outputs: "Outputs",
             mixAssignment: "Mix Assignment",
 
+            // Submix Checkbox
+            submix: "Submixes",
+
             // Mix Assignment
             channelA: "A",
             channelB: "B"
@@ -189,25 +195,25 @@ export default {
             newQuestion: "Would you like to create a new profile from the default, or current configuration?",
             newDefaultButton: "Default",
             newCurrentButton: "Current",
-            newCancelButton: "Cancel",
+            newCancelButton: "@:message.modalButtons.cancel",
 
             // Dialog Popup when hitting the 'Save Profile' button
             overwriteTitle: "Overwrite Confirmation",
             overwriteQuestion: "Are you sure you want to overwrite the profile {activeProfile}?",
-            overwriteYes: "Yes",
-            overwriteNo: "No",
+            overwriteYes: "@:message.modalButtons.yes",
+            overwriteNo: "@:message.modalButtons.no",
 
             // Dialog Popup when clicking the 'Delete' Menu Item
             deleteTitle: "Delete Confirmation",
             deleteQuestion: "Are you sure you want to delete the profile {profileName}?",
-            deleteYes: "Yes",
-            deleteNo: "No",
+            deleteYes: "@:message.modalButtons.yes",
+            deleteNo: "@:message.modalButtons.no",
 
             // Dialog prompting for a new Profile Name
             newNameTitle: "Enter New Profile Name",
             newNamePlaceHolder: "New Name",
-            newNameOk: "Ok",
-            newNameCancel: "Cancel",
+            newNameOk: "@:message.modalButtons.ok",
+            newNameCancel: "@:message.modalButtons.cancel",
 
             // Dialog Popup when attempting to delete the active profile
             deleteCurrentErrorTitle: "Unable to Delete",
@@ -231,9 +237,5 @@ export default {
             accessibilityOpenProfileDirectory: "Open Profile Directory",
             accessibilityOpenMicProfileDirectory: "Open Mic Profile Directory",
         },
-        // Profile Related Messages
-
-
-
     }
 }

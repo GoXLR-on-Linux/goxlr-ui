@@ -11,14 +11,14 @@
     <div role="radiogroup">
       <div class="box">
         <div>
-          <label :for="getRadioId('A')" class="label MixA" :class="{ selected: isDeviceMix('A') }">A</label>
+          <label :for="getRadioId('A')" class="label MixA" :class="{ selected: isDeviceMix('A') }">{{$t('message.mixer.channelA')}}</label>
           <input class="screenreader-only" type="radio" :id="getRadioId('A')" @change="setDeviceMix"
-                 :checked="isDeviceMix('A')" :name="name" value="A" aria-label="A"/>
+                 :checked="isDeviceMix('A')" :name="name" value="A" :aria-label="$t('message.mixer.channelA')"/>
         </div>
         <div>
-          <label :for="getRadioId('B')" class="label MixB" :class="{ selected: isDeviceMix('B') }">B</label>
+          <label :for="getRadioId('B')" class="label MixB" :class="{ selected: isDeviceMix('B') }">{{$t('message.mixer.channelB')}}</label>
           <input class="screenreader-only" type="radio" :id="getRadioId('B')" @change="setDeviceMix"
-                 :checked="isDeviceMix('B')" :name="name" value="B" aria-label="B"/>
+                 :checked="isDeviceMix('B')" :name="name" value="B" :aria-label="$t('message.mixer.channelB')"/>
         </div>
       </div>
     </div>

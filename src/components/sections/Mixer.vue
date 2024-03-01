@@ -4,23 +4,23 @@
 
     <GroupContainer v-if="!submixEnabled()" title="Inputs">
       <template v-if="isSubMixSupported()" #right>
-        <label for="submix_enabled">Submixes</label>
+        <label for="submix_enabled">{{ $t('message.mixer.submix' )}}</label>
         <input id="submix_enabled" type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled"/>
       </template>
-      <Slider v-for="item in inputMixer" :key=item :id=channelNames.indexOf(item) :title="channelNamesReadable[item]"
-              :slider-min-value=0
-              :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%" :slider-value="getValue(item)"
+      <Slider v-for="item in inputMixer" :key=item :id=channelNames.indexOf(item) :title="getChannelName(item)"
+              :slider-min-value=0 :slider-max-value=255 :text-min-value=0 :text-max-value=100
+              :text-suffix="$t('message.suffixes.percentage')" :slider-value="getValue(item)"
               :store-path="getStorePath(item)" @value-changed="valueChange"
       />
     </GroupContainer>
-    <GroupContainer v-else title="Inputs">
+    <GroupContainer v-else :title="$t('message.mixer.inputs')">
       <template v-if="isSubMixSupported()" #right>
-        <label for="submix_enabled">Submixes</label>
+        <label for="submix_enabled">{{ $t('message.mixer.submix' )}}</label>
         <input id="submix_enabled" type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled"/>
       </template>
       <SubmixSlider v-for="item in inputMixer" :key=item :id=channelNames.indexOf(item)
-                    :title="channelNamesReadable[item]" :slider-min-value=0
-                    :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%"
+                    :title="getChannelName(item)" :slider-min-value=0 :slider-max-value=255 :text-min-value=0
+                    :text-max-value=100 :text-suffix="$t('message.suffixes.percentage')"
                     :slider-a-value="getValue(item)" :slider-b-value="getSubmixValue(item)"
                     :submix-linked="isSubMixLinked(item)" :dimmed="isSubmixDimmed(item)"
                     :store-path="getSubmixPaths(item)" @value-changed="submixValueChange"
@@ -28,10 +28,11 @@
       />
     </GroupContainer>
 
-    <GroupContainer title="Outputs" @expando-clicked="isVisible = !isVisible" :expanded="isVisible">
+    <GroupContainer :title="$t('message.mixer.outputs')" @expando-clicked="isVisible = !isVisible"
+                    :expanded="isVisible">
       <Slider v-for="item in outputMixer" :key=item :id=channelNames.indexOf(item)
-              :title="channelNamesReadable[item]" :slider-min-value=0
-              :slider-max-value=255 :text-min-value=0 :text-max-value=100 text-suffix="%" :slider-value="getValue(item)"
+              :title="getChannelName(item)" :slider-min-value=0 :slider-max-value=255 :text-min-value=0
+              :text-max-value=100 :text-suffix="$t('message.suffixes.percentage')" :slider-value="getValue(item)"
               :store-path="getStorePath(item)" @value-changed="valueChange"
               v-show="!submixEnabled() || !submixHide.includes(item)"
       />
@@ -76,6 +77,10 @@ export default {
   },
 
   methods: {
+    getChannelName(channel) {
+      return this.$t(`message.channels.${channel}`);
+    },
+
     valueChange(id, volume) {
       let str_id = this.channelNames[id];
       let command = undefined;
