@@ -40,6 +40,10 @@ export default {
             ratio: ":{value}",
         },
 
+        modalButtons: {
+            ok: "Ok"
+        },
+
         // These Strings appear in the tabs throughout the pages
         navigation: {
             // Tabs at the top of the Page
@@ -72,6 +76,10 @@ export default {
 
         // Strings that appear in the Mic tab, note that the Profile Strings are handled in 'profileManager'
         microphone: {
+            profiles: {
+                title: "Mic Profiles"
+            },
+
             setup: {
                 button: "Mic Setup",
                 title: "Mic Setup",

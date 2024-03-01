@@ -16,7 +16,7 @@
         </div>
         <div v-if="show_footer" class="modal-footer">
           <slot name="footer">
-            <button ref="ok" class="modal-default-button" @click="closeModal()">OK</button>
+            <button ref="ok" class="modal-default-button" @click="closeModal()">{{ $t('message.modalButtons.ok') }}</button>
           </slot>
         </div>
       </div>

@@ -4,7 +4,7 @@
       <hr style="border: 1px solid #2d3230" />
     </div>
     <button
-      aria-label="Open Profile Directory"
+      :aria-label="$t('message.profileManager.accessibilityOpenProfileDirectory')"
       class="openButton"
       @click="openProfiles"
     >
@@ -26,30 +26,17 @@
   </div>
 
   <AccessibleModal ref="deleteModal" id="delProfile">
-    <template v-slot:title>Delete Confirmation</template>
-    <template v-slot:default
-      >Are you sure you want to delete the profile
-      {{ selectedProfile }}?</template
-    >
+    <template v-slot:title>{{$t('message.profileManager.deleteTitle')}}</template>
+    <template v-slot:default>{{$t('message.profileManager.deleteQuestion', { profileName: selectedProfile })}}</template>
     <template v-slot:footer>
-      <ModalButton
-        @click="
-          $refs.deleteModal.closeModal();
-          deleteProfile(this.selectedProfile);
-        "
-        >Ok</ModalButton
-      >
-      <ModalButton ref="focusDelDefault" @click="$refs.deleteModal.closeModal()"
-        >Cancel</ModalButton
-      >
+      <ModalButton @click="$refs.deleteModal.closeModal(); deleteProfile(this.selectedProfile);">{{$t('message.profileManager.deleteYes')}}</ModalButton>
+      <ModalButton ref="focusDelDefault" @click="$refs.deleteModal.closeModal()">{{$t('message.profileManager.deleteNo')}}</ModalButton>
     </template>
   </AccessibleModal>
 
   <AccessibleModal ref="noDelete" id="delProfile">
-    <template v-slot:title>Unable to Delete</template>
-    <template v-slot:default
-      >It is not possible to delete the current active profile.</template
-    >
+    <template v-slot:title>{{$t('message.profileManager.deleteCurrentErrorTitle')}}</template>
+    <template v-slot:default>{{$t('message.profileManager.deleteCurrentErrorMessage')}}</template>
   </AccessibleModal>
 </template>
 
@@ -67,9 +54,9 @@ export default {
   data() {
     return {
       menuList: [
-        { name: "Load Profile", slug: "load" },
-        { name: "Load Colours Only", slug: "colours" },
-        { name: "Delete Profile", slug: "delete" },
+        { name: this.$t('message.profileManager.menuLoadProfile'), slug: "load" },
+        { name: this.$t('message.profileManager.menuLoadProfileColours'), slug: "colours" },
+        { name: this.$t('message.profileManager.menuDeleteProfile'), slug: "delete" },
       ],
 
       selectedProfile: "",
@@ -122,7 +109,9 @@ export default {
       sendHttpCommand(store.getActiveSerial(), command).catch((error) => {
         console.log(error);
       });
-      store.setAccessibilityNotification("polite", `Profile ${label} Loaded`);
+      store.setAccessibilityNotification(
+          "polite",
+          this.$t('message.profileManager.accessibilityLoadedProfile', { profileName: label });
     },
 
     loadProfileColours: function (label) {
@@ -131,20 +120,23 @@ export default {
       });
       store.setAccessibilityNotification(
         "polite",
-        `Profile ${label} Colours Loaded`
+        this.$t('message.profileManager.accessibilityLoadedColours', { profileName: label })
       );
     },
 
     newProfile(name) {
       sendHttpCommand(store.getActiveSerial(), { NewProfile: name });
-      store.setAccessibilityNotification("polite", `Created Profile ${name}`);
+      store.setAccessibilityNotification(
+          "polite",
+          this.$t('message.profileManager.accessibilityCreatedProfile', { profileName: name })
+      );
     },
 
     saveProfile() {
       sendHttpCommand(store.getActiveSerial(), { SaveProfile: [] });
       store.setAccessibilityNotification(
-        "polite",
-        `Profile ${this.getActiveProfile()} Saved`
+          "polite",
+          this.$t('message.profileManager.accessibilitySavedProfile', { profileName: this.getActiveProfile() })
       );
     },
 
@@ -154,14 +146,16 @@ export default {
       };
       sendHttpCommand(store.getActiveSerial(), command);
       store.setAccessibilityNotification(
-        "polite",
-        `Profile ${this.getActiveProfile()} Saved as ${name}`
+          "polite",
+          this.$t('message.profileManager.accessibilitySavedProfileAs', { profileName: name })
       );
     },
 
     deleteProfile(name) {
       sendHttpCommand(store.getActiveSerial(), { DeleteProfile: name });
-      store.setAccessibilityNotification("polite", `Profile ${name} Deleted`);
+      store.setAccessibilityNotification(
+          "polite",
+          this.$t('message.profileManager.accessibilityProfileDeleted', { profileName: name }));
     },
 
     openProfiles() {

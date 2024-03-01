@@ -6,17 +6,22 @@
                    @button-double-clicked="handleDoubleClick"
     >
       <template #right v-if="menuList.length > 0">
-        <button :ref="getButtonId(name)" :aria-label="`${name} Options`" :id="getButtonId(name)" aria-haspopup="menu" aria-controls="profile_menu" class="menu" @click.prevent.stop="menuPressed($event, getButtonId(name), name)">
+        <button :ref="getButtonId(name)"
+                :aria-label="$t('message.profileManager.accessibilityDropMenuTitle', { profileName: name })"
+                :id="getButtonId(name)" aria-haspopup="menu" aria-controls="profile_menu" class="menu"
+                @click.prevent.stop="menuPressed($event, getButtonId(name), name)">
           <font-awesome-icon icon="fa-solid fa-ellipsis-vertical"/>
         </button>
       </template>
     </ProfileButton>
   </ProfileButtonList>
   <div class="buttonColumns">
-    <button ref="save" :title="`Save Profile ${activeProfile}`" class="actionButton" @click="$refs.saveModal.openModal($refs.focusOk, $refs.save)">
+    <button ref="save" :title="$t('message.profileManager.saveProfileName', {profileName: activeProfile} )"
+            class="actionButton" @click="$refs.saveModal.openModal($refs.focusOk, $refs.save)">
       <font-awesome-icon icon="fa-solid fa-floppy-disk"/>
     </button>
-    <button ref="new" title="Create new Profile" class="actionButton" @click="$refs.newModal.openModal($refs.focusDefault, $refs.new)">
+    <button ref="new" :title="$t('message.profileManager.createProfile')" class="actionButton"
+            @click="$refs.newModal.openModal($refs.focusDefault, $refs.new)">
       <font-awesome-icon icon="fa-solid fa-file-circle-plus"/>
     </button>
   </div>
@@ -30,34 +35,34 @@
   </DropMenu>
 
   <AccessibleModal ref="saveModal" id="saveProfile" :show_close=false>
-    <template v-slot:title>Overwrite Confirmation</template>
-    <template v-slot:default>Are you sure you want to overwrite the profile {{ activeProfile }}?</template>
+    <template v-slot:title>{{$t('message.profileManager.overwriteTitle')}}</template>
+    <template v-slot:default>{{ $t('message.profileManager.overwriteQuestion', { activeProfile: activeProfile }) }}</template>
     <template v-slot:footer>
-      <ModalButton ref="focusOk" @click="saveActiveProfile(); $refs.saveModal.closeModal()">OK</ModalButton>
-      <ModalButton @click="$refs.saveModal.closeModal()">Cancel</ModalButton>
+      <ModalButton ref="focusOk" @click="saveActiveProfile(); $refs.saveModal.closeModal()">{{ $t('message.profileManager.overwriteYes') }}</ModalButton>
+      <ModalButton @click="$refs.saveModal.closeModal()">{{ $t('message.profileManager.overwriteNo') }}</ModalButton>
     </template>
   </AccessibleModal>
 
   <AccessibleModal ref="newModal" id="newProfile">
-    <template v-slot:title>New Profile Source</template>
+    <template v-slot:title>{{$t('message.profileManager.newTitle')}}</template>
     <template v-slot:default>
-      Would you like to create a new profile from the default, or current configuration?
+      {{$t('message.profileManager.newQuestion')}}
     </template>
     <template v-slot:footer>
-      <ModalButton ref="focusDefault" @click="createNewProfile = true; $refs.newModal.closeModal(); $refs.nameModal.openModal($refs.newName, $refs.new)">Default</ModalButton>
-      <ModalButton @click="createNewProfile = false; $refs.newModal.closeModal(); $refs.nameModal.openModal($refs.newName, $refs.new)">Current</ModalButton>
-      <ModalButton @click="$refs.newModal.closeModal()">Cancel</ModalButton>
+      <ModalButton ref="focusDefault" @click="createNewProfile = true; $refs.newModal.closeModal(); $refs.nameModal.openModal($refs.newName, $refs.new)">{{$t('message.profileManager.newDefaultButton')}}</ModalButton>
+      <ModalButton @click="createNewProfile = false; $refs.newModal.closeModal(); $refs.nameModal.openModal($refs.newName, $refs.new)">{{$t('message.profileManager.newCurrentButton')}}</ModalButton>
+      <ModalButton @click="$refs.newModal.closeModal()">{{$t('message.profileManager.newCancelButton')}}</ModalButton>
     </template>
   </AccessibleModal>
 
   <AccessibleModal ref="nameModal" id="nameProfile">
-    <template v-slot:title>Enter New Profile Name</template>
+    <template v-slot:title>{{$t('message.profileManager.newNameTitle')}}</template>
     <template v-slot:default>
-      <ModalInput ref="newName" v-model="newProfileName" placeholder="Profile Name" @on-enter="$refs.nameModal.closeModal(); newProfile(); newProfileName = ''"/>
+      <ModalInput ref="newName" v-model="newProfileName" :placeholder="$t('message.profileManager.newNamePlaceHolder')" @on-enter="$refs.nameModal.closeModal(); newProfile(); newProfileName = ''"/>
     </template>
     <template v-slot:footer>
-      <ModalButton @click="$refs.nameModal.closeModal(); newProfile(); newProfileName = ''">Ok</ModalButton>
-      <ModalButton @click="$refs.nameModal.closeModal(); newProfileName = ''">Cancel</ModalButton>
+      <ModalButton @click="$refs.nameModal.closeModal(); newProfile(); newProfileName = ''">{{$t('message.profileManager.newNameOk')}}</ModalButton>
+      <ModalButton @click="$refs.nameModal.closeModal(); newProfileName = ''">{{$t('message.profileManager.newNameCancel')}}</ModalButton>
     </template>
   </AccessibleModal>
 </template>

@@ -1,35 +1,36 @@
 <template>
   <div class="profile-border">
     <div class="title">
-      Mic Profiles
+      {{ $t('message.microphone.profiles.title') }}
     </div>
     <div style="height: 30px; text-align: right">
       <div style="height: 14px; display: inline-block; width: calc(100% - 50px);">
         <hr style="border: 1px solid #2d3230" />
       </div>
-      <button aria-label="Open Mic Profile Directory" class="openButton" @click="openProfiles">
+      <button :aria-label="$t('message.profileManager.accessibilityOpenMicProfileDirectory')"
+              class="openButton" @click="openProfiles">
         <font-awesome-icon icon="fa-solid fa-folder" />
       </button>
     </div>
     <div style="height: 205px">
       <ProfileManager ref="manager" :profile-list="getProfileList()" :active-profile="getActiveProfile()"
-                      :menu-list="menuList"
-                      @new-profile="newProfile" @load-profile="loadProfile" @save-profile="saveProfile"
-                      @save-profile-as="saveProfileAs" @menu-item-pressed="menuItemPressed" />
+                      :menu-list="menuList" @new-profile="newProfile" @load-profile="loadProfile"
+                      @save-profile="saveProfile" @save-profile-as="saveProfileAs"
+                      @menu-item-pressed="menuItemPressed" />
     </div>
 
     <AccessibleModal ref="deleteMicModal" id="delMicProfile">
-      <template v-slot:title>Delete Confirmation</template>
-      <template v-slot:default>Are you sure you want to delete the microphone profile {{ selectedProfile }}?</template>
+      <template v-slot:title>{{ $t('message.profileManager.deleteTitle') }}</template>
+      <template v-slot:default>{{ $t('message.profileManager.deleteQuestion', { profileName: selectedProfile }) }}</template>
       <template v-slot:footer>
-        <ModalButton @click="$refs.deleteMicModal.closeModal(); deleteProfile(this.selectedProfile)">Ok</ModalButton>
-        <ModalButton ref="focusDelDefault" @click="$refs.deleteMicModal.closeModal()">Cancel</ModalButton>
+        <ModalButton @click="$refs.deleteMicModal.closeModal(); deleteProfile(this.selectedProfile)">{{ $t('message.profileManager.deleteYes') }}</ModalButton>
+        <ModalButton ref="focusDelDefault" @click="$refs.deleteMicModal.closeModal()">{{ $t('message.profileManager.deleteNo') }}</ModalButton>
       </template>
     </AccessibleModal>
 
     <AccessibleModal ref="noDelete" id="delMicProfile">
-      <template v-slot:title>Unable to Delete</template>
-      <template v-slot:default>It is not possible to delete the current active microphone profile.</template>
+      <template v-slot:title>{{ $t('message.profileManager.deleteCurrentErrorTitle') }}</template>
+      <template v-slot:default>{{ $t('message.profileManager.deleteCurrentErrorMessage') }}</template>
     </AccessibleModal>
   </div>
 </template>
@@ -49,8 +50,8 @@ export default {
   data() {
     return {
       menuList: [
-        {name: 'Load Profile', slug: 'load'},
-        {name: 'Delete Profile', slug: 'delete'}
+        {name: this.$t('message.profileManager.menuLoadProfile'), slug: 'load'},
+        {name: this.$t('message.profileManager.menuDeleteProfile'), slug: 'delete'}
       ],
 
       selectedProfile: '',
