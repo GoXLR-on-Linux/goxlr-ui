@@ -2,7 +2,7 @@
   <CenteredContainer>
     <MixAssignment v-if="submixEnabled()"/>
 
-    <GroupContainer v-if="!submixEnabled()" title="Inputs">
+    <GroupContainer v-if="!submixEnabled()" :title="$t('message.mixer.inputs' )">
       <template v-if="isSubMixSupported()" #right>
         <label for="submix_enabled">{{ $t('message.mixer.submix' )}}</label>
         <input id="submix_enabled" type="checkbox" :checked="submixEnabled()" @change="setSubmixEnabled"/>
