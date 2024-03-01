@@ -111,7 +111,8 @@ export default {
       });
       store.setAccessibilityNotification(
           "polite",
-          this.$t('message.profileManager.accessibilityLoadedProfile', { profileName: label });
+          this.$t('message.profileManager.accessibilityLoadedProfile', { profileName: label })
+      );
     },
 
     loadProfileColours: function (label) {
