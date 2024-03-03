@@ -1,5 +1,11 @@
 <template>
-  <div id="goxlr-visualiser" @wheel="handleScroll" v-html="getGoXLRSvg()" />
+  <div
+    id="goxlr-visualiser"
+    @wheel="handleScroll"
+    @click="e => handleClick(e, false)"
+    @contextmenu.prevent="e => handleClick(e, true)"
+    v-html="getGoXLRSvg()"
+  />
 </template>
 
 <script>
@@ -10,6 +16,7 @@ import {isDeviceMini} from "@/util/util";
 
 import GoXLRFull from "@/assets/preview/GoXLR.svg?raw";
 import GoXLRMini from "@/assets/preview/GoXLR-Mini.svg?raw";
+import {mapElementToArea} from "@/components/visualisation/VisualiserHelper";
 
 export default {
   name: "GoXLRVisualiser",
@@ -18,9 +25,22 @@ export default {
     activeDisplay: {type: Array, required: true},
   },
 
+  emits: ["areaClick"],
+
   methods: {
     getGoXLRSvg() {
       return (isDeviceMini()) ? GoXLRMini : GoXLRFull;
+    },
+
+    // emit areaClick event
+    handleClick(e, rightClick) {
+      const isCaptureElem = e.target.matches("#goxlr-visualiser .capture *")
+      if (!isCaptureElem) return;
+
+      let clickedArea = mapElementToArea(e.target, null, null);
+      this.$emit("areaClick", { area: clickedArea, alt: rightClick });
+
+      console.log({ area: clickedArea, alt: rightClick })
     },
 
     // transforms a HEX string into a colour object.
