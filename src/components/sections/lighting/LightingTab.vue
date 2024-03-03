@@ -8,6 +8,7 @@ import Global from "@/components/sections/lighting/subTabs/LightingGlobal.vue";
 import {isDeviceMini} from "@/util/util";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import {shallowRef} from "vue";
+import {HighlightArea} from "@/components/visualisation/VisualiserHelper";
 
 // We need to shallowRef these to avoid overheads..
 const LightingMixer = shallowRef(Mixer);
@@ -69,12 +70,93 @@ export default {
   },
 
   methods: {
-    getTabById(id) {
-      for (let tab of this.tabs) {
-        if (tab.id === id) {
-          return tab;
+    activateArea(area) {
+      console.log(area);
+
+      switch (area) {
+        case HighlightArea.COUGH: {
+          this.loadCoughTab();
+          break;
+        }
+        case HighlightArea.CHANNEL_A:
+          this.loadFaderTab("A");
+          break;
+        case HighlightArea.CHANNEL_B:
+          this.loadFaderTab("B");
+          break;
+        case HighlightArea.CHANNEL_C:
+          this.loadFaderTab("C");
+          break;
+        case HighlightArea.CHANNEL_D: {
+          this.loadFaderTab("D");
+          break;
+        }
+        case HighlightArea.SAMPLER_BANK_A: {
+          this.loadSampleBank("SamplerSelectA");
+          break;
+        }
+        case HighlightArea.SAMPLER_BANK_B: {
+          this.loadSampleBank("SamplerSelectB");
+          break;
+        }
+        case HighlightArea.SAMPLER_BANK_C: {
+          this.loadSampleBank("SamplerSelectC");
+          break;
+        }
+        case HighlightArea.EFFECTS_PRESET1: {
+          this.loadEffectsTab("Preset1");
+          break;
+        }
+        case HighlightArea.EFFECTS_PRESET2: {
+          this.loadEffectsTab("Preset2");
+          break;
+        }
+        case HighlightArea.EFFECTS_PRESET3: {
+          this.loadEffectsTab("Preset3");
+          break;
+        }
+        case HighlightArea.EFFECTS_PRESET4: {
+          this.loadEffectsTab("Preset4");
+          break;
+        }
+        case HighlightArea.EFFECTS_PRESET5: {
+          this.loadEffectsTab("Preset5");
+          break;
+        }
+        case HighlightArea.EFFECTS_PRESET6: {
+          this.loadEffectsTab("Preset6");
+          break;
         }
       }
+    },
+
+    loadCoughTab() {
+        this.setTab(this.getTabById("cough"));
+    },
+
+    loadFaderTab(channel) {
+      this.setTab(this.getTabById("mixer"));
+        this.$nextTick(() => {
+          this.$refs.component.onChannelSelectionChange(channel);
+        });
+    },
+
+    loadSampleBank(bank) {
+      this.setTab(this.getTabById("sampler"))
+      this.$nextTick(() => {
+        this.$refs.component.onButtonSelectionChange(bank);
+      })
+    },
+
+    loadEffectsTab(preset) {
+      this.setTab(this.getTabById("effects"));
+      this.$nextTick(() => {
+        this.$refs.component.setActivePreset(preset);
+      });
+    },
+
+    getTabById(id) {
+      return this.tabs.find((tab) => tab.id === id);
     },
 
     getTabs() {

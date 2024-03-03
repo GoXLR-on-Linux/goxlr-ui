@@ -14,6 +14,10 @@ export default {
   },
 
   methods: {
+    setActivePreset(preset) {
+      this.$refs.presets.onButtonSelectionChange(preset);
+    },
+
     getNodes() {
       return [this.$refs.presets.activePreset];
     },

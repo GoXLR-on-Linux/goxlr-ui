@@ -186,6 +186,13 @@ export default {
     },
 
     onAreaClicked(area) {
+      if (area.alt) {
+        // All right click behaviour is handled by the Lighting Tab (saves sub-tab headaches)
+        this.$refs["device-tabs"].selectTabById("lighting");
+        this.$nextTick(() => this.$refs.lighting.activateArea(area.area));
+        return;
+      }
+
       switch (area.area) {
         case HighlightArea.COUGH: {
           this.loadConfigurationTab();
