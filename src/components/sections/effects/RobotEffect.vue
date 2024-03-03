@@ -1,40 +1,40 @@
 <template>
-  <ExpandoGroupContainer title="Robot" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
+  <ExpandoGroupContainer :title="$t('message.effects.robot.title')" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
     <RadioSelection title="Style" group="effects_robot_style" :options="robot_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
-    <SliderInput title="Low Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
+    <SliderInput :title="$t('message.effects.robot.lowGain')" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
                  :slider-value="getLowGainValue()" :store-path="getStorePath('low_gain')" v-show="is_expanded"
                  @value-changed="setLowGainValue"/>
-    <SliderInput title="Low Freq" :value-map="getLowFreqValueMap()" text-suffix="Hz"
+    <SliderInput :title="$t('message.effects.robot.lowFrequency')" :value-map="getLowFreqValueMap()" text-suffix="Hz"
                  :slider-value="getLowFreqValue()" :store-path="getStorePath('low_freq')" v-show="is_expanded"
                  @value-changed="setLowFreqValue"/>
-    <SliderInput title="Low Width" :slider-value="getLowWidthValue()" :value-map="getWidthValueMap()"
+    <SliderInput :title="$t('message.effects.robot.lowWidth')" :slider-value="getLowWidthValue()" :value-map="getWidthValueMap()"
                  :store-path="getStorePath('low_width')" v-show="is_expanded" @value-changed="setLowWidthValue"/>
-    <SliderInput title="Mid Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
+    <SliderInput :title="$t('message.effects.robot.midGain')" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
                  :slider-value="getMidGainValue()" :store-path="getStorePath('mid_gain')" v-show="is_expanded"
                  @value-changed="setMidGainValue"/>
-    <SliderInput title="Mid Freq" :value-map="getMidFreqValueMap()" text-suffix="Hz"
+    <SliderInput :title="$t('message.effects.robot.midFrequency')" :value-map="getMidFreqValueMap()" text-suffix="Hz"
                  :slider-value="getMidFreqValue()" :store-path="getStorePath('mid_freq')" v-show="is_expanded"
                  @value-changed="setMidFreqValue"/>
-    <SliderInput title="Mid Width" :slider-value="getMidWidthValue()" :value-map="getWidthValueMap()"
+    <SliderInput :title="$t('message.effects.robot.midWidth')" :slider-value="getMidWidthValue()" :value-map="getWidthValueMap()"
                  :store-path="getStorePath('mid_width')" v-show="is_expanded" @value-changed="setMidWidthValue"/>
-    <SliderInput title="Hi Gain" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
+    <SliderInput :title="$t('message.effects.robot.highGain')" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
                  :slider-value="getHighGainValue()" :store-path="getStorePath('hi_gain')" v-show="is_expanded"
                  @value-changed="setHighGainValue"/>
-    <SliderInput title="Hi Freq" :value-map="getHighFreqValueMap()" text-suffix="Hz"
+    <SliderInput :title="$t('message.effects.robot.highFrequency')" :value-map="getHighFreqValueMap()" text-suffix="Hz"
                  :slider-value="getHighFreqValue()" :store-path="getStorePath('hi_freq')" v-show="is_expanded"
                  @value-changed="setHighFreqValue"/>
-    <SliderInput title="Hi Width" :slider-value="getHighWidthValue()" :value-map="getWidthValueMap()"
+    <SliderInput :title="$t('message.effects.robot.highWidth')" :slider-value="getHighWidthValue()" :value-map="getWidthValueMap()"
                  :store-path="getStorePath('hi_width')" v-show="is_expanded" @value-changed="setHighWidthValue"/>
-    <SliderInput title="Waveform" :slider-min-value=0 :slider-max-value=2 :slider-value="getWaveformValue()"
+    <SliderInput :title="$t('message.effects.robot.waveform')" :slider-min-value=0 :slider-max-value=2 :slider-value="getWaveformValue()"
                  :store-path="getStorePath('waveform')" v-show="is_expanded" @value-changed="setWaveformValue"/>
-    <SliderInput title="Pulse Width" :slider-min-value=0 :slider-max-value=100 text-suffix="%"
+    <SliderInput :title="$t('message.effects.robot.pulseWidth')" :slider-min-value=0 :slider-max-value=100 text-suffix="%"
                  :slider-value="getPulseWidthValue()" :store-path="getStorePath('pulse_width')"
                  v-show="is_expanded" @value-changed="setPulseWidthValue"/>
-    <SliderInput title="Threshold" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB"
+    <SliderInput :title="$t('message.effects.robot.threshold')" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB"
                  :slider-value="getThresholdValue()" :store-path="getStorePath('threshold')" v-show="is_expanded"
                  @value-changed="setThresholdValue"/>
-    <SliderInput title="Dry Mix" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB"
+    <SliderInput :title="$t('message.effects.robot.dryMix')" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB"
                  :slider-value="getDryMixValue()" :store-path="getStorePath('dry_mix')" v-show="is_expanded"
                  @value-changed="setDryMixValue"/>
   </ExpandoGroupContainer>
@@ -56,9 +56,9 @@ export default {
       is_expanded: false,
 
       robot_style: [
-        {id: "Robot1", label: "Robot 1"},
-        {id: "Robot2", label: "Robot 2"},
-        {id: "Robot3", label: "Robot 3"},
+        {id: "Robot1", label: $t('message.effects.robot.styles.robot1')},
+        {id: "Robot2", label: $t('message.effects.robot.styles.robot2')},
+        {id: "Robot3", label: $t('message.effects.robot.styles.robot3')},
       ],
     }
   },
