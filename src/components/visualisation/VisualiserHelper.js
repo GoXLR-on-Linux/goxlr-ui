@@ -1,9 +1,9 @@
 export const HighlightArea = {
     COUGH: 0,
-    CHANNEL1: 1,
-    CHANNEL2: 2,
-    CHANNEL3: 3,
-    CHANNEL4: 4,
+    CHANNEL_A: 1,
+    CHANNEL_B: 2,
+    CHANNEL_C: 3,
+    CHANNEL_D: 4,
     SAMPLER_BANK_A: 5,
     SAMPLER_BANK_B: 6,
     SAMPLER_BANK_C: 7,
@@ -32,13 +32,13 @@ export function mapElementToArea(elem, activeEffectPreset = null, activeSamplerB
     if (elem.matches('.capture .mixer *')) {
         switch (elem.id) {
             case "Channel1":
-                return HighlightArea.CHANNEL1;
+                return HighlightArea.CHANNEL_A;
             case "Channel2":
-                return HighlightArea.CHANNEL2;
+                return HighlightArea.CHANNEL_B;
             case "Channel3":
-                return HighlightArea.CHANNEL3;
+                return HighlightArea.CHANNEL_C;
             case "Channel4":
-                return HighlightArea.CHANNEL4;
+                return HighlightArea.CHANNEL_D;
         }
     }
 

@@ -16,13 +16,13 @@ import {isDeviceMini} from "@/util/util";
 
 import GoXLRFull from "@/assets/preview/GoXLR.svg?raw";
 import GoXLRMini from "@/assets/preview/GoXLR-Mini.svg?raw";
-import {mapElementToArea} from "@/components/visualisation/VisualiserHelper";
+import {HighlightArea, mapElementToArea} from "@/components/visualisation/VisualiserHelper";
 
 export default {
   name: "GoXLRVisualiser",
 
   props: {
-    activeDisplay: {type: Array, required: true},
+    highlightedAreas: {type: Array, required: true},
   },
 
   emits: ["areaClick"],
@@ -101,36 +101,15 @@ export default {
 
     // These occur first in the SVG, so top of the compute section :p
     computeChannelSelected(channel) {
-      // We need to be on the configuration page, or the Lighting -> Mixer page, and have our channel in the mix..
-      return (
-          this.activeDisplay.includes("configuration") ||
-          (this.activeDisplay.includes("lighting") && this.activeDisplay.includes("mixer"))) ?
-          (this.activeDisplay.includes(channel) ? "initial" : "none") :
-          "none";
+      return ((this.highlightedAreas.some(x => x === HighlightArea.CHANNEL_A) && channel === "A") ||
+        (this.highlightedAreas.some(x => x === HighlightArea.CHANNEL_B) && channel === "B") ||
+        (this.highlightedAreas.some(x => x === HighlightArea.CHANNEL_C) && channel === "C") ||
+        (this.highlightedAreas.some(x => x === HighlightArea.CHANNEL_D) && channel === "D"))
+        ? "initial" : "none";
     },
-    computeCoughSelected() { return this.activeDisplay.includes("cough") ? "initial" : "none" },
-    computePresetSelected(preset) {
-      if (!this.activeDisplay.includes("effects") &&
-          !(this.activeDisplay.includes("lighting") && this.activeDisplay.includes("effects"))) {
-        return "none";
-      }
-
-      if (this.activeDisplay.includes(`Preset${preset}`) || this.activeDisplay.includes(`EffectSelect${preset}`)) {
-        return "initial";
-      }
-      return "none";
-    },
-    computeSampleSelected(bank) {
-      if (!this.activeDisplay.includes("sampler") &&
-          !(this.activeDisplay.includes("lighting") && this.activeDisplay.includes("sampler"))) {
-        return "none";
-      }
-
-      if (this.activeDisplay.includes(bank) || this.activeDisplay.includes(`SamplerSelect${bank}`)) {
-        return "initial";
-      }
-      return "none";
-    },
+    computeCoughSelected() { return this.highlightedAreas.some(x => x === HighlightArea.COUGH) ? "initial" : "none" },
+    computePresetSelected(preset) { return this.highlightedAreas.some(x => x === HighlightArea[`EFFECTS_PRESET${preset}`]) ? "initial" : "none" },
+    computeSampleSelected(bank) { return this.highlightedAreas.some(x => x === HighlightArea[`SAMPLER_BANK_${bank}`]) ? "initial" : "none" },
 
 
     computeAccentColour() {
