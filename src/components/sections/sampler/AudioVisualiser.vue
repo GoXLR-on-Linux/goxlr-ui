@@ -1,60 +1,60 @@
 <template>
   <WidgetContainer style="width: fit-content">
-    <template v-slot:title>Waveform</template>
+    <template v-slot:title>{{ $t('message.sampler.samples.waveform.title') }}</template>
     <div
-      class="content"
-      role="group"
-      :aria-label="`Waveform for ${sampleName}`"
+        class="content"
+        role="group"
+        :aria-label="$t('message.sampler.samples.waveform.text', {sample: sampleName})"
     >
       <button
-        class="vertical_button"
-        :aria-label="getPlaybackLabel()"
-        style="text-align: center"
-        @click="playActiveSample()"
-        :disabled="activeSample === -1"
+          class="vertical_button"
+          :aria-label="getPlaybackLabel()"
+          style="text-align: center"
+          @click="playActiveSample()"
+          :disabled="activeSample === -1"
       >
         <font-awesome-icon :icon="getPlaybackButton()"></font-awesome-icon>
       </button>
 
       <div
-        ref="wrapper"
-        style="position: relative; width: 500px; background-color: #252927"
-        role="group"
-        aria-label="Waveform"
+          ref="wrapper"
+          style="position: relative; width: 500px; background-color: #252927"
+          role="group"
+          :aria-label="$t('message.sampler.samples.waveform.title')"
       >
         <div class="cover cover_left"></div>
         <div class="cover cover_right"></div>
         <div
-          class="drag_handle left"
-          ref="left"
-          v-bind:class="{ enabled: activeSample !== -1 }"
-          @mousedown.stop="mouseDownLeft"
-          @keydown="keyDown"
-          role="slider"
-          aria-label="Sample Start"
-          :aria-disabled="activeSample === -1"
-          tabindex="0"
-          aria-valuemin="0"
-          aria-valuemax="100"
-          :aria-valuenow="+leftPercentage.toFixed(2)"
-          :aria-valuetext="`${+leftPercentage.toFixed(2)}%`"
+            class="drag_handle left"
+            ref="left"
+            v-bind:class="{ enabled: activeSample !== -1 }"
+            @mousedown.stop="mouseDownLeft"
+            @keydown="keyDown"
+            role="slider"
+            :aria-label="$t('message.sampler.samples.waveform.sampleStart')"
+            :aria-disabled="activeSample === -1"
+            tabindex="0"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            :aria-valuenow="+leftPercentage.toFixed(2)"
+            :aria-valuetext="`${+leftPercentage.toFixed(2)}` + $t('message.suffixes.percentage')"
         >
           |
         </div>
         <div
-          class="drag_handle right"
-          ref="right"
-          v-bind:class="{ enabled: activeSample !== -1 }"
-          @keydown="keyDown"
-          @mousedown.stop="mouseDownRight"
-          role="slider"
-          aria-label="Sample End"
-          tabindex="0"
-          :aria-disabled="activeSample === -1"
-          aria-valuemin="0"
-          aria-valuemax="100"
-          :aria-valuenow="+rightPercentage.toFixed(2)"
-          :aria-valuetext="`${+rightPercentage.toFixed(2)}%`"
+            class="drag_handle right"
+            ref="right"
+            v-bind:class="{ enabled: activeSample !== -1 }"
+            @keydown="keyDown"
+            @mousedown.stop="mouseDownRight"
+            role="slider"
+            :aria-label="$t('message.sampler.samples.waveform.sampleEnd')"
+            tabindex="0"
+            :aria-disabled="activeSample === -1"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            :aria-valuenow="+rightPercentage.toFixed(2)"
+            :aria-valuetext="`${+rightPercentage.toFixed(2)}` + $t('message.suffixes.percentage')"
         >
           |
         </div>
@@ -62,11 +62,11 @@
       </div>
 
       <button
-        class="vertical_button"
-        aria-label="Remove Sample"
-        style="text-align: center"
-        @click="deleteActiveSample()"
-        :disabled="activeSample === -1"
+          class="vertical_button"
+          aria-label="Remove Sample"
+          style="text-align: center"
+          @click="deleteActiveSample()"
+          :disabled="activeSample === -1"
       >
         <font-awesome-icon icon="fa-solid fa-trash"></font-awesome-icon>
       </button>
@@ -75,14 +75,14 @@
 </template>
 
 <script>
-import { websocket, getBaseHTTPAddress } from "@/util/sockets";
-import { store } from "@/store";
+import {websocket, getBaseHTTPAddress} from "@/util/sockets";
+import {store} from "@/store";
 import WidgetContainer from "@/components/containers/WidgetContainer.vue";
 import WaveSurfer from "wavesurfer.js/dist/wavesurfer";
 
 export default {
   name: "AudioVisualiser",
-  components: { WidgetContainer },
+  components: {WidgetContainer},
   props: {
     activeBank: String,
     activeButton: String,
@@ -120,9 +120,9 @@ export default {
       }
 
       if (
-        store.getActiveDevice().sampler.banks[this.activeBank][
-          this.activeButton
-        ].is_playing
+          store.getActiveDevice().sampler.banks[this.activeBank][
+              this.activeButton
+              ].is_playing
       ) {
         websocket.send_command(store.getActiveSerial(), {
           StopSamplePlayback: [this.activeBank, this.activeButton],
@@ -140,9 +140,9 @@ export default {
 
     getPlaybackButton() {
       if (
-        store.getActiveDevice().sampler.banks[this.activeBank][
-          this.activeButton
-        ].is_playing
+          store.getActiveDevice().sampler.banks[this.activeBank][
+              this.activeButton
+              ].is_playing
       ) {
         return "fa-solid fa-stop";
       }
@@ -151,13 +151,13 @@ export default {
 
     getPlaybackLabel() {
       if (
-        store.getActiveDevice().sampler.banks[this.activeBank][
-          this.activeButton
-        ].is_playing
+          store.getActiveDevice().sampler.banks[this.activeBank][
+              this.activeButton
+              ].is_playing
       ) {
-        return "Stop Playback";
+        return this.$t('message.sampler.samples.waveform.stopSample');
       }
-      return "Playback Sample";
+      return this.$t('message.sampler.samples.waveform.playbackSample');
     },
 
     deleteActiveSample() {
@@ -173,8 +173,12 @@ export default {
         ],
       });
       store.setAccessibilityNotification(
-        "polite",
-        `Sample ${this.sampleName} has been deleted from ${this.activeButton} button in bank ${this.activeBank}`
+          "polite",
+          $t('message.sampler.samples.waveform.sampleDeleted', {
+            sampleName: this.sampleName,
+            activeButton: this.activeButton,
+            bank: this.activeBank
+          })
       );
       this.$emit("deselect-sample");
     },
@@ -200,11 +204,11 @@ export default {
     mouseDown(event) {
       // Set the X position...
       this.positions.parentOffset =
-        event.target.parentElement.getBoundingClientRect().x;
+          event.target.parentElement.getBoundingClientRect().x;
       this.positions.parentWidth = event.target.parentElement.clientWidth;
 
       this.positions.elementOffset =
-        event.clientX - event.target.getBoundingClientRect().x;
+          event.clientX - event.target.getBoundingClientRect().x;
       this.positions.elementWidth = event.target.clientWidth;
 
       window.onmousemove = this.mouseMove;
@@ -222,9 +226,9 @@ export default {
       {
         // Calculate the left Percentage from the Positions...
         let wrapperWidth =
-          this.$refs.wrapper.clientWidth -
-          this.$refs.left.clientWidth -
-          this.$refs.right.clientWidth;
+            this.$refs.wrapper.clientWidth -
+            this.$refs.left.clientWidth -
+            this.$refs.right.clientWidth;
         this.leftPercentage = 0;
         if (this.leftPosition > 0) {
           this.leftPercentage = (this.leftPosition / wrapperWidth) * 100;
@@ -242,9 +246,9 @@ export default {
       // Now for the Right...
       {
         let wrapperWidth =
-          this.$refs.wrapper.clientWidth -
-          this.$refs.left.clientWidth -
-          this.$refs.right.clientWidth;
+            this.$refs.wrapper.clientWidth -
+            this.$refs.left.clientWidth -
+            this.$refs.right.clientWidth;
         let rightPosition = this.rightPosition - this.$refs.left.clientWidth;
         this.rightPercentage = (rightPosition / wrapperWidth) * 100;
         websocket.send_command(store.getActiveSerial(), {
@@ -269,23 +273,23 @@ export default {
 
     mouseMoveLeft(event) {
       let position =
-        event.clientX -
-        this.positions.parentOffset -
-        this.positions.elementOffset;
+          event.clientX -
+          this.positions.parentOffset -
+          this.positions.elementOffset;
       if (position <= 0) {
         position = 0;
       }
 
       if (
-        position >=
-        this.positions.parentWidth -
+          position >=
+          this.positions.parentWidth -
           this.positions.elementWidth -
           this.positions.elementWidth
       ) {
         position =
-          this.positions.parentWidth -
-          this.positions.elementWidth -
-          this.positions.elementWidth;
+            this.positions.parentWidth -
+            this.positions.elementWidth -
+            this.positions.elementWidth;
       }
 
       // Check the right side of this box...
@@ -301,16 +305,16 @@ export default {
 
     mouseMoveRight(event) {
       let position =
-        event.clientX -
-        this.positions.parentOffset -
-        this.positions.elementOffset;
+          event.clientX -
+          this.positions.parentOffset -
+          this.positions.elementOffset;
       if (position <= this.positions.elementWidth) {
         position = this.positions.elementWidth;
       }
 
       if (
-        position >=
-        this.positions.parentWidth - this.positions.elementWidth
+          position >=
+          this.positions.parentWidth - this.positions.elementWidth
       ) {
         position = this.positions.parentWidth - this.positions.elementWidth;
       }
@@ -332,9 +336,9 @@ export default {
       }
 
       let sample =
-        store.getActiveDevice().sampler.banks[this.activeBank][
-          this.activeButton
-        ].samples[this.activeSample];
+          store.getActiveDevice().sampler.banks[this.activeBank][
+              this.activeButton
+              ].samples[this.activeSample];
       let start_pct = sample.start_pct;
       let stop_pct = sample.stop_pct;
 
@@ -375,7 +379,7 @@ export default {
       if (this.rightPercentage > 100) {
         // Something's gone wrong, and a percentage is higher than it should be, Reset.
         console.log(
-          "Something is wrong with the right value max.. Correcting!"
+            "Something is wrong with the right value max.. Correcting!"
         );
         this.rightPercentage = 100;
         this.rightPosition = audio + this.$refs.left.clientWidth;
@@ -384,7 +388,7 @@ export default {
 
       if (this.rightPercentage < 0) {
         console.log(
-          "Something is wrong with the right value min.. Correcting!"
+            "Something is wrong with the right value min.. Correcting!"
         );
         this.rightPercentage = 0;
         this.rightPosition = this.$refs.left.clientWidth;
@@ -423,11 +427,11 @@ export default {
             newPosition = this.leftPosition + this.$refs.left.clientWidth;
           }
           if (
-            newPosition >
-            this.$refs.wrapper.clientWidth - this.$refs.right.clientWidth
+              newPosition >
+              this.$refs.wrapper.clientWidth - this.$refs.right.clientWidth
           ) {
             newPosition =
-              this.$refs.wrapper.clientWidth - this.$refs.right.clientWidth;
+                this.$refs.wrapper.clientWidth - this.$refs.right.clientWidth;
           }
           this.rightPosition = newPosition;
         }
@@ -444,21 +448,21 @@ export default {
             newPosition = this.rightPosition - this.$refs.left.clientWidth;
           }
           if (
-            newPosition >
-            this.$refs.wrapper.clientWidth - this.$refs.left.clientWidth
+              newPosition >
+              this.$refs.wrapper.clientWidth - this.$refs.left.clientWidth
           ) {
             newPosition =
-              this.$refs.wrapper.clientWidth - this.$refs.left.clientWidth;
+                this.$refs.wrapper.clientWidth - this.$refs.left.clientWidth;
           }
           this.leftPosition = newPosition;
         } else {
           let newPosition = this.rightPosition + this.stepper;
           if (
-            newPosition >
-            this.$refs.wrapper.clientWidth - this.$refs.right.clientWidth
+              newPosition >
+              this.$refs.wrapper.clientWidth - this.$refs.right.clientWidth
           ) {
             newPosition =
-              this.$refs.wrapper.clientWidth - this.$refs.right.clientWidth;
+                this.$refs.wrapper.clientWidth - this.$refs.right.clientWidth;
           }
           if (newPosition < this.leftPosition + this.$refs.left.clientWidth) {
             newPosition = this.leftPosition + this.$refs.left.clientWidth;
@@ -485,7 +489,7 @@ export default {
           this.leftPosition = this.rightPosition - this.$refs.left.clientWidth;
         } else {
           this.rightPosition =
-            this.$refs.wrapper.clientWidth - this.$refs.right.clientWidth;
+              this.$refs.wrapper.clientWidth - this.$refs.right.clientWidth;
         }
         this.mouseUp();
         return;
@@ -498,8 +502,8 @@ export default {
           this.stepper = validSteppers[index - 1];
         }
         store.setAccessibilityNotification(
-          "polite",
-          `Zoom level: ${this.stepper}`
+            "polite",
+            $t('message.sampler.samples.waveform.zoomLevel', {level: this.stepper})
         );
         return;
       }
@@ -510,8 +514,8 @@ export default {
           this.stepper = validSteppers[index + 1];
         }
         store.setAccessibilityNotification(
-          "polite",
-          `Zoom level: ${this.stepper}`
+            "polite",
+            $t('message.sampler.samples.waveform.zoomLevel', {level: this.stepper})
         );
       }
     },
@@ -541,10 +545,10 @@ export default {
 
     cover_right_width() {
       return (
-        this.$refs.wrapper.clientWidth -
-        this.rightPosition -
-        this.$refs.right.clientWidth +
-        "px"
+          this.$refs.wrapper.clientWidth -
+          this.rightPosition -
+          this.$refs.right.clientWidth +
+          "px"
       );
     },
 

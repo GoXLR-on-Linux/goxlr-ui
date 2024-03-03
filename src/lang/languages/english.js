@@ -359,6 +359,95 @@ export default {
             }
         },
 
+        sampler: {
+            bankTitle: "Bank",
+            banks: {
+                bankTitle: "Bank",
+                bank: {
+                    a: "A",
+                    b: "B",
+                    c: "C"
+                },
+                buttonTitle: "Button",
+                buttonLabel: "Button for bank {activeBank}",
+                buttons: {
+                    topLeft: "Top Left",
+                    topRight: "Top Right",
+                    bottomLeft: "BottomLeft",
+                    bottomRight: "BottomRight",
+                },
+
+                functionTitle: "Function",
+                functionLabel: "Function for {activeButton} button in bank {activeBank}",
+                functions: {
+                    playNext: "Play-Next",
+                    playStop: "Play-Stop",
+                    playFade: "Play-Fade",
+                    stopOnRelease: "Stop on Release",
+                    fadeOnRelease: "Fade on Release",
+                    loop: "Loop"
+                },
+
+                playOrderTitle: "Play Order",
+                playOrderLabel: "Play Order for {activeButton} button in bank {activeBank}",
+                playOrders: {
+                    sequential: "Sequential",
+                    random: "Random",
+                },
+            },
+
+            samplesTitle: "Samples",
+            samples: {
+                samplesTitle: "Samples",
+                samplesLabel: "Sample for {activeButton} button in bank {activeBank}",
+
+                // Button at the bottom of the Sample List
+                addSample: "+",
+                addSampleLabel: "Add Sample",
+                sampleSelector: {
+                    parentDirectory: "Parent Directory",
+                    addButton: "Add",
+
+                    noSamples: "There are currently no samples in the samples folder. Copy some over so they can be selected here!",
+
+                    // Used with Screen Readers
+                    directories: "Directories",
+                    samples: "Samples",
+                },
+
+                gain: "Gain",
+                waveform: {
+                    title: "Waveform",
+
+                    // These are primarily for accessibility, but are labels on the various buttons.
+                    text: "Waveform for {sample}",
+
+                    // The Play / Stop button before the waveform
+                    playbackSample: "Playback Sample",
+                    stopSample: "Stop Sample",
+
+                    // Labels for the draggable 'Handles'
+                    sampleStart: "Sample Start",
+                    sampleEnd: "Sample End",
+
+                    sampleDeleted: "Sample {sampleName} has been deleted from {activeButton} button in bank {activeBank}",
+                    zoomLevel: "Zoom Level: {level}",
+                },
+
+                addSampleWaitTitle: "Please Wait",
+                addSampleAnalysing: "Please wait while the sample is being analysed.",
+                addSampleProgress: "Progress: {progress}@:message.suffixes.percentage",
+
+                errorTitle: "Error Adding Sample",
+                errorText: "An error occurred while adding the sample to the bank:",
+
+                accessibilityOpenSamplesDirectory: "Open Samples Directory",
+                accessibilityAnalysing: "Please wait, analysing sample. This process may take a couple of minutes.",
+                accessibilityAdded: "Sample {name} added to {activeButton} button in bank {activeBank}."
+            }
+
+        },
+
         // Strings used in Profile and Microphone Profile Management.
         profileManager: {
             // Accessibility Titles for the buttons at the bottom of the Profile List
