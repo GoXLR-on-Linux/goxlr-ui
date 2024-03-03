@@ -8,38 +8,35 @@
                  :slider-value="getAmountValue()" text-suffix="%"
                  :store-path="getStorePath('amount')" @value-changed="setAmountValue"/>
     <SliderInput :title="$t('message.effects.reverb.decay')" :value-map="decay_map" :slider-value="getDecayValue()"
-                 text-suffix="ms" :store-path="getStorePath('decay')" v-show="is_expanded"
-                 @value-changed="setDecayValue"/>
+                 :text-suffix="$t('message.suffixes.milliseconds')" :store-path="getStorePath('decay')"
+                 v-show="is_expanded" @value-changed="setDecayValue"/>
     <SliderInput :title="$t('message.effects.reverb.earlyLevel')" :slider-min-value=-25 :slider-max-value=0
-                 text-suffix="dB" :slider-value="getEarlyLevelValue()" :store-path="getStorePath('early_level')"
-                 v-show="is_expanded"
-                 @value-changed="setEarlyLevelValue"/>
+                 :text-suffix="$t('message.suffixes.decibels')" :slider-value="getEarlyLevelValue()"
+                 :store-path="getStorePath('early_level')" v-show="is_expanded" @value-changed="setEarlyLevelValue"/>
     <SliderInput :title="$t('message.effects.reverb.tailLevel')" :slider-min-value=-25 :slider-max-value=0
-                 text-suffix="dB" :slider-value="getTailLevelValue()" :store-path="getStorePath('tail_level')"
-                 v-show="is_expanded"
-                 @value-changed="setTailLevelValue"/>
+                 :text-suffix="$t('message.suffixes.decibels')" :slider-value="getTailLevelValue()"
+                 :store-path="getStorePath('tail_level')" v-show="is_expanded" @value-changed="setTailLevelValue"/>
     <SliderInput :title="$t('message.effects.reverb.preDelay')" :slider-min-value=0 :slider-max-value=100
-                 text-suffix="ms" :slider-value="getPreDelayValue()" :store-path="getStorePath('pre_delay')"
-                 v-show="is_expanded"
-                 @value-changed="setPreDelayValue"/>
+                 :text-suffix="$t('message.suffixes.milliseconds')" :slider-value="getPreDelayValue()"
+                 :store-path="getStorePath('pre_delay')" v-show="is_expanded" @value-changed="setPreDelayValue"/>
     <SliderInput :title="$t('message.effects.reverb.lowColour')" :slider-min-value=-50 :slider-max-value=50
-                 :slider-value="getLowColourValue()"
-                 :store-path="getStorePath('lo_colour')" v-show="is_expanded" @value-changed="setLowColourValue"/>
+                 :slider-value="getLowColourValue()" :store-path="getStorePath('lo_colour')" v-show="is_expanded"
+                 @value-changed="setLowColourValue"/>
     <SliderInput :title="$t('message.effects.reverb.highColour')" :slider-min-value=-50 :slider-max-value=50
-                 :slider-value="getHighColourValue()"
-                 :store-path="getStorePath('hi_colour')" v-show="is_expanded" @value-changed="setHighColourValue"/>
+                 :slider-value="getHighColourValue()" :store-path="getStorePath('hi_colour')" v-show="is_expanded"
+                 @value-changed="setHighColourValue"/>
     <SliderInput :title="$t('message.effects.reverb.highFactor')" :slider-min-value=-25 :slider-max-value=25
-                 :slider-value="getHighFactorValue()"
-                 :store-path="getStorePath('hi_factor')" v-show="is_expanded" @value-changed="setHighFactorValue"/>
+                 :slider-value="getHighFactorValue()" :store-path="getStorePath('hi_factor')" v-show="is_expanded"
+                 @value-changed="setHighFactorValue"/>
     <SliderInput :title="$t('message.effects.reverb.diffuse')" :slider-min-value=-50 :slider-max-value=50
-                 :slider-value="getDiffuseValue()"
-                 :store-path="getStorePath('diffuse')" v-show="is_expanded" @value-changed="setDiffuseValue"/>
+                 :slider-value="getDiffuseValue()" :store-path="getStorePath('diffuse')" v-show="is_expanded"
+                 @value-changed="setDiffuseValue"/>
     <SliderInput :title="$t('message.effects.reverb.modSpeed')" :slider-min-value=-25 :slider-max-value=25
-                 :slider-value="getModSpeedValue()"
-                 :store-path="getStorePath('mod_speed')" v-show="is_expanded" @value-changed="setModSpeedValue"/>
+                 :slider-value="getModSpeedValue()" :store-path="getStorePath('mod_speed')" v-show="is_expanded"
+                 @value-changed="setModSpeedValue"/>
     <SliderInput :title="$t('message.effects.reverb.modDepth')" :slider-min-value=-25 :slider-max-value=25
-                 :slider-value="getModDepthValue()"
-                 :store-path="getStorePath('mod_depth')" v-show="is_expanded" @value-changed="setModDepthValue"/>
+                 :slider-value="getModDepthValue()" :store-path="getStorePath('mod_depth')" v-show="is_expanded"
+                 @value-changed="setModDepthValue"/>
   </ExpandoGroupContainer>
 </template>
 

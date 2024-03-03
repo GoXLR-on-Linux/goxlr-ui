@@ -5,12 +5,12 @@
                     :options="megaphone_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput :title="$t('message.effects.megaphone.amount')" :slider-min-value=0 :slider-max-value=100
-                 text-suffix="%" :slider-value="getAmountValue()" :store-path="getStorePath('amount')"
-                 v-show="is_expanded" @value-changed="setAmountValue"/>
+                 suffix:text-suffix="$t('message.suffixes.percentage')" :slider-value="getAmountValue()"
+                 :store-path="getStorePath('amount')" v-show="is_expanded" @value-changed="setAmountValue"/>
 
     <SliderInput :title="$t('message.effects.megaphone.postGain')" :slider-min-value=-20 :slider-max-value=20
-                 text-suffix="dB" :slider-value="getPostGainValue()" :store-path="getStorePath('post_gain')"
-                 v-show="is_expanded" @value-changed="setPostGainValue"/>
+                 suffix:text-suffix="$t('message.suffixes.decibels')" :slider-value="getPostGainValue()"
+                 :store-path="getStorePath('post_gain')" v-show="is_expanded" @value-changed="setPostGainValue"/>
   </ExpandoGroupContainer>
 </template>
 

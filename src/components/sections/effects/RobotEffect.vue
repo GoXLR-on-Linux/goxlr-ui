@@ -1,42 +1,48 @@
 <template>
-  <ExpandoGroupContainer :title="$t('message.effects.robot.title')" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
-    <RadioSelection title="Style" group="effects_robot_style" :options="robot_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+  <ExpandoGroupContainer :title="$t('message.effects.robot.title')" @expando-clicked="is_expanded = !is_expanded"
+                         :expanded="is_expanded">
+    <RadioSelection title="Style" group="effects_robot_style" :options="robot_style" :selected="getActiveStyle()"
+                    @selection-changed="stylePressed"/>
 
-    <SliderInput :title="$t('message.effects.robot.lowGain')" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
-                 :slider-value="getLowGainValue()" :store-path="getStorePath('low_gain')" v-show="is_expanded"
-                 @value-changed="setLowGainValue"/>
+    <SliderInput :title="$t('message.effects.robot.lowGain')" :slider-min-value=-12 :slider-max-value=12
+                 :text-suffix="$t('message.suffixes.decibels')" :slider-value="getLowGainValue()"
+                 :store-path="getStorePath('low_gain')" v-show="is_expanded" @value-changed="setLowGainValue"/>
     <SliderInput :title="$t('message.effects.robot.lowFrequency')" :value-map="getLowFreqValueMap()" text-suffix="Hz"
                  :slider-value="getLowFreqValue()" :store-path="getStorePath('low_freq')" v-show="is_expanded"
                  @value-changed="setLowFreqValue"/>
-    <SliderInput :title="$t('message.effects.robot.lowWidth')" :slider-value="getLowWidthValue()" :value-map="getWidthValueMap()"
-                 :store-path="getStorePath('low_width')" v-show="is_expanded" @value-changed="setLowWidthValue"/>
-    <SliderInput :title="$t('message.effects.robot.midGain')" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
-                 :slider-value="getMidGainValue()" :store-path="getStorePath('mid_gain')" v-show="is_expanded"
-                 @value-changed="setMidGainValue"/>
-    <SliderInput :title="$t('message.effects.robot.midFrequency')" :value-map="getMidFreqValueMap()" text-suffix="Hz"
-                 :slider-value="getMidFreqValue()" :store-path="getStorePath('mid_freq')" v-show="is_expanded"
-                 @value-changed="setMidFreqValue"/>
-    <SliderInput :title="$t('message.effects.robot.midWidth')" :slider-value="getMidWidthValue()" :value-map="getWidthValueMap()"
-                 :store-path="getStorePath('mid_width')" v-show="is_expanded" @value-changed="setMidWidthValue"/>
-    <SliderInput :title="$t('message.effects.robot.highGain')" :slider-min-value=-12 :slider-max-value=12 text-suffix="dB"
-                 :slider-value="getHighGainValue()" :store-path="getStorePath('hi_gain')" v-show="is_expanded"
-                 @value-changed="setHighGainValue"/>
-    <SliderInput :title="$t('message.effects.robot.highFrequency')" :value-map="getHighFreqValueMap()" text-suffix="Hz"
-                 :slider-value="getHighFreqValue()" :store-path="getStorePath('hi_freq')" v-show="is_expanded"
-                 @value-changed="setHighFreqValue"/>
-    <SliderInput :title="$t('message.effects.robot.highWidth')" :slider-value="getHighWidthValue()" :value-map="getWidthValueMap()"
-                 :store-path="getStorePath('hi_width')" v-show="is_expanded" @value-changed="setHighWidthValue"/>
-    <SliderInput :title="$t('message.effects.robot.waveform')" :slider-min-value=0 :slider-max-value=2 :slider-value="getWaveformValue()"
-                 :store-path="getStorePath('waveform')" v-show="is_expanded" @value-changed="setWaveformValue"/>
-    <SliderInput :title="$t('message.effects.robot.pulseWidth')" :slider-min-value=0 :slider-max-value=100 text-suffix="%"
-                 :slider-value="getPulseWidthValue()" :store-path="getStorePath('pulse_width')"
-                 v-show="is_expanded" @value-changed="setPulseWidthValue"/>
-    <SliderInput :title="$t('message.effects.robot.threshold')" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB"
-                 :slider-value="getThresholdValue()" :store-path="getStorePath('threshold')" v-show="is_expanded"
-                 @value-changed="setThresholdValue"/>
-    <SliderInput :title="$t('message.effects.robot.dryMix')" :slider-min-value=-36 :slider-max-value=0 text-suffix="dB"
-                 :slider-value="getDryMixValue()" :store-path="getStorePath('dry_mix')" v-show="is_expanded"
-                 @value-changed="setDryMixValue"/>
+    <SliderInput :title="$t('message.effects.robot.lowWidth')" :slider-value="getLowWidthValue()"
+                 :value-map="getWidthValueMap()" :store-path="getStorePath('low_width')" v-show="is_expanded"
+                 @value-changed="setLowWidthValue"/>
+    <SliderInput :title="$t('message.effects.robot.midGain')" :slider-min-value=-12 :slider-max-value=12
+                 :text-suffix="$t('message.suffixes.decibels')" :slider-value="getMidGainValue()"
+                 :store-path="getStorePath('mid_gain')" v-show="is_expanded" @value-changed="setMidGainValue"/>
+    <SliderInput :title="$t('message.effects.robot.midFrequency')" :value-map="getMidFreqValueMap()"
+                 :text-suffix="$t('message.suffixes.hertz')" :slider-value="getMidFreqValue()"
+                 :store-path="getStorePath('mid_freq')" v-show="is_expanded" @value-changed="setMidFreqValue"/>
+    <SliderInput :title="$t('message.effects.robot.midWidth')" :slider-value="getMidWidthValue()"
+                 :value-map="getWidthValueMap()" :store-path="getStorePath('mid_width')" v-show="is_expanded"
+                 @value-changed="setMidWidthValue"/>
+    <SliderInput :title="$t('message.effects.robot.highGain')" :slider-min-value=-12 :slider-max-value=12
+                 :text-suffix="$t('message.suffixes.decibels')" :slider-value="getHighGainValue()"
+                 :store-path="getStorePath('hi_gain')" v-show="is_expanded" @value-changed="setHighGainValue"/>
+    <SliderInput :title="$t('message.effects.robot.highFrequency')" :value-map="getHighFreqValueMap()"
+                 :text-suffix="$t('message.suffixes.hertz')" :slider-value="getHighFreqValue()"
+                 :store-path="getStorePath('hi_freq')" v-show="is_expanded" @value-changed="setHighFreqValue"/>
+    <SliderInput :title="$t('message.effects.robot.highWidth')" :slider-value="getHighWidthValue()"
+                 :value-map="getWidthValueMap()" :store-path="getStorePath('hi_width')" v-show="is_expanded"
+                 @value-changed="setHighWidthValue"/>
+    <SliderInput :title="$t('message.effects.robot.waveform')" :slider-min-value=0 :slider-max-value=2
+                 :slider-value="getWaveformValue()" :store-path="getStorePath('waveform')" v-show="is_expanded"
+                 @value-changed="setWaveformValue"/>
+    <SliderInput :title="$t('message.effects.robot.pulseWidth')" :slider-min-value=0 :slider-max-value=100
+                 :text-suffix="$t('message.suffixes.percentage')" :slider-value="getPulseWidthValue()"
+                 :store-path="getStorePath('pulse_width')" v-show="is_expanded" @value-changed="setPulseWidthValue"/>
+    <SliderInput :title="$t('message.effects.robot.threshold')" :slider-min-value=-36 :slider-max-value=0
+                 :text-suffix="$t('message.suffixes.decibels')" :slider-value="getThresholdValue()"
+                 :store-path="getStorePath('threshold')" v-show="is_expanded" @value-changed="setThresholdValue"/>
+    <SliderInput :title="$t('message.effects.robot.dryMix')" :slider-min-value=-36 :slider-max-value=0
+                 :text-suffix="$t('message.suffixes.decibels')" :slider-value="getDryMixValue()"
+                 :store-path="getStorePath('dry_mix')" v-show="is_expanded" @value-changed="setDryMixValue"/>
   </ExpandoGroupContainer>
 </template>
 
@@ -56,9 +62,9 @@ export default {
       is_expanded: false,
 
       robot_style: [
-        {id: "Robot1", label: $t('message.effects.robot.styles.robot1')},
-        {id: "Robot2", label: $t('message.effects.robot.styles.robot2')},
-        {id: "Robot3", label: $t('message.effects.robot.styles.robot3')},
+        {id: "Robot1", label: this.$t('message.effects.robot.styles.robot1')},
+        {id: "Robot2", label: this.$t('message.effects.robot.styles.robot2')},
+        {id: "Robot3", label: this.$t('message.effects.robot.styles.robot3')},
       ],
     }
   },
@@ -69,7 +75,7 @@ export default {
     },
 
     stylePressed(button) {
-      websocket.send_command(store.getActiveSerial(), { "SetRobotStyle": button });
+      websocket.send_command(store.getActiveSerial(), {"SetRobotStyle": button});
     },
 
 
@@ -78,7 +84,7 @@ export default {
       return store.getActiveDevice().effects.current.robot.low_gain;
     },
     setLowGainValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetRobotGain": [ "Low", value ] });
+      websocket.send_command(store.getActiveSerial(), {"SetRobotGain": ["Low", value]});
     },
 
     getLowFreqValue() {
@@ -87,7 +93,7 @@ export default {
       let freq = store.getActiveDevice().effects.current.robot.low_freq;
       let map = this.getLowFreqValueMap();
       if (freq > map.length) {
-        return map.length -1;
+        return map.length - 1;
       }
 
       if (freq === 0) {
@@ -117,38 +123,38 @@ export default {
       // With the above, we need to prevent overflowing the actual map..
       let map = this.getLowFreqValueMap();
       if (sent_value > map.length) {
-        sent_value = map.length -1;
+        sent_value = map.length - 1;
       }
 
-      websocket.send_command(store.getActiveSerial(), { "SetRobotFreq": [ "Low", sent_value ] });
+      websocket.send_command(store.getActiveSerial(), {"SetRobotFreq": ["Low", sent_value]});
     },
 
     getLowWidthValue() {
       return store.getActiveDevice().effects.current.robot.low_width;
     },
     setLowWidthValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetRobotWidth": [ "Low", value ] });
+      websocket.send_command(store.getActiveSerial(), {"SetRobotWidth": ["Low", value]});
     },
 
     getMidGainValue() {
       return store.getActiveDevice().effects.current.robot.mid_gain;
     },
     setMidGainValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetRobotGain": [ "Medium", value ] });
+      websocket.send_command(store.getActiveSerial(), {"SetRobotGain": ["Medium", value]});
     },
 
     getMidFreqValue() {
-      return store.getActiveDevice().effects.current.robot.mid_freq  - 86;
+      return store.getActiveDevice().effects.current.robot.mid_freq - 86;
     },
     setMidFreqValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetRobotFreq": [ "Medium", value + 86 ] });
+      websocket.send_command(store.getActiveSerial(), {"SetRobotFreq": ["Medium", value + 86]});
     },
 
     getMidWidthValue() {
       return store.getActiveDevice().effects.current.robot.mid_width;
     },
     setMidWidthValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetRobotWidth": [ "Medium", value ] });
+      websocket.send_command(store.getActiveSerial(), {"SetRobotWidth": ["Medium", value]});
     },
 
 
@@ -156,49 +162,49 @@ export default {
       return store.getActiveDevice().effects.current.robot.high_gain;
     },
     setHighGainValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetRobotGain": [ "High", value ] });
+      websocket.send_command(store.getActiveSerial(), {"SetRobotGain": ["High", value]});
     },
 
     getHighFreqValue() {
       return store.getActiveDevice().effects.current.robot.high_freq - 182;
     },
     setHighFreqValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetRobotFreq": [ "High", value + 182 ] });
+      websocket.send_command(store.getActiveSerial(), {"SetRobotFreq": ["High", value + 182]});
     },
 
     getHighWidthValue() {
       return store.getActiveDevice().effects.current.robot.high_width;
     },
     setHighWidthValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetRobotWidth": [ "High", value ] });
+      websocket.send_command(store.getActiveSerial(), {"SetRobotWidth": ["High", value]});
     },
 
     getWaveformValue() {
       return store.getActiveDevice().effects.current.robot.waveform;
     },
     setWaveformValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetRobotWaveform": value });
+      websocket.send_command(store.getActiveSerial(), {"SetRobotWaveform": value});
     },
 
     getPulseWidthValue() {
       return store.getActiveDevice().effects.current.robot.pulse_width;
     },
     setPulseWidthValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetRobotPulseWidth": value });
+      websocket.send_command(store.getActiveSerial(), {"SetRobotPulseWidth": value});
     },
 
     getThresholdValue() {
       return store.getActiveDevice().effects.current.robot.threshold;
     },
     setThresholdValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetRobotThreshold": value });
+      websocket.send_command(store.getActiveSerial(), {"SetRobotThreshold": value});
     },
 
     getDryMixValue() {
       return store.getActiveDevice().effects.current.robot.dry_mix;
     },
     setDryMixValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetRobotDryMix": value });
+      websocket.send_command(store.getActiveSerial(), {"SetRobotDryMix": value});
     },
 
     // This is a calculated curve, but I've struggled to find a pattern that matches these values. 0.10 and 10.00
@@ -237,7 +243,7 @@ export default {
         5583, 5747, 5915, 6089, 6267, 6451, 6640, 6834, 7035, 7241, 7453, 7617, 7896,
         8127, 8366, 8611, 8863, 9123, 9390, 9665, 9948, 10240, 10540, 10849, 11167, 11494,
         11831, 12177, 12534, 12902, 13280, 13996, 14069, 14482, 14906, 15343, 15792, 16255,
-        16731, 17222, 17726, 18246, 18780, 19331, 19897, 20480 ];
+        16731, 17222, 17726, 18246, 18780, 19331, 19897, 20480];
     },
 
     getStorePath(name) {

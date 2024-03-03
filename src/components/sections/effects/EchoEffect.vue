@@ -6,50 +6,51 @@
 
     <SliderInput :title="$t('message.effects.echo.amount')" :slider-min-value=0 :slider-max-value=100
                  :slider-value="getAmountValue()" :store-path="getStorePath('amount')"
-                 @value-changed="setAmountValue" text-suffix="%"/>
+                 @value-changed="setAmountValue" :text-suffix="$t('message.suffixes.percentage')"/>
 
     <SliderInput :title="$t('message.effects.echo.feedback')" :slider-min-value=0 :slider-max-value=100
-                 text-suffix="%" :slider-value="getFeedbackValue()" :store-path="getStorePath('feedback')"
-                 v-show="is_expanded" @value-changed="setFeedbackValue"/>
+                 :text-suffix="$t('message.suffixes.percentage')" :slider-value="getFeedbackValue()"
+                 :store-path="getStorePath('feedback')" v-show="is_expanded" @value-changed="setFeedbackValue"/>
 
     <SliderInput :title="$t('message.effects.echo.tempo')" :disabled="isTempoDisabled()"
                  :background-colour="getBackgroundColour(isTempoDisabled())"
                  :input-background-colour="getInputBackgroundColour(isTempoDisabled())"
                  :text-colour="getSliderColour(isTempoDisabled())" :range-colour="getSliderColour(isTempoDisabled())"
                  :label-colour="getLabelColour(isTempoDisabled())" :slider-min-value=45 :slider-max-value=300
-                 text-suffix="BPM" :slider-value="getTempoValue()" :store-path="getStorePath('tempo')"
-                 v-show="is_expanded" @value-changed="setTempoValue"/>
+                 :text-suffix="$t('message.suffixes.beatsPerMinute')" :slider-value="getTempoValue()"
+                 :store-path="getStorePath('tempo')" v-show="is_expanded" @value-changed="setTempoValue"/>
 
     <SliderInput :title="$t('message.effects.echo.delayLeft')" :disabled="isDelayDisabled()"
                  :background-colour="getBackgroundColour(isDelayDisabled())"
                  :input-background-colour="getInputBackgroundColour(isDelayDisabled())"
                  :text-colour="getSliderColour(isDelayDisabled())" :range-colour="getSliderColour(isDelayDisabled())"
                  :label-colour="getLabelColour(isDelayDisabled())" :slider-min-value=0 :slider-max-value=2500
-                 text-suffix="ms" :slider-value="getDelayLValue()" :store-path="getStorePath('delay_left')"
-                 v-show="is_expanded" @value-changed="setDelayLValue"/>
+                 :text-suffix="$t('message.suffixes.milliseconds')" :slider-value="getDelayLValue()"
+                 :store-path="getStorePath('delay_left')" v-show="is_expanded" @value-changed="setDelayLValue"/>
 
     <SliderInput :title="$t('message.effects.echo.delayRight')" :disabled="isDelayDisabled()"
                  :background-colour="getBackgroundColour(isDelayDisabled())"
                  :input-background-colour="getInputBackgroundColour(isDelayDisabled())"
                  :text-colour="getSliderColour(isDelayDisabled())" :range-colour="getSliderColour(isDelayDisabled())"
                  :label-colour="getLabelColour(isDelayDisabled())" :slider-min-value=0 :slider-max-value=2500
-                 text-suffix="ms" :slider-value="getDelayRValue()" :store-path="getStorePath('delay_right')"
-                 v-show="is_expanded" @value-changed="setDelayRValue"/>
+                 :text-suffix="$t('message.suffixes.milliseconds')" :slider-value="getDelayRValue()"
+                 :store-path="getStorePath('delay_right')" v-show="is_expanded" @value-changed="setDelayRValue"/>
 
     <SliderInput :title="$t('message.effects.echo.feedbackLeft')" :slider-min-value=0 :slider-max-value=100
-                 text-suffix="%" :slider-value="getFeedbackLValue()" :store-path="getStorePath('feedback_left')"
-                 v-show="is_expanded" @value-changed="setFeedbackLValue"/>
+                 :text-suffix="$t('message.suffixes.percentage')" :slider-value="getFeedbackLValue()"
+                 :store-path="getStorePath('feedback_left')" v-show="is_expanded" @value-changed="setFeedbackLValue"/>
 
     <SliderInput :title="$t('message.effects.echo.xfbLeftToRight')" :slider-min-value=0 :slider-max-value=100
-                 text-suffix="%" :slider-value="getXFBLtoRValue()" :store-path="getStorePath('feedback_xfb_l_to_r')"
-                 v-show="is_expanded" @value-changed="setXFBLtoRValue"/>
+                 :text-suffix="$t('message.suffixes.percentage')" :slider-value="getXFBLtoRValue()"
+                 :store-path="getStorePath('feedback_xfb_l_to_r')" v-show="is_expanded"
+                 @value-changed="setXFBLtoRValue"/>
 
     <SliderInput :title="$t('message.effects.echo.feedbackRight')" :slider-min-value=0 :slider-max-value=100
-                 text-suffix="%" :slider-value="getFeedbackRValue()" :store-path="getStorePath('feedback_right')"
-                 v-show="is_expanded" @value-changed="setFeedbackRValue"/>
+                 :text-suffix="$t('message.suffixes.percentage')" :slider-value="getFeedbackRValue()"
+                 :store-path="getStorePath('feedback_right')" v-show="is_expanded" @value-changed="setFeedbackRValue"/>
 
     <SliderInput :title="$t('message.effects.echo.xfbRightToLeft')" :slider-min-value=0 :slider-max-value=100
-                 text-suffix="%" :slider-value="getXFBRtoLValue()" v-show="is_expanded"
+                 :text-suffix="$t('message.suffixes.percentage')" :slider-value="getXFBRtoLValue()" v-show="is_expanded"
                  :store-path="getStorePath('feedback_xfb_r_to_l')" @value-changed="setXFBRtoLValue"/>
   </ExpandoGroupContainer>
 </template>

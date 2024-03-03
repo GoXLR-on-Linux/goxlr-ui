@@ -46,6 +46,7 @@ export default {
             hertz: "Hz",
             kilohertz: "KHz",
             ratio: ":{value}",
+            beatsPerMinute: "BPM",
         },
 
         modalButtons: {
