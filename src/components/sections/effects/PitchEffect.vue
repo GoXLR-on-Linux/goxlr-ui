@@ -27,8 +27,8 @@ export default {
       is_expanded: false,
 
       pitch_style: [
-        {id: "Narrow", label: this.$t('message.effects.pitch.narrow')},
-        {id: "Wide", label: this.$t('message.effects.pitch.wide')},
+        {id: "Narrow", label: this.$t('message.effects.pitch.styles.narrow')},
+        {id: "Wide", label: this.$t('message.effects.pitch.styles.wide')},
       ],
     }
   },
