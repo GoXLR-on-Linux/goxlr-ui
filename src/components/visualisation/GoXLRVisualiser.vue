@@ -4,6 +4,8 @@
     @wheel="handleScroll"
     @click="e => handleClick(e, false)"
     @contextmenu.prevent="e => handleClick(e, true)"
+    @mouseover="handleHover"
+    @moussleave="handleHover"
     v-html="getGoXLRSvg()"
   />
 </template>
@@ -27,6 +29,12 @@ export default {
 
   emits: ["areaClick"],
 
+  data: () => {
+    return {
+      hoveredArea: null
+    }
+  },
+
   methods: {
     getGoXLRSvg() {
       return (isDeviceMini()) ? GoXLRMini : GoXLRFull;
@@ -42,6 +50,17 @@ export default {
 
       let clickedArea = mapElementToArea(e.target, activeEffectPreset, activeSampleBank);
       this.$emit("areaClick", { area: clickedArea, alt: rightClick });
+    },
+
+    // highlight hovered area
+    handleHover(e) {
+      const isCaptureElem = e.target.matches("#goxlr-visualiser .capture *")
+      if (!isCaptureElem) return this.hoveredArea = null;
+
+      let activeEffectPreset = getActivePresetOrBank(true, [this.hoveredArea]);
+      let activeSampleBank = getActivePresetOrBank(false, [this.hoveredArea]);
+
+      this.hoveredArea = mapElementToArea(e.target, activeEffectPreset, activeSampleBank);
     },
 
     // transforms a HEX string into a colour object.
@@ -102,15 +121,21 @@ export default {
 
     // These occur first in the SVG, so top of the compute section :p
     computeChannelSelected(channel) {
-      return ((this.highlightedAreas.some(x => x === HighlightArea.CHANNEL_A) && channel === "A") ||
-        (this.highlightedAreas.some(x => x === HighlightArea.CHANNEL_B) && channel === "B") ||
-        (this.highlightedAreas.some(x => x === HighlightArea.CHANNEL_C) && channel === "C") ||
-        (this.highlightedAreas.some(x => x === HighlightArea.CHANNEL_D) && channel === "D"))
-        ? "initial" : "none";
+      let fallbackOpacity = this.hoveredArea === HighlightArea[`CHANNEL_${channel}`] ? 0.5 : 0;
+      return this.highlightedAreas.some(a => a === HighlightArea[`CHANNEL_${channel}`]) ? 1 : fallbackOpacity;
     },
-    computeCoughSelected() { return this.highlightedAreas.some(x => x === HighlightArea.COUGH) ? "initial" : "none" },
-    computePresetSelected(preset) { return this.highlightedAreas.some(x => x === HighlightArea[`EFFECTS_PRESET${preset}`]) ? "initial" : "none" },
-    computeSampleSelected(bank) { return this.highlightedAreas.some(x => x === HighlightArea[`SAMPLER_BANK_${bank}`]) ? "initial" : "none" },
+    computeCoughSelected() {
+      let fallbackOpacity = this.hoveredArea === HighlightArea.COUGH ? 0.5 : 0;
+      return this.highlightedAreas.some(x => x === HighlightArea.COUGH) ? 1 : fallbackOpacity;
+    },
+    computePresetSelected(preset) {
+      let fallbackOpacity = this.hoveredArea === HighlightArea[`EFFECTS_PRESET${preset}`] ? 0.5 : 0;
+      return this.highlightedAreas.some(x => x === HighlightArea[`EFFECTS_PRESET${preset}`]) ? 1 : fallbackOpacity;
+    },
+    computeSampleSelected(bank) {
+      let fallbackOpacity = this.hoveredArea === HighlightArea[`SAMPLER_BANK_${bank}`] ? 0.5 : 0;
+      return this.highlightedAreas.some(x => x === HighlightArea[`SAMPLER_BANK_${bank}`]) ? 1 : fallbackOpacity;
+    },
 
 
     computeAccentColour() {
@@ -550,23 +575,27 @@ export default {
 #goxlr-visualiser .cough #Bleep { color: v-bind('computeBleepButtonColour()'); }
 
 /* selection overlay */
-#goxlr-visualiser .selection .channels #Channel1 { display: v-bind('computeChannelSelected("A")'); }
-#goxlr-visualiser .selection .channels #Channel2 { display: v-bind('computeChannelSelected("B")'); }
-#goxlr-visualiser .selection .channels #Channel3 { display: v-bind('computeChannelSelected("C")'); }
-#goxlr-visualiser .selection .channels #Channel4 { display: v-bind('computeChannelSelected("D")'); }
+#goxlr-visualiser .selection .channels * { opacity: 0; }
+#goxlr-visualiser .selection .channels #Channel1 { opacity: v-bind('computeChannelSelected("A")'); }
+#goxlr-visualiser .selection .channels #Channel2 { opacity: v-bind('computeChannelSelected("B")'); }
+#goxlr-visualiser .selection .channels #Channel3 { opacity: v-bind('computeChannelSelected("C")'); }
+#goxlr-visualiser .selection .channels #Channel4 { opacity: v-bind('computeChannelSelected("D")'); }
 
-#goxlr-visualiser .selection #Cough { display: v-bind('computeCoughSelected()'); }
+#goxlr-visualiser .selection #Cough { opacity: 0; }
+#goxlr-visualiser .selection #Cough { opacity: v-bind('computeCoughSelected()'); }
 
-#goxlr-visualiser .selection #Preset1 { display: v-bind('computePresetSelected("1")'); }
-#goxlr-visualiser .selection #Preset2 { display: v-bind('computePresetSelected("2")'); }
-#goxlr-visualiser .selection #Preset3 { display: v-bind('computePresetSelected("3")'); }
-#goxlr-visualiser .selection #Preset4 { display: v-bind('computePresetSelected("4")'); }
-#goxlr-visualiser .selection #Preset5 { display: v-bind('computePresetSelected("5")'); }
-#goxlr-visualiser .selection #Preset6 { display: v-bind('computePresetSelected("6")'); }
+#goxlr-visualiser .selection .presets * { opacity: 0; }
+#goxlr-visualiser .selection .presets #Preset1 { opacity: v-bind('computePresetSelected("1")'); }
+#goxlr-visualiser .selection .presets #Preset2 { opacity: v-bind('computePresetSelected("2")'); }
+#goxlr-visualiser .selection .presets #Preset3 { opacity: v-bind('computePresetSelected("3")'); }
+#goxlr-visualiser .selection .presets #Preset4 { opacity: v-bind('computePresetSelected("4")'); }
+#goxlr-visualiser .selection .presets #Preset5 { opacity: v-bind('computePresetSelected("5")'); }
+#goxlr-visualiser .selection .presets #Preset6 { opacity: v-bind('computePresetSelected("6")'); }
 
-#goxlr-visualiser .selection #BankA { display: v-bind('computeSampleSelected("A")'); }
-#goxlr-visualiser .selection #BankB { display: v-bind('computeSampleSelected("B")'); }
-#goxlr-visualiser .selection #BankC { display: v-bind('computeSampleSelected("C")'); }
+#goxlr-visualiser .selection .sampler * { opacity: 0; }
+#goxlr-visualiser .selection .sampler #BankA { opacity: v-bind('computeSampleSelected("A")'); }
+#goxlr-visualiser .selection .sampler #BankB { opacity: v-bind('computeSampleSelected("B")'); }
+#goxlr-visualiser .selection .sampler #BankC { opacity: v-bind('computeSampleSelected("C")'); }
 
 /* effects area: buttons */
 #goxlr-visualiser .effects .buttons #Megaphone { color: v-bind('computeEffectButtonColour("EffectMegaphone", "megaphone")'); }
