@@ -8,6 +8,9 @@
     I'm being as verbose as possible with the strings, while there are a lot of common answers for things
     like buttons (Yes, No, Ok, Cancel, etc), I'm a little paranoid some languages may need more contextual
     answers, so they're all individually labelled here.
+
+    If you're editing, or creating a new language, everything inside quotation marks ("text") is translatable,
+    Anything wrapped in curly brackets ({text}) is a variable, do NOT translate that!
  */
 
 
