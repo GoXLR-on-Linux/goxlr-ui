@@ -8,7 +8,7 @@
           <FileTabs/>
         </div>
         <div aria-hidden="true" style="margin: auto; width: 100%">
-          <GoXLRVisualiser :active-display="active" />
+          <GoXLRVisualiser :highlighted-areas="this.visualiserHighlightAreas" />
         </div>
       </div>
 
@@ -81,9 +81,15 @@ import ContentContainer from "@/components/containers/ContentContainer.vue";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import GoXLRVisualiser from "@/components/visualisation/GoXLRVisualiser.vue";
 import VersionCheck from "@/components/VersionCheck.vue";
+import {HighlightArea} from "@/components/visualisation/VisualiserHelper";
 
 export default {
   name: "GoXLR",
+    computed: {
+        HighlightArea() {
+            return HighlightArea
+        }
+    },
   components: {
     VersionCheck,
     GoXLRVisualiser,
@@ -107,7 +113,7 @@ export default {
 
   data() {
     return {
-      active: [],
+      visualiserHighlightAreas: [],
     }
   },
 
@@ -126,33 +132,58 @@ export default {
     onTabChange(tab) {
       let id = tab.id;
       if (id === "configuration") {
-        this.active = [id, "cough", this.$refs.faders.activeChannel];
+        this.visualiserHighlightAreas = [
+          HighlightArea.COUGH,
+          HighlightArea.CHANNEL_A
+        ];
       } else if (id === "effects") {
         // This one comes initially from the store...
-        this.active = [id, this.$refs.effects.getActivePreset()];
+        this.visualiserHighlightAreas = [
+          HighlightArea[`EFFECTS_PRESET${this.$refs.effects.getActivePreset().slice(-1)}`]
+        ];
       } else if (id === "sampler") {
-        this.active = [id, this.$refs.sampler.activeBank];
-      } else if (id === "lighting") {
-        this.active = [id].concat(this.$refs.lighting.getNodes());
-      } else {
-        this.active = [id];
+        this.visualiserHighlightAreas = [
+          HighlightArea[`SAMPLER_BANK_${this.$refs.sampler.activeBank}`]
+        ];
+      } else  {
+        this.visualiserHighlightAreas = []
       }
+
     },
 
     onFaderChannelChange(activeChannel) {
-      this.active[2] = activeChannel;
+      this.visualiserHighlightAreas[this.visualiserHighlightAreas.length - 1] = HighlightArea[`CHANNEL_${activeChannel}`];
     },
 
     onEffectPresetChange(activePreset) {
-      this.active[1] = activePreset;
+      this.visualiserHighlightAreas = [HighlightArea[`EFFECTS_PRESET${activePreset.slice(-1)}`]];
     },
 
     onSampleBankChange(activeBank) {
-      this.active[1] = activeBank;
+      this.visualiserHighlightAreas = [HighlightArea[`SAMPLER_BANK_${activeBank}`]];
     },
 
     onLightingDataChange() {
-      this.active = ["lighting"].concat(this.$refs.lighting.getNodes());
+      let lightingData = this.$refs.lighting.getNodes();
+
+      // mixer channels
+      if (lightingData[0] === "mixer")
+        this.visualiserHighlightAreas = [ HighlightArea[`CHANNEL_${lightingData[1]}`] ];
+
+      // effect presets
+      else if (lightingData[0] === "effects")
+        this.visualiserHighlightAreas = [ HighlightArea[`EFFECTS_PRESET${lightingData[1].slice(-1)}`] ];
+
+      // sampler banks
+      else if (lightingData[0] === "sampler")
+        this.visualiserHighlightAreas = [ HighlightArea[`SAMPLER_BANK_${lightingData[1].slice(-1)}`] ];
+
+      // cough
+      else if (lightingData[0] === "cough")
+        this.visualiserHighlightAreas = [HighlightArea.COUGH];
+
+      // nothing
+      else this.visualiserHighlightAreas = [];
     }
   },
 

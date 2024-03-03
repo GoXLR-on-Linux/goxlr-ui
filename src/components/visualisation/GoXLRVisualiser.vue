@@ -1,5 +1,13 @@
 <template>
-  <div id="goxlr-visualiser" @wheel="handleScroll" v-html="getGoXLRSvg()" />
+  <div
+    id="goxlr-visualiser"
+    @wheel="handleScroll"
+    @click="e => handleClick(e, false)"
+    @contextmenu.prevent="e => handleClick(e, true)"
+    @mouseover="handleHover"
+    @moussleave="handleHover"
+    v-html="getGoXLRSvg()"
+  />
 </template>
 
 <script>
@@ -10,17 +18,49 @@ import {isDeviceMini} from "@/util/util";
 
 import GoXLRFull from "@/assets/preview/GoXLR.svg?raw";
 import GoXLRMini from "@/assets/preview/GoXLR-Mini.svg?raw";
+import {HighlightArea, mapElementToArea, getActivePresetOrBank} from "@/components/visualisation/VisualiserHelper";
 
 export default {
   name: "GoXLRVisualiser",
 
   props: {
-    activeDisplay: {type: Array, required: true},
+    highlightedAreas: {type: Array, required: true},
+  },
+
+  emits: ["areaClick"],
+
+  data: () => {
+    return {
+      hoveredArea: null
+    }
   },
 
   methods: {
     getGoXLRSvg() {
       return (isDeviceMini()) ? GoXLRMini : GoXLRFull;
+    },
+
+    // emit areaClick event
+    handleClick(e, rightClick) {
+      const isCaptureElem = e.target.matches("#goxlr-visualiser .capture *")
+      if (!isCaptureElem) return;
+
+      let activeEffectPreset = getActivePresetOrBank(true, this.highlightedAreas);
+      let activeSampleBank = getActivePresetOrBank(false, this.highlightedAreas);
+
+      let clickedArea = mapElementToArea(e.target, activeEffectPreset, activeSampleBank);
+      this.$emit("areaClick", { area: clickedArea, alt: rightClick });
+    },
+
+    // highlight hovered area
+    handleHover(e) {
+      const isCaptureElem = e.target.matches("#goxlr-visualiser .capture *")
+      if (!isCaptureElem) return this.hoveredArea = null;
+
+      let activeEffectPreset = getActivePresetOrBank(true, [this.hoveredArea]);
+      let activeSampleBank = getActivePresetOrBank(false, [this.hoveredArea]);
+
+      this.hoveredArea = mapElementToArea(e.target, activeEffectPreset, activeSampleBank);
     },
 
     // transforms a HEX string into a colour object.
@@ -81,35 +121,20 @@ export default {
 
     // These occur first in the SVG, so top of the compute section :p
     computeChannelSelected(channel) {
-      // We need to be on the configuration page, or the Lighting -> Mixer page, and have our channel in the mix..
-      return (
-          this.activeDisplay.includes("configuration") ||
-          (this.activeDisplay.includes("lighting") && this.activeDisplay.includes("mixer"))) ?
-          (this.activeDisplay.includes(channel) ? "initial" : "none") :
-          "none";
+      let fallbackOpacity = this.hoveredArea === HighlightArea[`CHANNEL_${channel}`] ? 0.5 : 0;
+      return this.highlightedAreas.some(a => a === HighlightArea[`CHANNEL_${channel}`]) ? 1 : fallbackOpacity;
     },
-    computeCoughSelected() { return this.activeDisplay.includes("cough") ? "initial" : "none" },
+    computeCoughSelected() {
+      let fallbackOpacity = this.hoveredArea === HighlightArea.COUGH ? 0.5 : 0;
+      return this.highlightedAreas.some(x => x === HighlightArea.COUGH) ? 1 : fallbackOpacity;
+    },
     computePresetSelected(preset) {
-      if (!this.activeDisplay.includes("effects") &&
-          !(this.activeDisplay.includes("lighting") && this.activeDisplay.includes("effects"))) {
-        return "none";
-      }
-
-      if (this.activeDisplay.includes(`Preset${preset}`) || this.activeDisplay.includes(`EffectSelect${preset}`)) {
-        return "initial";
-      }
-      return "none";
+      let fallbackOpacity = this.hoveredArea === HighlightArea[`EFFECTS_PRESET${preset}`] ? 0.5 : 0;
+      return this.highlightedAreas.some(x => x === HighlightArea[`EFFECTS_PRESET${preset}`]) ? 1 : fallbackOpacity;
     },
     computeSampleSelected(bank) {
-      if (!this.activeDisplay.includes("sampler") &&
-          !(this.activeDisplay.includes("lighting") && this.activeDisplay.includes("sampler"))) {
-        return "none";
-      }
-
-      if (this.activeDisplay.includes(bank) || this.activeDisplay.includes(`SamplerSelect${bank}`)) {
-        return "initial";
-      }
-      return "none";
+      let fallbackOpacity = this.hoveredArea === HighlightArea[`SAMPLER_BANK_${bank}`] ? 0.5 : 0;
+      return this.highlightedAreas.some(x => x === HighlightArea[`SAMPLER_BANK_${bank}`]) ? 1 : fallbackOpacity;
     },
 
 
@@ -550,23 +575,27 @@ export default {
 #goxlr-visualiser .cough #Bleep { color: v-bind('computeBleepButtonColour()'); }
 
 /* selection overlay */
-.selection .channels #Channel1 { display: v-bind('computeChannelSelected("A")'); }
-.selection .channels #Channel2 { display: v-bind('computeChannelSelected("B")'); }
-.selection .channels #Channel3 { display: v-bind('computeChannelSelected("C")'); }
-.selection .channels #Channel4 { display: v-bind('computeChannelSelected("D")'); }
+#goxlr-visualiser .selection .channels * { opacity: 0; }
+#goxlr-visualiser .selection .channels #Channel1 { opacity: v-bind('computeChannelSelected("A")'); }
+#goxlr-visualiser .selection .channels #Channel2 { opacity: v-bind('computeChannelSelected("B")'); }
+#goxlr-visualiser .selection .channels #Channel3 { opacity: v-bind('computeChannelSelected("C")'); }
+#goxlr-visualiser .selection .channels #Channel4 { opacity: v-bind('computeChannelSelected("D")'); }
 
-.selection #Cough { display: v-bind('computeCoughSelected()'); }
+#goxlr-visualiser .selection #Cough { opacity: 0; }
+#goxlr-visualiser .selection #Cough { opacity: v-bind('computeCoughSelected()'); }
 
-.selection #Preset1 { display: v-bind('computePresetSelected("1")'); }
-.selection #Preset2 { display: v-bind('computePresetSelected("2")'); }
-.selection #Preset3 { display: v-bind('computePresetSelected("3")'); }
-.selection #Preset4 { display: v-bind('computePresetSelected("4")'); }
-.selection #Preset5 { display: v-bind('computePresetSelected("5")'); }
-.selection #Preset6 { display: v-bind('computePresetSelected("6")'); }
+#goxlr-visualiser .selection .presets * { opacity: 0; }
+#goxlr-visualiser .selection .presets #Preset1 { opacity: v-bind('computePresetSelected("1")'); }
+#goxlr-visualiser .selection .presets #Preset2 { opacity: v-bind('computePresetSelected("2")'); }
+#goxlr-visualiser .selection .presets #Preset3 { opacity: v-bind('computePresetSelected("3")'); }
+#goxlr-visualiser .selection .presets #Preset4 { opacity: v-bind('computePresetSelected("4")'); }
+#goxlr-visualiser .selection .presets #Preset5 { opacity: v-bind('computePresetSelected("5")'); }
+#goxlr-visualiser .selection .presets #Preset6 { opacity: v-bind('computePresetSelected("6")'); }
 
-.selection #BankA { display: v-bind('computeSampleSelected("A")'); }
-.selection #BankB { display: v-bind('computeSampleSelected("B")'); }
-.selection #BankC { display: v-bind('computeSampleSelected("C")'); }
+#goxlr-visualiser .selection .sampler * { opacity: 0; }
+#goxlr-visualiser .selection .sampler #BankA { opacity: v-bind('computeSampleSelected("A")'); }
+#goxlr-visualiser .selection .sampler #BankB { opacity: v-bind('computeSampleSelected("B")'); }
+#goxlr-visualiser .selection .sampler #BankC { opacity: v-bind('computeSampleSelected("C")'); }
 
 /* effects area: buttons */
 #goxlr-visualiser .effects .buttons #Megaphone { color: v-bind('computeEffectButtonColour("EffectMegaphone", "megaphone")'); }
