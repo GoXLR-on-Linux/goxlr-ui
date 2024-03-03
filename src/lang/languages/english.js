@@ -15,6 +15,7 @@ export default {
     message: {
         // For these, the keys map directly to their GoXLR Channel Names
         channels: {
+            All: "All",
             Mic: "Mic",
             Chat: "Voice Chat",
             Music: "Music",
@@ -158,7 +159,7 @@ export default {
         configuration: {
             // This is common between Faders and Cough Buttons
             mute_behaviour: {
-                all: "Mute to All",
+                all: "Mute to @:message.channels.All",
                 stream: "Mute to @:message.channels.StreamMix",
                 chatMic: "Mute to @:message.channels.ChatMic",
                 headphones: "Mute to @:message.channels.Headphones",
