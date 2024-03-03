@@ -1,9 +1,14 @@
 <template>
-  <ExpandoGroupContainer title="Pitch" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
-    <RadioSelection title="Style" group="effects_pitch_style" :options="pitch_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+  <ExpandoGroupContainer :title="$t('message.effects.pitch.title')" @expando-clicked="is_expanded = !is_expanded"
+                         :expanded="is_expanded">
+    <RadioSelection :title="$t('message.effects.pitch.style')" group="effects_pitch_style" :options="pitch_style"
+                    :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
-    <SliderInput title="Amount" :value-map="getValueMap()" :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />
-    <SliderInput title="Character" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getCharacterValue()" :store-path="getStorePath('character')" v-show="is_expanded" @value-changed="setCharacterValue" />
+    <SliderInput :title="$t('message.effects.pitch.amount')" :value-map="getValueMap()" :slider-value="getAmountValue()"
+                 :store-path="getStorePath('amount')" @value-changed="setAmountValue"/>
+    <SliderInput :title="$t('message.effects.pitch.character')" :slider-min-value=0 :slider-max-value=100
+                 text-suffix="%" :slider-value="getCharacterValue()" :store-path="getStorePath('character')"
+                 v-show="is_expanded" @value-changed="setCharacterValue"/>
   </ExpandoGroupContainer>
 </template>
 
@@ -22,8 +27,8 @@ export default {
       is_expanded: false,
 
       pitch_style: [
-        {id: "Narrow", label: "Narrow"},
-        {id: "Wide", label: "Wide"},
+        {id: "Narrow", label: this.$t('message.effects.pitch.narrow')},
+        {id: "Wide", label: this.$t('message.effects.pitch.wide')},
       ],
     }
   },
@@ -61,11 +66,11 @@ export default {
       let pitch_style = store.getActiveDevice().effects.current.pitch.style;
       let base_value = store.getActiveDevice().effects.current.pitch.amount;
       if (hardtune_enabled) {
-         if (pitch_style === "Narrow") {
-           return base_value + 1;
-         } else {
-           return base_value + 2;
-         }
+        if (pitch_style === "Narrow") {
+          return base_value + 1;
+        } else {
+          return base_value + 2;
+        }
       }
       if (pitch_style === "Narrow") {
         return (base_value / 2) + 12;
