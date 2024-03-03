@@ -16,7 +16,7 @@ import {isDeviceMini} from "@/util/util";
 
 import GoXLRFull from "@/assets/preview/GoXLR.svg?raw";
 import GoXLRMini from "@/assets/preview/GoXLR-Mini.svg?raw";
-import {HighlightArea, mapElementToArea} from "@/components/visualisation/VisualiserHelper";
+import {HighlightArea, mapElementToArea, getActivePresetOrBank} from "@/components/visualisation/VisualiserHelper";
 
 export default {
   name: "GoXLRVisualiser",
@@ -37,7 +37,10 @@ export default {
       const isCaptureElem = e.target.matches("#goxlr-visualiser .capture *")
       if (!isCaptureElem) return;
 
-      let clickedArea = mapElementToArea(e.target, null, null);
+      let activeEffectPreset = getActivePresetOrBank(true, this.highlightedAreas);
+      let activeSampleBank = getActivePresetOrBank(false, this.highlightedAreas);
+
+      let clickedArea = mapElementToArea(e.target, activeEffectPreset, activeSampleBank);
       this.$emit("areaClick", { area: clickedArea, alt: rightClick });
     },
 

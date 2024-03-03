@@ -78,3 +78,19 @@ export function mapElementToArea(elem, activeEffectPreset = null, activeSamplerB
 
     return null;
 }
+
+/***
+ * Searches throu all currently highlighted areas and trys to find the currently selected effects tab or sampler bank.
+ * This is required to make sure that when the user clicks on the tab body, it doesn't switch to the first available preset and
+ * instead stays at the current selected one.
+ */
+export function getActivePresetOrBank(lookupEffectPreset, activeAreas) {
+    let searchString = lookupEffectPreset ?  "EFFECTS_PRESET" : "SAMPLER_BANK_";
+
+    return activeAreas.filter(x =>
+        Object.keys(HighlightArea)
+        .filter(k =>
+            k.startsWith(searchString))
+        .some(k => HighlightArea[k] === x)
+    )[0] || null;
+}
