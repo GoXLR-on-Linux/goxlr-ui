@@ -1,8 +1,8 @@
-import English from "@/lang/languages/english";
+import en_GB from "@/lang/languages/en_GB";
 import it_IT from "@/lang/languages/it_IT";
 
 
 export const messages = {
-    en: English,
-    it_IT: it_IT // Italian (Italy)
+    en_GB: en_GB,
+    it_IT: it_IT // Italian (Italy) | Italiano (Italia)
 }

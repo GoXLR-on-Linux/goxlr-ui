@@ -106,6 +106,8 @@ export default {
                 phantom: "XLR + Phantom (+{voltage}V)",
                 jack: "3.5mm",
             },
+
+            // TODO: Recently Changed
             waveform: {
                 peaking: "Too Loud",
                 speaking: "Good",
@@ -204,7 +206,8 @@ export default {
 
                 loadPreset: "Load Preset",
 
-                newPresetTitle: "Enter New Preset Name",
+                // TODO: FIX: RENAME PRESET
+                newPresetTitle: "Rename Preset",
                 newPresetPlaceholder: "New Preset Name",
                 newPresetOk: "@:message.modalButtons.ok",
                 newPresetCancel: "@:message.modalButtons.cancel",
@@ -258,11 +261,11 @@ export default {
                 style: "Style",
                 styles: {
                     quarter: "Quarter",
-                    eighth: "Eights",
+                    eighth: "Eighth",
                     triplet: "Triplet",
                     pingPong: "Ping Pong",
                     classicSlap: "Classic Slap",
-                    multiTap: "MutliTap"
+                    multiTap: "MultiTap"
                 },
 
                 amount: "Amount",
@@ -376,16 +379,16 @@ export default {
                 buttons: {
                     topLeft: "Top Left",
                     topRight: "Top Right",
-                    bottomLeft: "BottomLeft",
-                    bottomRight: "BottomRight",
+                    bottomLeft: "Bottom Left",
+                    bottomRight: "Bottom Right",
                 },
 
                 functionTitle: "Function",
                 functionLabel: "Function for {activeButton} button in bank {activeBank}",
                 functions: {
-                    playNext: "Play-Next",
-                    playStop: "Play-Stop",
-                    playFade: "Play-Fade",
+                    playNext: "Play / Next",
+                    playStop: "Play / Stop",
+                    playFade: "Play / Fade Out",
                     stopOnRelease: "Stop on Release",
                     fadeOnRelease: "Fade on Release",
                     loop: "Loop"
@@ -426,7 +429,7 @@ export default {
                     text: "Waveform for {sample}",
 
                     // The Play / Stop button before the waveform
-                    playbackSample: "Playback Sample",
+                    playbackSample: "Play Sample",
                     stopSample: "Stop Sample",
 
                     // Labels for the draggable 'Handles'

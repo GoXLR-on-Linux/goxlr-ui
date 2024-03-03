@@ -34,8 +34,8 @@ let app = createApp(App);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.use(vClickOutside);
 app.use(createI18n({
-    locale: "en",
-    fallbackLocale: "en",
-    messages: messages
+    locale: "en_GB",
+    fallbackLocale: "en_GB",
+    messages
 }));
 app.mount('#app');

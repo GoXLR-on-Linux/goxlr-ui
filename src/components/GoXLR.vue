@@ -55,6 +55,7 @@
       </Tabs>
     </template>
     <VersionCheck/>
+    <Language />
     <A11yNotifications/>
   </div>
 </template>
@@ -82,6 +83,7 @@ import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import GoXLRVisualiser from "@/components/visualisation/GoXLRVisualiser.vue";
 import VersionCheck from "@/components/VersionCheck.vue";
 import {HighlightArea} from "@/components/visualisation/VisualiserHelper";
+import Language from "@/components/Language.vue";
 
 export default {
   name: "GoXLR",
@@ -91,6 +93,7 @@ export default {
     }
   },
   components: {
+    Language,
     VersionCheck,
     GoXLRVisualiser,
     A11yNotifications,
@@ -122,10 +125,6 @@ export default {
 
     isDeviceSet() {
       let ready = store.hasActiveDevice() && store.isConnected();
-      if (ready) {
-        this.$i18n.locale = "en";
-      }
-
       return ready;
     },
 
