@@ -1,8 +1,11 @@
 <template>
-  <GroupContainer title="Gender">
-    <RadioSelection title="Style" group="effects_gender_style" :options="gender_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+  <GroupContainer :title="$t('message.effects.gender.title')">
+    <RadioSelection :title="$t('message.effects.gender.style')" group="effects_gender_style" :options="gender_style"
+                    :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
-    <SliderInput title="Amount" :slider-min-value="getSliderValue(true)" :slider-max-value="getSliderValue(false)" :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" />
+    <SliderInput :title="$t('message.effects.gender.amount')" :slider-min-value="getSliderValue(true)"
+                 :slider-max-value="getSliderValue(false)" :slider-value="getAmountValue()"
+                 :store-path="getStorePath('amount')" @value-changed="setAmountValue"/>
   </GroupContainer>
 </template>
 
@@ -22,9 +25,9 @@ export default {
       amount: 0,
 
       gender_style: [
-        {id: "Narrow", label: "Narrow"},
-        {id: "Medium", label: "Medium"},
-        {id: "Wide", label: "Wide"},
+        {id: "Narrow", label: this.$t('message.effects.gender.styles.narrow')},
+        {id: "Medium", label: this.$t('message.effects.gender.styles.medium')},
+        {id: "Wide", label: this.$t('message.effects.gender.styles.wide')},
       ],
     }
   },
@@ -35,13 +38,17 @@ export default {
     },
 
     getSliderValue(isMin) {
-      let multiplier = (isMin)? -1 : 1;
+      let multiplier = (isMin) ? -1 : 1;
       let style = store.getActiveDevice().effects.current.gender.style;
       switch (style) {
-        case "Narrow": return 12 * multiplier;
-        case "Medium": return 25 * multiplier;
-        case "Wide": return 50 * multiplier;
+        case "Narrow":
+          return 12 * multiplier;
+        case "Medium":
+          return 25 * multiplier;
+        case "Wide":
+          return 50 * multiplier;
       }
+      return 0;
     },
 
     stylePressed(button) {
