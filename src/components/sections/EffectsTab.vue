@@ -1,9 +1,9 @@
 <template>
   <div style="display: flex">
     <div style="padding: 40px 20px 40px 40px;">
-      <GroupContainer title="Preset">
+      <GroupContainer :title="$t('message.effects.preset.title')">
         <RadioSelection
-            title="Group"
+            :title="$t('message.effects.preset.group')"
             group="preset_select"
             :options="getEffectOptions()"
             :selected="getActivePreset()"
@@ -28,13 +28,15 @@
 
   <!-- Modals -->
   <AccessibleModal ref="renamePresetModal" id="renameEffect" :show_close="false">
-    <template v-slot:title>Enter New Preset Name</template>
+    <template v-slot:title>{{ $t('message.effects.preset.newPresetTitle') }}</template>
     <template v-slot:default>
-      <ModalInput ref="newName" v-model="newPresetName" placeholder="New Preset Name" @on-enter="renamePreset();"/>
+      <ModalInput ref="newName" v-model="newPresetName"
+                  :placeholder="$t('message.effects.preset.newPresetPlaceholder')"
+                  @on-enter="renamePreset();" />
     </template>
     <template v-slot:footer>
-      <ModalButton ref="focusOk" @click="renamePreset();">OK</ModalButton>
-      <ModalButton @click="$refs.renamePresetModal.closeModal(); this.newPresetName = ''">Cancel</ModalButton>
+      <ModalButton ref="focusOk" @click="renamePreset();">{{ $t('message.effects.preset.newPresetOk') }}</ModalButton>
+      <ModalButton @click="$refs.renamePresetModal.closeModal(); this.newPresetName = ''">{{ $t('message.effects.preset.newPresetCancel') }}</ModalButton>
     </template>
   </AccessibleModal>
 
@@ -44,11 +46,11 @@
       :show_footer="true"
   >
     <template v-slot:title>
-      <span>Load Preset</span>
+      <span>{{ $t('message.effects.preset.loadPreset') }}</span>
       <button
           class="openButton"
           @click="openPresets"
-          aria-label="Open Presets Directory"
+          :aria-label="$t('message.effects.preset.accessibilityOpenPresetDirectory')"
       >
         <font-awesome-icon icon="fa-solid fa-folder"/>
       </button>
@@ -62,38 +64,36 @@
         @selection-changed="selectPreset"
     />
     <span v-else>
-      There are currently no presets in the library, save or copy some for them to appear here.
+      {{ $t('message.effects.preset.noPresets') }}
     </span>
     <template v-slot:footer>
       <ModalButton
           ref="ok" class="modal-default-button" :enabled="selectedPreset !== undefined"
-          @click="confirmPresetLoad()">Ok
-      </ModalButton>
+          @click="confirmPresetLoad()">{{ $t('message.effects.preset.loadPresetOk') }}</ModalButton>
     </template>
   </AccessibleModal>
 
   <AccessibleModal ref="override_preset_modal" id="override_preset" :show_close="false">
-    <template v-slot:title>Confirm Preset Load</template>
-    <template v-slot:default>
-      Loading this preset will replace any unsaved changes on this effects bank, would you like to proceed?
-    </template>
+    <template v-slot:title>{{ $t('message.effects.preset.confirmTitle') }}</template>
+    <template v-slot:default>{{ $t('message.effects.preset.confirmMessage') }}</template>
     <template v-slot:footer>
-      <ModalButton ref="confirmFocusOk" @click="loadPreset()">OK</ModalButton>
-      <ModalButton @click="this.selectedPreset = undefined; $refs.override_preset_modal.closeModal();">Cancel
+      <ModalButton ref="confirmFocusOk" @click="loadPreset()">{{ $t('message.effects.preset.confirmOk') }}</ModalButton>
+      <ModalButton @click="this.selectedPreset = undefined; $refs.override_preset_modal.closeModal();">
+        {{ $t('message.effects.preset.confirmCancel') }}
       </ModalButton>
     </template>
   </AccessibleModal>
 
   <AccessibleModal ref="overwrite_library_save" id="overwrite_save" :show_close="false">
-    <template v-slot:title>Confirm Preset Overwrite</template>
+    <template v-slot:title>{{ $t('message.effects.preset.overwriteTitle') }}</template>
     <template v-slot:default>
-      The preset {{ getCurrentPresetName() }} already exists in your library, would you like to overwrite?
+      {{ $t('message.effects.preset.overwriteMessage', { current: getCurrentPresetName() }) }}
     </template>
     <template v-slot:footer>
       <ModalButton ref="overwriteConfirm" @click="saveActivePreset(); $refs.overwrite_library_save.closeModal();">
-        Overwrite
+        {{ $t('message.effects.preset.overwriteConfirm') }}
       </ModalButton>
-      <ModalButton @click="$refs.overwrite_library_save.closeModal();">Cancel</ModalButton>
+      <ModalButton @click="$refs.overwrite_library_save.closeModal();">{{ $t('message.effects.preset.overwriteCancel') }}</ModalButton>
     </template>
   </AccessibleModal>
 </template>
@@ -143,9 +143,9 @@ export default {
 
       // This will need to be generated per-button..
       menu_options: [
-        {name: "Load Preset", slug: "load"},
-        {name: 'Rename', slug: 'rename'},
-        {name: 'Save to Library', slug: 'save'}
+        {name: this.$t('message.effects.preset.menuLoad'), slug: "load"},
+        {name: this.$t('message.effects.preset.menuRename'), slug: 'rename'},
+        {name: this.$t('message.effects.preset.menuSave'), slug: 'save'}
       ],
     };
   },
@@ -208,7 +208,7 @@ export default {
         let currentBank = EffectPresets.indexOf(store.getActiveDevice().effects.active_preset) + 1;
         store.setAccessibilityNotification(
             "polite",
-            `Preset ${name} loaded to bank ${currentBank}.`
+            this.$t("message.effects.preset.accessibilityPresetLoaded", { name: name, bank: currentBank })
         );
 
         this.selectedPreset = undefined;
@@ -287,7 +287,7 @@ export default {
       websocket.send_command(store.getActiveSerial(), {"SaveActivePreset": []});
       store.setAccessibilityNotification(
           "polite",
-          `Preset ${name} saved to library`
+          this.$t("message.effects.preset.accessibilityPresetSaved", { name: name })
       );
     },
 

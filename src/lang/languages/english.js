@@ -187,6 +187,176 @@ export default {
             }
         },
 
+        effects: {
+            preset: {
+                title: "Preset",
+                group: "Group",
+
+                menuLoad: "Load",
+                menuRename: "Rename",
+                menuSave: "Save to Library",
+
+
+                loadPreset: "Load Preset",
+
+                newPresetTitle: "Enter New Preset Name",
+                newPresetPlaceholder: "New Preset Name",
+                newPresetOk: "@:message.modalButtons.ok",
+                newPresetCancel: "@:message.modalButtons.cancel",
+
+                noPresets: "There are currently no presets in the library, save or copy some for them to appear here.",
+                loadPresetOk: "@:message.modalButtons.ok",
+
+                confirmTitle: "Confirm Preset Load",
+                confirmMessage: "Loading this preset will replace any unsaved changes on this effects bank, would you like to proceed?",
+                confirmOk: "@:message.modalButtons.ok",
+                confirmCancel: "@:message.modalButtons.cancel",
+
+                overwriteTitle: "Confirm Preset Overwrite",
+                overwriteMessage: "The preset {current} already exists in your library, would you like to overwrite?",
+                overwriteConfirm: "Overwrite",
+                overwriteCancel: "@:message.modalButtons.cancel",
+
+                accessibilityOpenPresetDirectory: "Open Presets Directory",
+                accessibilityPresetLoaded: "Preset {name} loaded to {bank}",
+                accessibilityPresetSaved: "Preset {name} saved to Library",
+            },
+            reverb: {
+                title: "Reverb",
+                style: "Style",
+
+                styles: {
+                    library: "Library",
+                    darkBloom: "Dark Bloom",
+                    musicClub: "Music Club",
+                    realPlate: "Real Plate",
+                    chapel: "Chapel",
+                    hockeyArena: "Hockey Arena"
+                },
+
+                amount: "Amount",
+                decay: "Decay",
+                earlyLevel: "Early Level",
+                tailLevel: "Tail Level",
+                predelay: "Predelay",
+                lowColour: "Lo Colour",
+                highColour: "Hi Colour",
+                highFactor: "Hi Factor",
+                diffuse: "Diffuse",
+                modSpeed: "ModSpeed",
+                modDepth: "ModDepth"
+            },
+
+            echo: {
+                title: "Echo",
+
+                style: "Style",
+                styles: {
+                    quarter: "Quarter",
+                    eighth: "Eights",
+                    triplet: "Triplet",
+                    pingPong: "Ping Pong",
+                    classicSlap: "Classic Slap",
+                    multiTap: "MutliTap"
+                },
+
+                amount: "Amount",
+                feedback: "Feedback",
+                tempo: "Tempo",
+                delayLeft: "Delay L",
+                delayRight: "Delay R",
+                feedbackLeft: "Feedback L",
+                feedbackRight: "Feedback R",
+                xfbLeftToRight: "XFB L to R",
+                xfbRightToLeft: "XFB R to L",
+            },
+
+            pitch: {
+                title: "Pitch",
+
+                style: "Style",
+                styles: {
+                    narrow: "Narrow",
+                    wide: "Wide"
+                },
+
+                amount: "Amount",
+                character: "Character"
+            },
+
+            gender: {
+                title: "Gender",
+
+                style: "Style",
+                styles: {
+                    narrow: "Narrow",
+                    medium: "Medium",
+                    wide: "Wide"
+                },
+
+                amount: "Amount"
+            },
+
+            megaphone: {
+                title: "Megaphone",
+
+                style: "Style",
+                styles: {
+                    megaphone: "Megaphone",
+                    radio: "Radio",
+                    onThePhone: "On The Phone",
+                    overdrive: "Overdrive",
+                    buzzCutt: "Buzz Cutt",
+                    tweed: "Tweed"
+                },
+
+                amount: "Amount",
+                postGain: "Post Gain"
+            },
+
+            robot: {
+                title: "Robot",
+
+                style: "Style",
+                styles: {
+                    robot1: "Robot 1",
+                    robot2: "Robot 2",
+                    robot3: "Robot 3",
+                },
+
+                lowGain: "Low Gain",
+                lowFrequency: "Low Freq",
+                lowWidth: "Low Width",
+                midGain: "Mid Gain",
+                midFrequency: "Mid Freq",
+                midWidth: "Mid Width",
+                highGain: "Hi Gain",
+                highFrequency: "Hi Freq",
+                highWidth: "Hi Width",
+                waveform: "Waveform",
+                pulseWidth: "Pulse Width",
+                threshold: "Threshold",
+                dryMix: "Dry Mix",
+            },
+
+            hardTune: {
+                title: "Hard Tune",
+
+                style: "Style",
+                styles: {
+                    natural: "Natural",
+                    medium: "Medium",
+                    hard: "Hard"
+                },
+
+                amount: "Amount",
+                rate: "Rate",
+                window: "Window",
+
+                source: "Source"
+            }
+        },
+
         // Strings used in Profile and Microphone Profile Management.
         profileManager: {
             // Accessibility Titles for the buttons at the bottom of the Profile List
