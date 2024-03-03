@@ -1,33 +1,45 @@
 <template>
-  <ExpandoGroupContainer title="Reverb" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
-    <RadioSelection title="Style" group="effects_reverb_style" :options="reverb_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+  <ExpandoGroupContainer :title="$t('message.effects.reverb.title')" @expando-clicked="is_expanded = !is_expanded"
+                         :expanded="is_expanded">
+    <RadioSelection :title="$t('message.effects.reverb.style')" group="effects_reverb_style" :options="reverb_style"
+                    :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
-    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" text-suffix="%"
+    <SliderInput :title="$t('message.effects.reverb.amount')" :slider-min-value=0 :slider-max-value=100
+                 :slider-value="getAmountValue()" text-suffix="%"
                  :store-path="getStorePath('amount')" @value-changed="setAmountValue"/>
-    <SliderInput title="Decay" :value-map="decay_map" :slider-value="getDecayValue()" text-suffix="ms"
-                 :store-path="getStorePath('decay')" v-show="is_expanded" @value-changed="setDecayValue"/>
-    <SliderInput title="Early Level" :slider-min-value=-25 :slider-max-value=0 text-suffix="dB"
-                 :slider-value="getEarlyLevelValue()" :store-path="getStorePath('early_level')" v-show="is_expanded"
+    <SliderInput :title="$t('message.effects.reverb.decay')" :value-map="decay_map" :slider-value="getDecayValue()"
+                 text-suffix="ms" :store-path="getStorePath('decay')" v-show="is_expanded"
+                 @value-changed="setDecayValue"/>
+    <SliderInput :title="$t('message.effects.reverb.earlyLevel')" :slider-min-value=-25 :slider-max-value=0
+                 text-suffix="dB" :slider-value="getEarlyLevelValue()" :store-path="getStorePath('early_level')"
+                 v-show="is_expanded"
                  @value-changed="setEarlyLevelValue"/>
-    <SliderInput title="Tail Level" :slider-min-value=-25 :slider-max-value=0 text-suffix="dB"
-                 :slider-value="getTailLevelValue()" :store-path="getStorePath('tail_level')" v-show="is_expanded"
+    <SliderInput :title="$t('message.effects.reverb.tailLevel')" :slider-min-value=-25 :slider-max-value=0
+                 text-suffix="dB" :slider-value="getTailLevelValue()" :store-path="getStorePath('tail_level')"
+                 v-show="is_expanded"
                  @value-changed="setTailLevelValue"/>
-    <SliderInput title="PreDelay" :slider-min-value=0 :slider-max-value=100 text-suffix="ms"
-                 :slider-value="getPreDelayValue()" :store-path="getStorePath('pre_delay')" v-show="is_expanded"
+    <SliderInput :title="$t('message.effects.reverb.preDelay')" :slider-min-value=0 :slider-max-value=100
+                 text-suffix="ms" :slider-value="getPreDelayValue()" :store-path="getStorePath('pre_delay')"
+                 v-show="is_expanded"
                  @value-changed="setPreDelayValue"/>
-    <SliderInput title="Lo Colour" :slider-min-value=-50 :slider-max-value=50 :slider-value="getLowColourValue()"
+    <SliderInput :title="$t('message.effects.reverb.lowColour')" :slider-min-value=-50 :slider-max-value=50
+                 :slider-value="getLowColourValue()"
                  :store-path="getStorePath('lo_colour')" v-show="is_expanded" @value-changed="setLowColourValue"/>
-    <SliderInput title="Hi Colour" :slider-min-value=-50 :slider-max-value=50 :slider-value="getHighColourValue()"
+    <SliderInput :title="$t('message.effects.reverb.highColour')" :slider-min-value=-50 :slider-max-value=50
+                 :slider-value="getHighColourValue()"
                  :store-path="getStorePath('hi_colour')" v-show="is_expanded" @value-changed="setHighColourValue"/>
-    <SliderInput title="Hi Factor" :slider-min-value=-25 :slider-max-value=25 :slider-value="getHighFactorValue()"
+    <SliderInput :title="$t('message.effects.reverb.highFactor')" :slider-min-value=-25 :slider-max-value=25
+                 :slider-value="getHighFactorValue()"
                  :store-path="getStorePath('hi_factor')" v-show="is_expanded" @value-changed="setHighFactorValue"/>
-    <SliderInput title="Diffuse" :slider-min-value=-50 :slider-max-value=50 :slider-value="getDiffuseValue()"
+    <SliderInput :title="$t('message.effects.reverb.diffuse')" :slider-min-value=-50 :slider-max-value=50
+                 :slider-value="getDiffuseValue()"
                  :store-path="getStorePath('diffuse')" v-show="is_expanded" @value-changed="setDiffuseValue"/>
-    <SliderInput title="ModSpeed" :slider-min-value=-25 :slider-max-value=25 :slider-value="getModSpeedValue()"
+    <SliderInput :title="$t('message.effects.reverb.modSpeed')" :slider-min-value=-25 :slider-max-value=25
+                 :slider-value="getModSpeedValue()"
                  :store-path="getStorePath('mod_speed')" v-show="is_expanded" @value-changed="setModSpeedValue"/>
-    <SliderInput title="ModDepth" :slider-min-value=-25 :slider-max-value=25 :slider-value="getModDepthValue()"
+    <SliderInput :title="$t('message.effects.reverb.modDepth')" :slider-min-value=-25 :slider-max-value=25
+                 :slider-value="getModDepthValue()"
                  :store-path="getStorePath('mod_depth')" v-show="is_expanded" @value-changed="setModDepthValue"/>
-
   </ExpandoGroupContainer>
 </template>
 
@@ -41,7 +53,7 @@ import ExpandoGroupContainer from "@/components/containers/ExpandoGroupContainer
 
 export default {
   name: "ReverbEffect",
-  components: {ExpandoGroupContainer, RadioSelection, SliderInput },
+  components: {ExpandoGroupContainer, RadioSelection, SliderInput},
 
   data() {
     return {
@@ -49,12 +61,12 @@ export default {
       is_expanded: false,
 
       reverb_style: [
-        {id: "Library", label: "Library"},
-        {id: "DarkBloom", label: "Dark Bloom"},
-        {id: "MusicClub", label: "Music Club"},
-        {id: "RealPlate", label: "Real Plate"},
-        {id: "Chapel", label: "Chapel"},
-        {id: "HockeyArena", label: "Hockey Arena"}
+        {id: "Library", label: this.$t('message.effects.reverb.styles.library')},
+        {id: "DarkBloom", label: this.$t('message.effects.reverb.styles.darkBloom')},
+        {id: "MusicClub", label: this.$t('message.effects.reverb.styles.musicClub')},
+        {id: "RealPlate", label: this.$t('message.effects.reverb.styles.realPlate')},
+        {id: "Chapel", label: this.$t('message.effects.reverb.styles.chapel')},
+        {id: "HockeyArena", label: this.$t('message.effects.reverb.styles.library')}
       ],
     }
   },

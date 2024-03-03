@@ -239,7 +239,7 @@ export default {
                 decay: "Decay",
                 earlyLevel: "Early Level",
                 tailLevel: "Tail Level",
-                predelay: "Predelay",
+                preDelay: "Predelay",
                 lowColour: "Lo Colour",
                 highColour: "Hi Colour",
                 highFactor: "Hi Factor",
