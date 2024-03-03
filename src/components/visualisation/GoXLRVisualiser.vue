@@ -39,8 +39,6 @@ export default {
 
       let clickedArea = mapElementToArea(e.target, null, null);
       this.$emit("areaClick", { area: clickedArea, alt: rightClick });
-
-      console.log({ area: clickedArea, alt: rightClick })
     },
 
     // transforms a HEX string into a colour object.

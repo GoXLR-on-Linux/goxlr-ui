@@ -130,8 +130,6 @@ export default {
     },
 
     onTabChange(tab) {
-      console.log(tab)
-
       let id = tab.id;
       if (id === "configuration") {
         this.visualiserHighlightAreas = [
