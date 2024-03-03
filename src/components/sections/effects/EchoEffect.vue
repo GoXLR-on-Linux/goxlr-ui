@@ -1,16 +1,56 @@
 <template>
-  <ExpandoGroupContainer title="Echo" :expanded="is_expanded" @expando-clicked="is_expanded = !is_expanded">
-    <RadioSelection title="Style" group="effects_echo_style" :options="echo_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+  <ExpandoGroupContainer :title="$t('message.effects.echo.title')" :expanded="is_expanded"
+                         @expando-clicked="is_expanded = !is_expanded">
+    <RadioSelection :title="$t('message.effects.echo.style')" group="effects_echo_style" :options="echo_style"
+                    :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
-    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 :slider-value="getAmountValue()" :store-path="getStorePath('amount')" @value-changed="setAmountValue" text-suffix="%" />
-    <SliderInput title="Feedback" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackValue()" :store-path="getStorePath('feedback')" v-show="is_expanded" @value-changed="setFeedbackValue" />
-    <SliderInput title="Tempo" :disabled="isTempoDisabled()" :background-colour="getBackgroundColour(isTempoDisabled())" :input-background-colour="getInputBackgroundColour(isTempoDisabled())" :text-colour="getSliderColour(isTempoDisabled())" :range-colour="getSliderColour(isTempoDisabled())" :label-colour="getLabelColour(isTempoDisabled())" :slider-min-value=45 :slider-max-value=300 text-suffix="BPM" :slider-value="getTempoValue()" :store-path="getStorePath('tempo')" v-show="is_expanded" @value-changed="setTempoValue"/>
-    <SliderInput title="Delay L" :disabled="isDelayDisabled()" :background-colour="getBackgroundColour(isDelayDisabled())" :input-background-colour="getInputBackgroundColour(isDelayDisabled())" :text-colour="getSliderColour(isDelayDisabled())" :range-colour="getSliderColour(isDelayDisabled())" :label-colour="getLabelColour(isDelayDisabled())" :slider-min-value=0 :slider-max-value=2500 text-suffix="ms" :slider-value="getDelayLValue()" :store-path="getStorePath('delay_left')" v-show="is_expanded" @value-changed="setDelayLValue"/>
-    <SliderInput title="Delay R" :disabled="isDelayDisabled()" :background-colour="getBackgroundColour(isDelayDisabled())" :input-background-colour="getInputBackgroundColour(isDelayDisabled())" :text-colour="getSliderColour(isDelayDisabled())" :range-colour="getSliderColour(isDelayDisabled())" :label-colour="getLabelColour(isDelayDisabled())" :slider-min-value=0 :slider-max-value=2500 text-suffix="ms" :slider-value="getDelayRValue()" :store-path="getStorePath('delay_right')" v-show="is_expanded" @value-changed="setDelayRValue"/>
-    <SliderInput title="Feedback L" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackLValue()" :store-path="getStorePath('feedback_left')" v-show="is_expanded" @value-changed="setFeedbackLValue"/>
-    <SliderInput title="XFB L to R" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getXFBLtoRValue()" :store-path="getStorePath('feedback_xfb_l_to_r')" v-show="is_expanded" @value-changed="setXFBLtoRValue"/>
-    <SliderInput title="Feedback R" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getFeedbackRValue()" :store-path="getStorePath('feedback_right')" v-show="is_expanded" @value-changed="setFeedbackRValue"/>
-    <SliderInput title="XFB R to L" :slider-min-value=0 :slider-max-value=100 text-suffix="%" :slider-value="getXFBRtoLValue()" v-show="is_expanded" :store-path="getStorePath('feedback_xfb_r_to_l')" @value-changed="setXFBRtoLValue"/>
+    <SliderInput :title="$t('message.effects.echo.amount')" :slider-min-value=0 :slider-max-value=100
+                 :slider-value="getAmountValue()" :store-path="getStorePath('amount')"
+                 @value-changed="setAmountValue" text-suffix="%"/>
+
+    <SliderInput :title="$t('message.effects.echo.feedback')" :slider-min-value=0 :slider-max-value=100
+                 text-suffix="%" :slider-value="getFeedbackValue()" :store-path="getStorePath('feedback')"
+                 v-show="is_expanded" @value-changed="setFeedbackValue"/>
+
+    <SliderInput :title="$t('message.effects.echo.tempo')" :disabled="isTempoDisabled()"
+                 :background-colour="getBackgroundColour(isTempoDisabled())"
+                 :input-background-colour="getInputBackgroundColour(isTempoDisabled())"
+                 :text-colour="getSliderColour(isTempoDisabled())" :range-colour="getSliderColour(isTempoDisabled())"
+                 :label-colour="getLabelColour(isTempoDisabled())" :slider-min-value=45 :slider-max-value=300
+                 text-suffix="BPM" :slider-value="getTempoValue()" :store-path="getStorePath('tempo')"
+                 v-show="is_expanded" @value-changed="setTempoValue"/>
+
+    <SliderInput :title="$t('message.effects.echo.delayLeft')" :disabled="isDelayDisabled()"
+                 :background-colour="getBackgroundColour(isDelayDisabled())"
+                 :input-background-colour="getInputBackgroundColour(isDelayDisabled())"
+                 :text-colour="getSliderColour(isDelayDisabled())" :range-colour="getSliderColour(isDelayDisabled())"
+                 :label-colour="getLabelColour(isDelayDisabled())" :slider-min-value=0 :slider-max-value=2500
+                 text-suffix="ms" :slider-value="getDelayLValue()" :store-path="getStorePath('delay_left')"
+                 v-show="is_expanded" @value-changed="setDelayLValue"/>
+
+    <SliderInput :title="$t('message.effects.echo.delayRight')" :disabled="isDelayDisabled()"
+                 :background-colour="getBackgroundColour(isDelayDisabled())"
+                 :input-background-colour="getInputBackgroundColour(isDelayDisabled())"
+                 :text-colour="getSliderColour(isDelayDisabled())" :range-colour="getSliderColour(isDelayDisabled())"
+                 :label-colour="getLabelColour(isDelayDisabled())" :slider-min-value=0 :slider-max-value=2500
+                 text-suffix="ms" :slider-value="getDelayRValue()" :store-path="getStorePath('delay_right')"
+                 v-show="is_expanded" @value-changed="setDelayRValue"/>
+
+    <SliderInput :title="$t('message.effects.echo.feedbackLeft')" :slider-min-value=0 :slider-max-value=100
+                 text-suffix="%" :slider-value="getFeedbackLValue()" :store-path="getStorePath('feedback_left')"
+                 v-show="is_expanded" @value-changed="setFeedbackLValue"/>
+
+    <SliderInput :title="$t('message.effects.echo.xfbLeftToRight')" :slider-min-value=0 :slider-max-value=100
+                 text-suffix="%" :slider-value="getXFBLtoRValue()" :store-path="getStorePath('feedback_xfb_l_to_r')"
+                 v-show="is_expanded" @value-changed="setXFBLtoRValue"/>
+
+    <SliderInput :title="$t('message.effects.echo.feedbackRight')" :slider-min-value=0 :slider-max-value=100
+                 text-suffix="%" :slider-value="getFeedbackRValue()" :store-path="getStorePath('feedback_right')"
+                 v-show="is_expanded" @value-changed="setFeedbackRValue"/>
+
+    <SliderInput :title="$t('message.effects.echo.xfbRightToLeft')" :slider-min-value=0 :slider-max-value=100
+                 text-suffix="%" :slider-value="getXFBRtoLValue()" v-show="is_expanded"
+                 :store-path="getStorePath('feedback_xfb_r_to_l')" @value-changed="setXFBRtoLValue"/>
   </ExpandoGroupContainer>
 </template>
 
@@ -29,12 +69,12 @@ export default {
       is_expanded: false,
 
       echo_style: [
-        {id: "Quarter", label: "Quarter"},
-        {id: "Eighth", label: "Eighth"},
-        {id: "Triplet", label: "Triplet"},
-        {id: "PingPong", label: "Ping Pong"},
-        {id: "ClassicSlap", label: "Classic Slap"},
-        {id: "MultiTap", label: "MultiTap"}
+        {id: "Quarter", label: this.$t('message.effects.echo.styles.quarter')},
+        {id: "Eighth", label: this.$t('message.effects.echo.styles.eighth')},
+        {id: "Triplet", label: this.$t('message.effects.echo.styles.triplet')},
+        {id: "PingPong", label: this.$t('message.effects.echo.styles.pingPong')},
+        {id: "ClassicSlap", label: this.$t('message.effects.echo.styles.classicSlap')},
+        {id: "MultiTap", label: this.$t('message.effects.echo.styles.multiTap')}
       ],
     }
   },
@@ -67,7 +107,7 @@ export default {
     },
 
     stylePressed(button) {
-      websocket.send_command(store.getActiveSerial(), { "SetEchoStyle": button });
+      websocket.send_command(store.getActiveSerial(), {"SetEchoStyle": button});
     },
 
     getAmountValue() {
@@ -75,21 +115,21 @@ export default {
     },
     setAmountValue(id, value) {
       store.getActiveDevice().effects.current.echo.amount = value;
-      websocket.send_command(store.getActiveSerial(), { "SetEchoAmount": value });
+      websocket.send_command(store.getActiveSerial(), {"SetEchoAmount": value});
     },
 
     getFeedbackValue() {
       return store.getActiveDevice().effects.current.echo.feedback;
     },
     setFeedbackValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetEchoFeedback": value });
+      websocket.send_command(store.getActiveSerial(), {"SetEchoFeedback": value});
     },
 
     getTempoValue() {
       return store.getActiveDevice().effects.current.echo.tempo;
     },
     setTempoValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetEchoTempo": value });
+      websocket.send_command(store.getActiveSerial(), {"SetEchoTempo": value});
     },
 
 
@@ -97,42 +137,42 @@ export default {
       return store.getActiveDevice().effects.current.echo.delay_left;
     },
     setDelayLValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetEchoDelayLeft": value });
+      websocket.send_command(store.getActiveSerial(), {"SetEchoDelayLeft": value});
     },
 
     getDelayRValue() {
       return store.getActiveDevice().effects.current.echo.delay_right;
     },
     setDelayRValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetEchoDelayRight": value });
+      websocket.send_command(store.getActiveSerial(), {"SetEchoDelayRight": value});
     },
 
     getFeedbackLValue() {
       return store.getActiveDevice().effects.current.echo.feedback_left;
     },
     setFeedbackLValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetEchoFeedbackLeft": value });
+      websocket.send_command(store.getActiveSerial(), {"SetEchoFeedbackLeft": value});
     },
 
     getFeedbackRValue() {
       return store.getActiveDevice().effects.current.echo.feedback_right;
     },
     setFeedbackRValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetEchoFeedbackRight": value });
+      websocket.send_command(store.getActiveSerial(), {"SetEchoFeedbackRight": value});
     },
 
     getXFBLtoRValue() {
       return store.getActiveDevice().effects.current.echo.feedback_xfb_l_to_r;
     },
     setXFBLtoRValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetEchoFeedbackXFBLtoR": value });
+      websocket.send_command(store.getActiveSerial(), {"SetEchoFeedbackXFBLtoR": value});
     },
 
     getXFBRtoLValue() {
       return store.getActiveDevice().effects.current.echo.feedback_xfb_r_to_l;
     },
     setXFBRtoLValue(id, value) {
-      websocket.send_command(store.getActiveSerial(), { "SetEchoFeedbackXFBRtoL": value });
+      websocket.send_command(store.getActiveSerial(), {"SetEchoFeedbackXFBRtoL": value});
     },
 
     getStorePath(name) {
