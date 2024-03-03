@@ -1,7 +1,7 @@
 <template>
   <ExpandoGroupContainer :title="$t('message.effects.robot.title')" @expando-clicked="is_expanded = !is_expanded"
                          :expanded="is_expanded">
-    <RadioSelection title="Style" group="effects_robot_style" :options="robot_style" :selected="getActiveStyle()"
+    <RadioSelection title="Style" group="effects_robot_style" :options="getRobotStyles()" :selected="getActiveStyle()"
                     @selection-changed="stylePressed"/>
 
     <SliderInput :title="$t('message.effects.robot.lowGain')" :slider-min-value=-12 :slider-max-value=12
@@ -60,16 +60,18 @@ export default {
   data() {
     return {
       is_expanded: false,
-
-      robot_style: [
-        {id: "Robot1", label: this.$t('message.effects.robot.styles.robot1')},
-        {id: "Robot2", label: this.$t('message.effects.robot.styles.robot2')},
-        {id: "Robot3", label: this.$t('message.effects.robot.styles.robot3')},
-      ],
     }
   },
 
   methods: {
+    getRobotStyles() {
+      return [
+        {id: "Robot1", label: this.$t('message.effects.robot.styles.robot1')},
+        {id: "Robot2", label: this.$t('message.effects.robot.styles.robot2')},
+        {id: "Robot3", label: this.$t('message.effects.robot.styles.robot3')},
+      ];
+    },
+
     getActiveStyle() {
       return store.getActiveDevice().effects.current.robot.style;
     },

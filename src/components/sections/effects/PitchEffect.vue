@@ -1,7 +1,7 @@
 <template>
   <ExpandoGroupContainer :title="$t('message.effects.pitch.title')" @expando-clicked="is_expanded = !is_expanded"
                          :expanded="is_expanded">
-    <RadioSelection :title="$t('message.effects.pitch.style')" group="effects_pitch_style" :options="pitch_style"
+    <RadioSelection :title="$t('message.effects.pitch.style')" group="effects_pitch_style" :options="getPitchStyles()"
                     :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput :title="$t('message.effects.pitch.amount')" :value-map="getValueMap()" :slider-value="getAmountValue()"
@@ -25,15 +25,17 @@ export default {
   data() {
     return {
       is_expanded: false,
-
-      pitch_style: [
-        {id: "Narrow", label: this.$t('message.effects.pitch.styles.narrow')},
-        {id: "Wide", label: this.$t('message.effects.pitch.styles.wide')},
-      ],
     }
   },
 
   methods: {
+    getPitchStyles() {
+      return [
+        {id: "Narrow", label: this.$t('message.effects.pitch.styles.narrow')},
+        {id: "Wide", label: this.$t('message.effects.pitch.styles.wide')},
+      ];
+    },
+
     getActiveStyle() {
       return store.getActiveDevice().effects.current.pitch.style;
     },

@@ -1,7 +1,7 @@
 <template>
   <GroupContainer :title="$t('message.effects.gender.title')">
-    <RadioSelection :title="$t('message.effects.gender.style')" group="effects_gender_style" :options="gender_style"
-                    :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+    <RadioSelection :title="$t('message.effects.gender.style')" group="effects_gender_style"
+                    :options="getGenderStyles()" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput :title="$t('message.effects.gender.amount')" :slider-min-value="getSliderValue(true)"
                  :slider-max-value="getSliderValue(false)" :slider-value="getAmountValue()"
@@ -23,16 +23,18 @@ export default {
   data() {
     return {
       amount: 0,
-
-      gender_style: [
-        {id: "Narrow", label: this.$t('message.effects.gender.styles.narrow')},
-        {id: "Medium", label: this.$t('message.effects.gender.styles.medium')},
-        {id: "Wide", label: this.$t('message.effects.gender.styles.wide')},
-      ],
     }
   },
 
   methods: {
+    getGenderStyles() {
+      return [
+        {id: "Narrow", label: this.$t('message.effects.gender.styles.narrow')},
+        {id: "Medium", label: this.$t('message.effects.gender.styles.medium')},
+        {id: "Wide", label: this.$t('message.effects.gender.styles.wide')},
+      ];
+    },
+
     getActiveStyle() {
       return store.getActiveDevice().effects.current.gender.style;
     },

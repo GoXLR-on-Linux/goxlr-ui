@@ -2,7 +2,7 @@
   <ExpandoGroupContainer :title="$t('message.effects.megaphone.title')" @expando-clicked="is_expanded = !is_expanded"
                          :expanded="is_expanded">
     <RadioSelection :title="$t('message.effects.megaphone.style')" group="effects_megaphone_style"
-                    :options="megaphone_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+                    :options="getMegaphoneStyles()" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput :title="$t('message.effects.megaphone.amount')" :slider-min-value=0 :slider-max-value=100
                  suffix:text-suffix="$t('message.suffixes.percentage')" :slider-value="getAmountValue()"
@@ -27,19 +27,21 @@ export default {
   data() {
     return {
       is_expanded: false,
+    }
+  },
 
-      megaphone_style: [
+  methods: {
+    getMegaphoneStyles() {
+      return [
         {id: "Megaphone", label: this.$t('message.effects.megaphone.styles.megaphone')},
         {id: "Radio", label: this.$t('message.effects.megaphone.styles.radio')},
         {id: "OnThePhone", label: this.$t('message.effects.megaphone.styles.onThePhone')},
         {id: "Overdrive", label: this.$t('message.effects.megaphone.styles.overdrive')},
         {id: "BuzzCutt", label: this.$t('message.effects.megaphone.styles.buzzCutt')},
         {id: "Tweed", label: this.$t('message.effects.megaphone.styles.tweed')}
-      ],
-    }
-  },
+      ];
+    },
 
-  methods: {
     getActiveStyle() {
       return store.getActiveDevice().effects.current.megaphone.style;
     },

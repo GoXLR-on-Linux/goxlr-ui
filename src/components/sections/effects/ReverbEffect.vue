@@ -1,8 +1,8 @@
 <template>
   <ExpandoGroupContainer :title="$t('message.effects.reverb.title')" @expando-clicked="is_expanded = !is_expanded"
                          :expanded="is_expanded">
-    <RadioSelection :title="$t('message.effects.reverb.style')" group="effects_reverb_style" :options="reverb_style"
-                    :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+    <RadioSelection :title="$t('message.effects.reverb.style')" group="effects_reverb_style"
+                    :options="getReverbStyles()" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput :title="$t('message.effects.reverb.amount')" :slider-min-value=0 :slider-max-value=100
                  :slider-value="getAmountValue()" text-suffix="%"
@@ -56,19 +56,21 @@ export default {
     return {
       decay_map: [],
       is_expanded: false,
+    }
+  },
 
-      reverb_style: [
+  methods: {
+    getReverbStyles() {
+      return [
         {id: "Library", label: this.$t('message.effects.reverb.styles.library')},
         {id: "DarkBloom", label: this.$t('message.effects.reverb.styles.darkBloom')},
         {id: "MusicClub", label: this.$t('message.effects.reverb.styles.musicClub')},
         {id: "RealPlate", label: this.$t('message.effects.reverb.styles.realPlate')},
         {id: "Chapel", label: this.$t('message.effects.reverb.styles.chapel')},
         {id: "HockeyArena", label: this.$t('message.effects.reverb.styles.library')}
-      ],
-    }
-  },
+      ];
+    },
 
-  methods: {
     getActiveStyle() {
       return store.getActiveDevice().effects.current.reverb.style;
     },

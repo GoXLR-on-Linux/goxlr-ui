@@ -3,14 +3,14 @@
     <RadioSelection
         :title="$t('message.sampler.banks.bankTitle')"
         group="sampler_bank"
-        :options="bank_options"
+        :options="getBankOptions()"
         :selected="activeBank"
         @selection-changed="setActiveBank"
     />
     <RadioSelection
         :title="$t('message.sampler.banks.buttonTitle')"
         group="sampler_button"
-        :options="button_options"
+        :options="getButtonOptions()"
         :selected="activeButton"
         @selection-changed="setActiveButton"
         :label="$t('message.sampler.banks.buttonLabel', {activeBank: activeBank})"
@@ -18,7 +18,7 @@
     <RadioSelection
         :title="$t('message.sampler.banks.functionTitle')"
         group="sampler_function"
-        :options="function_options"
+        :options="getFunctionOptions()"
         :selected="getActiveFunction()"
         @selection-changed="setActiveFunction"
         :label="$t('message.sampler.banks.functionLabel', {activeButton: activeButton, activeBank: activeBank})"
@@ -26,7 +26,7 @@
     <RadioSelection
         :title="$t('message.sampler.banks.playOrderTitle')"
         group="sampler_order"
-        :options="order_options"
+        :options="getOrderOptions()"
         :selected="getActiveOrder()"
         @selection-changed="setActiveOrder"
         :label="$t('message.sampler.banks.playOrderLabel', {activeButton: activeButton, activeBank: activeBank})"
@@ -179,37 +179,45 @@ export default {
 
       showAddModal: false,
       waitModal: false,
+    };
+  },
 
-      bank_options: [
+  methods: {
+    getBankOptions() {
+      return [
         {id: "A", label: this.$t('message.sampler.banks.bank.a')},
         {id: "B", label: this.$t('message.sampler.banks.bank.b')},
         {id: "C", label: this.$t('message.sampler.banks.bank.c')},
-      ],
+      ];
+    },
 
-      button_options: [
+    getButtonOptions() {
+      return [
         {id: "TopLeft", label: this.$t('message.sampler.banks.buttons.topLeft')},
         {id: "TopRight", label: this.$t('message.sampler.banks.buttons.topRight')},
         {id: "BottomLeft", label: this.$t('message.sampler.banks.buttons.bottomLeft')},
         {id: "BottomRight", label: this.$t('message.sampler.banks.buttons.bottomRight')},
-      ],
+      ];
+    },
 
-      function_options: [
+    getFunctionOptions() {
+      return [
         {id: "PlayNext", label: this.$t('message.sampler.banks.functions.playNext')},
         {id: "PlayStop", label: this.$t('message.sampler.banks.functions.playStop')},
         {id: "PlayFade", label: this.$t('message.sampler.banks.functions.playFade')},
         {id: "StopOnRelease", label: this.$t('message.sampler.banks.functions.stopOnRelease')},
         {id: "FadeOnRelease", label: this.$t('message.sampler.banks.functions.fadeOnRelease')},
         {id: "Loop", label: "Loop"},
-      ],
+      ];
+    },
 
-      order_options: [
+    getOrderOptions() {
+      return [
         {id: "Sequential", label: this.$t('message.sampler.banks.playOrders.sequential')},
         {id: "Random", label: this.$t('message.sampler.banks.playOrders.random')},
-      ],
-    };
-  },
+      ];
+    },
 
-  methods: {
     openSamples() {
       websocket.open_path("Samples");
     },

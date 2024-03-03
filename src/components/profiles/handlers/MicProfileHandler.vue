@@ -14,7 +14,7 @@
     </div>
     <div style="height: 205px">
       <ProfileManager ref="manager" :profile-list="getProfileList()" :active-profile="getActiveProfile()"
-                      :menu-list="menuList" @new-profile="newProfile" @load-profile="loadProfile"
+                      :menu-list="getMenuList()" @new-profile="newProfile" @load-profile="loadProfile"
                       @save-profile="saveProfile" @save-profile-as="saveProfileAs"
                       @menu-item-pressed="menuItemPressed" />
     </div>
@@ -49,16 +49,18 @@ export default {
 
   data() {
     return {
-      menuList: [
-        {name: this.$t('message.profileManager.menuLoadProfile'), slug: 'load'},
-        {name: this.$t('message.profileManager.menuDeleteProfile'), slug: 'delete'}
-      ],
-
       selectedProfile: '',
     }
   },
 
   methods: {
+    getMenuList() {
+      return [
+        {name: this.$t('message.profileManager.menuLoadProfile'), slug: 'load'},
+        {name: this.$t('message.profileManager.menuDeleteProfile'), slug: 'delete'}
+      ];
+    },
+
     getProfileList() {
       return store.getMicProfileFiles().sort(Intl.Collator().compare);
     },

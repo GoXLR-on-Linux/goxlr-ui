@@ -1,8 +1,8 @@
 <template>
     <GroupContainer :title="$t('message.configuration.cough.title')">
-      <RadioSelection :title="$t('message.configuration.cough.behaviourTitle')" :options="button_behaviour"
+      <RadioSelection :title="$t('message.configuration.cough.behaviourTitle')" :options="getButtonBehaviours()"
                       group="cough_button_behaviour" @selection-changed="behaviorPressed" :selected="getCough()" />
-      <RadioSelection :title="$t('message.configuration.muteBehaviourTitle')" :options="mute_behaviour"
+      <RadioSelection :title="$t('message.configuration.muteBehaviourTitle')" :options="getMuteBehaviours()"
                       group="cough_mute_behaviour" @selection-changed="setActiveMuteFunction"
                       :selected="getActiveMute()" />
     </GroupContainer>
@@ -20,22 +20,27 @@ export default {
 
   data() {
     return {
-      button_behaviour: [
+    }
+  },
+
+  methods: {
+    getButtonBehaviours() {
+      return [
         {id: "hold", label: this.$t('message.configuration.cough.behaviour.hold') },
         {id: "toggle", label: this.$t('message.configuration.cough.behaviour.toggle') }
-      ],
+      ];
+    },
 
-      mute_behaviour: [
+    getMuteBehaviours() {
+      return [
         { id: "All", label: this.$t('message.configuration.mute_behaviour.all') },
         { id: "ToStream", label: this.$t('message.configuration.mute_behaviour.stream') },
         { id: "ToVoiceChat", label: this.$t('message.configuration.mute_behaviour.chatMic') },
         { id: "ToPhones", label: this.$t('message.configuration.mute_behaviour.headphones') },
         { id: "ToLineOut", label: this.$t('message.configuration.mute_behaviour.lineOut') },
-      ]
-    }
-  },
+      ];
+    },
 
-  methods: {
     getCough() {
       return (store.getActiveDevice().cough_button.is_toggle) ? "toggle" : "hold";
     },

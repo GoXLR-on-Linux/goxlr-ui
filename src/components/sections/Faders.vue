@@ -1,14 +1,14 @@
 <template>
   <GroupContainer :title="$t('message.configuration.faders.title')">
     <RadioSelection :title="$t('message.configuration.faders.channelTitle')" group="faders_channel"
-                    :options="fader_options" :selected="activeChannel" @selection-changed="channelChanged" />
+                    :options="getFaderOptions()" :selected="activeChannel" @selection-changed="channelChanged" />
 
     <RadioSelection :title="$t('message.configuration.faders.sourceTitle')" group="faders_source"
-                    :options="source_options" :selected="getActiveSource()" @selection-changed="sourceChanged"
+                    :options="getSourceOptions()" :selected="getActiveSource()" @selection-changed="sourceChanged"
                     :label="$t('message.configuration.faders.sourceLabel', { channel: getActiveChannelName() })" />
 
     <RadioSelection :title="$t('message.configuration.muteBehaviourTitle')" group="faders_mute"
-                    :options="getMuteFunctions()" :selected="getActiveMuteFunction()"
+                    :options="getMuteBehaviour()" :selected="getActiveMuteBehaviour()"
                     @selection-changed="muteFunctionChanged"
                     :label="$t('message.configuration.muteBehaviourLabel', { channel: getActiveChannelName() })" />
   </GroupContainer>
@@ -32,15 +32,21 @@ export default {
   data() {
     return {
       activeChannel: "A",
+    }
+  },
 
-      fader_options: [
+  methods: {
+    getFaderOptions() {
+      return [
         { id: "A", label: this.$t('message.faders.A') },
         { id: "B", label: this.$t('message.faders.B') },
         { id: "C", label: this.$t('message.faders.C') },
         { id: "D", label: this.$t('message.faders.D') }
-      ],
+      ];
+    },
 
-      source_options: [
+    getSourceOptions() {
+      return [
         { id: "Mic", label: this.$t('message.channels.Mic') },
         { id: "Chat", label: this.$t('message.channels.Chat') },
         { id: "Music", label: this.$t('message.channels.Music') },
@@ -51,19 +57,19 @@ export default {
         { id: "Sample", label: this.$t('message.channels.Sample') },
         { id: "Headphones", label: this.$t('message.channels.Headphones') },
         { id: "LineOut", label: this.$t('message.channels.LineOut') }
-      ],
+      ];
+    },
 
-      mute_options: [
+    getMuteBehaviours() {
+      return [
         { id: "All", label: this.$t('message.configuration.mute_behaviour.all') },
         { id: "ToStream", label: this.$t('message.configuration.mute_behaviour.stream') },
         { id: "ToVoiceChat", label: this.$t('message.configuration.mute_behaviour.chatMic') },
         { id: "ToPhones", label: this.$t('message.configuration.mute_behaviour.headphones') },
         { id: "ToLineOut", label: this.$t('message.configuration.mute_behaviour.lineOut') },
-      ]
-    }
-  },
+      ];
+    },
 
-  methods: {
     channelChanged: function (id) {
       this.activeChannel = id;
       this.$emit("on-fader-channel-change", id);
@@ -80,7 +86,7 @@ export default {
       websocket.send_command(serial, command);
       store.getActiveDevice().fader_status[this.activeChannel].channel = channelName;
 
-      if (this.isMuteFunctionDisabled(this.getActiveMuteFunction())) {
+      if (this.isMuteFunctionDisabled(this.getActiveMuteBehaviour())) {
         this.muteFunctionChanged("All")
       }
     },
@@ -104,7 +110,7 @@ export default {
     },
 
     updateDisabledMuteFunctions(source) {
-      for (let mute_option of this.mute_options) {
+      for (let mute_option of this.getMuteBehaviours()) {
         if (source === "Chat" && mute_option.id === "ToVoiceChat") {
           mute_option.disabled = true;
           continue;
@@ -138,16 +144,16 @@ export default {
       return store.getActiveDevice().fader_status[this.activeChannel].channel;
     },
 
-    getActiveMuteFunction: function () {
+    getActiveMuteBehaviour: function () {
       return store.getActiveDevice().fader_status[this.activeChannel].mute_type;
     },
 
-    getMuteFunctions: function () {
+    getMuteBehaviour: function () {
       this.updateDisabledMuteFunctions(this.getActiveSource());
-      return this.mute_options;
+      return this.getMuteBehaviours();
     },
     getActiveChannelName: function () {
-      return this.fader_options.find((option) => option.id === this.activeChannel).label;
+      return this.getFaderOptions().find((option) => option.id === this.activeChannel).label;
     },
   },
 }

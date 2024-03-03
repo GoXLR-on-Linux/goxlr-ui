@@ -7,7 +7,7 @@
             group="preset_select"
             :options="getEffectOptions()"
             :selected="getActivePreset()"
-            :menu="menu_options"
+            :menu="getMenuOptions()"
             menu_id="preset_buttons"
             @menu-opened="menuOpened"
             @menu-selected="optionClicked"
@@ -140,17 +140,18 @@ export default {
       newPresetName: '',
 
       selectedPreset: undefined,
-
-      // This will need to be generated per-button..
-      menu_options: [
-        {name: this.$t('message.effects.preset.menuLoad'), slug: "load"},
-        {name: this.$t('message.effects.preset.menuRename'), slug: 'rename'},
-        {name: this.$t('message.effects.preset.menuSave'), slug: 'save'}
-      ],
     };
   },
 
   methods: {
+    getMenuOptions() {
+      return [
+        {name: this.$t('message.effects.preset.menuLoad'), slug: "load"},
+        {name: this.$t('message.effects.preset.menuRename'), slug: 'rename'},
+        {name: this.$t('message.effects.preset.menuSave'), slug: 'save'}
+      ];
+    },
+
     getCurrentPresetName() {
       return store.getActiveDevice().effects.preset_names[store.getActiveDevice().effects.active_preset];
     },

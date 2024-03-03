@@ -16,7 +16,7 @@
       ref="manager"
       :profile-list="getProfileList()"
       :active-profile="getActiveProfile()"
-      :menu-list="menuList"
+      :menu-list="getMenuList()"
       @new-profile="newProfile"
       @load-profile="loadProfile"
       @save-profile="saveProfile"
@@ -53,17 +53,19 @@ export default {
 
   data() {
     return {
-      menuList: [
-        { name: this.$t('message.profileManager.menuLoadProfile'), slug: "load" },
-        { name: this.$t('message.profileManager.menuLoadProfileColours'), slug: "colours" },
-        { name: this.$t('message.profileManager.menuDeleteProfile'), slug: "delete" },
-      ],
-
       selectedProfile: "",
     };
   },
 
   methods: {
+    getMenuList() {
+      return [
+        { name: this.$t('message.profileManager.menuLoadProfile'), slug: "load" },
+        { name: this.$t('message.profileManager.menuLoadProfileColours'), slug: "colours" },
+        { name: this.$t('message.profileManager.menuDeleteProfile'), slug: "delete" },
+      ];
+    },
+
     getProfileList() {
       return store.getProfileFiles().sort(Intl.Collator().compare);
     },

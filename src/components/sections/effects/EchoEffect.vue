@@ -1,7 +1,7 @@
 <template>
   <ExpandoGroupContainer :title="$t('message.effects.echo.title')" :expanded="is_expanded"
                          @expando-clicked="is_expanded = !is_expanded">
-    <RadioSelection :title="$t('message.effects.echo.style')" group="effects_echo_style" :options="echo_style"
+    <RadioSelection :title="$t('message.effects.echo.style')" group="effects_echo_style" :options="getEchoStyles()"
                     :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
     <SliderInput :title="$t('message.effects.echo.amount')" :slider-min-value=0 :slider-max-value=100
@@ -68,19 +68,21 @@ export default {
   data() {
     return {
       is_expanded: false,
+    }
+  },
 
-      echo_style: [
+  methods: {
+    getEchoStyles() {
+      return [
         {id: "Quarter", label: this.$t('message.effects.echo.styles.quarter')},
         {id: "Eighth", label: this.$t('message.effects.echo.styles.eighth')},
         {id: "Triplet", label: this.$t('message.effects.echo.styles.triplet')},
         {id: "PingPong", label: this.$t('message.effects.echo.styles.pingPong')},
         {id: "ClassicSlap", label: this.$t('message.effects.echo.styles.classicSlap')},
         {id: "MultiTap", label: this.$t('message.effects.echo.styles.multiTap')}
-      ],
-    }
-  },
+      ];
+    },
 
-  methods: {
     isTempoDisabled() {
       return this.getActiveStyle() === "ClassicSlap";
     },
