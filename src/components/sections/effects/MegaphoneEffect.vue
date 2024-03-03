@@ -1,11 +1,16 @@
 <template>
-  <ExpandoGroupContainer title="Megaphone" @expando-clicked="is_expanded = !is_expanded" :expanded="is_expanded">
-    <RadioSelection title="Style" group="effects_megaphone_style" :options="megaphone_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
+  <ExpandoGroupContainer :title="$t('message.effects.megaphone.title')" @expando-clicked="is_expanded = !is_expanded"
+                         :expanded="is_expanded">
+    <RadioSelection :title="$t('message.effects.megaphone.style')" group="effects_megaphone_style"
+                    :options="megaphone_style" :selected="getActiveStyle()" @selection-changed="stylePressed"/>
 
-    <SliderInput title="Amount" :slider-min-value=0 :slider-max-value=100 text-suffix="%"
-                 :slider-value="getAmountValue()" :store-path="getStorePath('amount')" v-show="is_expanded" @value-changed="setAmountValue"/>
-    <SliderInput title="Post Gain" :slider-min-value=-20 :slider-max-value=20 text-suffix="dB"
-                 :slider-value="getPostGainValue()" :store-path="getStorePath('post_gain')" v-show="is_expanded" @value-changed="setPostGainValue"/>
+    <SliderInput :title="$t('message.effects.megaphone.amount')" :slider-min-value=0 :slider-max-value=100
+                 text-suffix="%" :slider-value="getAmountValue()" :store-path="getStorePath('amount')"
+                 v-show="is_expanded" @value-changed="setAmountValue"/>
+
+    <SliderInput :title="$t('message.effects.megaphone.postGain')" :slider-min-value=-20 :slider-max-value=20
+                 text-suffix="dB" :slider-value="getPostGainValue()" :store-path="getStorePath('post_gain')"
+                 v-show="is_expanded" @value-changed="setPostGainValue"/>
   </ExpandoGroupContainer>
 </template>
 
@@ -24,12 +29,12 @@ export default {
       is_expanded: false,
 
       megaphone_style: [
-        {id: "Megaphone", label: "Megaphone"},
-        {id: "Radio", label: "Radio"},
-        {id: "OnThePhone", label: "On The Phone"},
-        {id: "Overdrive", label: "Overdrive"},
-        {id: "BuzzCutt", label: "Buzz Cutt"},
-        {id: "Tweed", label: "Tweed"}
+        {id: "Megaphone", label: this.$t('message.effects.megaphone.styles.megaphone')},
+        {id: "Radio", label: this.$t('message.effects.megaphone.styles.radio')},
+        {id: "OnThePhone", label: this.$t('message.effects.megaphone.styles.onThePhone')},
+        {id: "Overdrive", label: this.$t('message.effects.megaphone.styles.overdrive')},
+        {id: "BuzzCutt", label: this.$t('message.effects.megaphone.styles.buzzCutt')},
+        {id: "Tweed", label: this.$t('message.effects.megaphone.styles.tweed')}
       ],
     }
   },
