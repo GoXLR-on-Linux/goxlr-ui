@@ -2,18 +2,18 @@
   <div id="main">
     <DeviceSelector v-if="!isDeviceSet()"/>
     <template v-if="isDeviceSet()">
-      <h1 class="screenreader-only"> {{$t('message.navigation.accessibilityProfileSection')}}</h1>
+      <h1 class="screenreader-only"> {{ $t('message.navigation.accessibilityProfileSection') }}</h1>
       <div style="display: flex; flex-direction: row; column-gap: 30px">
         <div>
           <FileTabs/>
         </div>
         <div aria-hidden="true" style="margin: auto; width: 100%">
-          <GoXLRVisualiser :highlighted-areas="this.visualiserHighlightAreas" />
+          <GoXLRVisualiser :highlighted-areas="this.visualiserHighlightAreas" @area-click="onAreaClicked"/>
         </div>
       </div>
 
       <div style="height: 25px; background-color: #3b413f"/>
-      <h1 class="sr-only">{{ $t('message.navigation.accessibilityDeviceSection')  }}</h1>
+      <h1 class="sr-only">{{ $t('message.navigation.accessibilityDeviceSection') }}</h1>
       <Tabs ref="device-tabs" @on-change="onTabChange" :label="$t('message.navigation.accessibilityDeviceSection')">
         <Tab id="mic" :name="$t('message.navigation.microphone')">
           <Mic/>
@@ -32,15 +32,15 @@
           </ContentContainer>
         </Tab>
         <Tab id="effects" v-if="!isDeviceMini()" :name="$t('message.navigation.effects')">
-          <EffectsTab ref="effects" @on-effect-preset-change="onEffectPresetChange" />
+          <EffectsTab ref="effects" @on-effect-preset-change="onEffectPresetChange"/>
         </Tab>
         <Tab id="sampler" v-if="!isDeviceMini()" :name="$t('message.navigation.sampler')">
           <ContentContainer>
-            <SamplerTab ref="sampler" @on-sample-bank-change="onSampleBankChange" />
+            <SamplerTab ref="sampler" @on-sample-bank-change="onSampleBankChange"/>
           </ContentContainer>
         </Tab>
         <Tab id="lighting" :name="$t('message.navigation.lighting')">
-          <LightingTab ref="lighting" @on-lighting-changed="onLightingDataChange" />
+          <LightingTab ref="lighting" @on-lighting-changed="onLightingDataChange"/>
         </Tab>
         <Tab id="routing" :name="$t('message.navigation.routing')">
           <ContentContainer>
@@ -85,11 +85,11 @@ import {HighlightArea} from "@/components/visualisation/VisualiserHelper";
 
 export default {
   name: "GoXLR",
-    computed: {
-        HighlightArea() {
-            return HighlightArea
-        }
-    },
+  computed: {
+    HighlightArea() {
+      return HighlightArea
+    }
+  },
   components: {
     VersionCheck,
     GoXLRVisualiser,
@@ -145,10 +145,9 @@ export default {
         this.visualiserHighlightAreas = [
           HighlightArea[`SAMPLER_BANK_${this.$refs.sampler.activeBank}`]
         ];
-      } else  {
+      } else {
         this.visualiserHighlightAreas = []
       }
-
     },
 
     onFaderChannelChange(activeChannel) {
@@ -168,15 +167,15 @@ export default {
 
       // mixer channels
       if (lightingData[0] === "mixer")
-        this.visualiserHighlightAreas = [ HighlightArea[`CHANNEL_${lightingData[1]}`] ];
+        this.visualiserHighlightAreas = [HighlightArea[`CHANNEL_${lightingData[1]}`]];
 
       // effect presets
       else if (lightingData[0] === "effects")
-        this.visualiserHighlightAreas = [ HighlightArea[`EFFECTS_PRESET${lightingData[1].slice(-1)}`] ];
+        this.visualiserHighlightAreas = [HighlightArea[`EFFECTS_PRESET${lightingData[1].slice(-1)}`]];
 
       // sampler banks
       else if (lightingData[0] === "sampler")
-        this.visualiserHighlightAreas = [ HighlightArea[`SAMPLER_BANK_${lightingData[1].slice(-1)}`] ];
+        this.visualiserHighlightAreas = [HighlightArea[`SAMPLER_BANK_${lightingData[1].slice(-1)}`]];
 
       // cough
       else if (lightingData[0] === "cough")
@@ -184,6 +183,89 @@ export default {
 
       // nothing
       else this.visualiserHighlightAreas = [];
+    },
+
+    onAreaClicked(area) {
+      switch (area.area) {
+        case HighlightArea.COUGH: {
+          this.loadConfigurationTab();
+          break;
+        }
+        case HighlightArea.CHANNEL_A:
+          this.loadConfigurationTab("A");
+          break;
+        case HighlightArea.CHANNEL_B:
+          this.loadConfigurationTab("B");
+          break;
+        case HighlightArea.CHANNEL_C:
+          this.loadConfigurationTab("C");
+          break;
+        case HighlightArea.CHANNEL_D: {
+          this.loadConfigurationTab("D");
+          break;
+        }
+        case HighlightArea.SAMPLER_BANK_A: {
+          this.loadSampleBank("A");
+          break;
+        }
+        case HighlightArea.SAMPLER_BANK_B: {
+          this.loadSampleBank("B");
+          break;
+        }
+        case HighlightArea.SAMPLER_BANK_C: {
+          this.loadSampleBank("C");
+          break;
+        }
+        case HighlightArea.EFFECTS_PRESET1: {
+          this.loadEffectsTab("Preset1");
+          break;
+        }
+        case HighlightArea.EFFECTS_PRESET2: {
+          this.loadEffectsTab("Preset2");
+          break;
+        }
+        case HighlightArea.EFFECTS_PRESET3: {
+          this.loadEffectsTab("Preset3");
+          break;
+        }
+        case HighlightArea.EFFECTS_PRESET4: {
+          this.loadEffectsTab("Preset4");
+          break;
+        }
+        case HighlightArea.EFFECTS_PRESET5: {
+          this.loadEffectsTab("Preset5");
+          break;
+        }
+        case HighlightArea.EFFECTS_PRESET6: {
+          this.loadEffectsTab("Preset6");
+          break;
+        }
+      }
+
+      console.log(area);
+    },
+
+    loadConfigurationTab(channel = undefined) {
+      this.$refs['device-tabs'].selectTabById("configuration");
+      if (channel !== undefined) {
+        this.$nextTick(() => {
+          this.$refs.faders.channelChanged(channel);
+        });
+      }
+    },
+
+    loadSampleBank(bank) {
+      this.$refs['device-tabs'].selectTabById("sampler");
+      this.$nextTick(() => {
+        this.$refs.sampler.setActiveBank(bank);
+      })
+    },
+
+    loadEffectsTab(preset) {
+      this.$refs['device-tabs'].selectTabById("effects");
+      this.$nextTick(() => {
+        this.$refs.effects.onEffectSelectionChange(preset);
+      });
     }
   },
 
