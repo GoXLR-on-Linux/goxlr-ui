@@ -580,7 +580,21 @@ export default {
                         hardTune: "Hardtune",
                         fx: "Fx"
                     }
-                }
+                },
+            },
+            sampler: {
+                title: "Bank",
+
+                buttonsTitle: "Buttons",
+                buttons: {
+                    a: "A",
+                    b: "B",
+                    c: "C"
+                },
+
+                active: "Active / Loaded",
+                empty: "Sample Empty",
+                inactive: "Inactive Bank",
             },
 
         },
