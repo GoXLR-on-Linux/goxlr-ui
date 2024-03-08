@@ -4,9 +4,9 @@ import GroupContainer from "@/components/containers/GroupContainer.vue";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
 import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.vue";
 
-import { store } from "@/store";
-import { websocket } from "@/util/sockets";
-import { LightingInactiveOptions } from "@/util/mixerMapping";
+import {store} from "@/store";
+import {websocket} from "@/util/sockets";
+import {getLightingInactiveOptions, LightingInactiveOptions} from "@/util/mixerMapping";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 
 export default {
@@ -21,22 +21,25 @@ export default {
 
   data() {
     return {
-      buttonOptions: [
-        {
-          id: 'Bleep',
-          label: 'Bleep'
-        },
-        {
-          id: 'Cough',
-          label: 'Cough'
-        }
-      ],
       selectedButtonOption: 'Bleep',
-      inactiveOptions: LightingInactiveOptions
     }
   },
 
   methods: {
+    getLightingInactiveOptions,
+    getButtonOptions() {
+      return [
+        {
+          id: 'Bleep',
+          label: this.$t('message.lighting.cough.buttons.bleep'),
+        },
+        {
+          id: 'Cough',
+          label: this.$t('message.lighting.cough.buttons.cough')
+        }
+      ];
+    },
+
     getNodes() {
       return [];
     },
@@ -81,11 +84,18 @@ export default {
 <template>
   <CenteredContainer>
     <ContentContainer style="padding-top: 15px; padding-bottom: 20px">
-      <GroupContainer title="Cough/Bleep Buttons">
-        <RadioSelection title="Buttons" group="lighting_cough_buttons" :options="this.buttonOptions" :selected="this.selectedButtonOption" @selection-changed="onButtonSelectionChange"/>
-        <ColourPicker title="Active" :color-value="activeColor()" @colour-changed="onActiveColourChange" />
-        <RadioSelection title="Inactive Options" group="lighting_cough_inactive_behaviour" :options="this.inactiveOptions" :selected="this.selectedInactiveOption()" @selection-changed="onInactiveSelectionChange"/>
-        <ColourPicker title="Inactive" :color-value="inactiveColor()" @colour-changed="onInactiveColourChange" />
+      <GroupContainer :title="$t('message.lighting.cough.title')">
+        <RadioSelection :title="$t('message.lighting.cough.buttonsTitle')" group="lighting_cough_buttons"
+                        :options="getButtonOptions()" :selected="this.selectedButtonOption"
+                        @selection-changed="onButtonSelectionChange"/>
+        <ColourPicker :title="$t('message.lighting.common.activeColour')" :color-value="activeColor()"
+                      @colour-changed="onActiveColourChange"/>
+        <RadioSelection :title="$t('message.lighting.common.inactiveOption')"
+                        group="lighting_cough_inactive_behaviour"
+                        :options="getLightingInactiveOptions($t)" :selected="this.selectedInactiveOption()"
+                        @selection-changed="onInactiveSelectionChange"/>
+        <ColourPicker :title="$t('message.lighting.common.inactiveColour')" :color-value="inactiveColor()"
+                      @colour-changed="onInactiveColourChange"/>
       </GroupContainer>
     </ContentContainer>
   </CenteredContainer>

@@ -597,6 +597,16 @@ export default {
                 inactive: "Inactive Bank",
             },
 
+            cough: {
+                title: "Cough/Bleep Buttons",
+
+                buttonsTitle: "Buttons",
+                buttons: {
+                    bleep: "Bleep",
+                    cough: "Cough",
+                }
+            },
+
         },
 
         // Strings used in Profile and Microphone Profile Management.
