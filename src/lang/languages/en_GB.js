@@ -109,8 +109,8 @@ export default {
 
             // TODO: Recently Changed
             waveform: {
-                peaking: "Too Loud",
-                speaking: "Good",
+                loud: "Too Loud",
+                good: "Good",
                 gate_estimated: "Gate is Estimated"
             },
 

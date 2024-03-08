@@ -80,10 +80,10 @@ export default {
       this.move_canvas(delta)
 
       this.draw_peaking()
-      this.draw_text(this.$t('message.microphone.waveform.peaking'), -10, 0);
+      this.draw_text(this.$t('message.microphone.waveform.loud'), -10, 0);
 
       this.draw_good()
-      this.draw_text(this.$t('message.microphone.waveform.speaking'), -20, -10);
+      this.draw_text(this.$t('message.microphone.waveform.good'), -20, -10);
 
       if (this.show_estimated) {
         this.render_text(this.$t('message.microphone.waveform.gate_estimated'), this.canvas_size.width - 40, this.canvas_size.height - 10, "#888", "right", "middle");

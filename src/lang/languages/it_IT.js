@@ -95,8 +95,8 @@ export default {
                 jack: "3.5mm",
             },
             waveform: {
-                peaking: "Troppo Forte",
-                speaking: "Giusto",
+                loud: "Troppo Forte",
+                good: "Giusto",
                 gate_estimated: "Il Gate è una stima"
             },
 
