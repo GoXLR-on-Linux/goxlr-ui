@@ -30,7 +30,8 @@ export default {
 <style scoped>
 
 button.content {
-  width: 130px;
+  min-width: 130px;
+  max-width: min-content;
   height: 170px;
   background: #252927;
   border: 0;
@@ -69,6 +70,8 @@ button .iconTitle {
   color: #fff;
   font-family: LeagueMonoCondensed, sans-serif;
   text-align: center;
+  white-space: nowrap;
+  padding: 0px 10px;
 }
 button:hover .iconTitle {
   background-color: #6E7170;
