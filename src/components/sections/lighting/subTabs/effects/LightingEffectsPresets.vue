@@ -101,6 +101,7 @@ export default {
     </template>
     <RadioSelection
         :title="$t('message.lighting.effects.preset.presetTitle')"
+        max-width="200px"
         group="lighting_effects_presets"
         :options="presetLabels()"
         :selected="getActivePreset()"

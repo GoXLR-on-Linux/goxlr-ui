@@ -1,5 +1,5 @@
 <template>
-  <WidgetContainer style="width: fit-content">
+  <WidgetContainer style="width: fit-content;" max_width="fit-content">
     <template v-slot:title>{{ $t('message.sampler.samples.waveform.title') }}</template>
     <div
         class="content"

@@ -36,6 +36,7 @@
     <RadioSelection
         :title="$t('message.sampler.samples.samplesTitle')"
         group="sampler_samples"
+        max-width="200px"
         :options="getSampleOptions()"
         :selected="activeSample"
         @selection-changed="setActiveSample"

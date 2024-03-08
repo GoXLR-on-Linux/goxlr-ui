@@ -5,6 +5,7 @@
         <RadioSelection
             :title="$t('message.effects.preset.group')"
             group="preset_select"
+            max-width="200px"
             :options="getEffectOptions()"
             :selected="getActivePreset()"
             :menu="getMenuOptions()"

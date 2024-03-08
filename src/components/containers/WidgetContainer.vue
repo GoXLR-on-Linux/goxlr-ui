@@ -2,7 +2,8 @@
 export default {
     name: "WidgetContainer",
     props: {
-        title: String
+        title: String,
+        maxWidth: { type: String, default: "fit-content"}
     }
 }
 </script>
@@ -28,7 +29,8 @@ export default {
     align-items: center;
 
     height: 220px;
-    width: 200px;
+    min-width: 200px;
+    max-width: v-bind(maxWidth);
 
     background-color: #353937;
 }
