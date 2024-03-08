@@ -5,7 +5,7 @@ import ColourPicker from "@/components/sections/lighting/elements/ColourPicker.v
 
 import {
   EffectLightingPresets,
-  EffectPresets,
+  EffectPresets, getLightingInactiveOptions,
   LightingInactiveOptions
 } from "@/util/mixerMapping";
 
@@ -26,11 +26,11 @@ export default {
     return {
       effectPresets: EffectLightingPresets,
       activePreset: "EffectSelect1",
-      inactiveOptions: LightingInactiveOptions
     }
   },
 
   methods: {
+    getLightingInactiveOptions,
     presetLabels() {
       let presetLabels = []
 
@@ -95,31 +95,31 @@ export default {
 </script>
 
 <template>
-  <GroupContainer title="Preset Buttons">
+  <GroupContainer :title="$t('message.lighting.effects.preset.title')">
     <template #right>
-      <button class="applyToAll" @click="applyToAll()">Apply to All</button>
+      <button class="applyToAll" @click="applyToAll()">{{ $t('message.lighting.common.applyToAll') }}</button>
     </template>
     <RadioSelection
-        title="Preset"
+        :title="$t('message.lighting.effects.preset.presetTitle')"
         group="lighting_effects_presets"
         :options="presetLabels()"
         :selected="getActivePreset()"
         @selection-changed="onButtonSelectionChange"
     />
     <ColourPicker
-        title="Active"
+        :title="$t('message.lighting.common.activeColour')"
         :color-value="activeColor()"
         @colour-changed="onActiveColourChange"
     />
     <RadioSelection
-        title="Inactive Option"
+        :title="$t('message.lighting.common.inactiveOption')"
         group="lighting_effects_preset_inactive_behaviour"
-        :options="inactiveOptions"
+        :options="getLightingInactiveOptions($t)"
         :selected="selectedInactiveOption()"
         @selection-changed="onInactiveSelectionChange"
     />
     <ColourPicker
-        title="Inactive"
+        :title="$t('message.lighting.common.inactiveColour')"
         :color-value="inactiveColor()"
         @colour-changed="onInactiveColourChange"
     />

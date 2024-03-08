@@ -164,15 +164,15 @@ export function getLightingInactiveOptions(lang) {
     return [
         {
             id: 'Dimmed',
-            label: lang("message.lighting.common.inactive_options.dimActiveColour")
+            label: lang("message.lighting.common.inactiveOptions.dimActiveColour")
         },
         {
             id: 'Colour2',
-            label: lang("message.lighting.common.inactive_options.inactiveColour")
+            label: lang("message.lighting.common.inactiveOptions.inactiveColour")
         },
         {
             id: 'DimmedColour2',
-            label: lang("message.lighting.common.inactive_options.dimInactiveColour")
+            label: lang("message.lighting.common.inactiveOptions.dimInactiveColour")
         }
     ]
 }

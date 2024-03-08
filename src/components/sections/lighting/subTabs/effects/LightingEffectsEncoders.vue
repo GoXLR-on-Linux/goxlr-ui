@@ -17,30 +17,33 @@ export default {
 
   data() {
     return {
-      encoderOptions: [
-        {
-          id: 'Reverb',
-          label: 'Reverb'
-        },
-        {
-          id: 'Echo',
-          label: 'Echo'
-        },
-        {
-          id: 'Pitch',
-          label: 'Pitch'
-        },
-        {
-          id: 'Gender',
-          label: 'Gender'
-        },
-      ],
       selectedEncoder: "Reverb",
       inactiveOptions: LightingInactiveOptions
     }
   },
 
   methods: {
+    getEncoderOptions() {
+      return [
+        {
+          id: 'Reverb',
+          label: this.$t('message.lighting.effects.encoders.encoders.reverb')
+        },
+        {
+          id: 'Echo',
+          label: this.$t('message.lighting.effects.encoders.encoders.echo')
+        },
+        {
+          id: 'Pitch',
+          label: this.$t('message.lighting.effects.encoders.encoders.pitch')
+        },
+        {
+          id: 'Gender',
+          label: this.$t('message.lighting.effects.encoders.encoders.gender')
+        },
+      ];
+    },
+
     leftColour() {
       return "#" + store.getActiveDevice().lighting.encoders[this.selectedEncoder]["colour_two"]
     },
@@ -93,8 +96,8 @@ export default {
       const leftColour = encoder.colour_two;
       const knobColour = encoder.colour_three;
 
-      for (let encoder in this.encoderOptions) {
-        let id = this.encoderOptions[encoder].id;
+      for (let encoder in this.getEncoderOptions()) {
+        let id = this.getEncoderOptions()[encoder].id;
         websocket.send_command(store.getActiveSerial(), {"SetEncoderColour": [id, rightColour, leftColour, knobColour]});
       }
     }
@@ -105,27 +108,27 @@ export default {
 <template>
   <GroupContainer title="Encoders">
     <template #right>
-      <button class="applyToAll" @click="applyToAll()">Apply to All</button>
+      <button class="applyToAll" @click="applyToAll()">{{ $t('message.lighting.common.applyToAll') }}</button>
     </template>
     <RadioSelection
-        title="Encoder"
+        :title="$t('message.lighting.effects.encoders.title')"
         group="lighting_effects_encoders"
-        :options="this.encoderOptions"
+        :options="this.getEncoderOptions()"
         :selected="this.selectedEncoder"
         @selection-changed="onButtonSelectionChange"
     />
     <ColourPicker
-        title="Left Colour"
+        :title="$t('message.lighting.effects.encoders.leftColour')"
         :color-value="leftColour()"
         @colour-changed="onLeftColourChange"
     />
     <ColourPicker
-        title="Right Colour"
+        :title="$t('message.lighting.effects.encoders.rightColour')"
         :color-value="rightColour()"
         @colour-changed="onRightColourChange"
     />
     <ColourPicker
-        title="Knob Colour"
+        :title="$t('message.lighting.effects.encoders.knobColour')"
         :color-value="knobColour()"
         @colour-changed="onKnobColourChange"
     />

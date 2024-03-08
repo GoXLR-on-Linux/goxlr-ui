@@ -551,7 +551,35 @@ export default {
             effects: {
                 preset: {
                     title: "Preset Buttons",
-                    preset_title: "Preset"
+                    presetTitle: "Preset"
+                },
+
+                encoders: {
+                    title: "Encoders",
+
+                    encoder: "Encoder",
+                    encoders: {
+                        reverb: "Reverb",
+                        echo: "Echo",
+                        pitch: "Pitch",
+                        gender: "Gender",
+                    },
+
+                    leftColour: "Left Colour",
+                    rightColour: "Right Colour",
+                    knobColour: "Knob Colour"
+                },
+
+                buttons: {
+                    title: "Effect Buttons",
+
+                    effectTitle: "Effect",
+                    effect: {
+                        megaphone: "Megaphone",
+                        robot: "Robot",
+                        hardTune: "Hardtune",
+                        fx: "Fx"
+                    }
                 }
             },
 
