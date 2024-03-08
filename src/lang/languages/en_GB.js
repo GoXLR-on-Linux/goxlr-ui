@@ -677,7 +677,69 @@ export default {
 
                 lockFaders: "Lock fader positions when Muting to All",
                 lockFadersAccessibility: "Prevents the faders from moving down when Mute to All is active",
-            }
+            },
+
+            settingsButton: "Utility Settings",
+            settings: {
+                uiHandler: "UI Handler",
+                uiHandlers: {
+                    browser: "Browser",
+                    app: "App",
+                    custom: "Custom"
+                },
+
+
+                logLevel: "Log Level (requires restart)",
+                logLevels: {
+                    off: "Off",
+                    error: "Error",
+                    warn: "Warn",
+                    info: "Info",
+                    debug: "Debug",
+                    trace: "Trace"
+
+                    // OFF / ERROR / WARN / INFO / DEBUG / TRACE
+                },
+
+                allowNetworkAccess: "Allow UI Network Access (required restart)",
+                allowNetworkAccessAccessibility: "Allow the UI to be accessed from other devices on the network",
+
+                autoStart: "AutoStart on Login",
+                autoStartAccessibility: "Start the GoXLR Utility when the user logs in",
+
+                showOnLaunch: "Show UI on Launch",
+                showOnLaunchAccessibility: "Automatically launches the UI on startup",
+
+                showTray: "Show Tray Icon (requires restart)",
+                showTrayAccessibility: "Show the GoXLR Utility icon in the system tray",
+
+                ttsOnButton: "TTS on button press",
+                ttsOnButtonAccessibility: "Speak the button status when pressed, either via screen reader or system TTS",
+
+                recoverDefaults: "Recover Defaults",
+                recoverOptions: {
+                    profiles: "Profiles",
+                    micProfiles: "Mic Profiles",
+                    icons: "Icons",
+                    presets: "Presets"
+                },
+
+                shutdownUtility: "Shutdown GoXLR Utility"
+            },
+
+            aboutButton: "About GoXLR",
+            about: {
+                serial: "Serial",
+                utilityVersion: "Utility Version",
+                hardwareVersion: "Hardware Version",
+
+                firmware: "Firmware",
+                dice: "DICE",
+                fpga: "FPGA"
+            },
+
+            licenses: "Licenses",
+            help: "Help",
         },
 
         // Strings used in Profile and Microphone Profile Management.

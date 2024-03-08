@@ -1,9 +1,9 @@
 <template>
-  <BigButton id="license_button" ref="license_button" :title="setupTitle" @button-clicked="$refs.licenseModal.openModal(undefined, $refs.license_button)">
+  <BigButton id="license_button" ref="license_button" :title="$t('message.system.licenses')" @button-clicked="$refs.licenseModal.openModal(undefined, $refs.license_button)">
     <font-awesome-icon icon="fa-solid fa-book-open"/>
   </BigButton>
   <AccessibleModal width="680px" ref="licenseModal" id="license_modal" :show_footer=false>
-    <template v-slot:title>Licenses</template>
+    <template v-slot:title>{{ $t('message.system.licenses') }}</template>
     <textarea
         style="width: 630px; height: 710px; background-color: #2B2F2D; color: #fff; border: 1px solid #000; resize: none"
         disabled>Copyright (c) 2022 Nathan Adams

@@ -1,32 +1,34 @@
 <template>
-  <BigButton id="about_button" ref="button" :title="aboutTitle" @button-clicked="$refs.aboutModal.openModal(undefined, $refs.button)">
-    <font-awesome-icon icon="fa-solid fa-circle-info" />
+  <BigButton id="about_button" ref="button" :title="$t('message.system.aboutButton')"
+             @button-clicked="$refs.aboutModal.openModal(undefined, $refs.button)">
+    <font-awesome-icon icon="fa-solid fa-circle-info"/>
   </BigButton>
   <AccessibleModal ref="aboutModal" id="about_modal" :show_footer=false>
-    <template v-slot:title>About GoXLR</template>
+    <template v-slot:title>{{ $t('message.system.aboutButton') }}</template>
     <div style="text-align: left">
       <div style="margin-bottom: 20px">
-        <div style="font-size: 16px; font-weight: bold">Serial</div>
+        <div style="font-size: 16px; font-weight: bold">{{ $t('message.system.about.serial') }}</div>
         <div>{{ getSerial() }}</div>
       </div>
 
       <div style="margin-bottom: 20px">
-        <div style="font-size: 16px; font-weight: bold">Utility Version</div>
+        <div style="font-size: 16px; font-weight: bold">{{ $t('message.system.about.utilityVersion') }}</div>
         <div>{{ getUtilityVersion() }}</div>
       </div>
 
       <div>
-        <div style="font-size: 16px; font-weight: bold">Hardware Version</div>
+        <div style="font-size: 16px; font-weight: bold">{{ $t('message.system.about.hardwareVersion') }}</div>
         <div>
-          <span style="display: inline-block; width: 80px; font-weight: bold">Firmware: </span>
+          <span
+              style="display: inline-block; width: 80px; font-weight: bold">{{ $t('message.system.about.firmware') }}: </span>
           <span>{{ getFirmwareVersion() }}</span>
         </div>
         <div>
-          <span style="display: inline-block; width: 80px; font-weight: bold">Dice: </span>
+          <span style="display: inline-block; width: 80px; font-weight: bold">{{$t('message.system.about.dice')}}: </span>
           <span>{{ getDice() }}</span>
         </div>
         <div>
-          <span style="display: inline-block; width: 80px; font-weight: bold">FPGA: </span>
+          <span style="display: inline-block; width: 80px; font-weight: bold">{{$t('message.system.about.fpga')}}:</span>
           <span>{{ getFPGACount() }}</span>
         </div>
       </div>

@@ -3,7 +3,7 @@
       v-if="store.getConfig() !== undefined"
       id="settings_button"
       ref="button"
-      title="Utility Settings"
+      :title="$t('message.system.settingsButton')"
       @button-clicked="$refs.modal.openModal(undefined, $refs.button)"
   >
     <font-awesome-icon icon="fa-solid fa-gear"/>
@@ -14,26 +14,28 @@
       id="about_modal"
       :show_footer="false"
   >
-    <template v-slot:title>Settings (Work in Progress)</template>
+    <template v-slot:title>{{ $t('message.system.settingsButton') }}</template>
     <div style="text-align: left" role="region" aria-label="settings">
       <div style="padding: 12px">
-        UI Handler:
+        {{$t('message.system.settings.uiHandler')}}:
         <select @change="setUiHandler" style="margin-right: 15px">
-          <option :selected="getActivePath() === null" value="">Web Browser</option>
-          <option v-if="getAppPath() !== null" :selected="isActivePath()" :value="getAppPath()">Application</option>
-          <option v-if="isCustomPath()" :selected="getActivePath() !== null && !isActivePath()" :value="getActivePath()">Custom</option>
+          <option :selected="getActivePath() === null" value="">{{ $t('message.system.settings.uiHandlers.browser') }}</option>
+          <option v-if="getAppPath() !== null" :selected="isActivePath()" :value="getAppPath()">{{ $t('message.system.settings.uiHandlers.app') }}</option>
+          <option v-if="isCustomPath()" :selected="getActivePath() !== null && !isActivePath()" :value="getActivePath()">{{
+              $t('message.system.settings.uiHandlers.custom')
+            }}</option>
         </select>
       </div>
 
       <div style="padding: 12px">
-        Log Level (Requires Restart):
+        {{$t('message.system.settings.logLevel')}}:
         <select @change="setLogLevel" style="margin-right: 15px">
-          <option :selected="getLogLevel() === 'Off'" value="Off">Off</option>
-          <option :selected="getLogLevel() === 'Error'" value="Error">Error</option>
-          <option :selected="getLogLevel() === 'Warn'" value="Warn">Warn</option>
-          <option :selected="getLogLevel() === 'Info'" value="Info">Info</option>
-          <option :selected="getLogLevel() === 'Debug'" value="Debug">Debug</option>
-          <option :selected="getLogLevel() === 'Trace'" value="Trace">Trace</option>
+          <option :selected="getLogLevel() === 'Off'" value="Off">{{$t('message.system.settings.logLevels.off')}}</option>
+          <option :selected="getLogLevel() === 'Error'" value="Error">{{$t('message.system.settings.logLevels.error')}}</option>
+          <option :selected="getLogLevel() === 'Warn'" value="Warn">{{$t('message.system.settings.logLevels.warn')}}</option>
+          <option :selected="getLogLevel() === 'Info'" value="Info">{{$t('message.system.settings.logLevels.info')}}</option>
+          <option :selected="getLogLevel() === 'Debug'" value="Debug">{{$t('message.system.settings.logLevels.debug')}}</option>
+          <option :selected="getLogLevel() === 'Trace'" value="Trace">{{$t('message.system.settings.logLevels.trace')}}</option>
         </select>
         <button class="openButton" @click="openLogs">
           <font-awesome-icon icon="fa-solid fa-folder"/>
@@ -41,78 +43,68 @@
       </div>
 
       <div style="padding: 12px">
-        <span style="display: inline-block; width: 360px"
-        >Allow UI Network Access (Required Restart):</span
-        >
+        <span style="display: inline-block; width: 360px">{{$t('message.system.settings.allowNetworkAccess')}}:</span>
         <input
             type="checkbox"
             :checked="get_allow_network_access()"
             @change="set_allow_network_access"
-            aria-label="Allow UI Network Access (Required Restart)"
-            aria-description="Allow the UI to be accessed from other devices on the network"
+            :aria-label="$t('message.system.settings.allowNetworkAccess')"
+            aria-description="$t('message.system.settings.allowNetworkAccessAccessibility')"
         />
       </div>
       <div style="padding: 12px">
-        <span style="display: inline-block; width: 360px"
-        >Autostart on Login:</span
-        >
+        <span style="display: inline-block; width: 360px">{{$t('message.system.settings.autoStart')}}:</span>
         <input
             type="checkbox"
             :checked="isAutostart()"
             @change="setAutoStart"
-            aria-label="Autostart on Login"
-            aria-description="Start the GoXLR Utility when the user logs in"
+            :aria-label="$t('message.system.settings.autoStart')"
+            :aria-description="$t('message.system.settings.autoStartAccessibility')"
         />
       </div>
       <div style="padding: 12px">
-        <span style="display: inline-block; width: 360px"
-        >Show the UI on Launch:</span
-        >
+        <span style="display: inline-block; width: 360px">{{ $t('message.system.settings.showOnLaunch') }}</span>
         <input
             type="checkbox"
             :checked="isShowUi()"
             @change="setShowUi"
-            aria-label="Show UI on Load"
-            aria-description="Automatically launches the UI on startup"
+            :aria-label="$t('message.system.settings.showOnLaunch')"
+            aria-description="$t('message.system.settings.showOnLaunchAccessibility')"
         />
       </div>
       <div style="padding: 12px">
-        <span style="display: inline-block; width: 360px"
-        >Show Tray Icon (requires restart):</span
-        >
+        <span style="display: inline-block; width: 360px">{{ $t('message.system.settings.showTray') }}:</span>
         <input
             type="checkbox"
             :checked="isShowIcon()"
             @change="setShowIcon"
-            aria-label="Show Tray Icon (requires restart)"
-            aria-description="Show the GoXLR Utility icon in the system tray"
+            :aria-label="$t('message.system.settings.showTray')"
+            :aria-description="$t('message.system.settings.showTrayAccessibility')"
         />
       </div>
       <div v-if="isTTSAvailable()" style="padding: 12px">
-        <span style="display: inline-block; width: 360px"
-        >TTS on button press:</span
-        >
+        <span style="display: inline-block; width: 360px">{{ $t('message.system.settings.ttsOnButton') }}:</span>
         <input
             type="checkbox"
             :checked="isTTSEnabled()"
             @change="setTTSEnabled"
-            aria-label="TTS on button press"
-            aria-description="Speak the button status when pressed, either via screen reader or system TTS"
+            :aria-label="$t('message.system.settings.ttsOnButton')"
+            :aria-description="$t('message.system.settings.ttsOnButtonAccessibility')"
         />
       </div>
       <div style="padding: 12px" role="group" aria-label="recover defaults">
-        Recover Defaults:<br/>
+        {{ $t('message.system.settings.recoverDefaults') }}:<br/>
         <button style="margin: 3px" @click="recover_defaults('Profiles')">
-          Profiles
+          {{ $t('message.system.settings.recoverOptions.profiles') }}
         </button>
         <button style="margin: 3px" @click="recover_defaults('MicProfiles')">
-          Mic Profiles
+          {{ $t('message.system.settings.recoverOptions.micProfiles') }}
         </button>
         <button style="margin: 3px" @click="recover_defaults('Icons')">
-          Icons
+          {{ $t('message.system.settings.recoverOptions.icons') }}
         </button>
         <button style="margin: 3px" @click="recover_defaults('Presets')">
-          Presets
+          {{ $t('message.system.settings.recoverOptions.presets') }}
         </button>
       </div>
       <div style="padding: 12px">
@@ -120,7 +112,7 @@
             style="background-color: darkred; color: white"
             @click="shutdown_util()"
         >
-          Shutdown GoXLR Utility
+          {{ $t('message.system.settings.shutdownUtility') }}
         </button>
       </div>
     </div>
