@@ -26,5 +26,6 @@ export default {
     text-transform: uppercase;
     text-align: center;
     font-stretch: condensed;
+    white-space: nowrap;
   }
 </style>

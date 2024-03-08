@@ -283,7 +283,7 @@ export default {
 <style scoped>
 .sliderBox {
   background-color: v-bind(backgroundColour);
-  min-width: 100px;
+  min-width: 92px;
   max-width: min-content;
 }
 </style>
