@@ -1,6 +1,6 @@
 <template>
   <div class="assignment">
-    <div>
+    <div style="flex-grow: 1">
       <div role="button" class="button" @click="setMixMonitor" :class="{ highlight: isMixMonitored() }">
         <div class="icon" :class="{ faded: !isMixMonitored() }">
           <font-awesome-icon icon="fa-solid fa-headphones"/>
@@ -74,6 +74,7 @@ export default {
   display: flex;
   flex-direction: row;
   gap: 5px;
+  width: 100%;
 }
 
 .button {
@@ -82,7 +83,7 @@ export default {
   text-align: left;
   padding: 4px 6px;
 
-  width: 150px;
+  min-width: 150px;
   height: 34px;
 
   box-sizing: border-box;
@@ -90,6 +91,7 @@ export default {
   background-color: #3b413f;
   color: #fff;
   font-family: LeagueMonoCondensed, sans-serif;
+  white-space: nowrap;
 }
 
 .button.highlight {
@@ -107,9 +109,10 @@ export default {
 }
 
 .button .text {
+  flex-grow: 1;
   padding-left: 10px;
   padding-right: 10px;
-  width: 96px;
+  width: 100%;
   margin: auto;
   text-align: center;
   box-sizing: border-box;
