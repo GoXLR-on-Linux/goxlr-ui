@@ -107,7 +107,6 @@ export default {
                 jack: "3.5mm",
             },
 
-            // TODO: Recently Changed
             waveform: {
                 loud: "Too Loud",
                 good: "Good",
@@ -206,11 +205,10 @@ export default {
 
                 loadPreset: "Load Preset",
 
-                // TODO: FIX: RENAME PRESET
-                newPresetTitle: "Rename Preset",
-                newPresetPlaceholder: "New Preset Name",
-                newPresetOk: "@:message.modalButtons.ok",
-                newPresetCancel: "@:message.modalButtons.cancel",
+                renamePresetTitle: "Rename Preset",
+                renamePresetPlaceholder: "New Preset Name",
+                renamePresetOk: "@:message.modalButtons.ok",
+                renamePresetCancel: "@:message.modalButtons.cancel",
 
                 noPresets: "There are currently no presets in the library, save or copy some for them to appear here.",
                 loadPresetOk: "@:message.modalButtons.ok",

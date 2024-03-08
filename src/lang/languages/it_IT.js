@@ -192,10 +192,10 @@ export default {
 
                 loadPreset: "Carica Preset",
 
-                newPresetTitle: "Rinomina Preset",
-                newPresetPlaceholder: "Nome Nuovo Preset",
-                newPresetOk: "@:message.modalButtons.ok",
-                newPresetCancel: "@:message.modalButtons.cancel",
+                renamePresetTitle: "Rinomina Preset",
+                renamePresetPlaceholder: "Nome Nuovo Preset",
+                renamePresetOk: "@:message.modalButtons.ok",
+                renamePresetCancel: "@:message.modalButtons.cancel",
 
                 noPresets: "Al momento non sono presenti preset nella libreria, salva o copiane qualcuno per farli apparire qui.",
                 loadPresetOk: "@:message.modalButtons.ok",

@@ -28,15 +28,15 @@
 
   <!-- Modals -->
   <AccessibleModal ref="renamePresetModal" id="renameEffect" :show_close="false">
-    <template v-slot:title>{{ $t('message.effects.preset.newPresetTitle') }}</template>
+    <template v-slot:title>{{ $t('message.effects.preset.renamePresetTitle') }}</template>
     <template v-slot:default>
       <ModalInput ref="newName" v-model="newPresetName"
-                  :placeholder="$t('message.effects.preset.newPresetPlaceholder')"
+                  :placeholder="$t('message.effects.preset.renamePresetPlaceholder')"
                   @on-enter="renamePreset();" />
     </template>
     <template v-slot:footer>
-      <ModalButton ref="focusOk" @click="renamePreset();">{{ $t('message.effects.preset.newPresetOk') }}</ModalButton>
-      <ModalButton @click="$refs.renamePresetModal.closeModal(); this.newPresetName = ''">{{ $t('message.effects.preset.newPresetCancel') }}</ModalButton>
+      <ModalButton ref="focusOk" @click="renamePreset();">{{ $t('message.effects.preset.renamePresetOk') }}</ModalButton>
+      <ModalButton @click="$refs.renamePresetModal.closeModal(); this.newPresetName = ''">{{ $t('message.effects.preset.renamePresetCancel') }}</ModalButton>
     </template>
   </AccessibleModal>
 
