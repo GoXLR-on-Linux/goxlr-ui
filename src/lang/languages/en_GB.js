@@ -11,7 +11,14 @@
 
     If you're editing, or creating a new language, everything inside quotation marks ("text") is translatable,
     Anything wrapped in curly brackets ({text}) is a variable, do NOT translate that!
+
+    Also, feel free to leave your name as a contributor:
  */
+
+///
+/// Authors:
+/// FrostyCoolSlug
+///
 
 
 export default {
