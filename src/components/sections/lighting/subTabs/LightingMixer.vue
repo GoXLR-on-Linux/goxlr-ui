@@ -343,8 +343,7 @@ export default {
                       @colour-changed="onFaderTopColourChange"/>
       </GroupContainer>
 
-      <GroupContainer v-if="!isDeviceMini()" :title="$t('message.lighting.mixer.screen.title')"
-                      :label="$t('message.lighting.mixer.screen.accessibilityTitle', { channel: getSelectedChannelName() })">
+      <GroupContainer v-if="!isDeviceMini()" :title="$t('message.lighting.mixer.screen.title')">
         <ColourPicker :title="$t('message.lighting.mixer.screen.backgroundColour')" :color-value="getScreenColour()"
                       @colour-changed="onScreenColourChange"/>
         <RadioSelection group="lighting_mixer_icon_select" :options="getIconOptions()" :selected="getSelectedIcon()"
