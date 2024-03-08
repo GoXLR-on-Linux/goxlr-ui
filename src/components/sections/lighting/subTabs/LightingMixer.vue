@@ -1,7 +1,11 @@
 <script>
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import {LightingInactiveOptions, MuteButtonNamesForFader, ScribbleNames} from "@/util/mixerMapping";
+import {
+  getLightingInactiveOptions,
+  MuteButtonNamesForFader,
+  ScribbleNames
+} from "@/util/mixerMapping";
 import {isDeviceMini} from "@/util/util";
 import ContentContainer from "@/components/containers/ContentContainer.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
@@ -21,36 +25,25 @@ export default {
 
   data() {
     return {
-      buttonOptions: [
-        {
-          id: 'A',
-          label: 'Channel 1'
-        },
-        {
-          id: 'B',
-          label: 'Channel 2'
-        },
-        {
-          id: 'C',
-          label: 'Channel 3'
-        },
-        {
-          id: 'D',
-          label: 'Channel 4'
-        },
-      ],
-
       activeChannel: "A",
       textValue: null,
-
-      inactiveOptions: LightingInactiveOptions
     }
   },
 
   methods: {
+    getLightingInactiveOptions,
     isDeviceMini,
 
-    getNodes: function() {
+    getButtonOptions() {
+      return [
+        {id: "A", label: this.$t('message.faders.A')},
+        {id: "B", label: this.$t('message.faders.B')},
+        {id: "C", label: this.$t('message.faders.C')},
+        {id: "D", label: this.$t('message.faders.D')}
+      ];
+    },
+
+    getNodes: function () {
       return [this.activeChannel];
     },
 
@@ -109,12 +102,12 @@ export default {
       return [
         {
           id: 'StyleGradient',
-          label: 'Gradient',
+          label: this.$t('message.lighting.mixer.fader.styles.gradient'),
           selected: this.styleContains('Gradient')
         },
         {
           id: 'StyleMeter',
-          label: 'Meter',
+          label: this.$t('message.lighting.mixer.fader.styles.meter'),
           selected: this.styleContains('Meter')
         },
       ];
@@ -188,7 +181,7 @@ export default {
       let options = [
         {
           id: null,
-          label: "-- NONE --"
+          label: this.$t('message.lighting.mixer.screen.icon_none')
         }
       ];
 
@@ -215,12 +208,12 @@ export default {
       return [
         {
           id: 'lighting-mixer-screen-show-number',
-          label: 'Show Number',
+          label: this.$t('message.lighting.mixer.screen.options.show_number'),
           selected: this.isScreenNumberShow()
         },
         {
           id: 'lighting-mixer-screen-invert-display',
-          label: 'Invert Display',
+          label: this.$t('message.lighting.mixer.screen.options.invert_display'),
           selected: this.isScreenInverted()
         },
       ];
@@ -314,7 +307,7 @@ export default {
 
     getSelectedChannelName() {
       //get the current selected channel name to be used in aria-labels
-      return this.buttonOptions.find(option => option.id === this.activeChannel).label;
+      return this.getButtonOptions().find(option => option.id === this.activeChannel).label;
     },
   },
 
@@ -329,30 +322,36 @@ export default {
 <template>
   <div style="display: flex">
     <ContentContainer style="padding-top: 15px; padding-bottom: 20px">
-      <GroupContainer title="Faders">
-        <RadioSelection title="Channel" group="lighting_mixer_channel_select" :options="buttonOptions"
-                        :selected="selectedChannel()" @selection-changed="onChannelSelectionChange"/>
+      <GroupContainer :title="$t('message.lighting.mixer.faders.title')">
+        <RadioSelection :title="$t('message.lighting.mixer.faders.channelTitle')" group="lighting_mixer_channel_select"
+                        :options="getButtonOptions()" :selected="selectedChannel()"
+                        @selection-changed="onChannelSelectionChange"/>
       </GroupContainer>
 
-      <GroupContainer title="Fader" :label="`Fader Settings for ${getSelectedChannelName()}`">
+      <GroupContainer :title="$t('message.lighting.mixer.fader.title')"
+                      :label="$t('message.lighting.mixer.fader.accessibilityTitle', { channel: getSelectedChannelName() })">
         <template #right>
-          <button class="applyToAll" @click="applyFaderToAll()">Apply to All</button>
+          <button class="applyToAll" @click="applyFaderToAll()">{{ $t('message.lighting.common.apply_to_all') }}
+          </button>
         </template>
 
-        <CheckSelection title="Style" :options="getStyleOptions()" @selection-changed="onStyleSelectionChanged"/>
-        <ColourPicker title="Bottom Colour" :color-value="getFaderBottomColour()"
+        <CheckSelection :title="$t('message.lighting.mixer.fader.style')" :options="getStyleOptions()"
+                        @selection-changed="onStyleSelectionChanged"/>
+        <ColourPicker :title="$t('message.lighting.mixer.fader.bottom_colour')" :color-value="getFaderBottomColour()"
                       @colour-changed="onFaderBottomColourChange"/>
-        <ColourPicker title="Top Colour" :color-value="getFaderTopColour()" @colour-changed="onFaderTopColourChange"/>
+        <ColourPicker :title="$t('message.lighting.mixer.fader.top_colour')" :color-value="getFaderTopColour()"
+                      @colour-changed="onFaderTopColourChange"/>
       </GroupContainer>
 
-      <GroupContainer v-if="!isDeviceMini()" title="Screen" :label="`Screen Settings for ${getSelectedChannelName()}`">
-        <ColourPicker title="Background Colour" :color-value="getScreenColour()"
+      <GroupContainer v-if="!isDeviceMini()" :title="$t('message.lighting.mixer.screen.title')"
+                      :label="$t('message.lighting.mixer.screen.accessibilityTitle', { channel: getSelectedChannelName() })">
+        <ColourPicker :title="$t('message.lighting.mixer.screen.background_colour')" :color-value="getScreenColour()"
                       @colour-changed="onScreenColourChange"/>
-        <RadioSelection title="Icon" group="lighting_mixer_icon_select" :options="getIconOptions()"
-                        :selected="getSelectedIcon()" @selection-changed="onIconSelectionChange">
+        <RadioSelection group="lighting_mixer_icon_select" :options="getIconOptions()" :selected="getSelectedIcon()"
+                        @selection-changed="onIconSelectionChange">
           <template #title>
             <div>
-              <span style="padding-right: 14px">Icons</span>
+              <span style="padding-right: 14px">{{ $t('message.lighting.mixer.screen.icons') }}</span>
               <button class="openButton" @click="openIcons">
                 <font-awesome-icon icon="fa-solid fa-folder"/>
               </button>
@@ -361,25 +360,31 @@ export default {
         </RadioSelection>
 
 
-        <CheckSelection title="Options" :options="getDisplayOptions()" @selection-changed="onDisplayOptionsChanged">
+        <CheckSelection :title="$t('message.lighting.mixer.screen.optionsTitle')" :options="getDisplayOptions()"
+                        @selection-changed="onDisplayOptionsChanged">
           <div style="text-align: center">
             <hr style="margin-top: 14px"/>
-            <div style="color: #fff; text-align: left; padding-left: 8px; margin-top: 16px;">Text:</div>
-            <input type="text" v-model="textValue" @blur="applyUpdate" v-on:keyup.enter="applyUpdate" aria-label="Text"
-                   aria-description="Text to display on the GoXLR screen"/>
+            <div style="color: #fff; text-align: left; padding-left: 8px; margin-top: 16px;">
+              {{ $t('message.lighting.mixer.screen.options.text') }}:
+            </div>
+            <input type="text" v-model="textValue" @blur="applyUpdate" v-on:keyup.enter="applyUpdate"
+                   :aria-label="$t('message.lighting.mixer.screen.options.text')"
+                   :aria-description="$t('message.lighting.mixer.screen.options.accessibilityText')"/>
           </div>
         </CheckSelection>
       </GroupContainer>
 
-      <GroupContainer title="Mute" :label="`Mute Settings for ${getSelectedChannelName()}`">
+      <GroupContainer :title="$t('message.lighting.mixer.mute.title')"
+                      :label="$t('message.lighting.mixer.mute.accessibilityTitle', {channel: getSelectedChannelName() })">
         <template #right>
-          <button class="applyToAll" @click="applyMuteToAll()">Apply to All</button>
+          <button class="applyToAll" @click="applyMuteToAll()">{{ $t('message.lighting.common.apply_to_all') }}</button>
         </template>
-        <ColourPicker title="Active" :color-value="getMuteActiveColour()" @colour-changed="onMuteActiveColourChanged"/>
-        <RadioSelection title="Inactive Option" group="lighting_mixer_mute_inactive_behaviour"
-                        :options="inactiveOptions"
+        <ColourPicker :title="$t('message.lighting.common.active_colour')" :color-value="getMuteActiveColour()"
+                      @colour-changed="onMuteActiveColourChanged"/>
+        <RadioSelection :title="$t('message.lighting.common.inactive_option')" group="lighting_mixer_mute_inactive_behaviour"
+                        :options="getLightingInactiveOptions($t)"
                         :selected="selectedMuteInactiveOption()" @selection-changed="onMuteInactiveSelectionChange"/>
-        <ColourPicker title="Inactive" :color-value="getMuteInactiveColour()"
+        <ColourPicker :title="$t('message.lighting.common.inactive_colour')" :color-value="getMuteInactiveColour()"
                       @colour-changed="onMuteInactiveColourChanged"/>
       </GroupContainer>
     </ContentContainer>

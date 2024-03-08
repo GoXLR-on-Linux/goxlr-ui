@@ -449,6 +449,104 @@ export default {
                 accessibilityAnalysing: "Please wait, analysing sample. This process may take a couple of minutes.",
                 accessibilityAdded: "Sample {name} added to {activeButton} button in bank {activeBank}."
             }
+        },
+
+        lighting: {
+            // These are some common strings that are used in multiple places
+            common: {
+                colour: "Colour",
+
+                active_colour: "Active",
+                inactive_colour: "Inactive",
+
+                inactive_option: "Inactive Option",
+                inactive_options: {
+                    dim_active_colour: "Dim Active Colour",
+                    inactive_colour: "Inactive Colour",
+                    dim_inactive_colour: "Dim Inactive Colour"
+
+                },
+
+                apply_to_all: "Apply to All",
+            },
+
+            global: {
+                areas: {
+                    title: "Areas",
+
+                    area: "Area",
+                    areas: {
+                        global: "Global",
+                        accent: "Accent",
+                    },
+
+                    colour: "@:message.lighting.common.colour",
+                },
+
+                animations: {
+                    title: "Animations",
+
+                    mode: "Animation Mode",
+                    modes: {
+                        none: "None",
+                        rainbow_retro: "Rainbow Retro",
+                        rainbow_bright: "Rainbow Bright",
+                        rainbow_dark: "Rainbow Dark",
+                        simple: "Simple",
+                        ripple: "Ripple",
+                    },
+
+                    mod_1: "Gradient Mod 1",
+                    mod_2: "Gradient Mod 2",
+
+                    waterfall: "Waterfall Settings",
+                    waterfall_off: "Off",
+                }
+            },
+
+            mixer: {
+                faders: {
+                    title: "@:message.configuration.faders.title",
+                    channelTitle: "@:message.configuration.faders.channel",
+                },
+
+                fader: {
+                    title: "Fader",
+
+                    style: "Style",
+                    styles: {
+                        gradient: "Gradient",
+                        meter: "Meter",
+                    },
+
+                    bottom_colour: "Bottom Colour",
+                    top_colour: "Top Colour",
+
+                    accessibilityTitle: "Fader settings for {channel}",
+                },
+
+                screen: {
+                    title: "Screen",
+                    background_colour: "Background Colour",
+                    icons: "Icons",
+                    icon_none: "-- NONE --",
+
+                    optionsTitle: "Options",
+                    options: {
+                        show_number: "Show Number",
+                        invert_display: "Invert Display",
+                        text: "Text",
+
+                        accessibilityText: "Text to display on the GoXLR screen"
+                    }
+                },
+
+                mute: {
+                    // Pretty much all other fields for this area come from 'Common'
+                    title: "Mute",
+                    accessibilityTitle: "Mute Settings for {channel}"
+                }
+            },
 
         },
 

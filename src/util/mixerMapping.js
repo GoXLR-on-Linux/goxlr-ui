@@ -159,3 +159,20 @@ export const LightingInactiveOptions = [
         label: 'Dim Inactive Colour'
     }
 ]
+
+export function getLightingInactiveOptions(lang) {
+    return [
+        {
+            id: 'Dimmed',
+            label: lang("message.lighting.common.inactive_options.dim_active_colour")
+        },
+        {
+            id: 'Colour2',
+            label: lang("message.lighting.common.inactive_options.inactive_colour")
+        },
+        {
+            id: 'DimmedColour2',
+            label: lang("message.lighting.common.inactive_options.dim_inactive_colour")
+        }
+    ]
+}
