@@ -456,18 +456,18 @@ export default {
             common: {
                 colour: "Colour",
 
-                active_colour: "Active",
-                inactive_colour: "Inactive",
+                activeColour: "Active",
+                inactiveColour: "Inactive",
 
-                inactive_option: "Inactive Option",
-                inactive_options: {
-                    dim_active_colour: "Dim Active Colour",
-                    inactive_colour: "Inactive Colour",
-                    dim_inactive_colour: "Dim Inactive Colour"
+                inactiveOption: "Inactive Option",
+                inactiveOptions: {
+                    dimActiveColour: "Dim Active Colour",
+                    inactiveColour: "Inactive Colour",
+                    dimInactiveColour: "Dim Inactive Colour"
 
                 },
 
-                apply_to_all: "Apply to All",
+                applyToAll: "Apply to All",
             },
 
             global: {
@@ -489,18 +489,18 @@ export default {
                     mode: "Animation Mode",
                     modes: {
                         none: "None",
-                        rainbow_retro: "Rainbow Retro",
-                        rainbow_bright: "Rainbow Bright",
-                        rainbow_dark: "Rainbow Dark",
+                        rainbowRetro: "Rainbow Retro",
+                        rainbowBright: "Rainbow Bright",
+                        rainbowDark: "Rainbow Dark",
                         simple: "Simple",
                         ripple: "Ripple",
                     },
 
-                    mod_1: "Gradient Mod 1",
-                    mod_2: "Gradient Mod 2",
+                    mod1: "Gradient Mod 1",
+                    mod2: "Gradient Mod 2",
 
                     waterfall: "Waterfall Settings",
-                    waterfall_off: "Off",
+                    waterfallOff: "Off",
                 }
             },
 
@@ -519,22 +519,22 @@ export default {
                         meter: "Meter",
                     },
 
-                    bottom_colour: "Bottom Colour",
-                    top_colour: "Top Colour",
+                    bottomColour: "Bottom Colour",
+                    topColour: "Top Colour",
 
                     accessibilityTitle: "Fader settings for {channel}",
                 },
 
                 screen: {
                     title: "Screen",
-                    background_colour: "Background Colour",
+                    backgroundColour: "Background Colour",
                     icons: "Icons",
-                    icon_none: "-- NONE --",
+                    iconNone: "-- NONE --",
 
                     optionsTitle: "Options",
                     options: {
-                        show_number: "Show Number",
-                        invert_display: "Invert Display",
+                        showNumber: "Show Number",
+                        invertDisplay: "Invert Display",
                         text: "Text",
 
                         accessibilityText: "Text to display on the GoXLR screen"
@@ -545,6 +545,13 @@ export default {
                     // Pretty much all other fields for this area come from 'Common'
                     title: "Mute",
                     accessibilityTitle: "Mute Settings for {channel}"
+                }
+            },
+
+            effects: {
+                preset: {
+                    title: "Preset Buttons",
+                    preset_title: "Preset"
                 }
             },
 

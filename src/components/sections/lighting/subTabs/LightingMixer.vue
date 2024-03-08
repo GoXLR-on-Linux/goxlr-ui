@@ -181,7 +181,7 @@ export default {
       let options = [
         {
           id: null,
-          label: this.$t('message.lighting.mixer.screen.icon_none')
+          label: this.$t('message.lighting.mixer.screen.iconNone')
         }
       ];
 
@@ -208,12 +208,12 @@ export default {
       return [
         {
           id: 'lighting-mixer-screen-show-number',
-          label: this.$t('message.lighting.mixer.screen.options.show_number'),
+          label: this.$t('message.lighting.mixer.screen.options.showNumber'),
           selected: this.isScreenNumberShow()
         },
         {
           id: 'lighting-mixer-screen-invert-display',
-          label: this.$t('message.lighting.mixer.screen.options.invert_display'),
+          label: this.$t('message.lighting.mixer.screen.options.invertDisplay'),
           selected: this.isScreenInverted()
         },
       ];
@@ -331,21 +331,21 @@ export default {
       <GroupContainer :title="$t('message.lighting.mixer.fader.title')"
                       :label="$t('message.lighting.mixer.fader.accessibilityTitle', { channel: getSelectedChannelName() })">
         <template #right>
-          <button class="applyToAll" @click="applyFaderToAll()">{{ $t('message.lighting.common.apply_to_all') }}
+          <button class="applyToAll" @click="applyFaderToAll()">{{ $t('message.lighting.common.applyToAll') }}
           </button>
         </template>
 
         <CheckSelection :title="$t('message.lighting.mixer.fader.style')" :options="getStyleOptions()"
                         @selection-changed="onStyleSelectionChanged"/>
-        <ColourPicker :title="$t('message.lighting.mixer.fader.bottom_colour')" :color-value="getFaderBottomColour()"
+        <ColourPicker :title="$t('message.lighting.mixer.fader.bottomColour')" :color-value="getFaderBottomColour()"
                       @colour-changed="onFaderBottomColourChange"/>
-        <ColourPicker :title="$t('message.lighting.mixer.fader.top_colour')" :color-value="getFaderTopColour()"
+        <ColourPicker :title="$t('message.lighting.mixer.fader.topColour')" :color-value="getFaderTopColour()"
                       @colour-changed="onFaderTopColourChange"/>
       </GroupContainer>
 
       <GroupContainer v-if="!isDeviceMini()" :title="$t('message.lighting.mixer.screen.title')"
                       :label="$t('message.lighting.mixer.screen.accessibilityTitle', { channel: getSelectedChannelName() })">
-        <ColourPicker :title="$t('message.lighting.mixer.screen.background_colour')" :color-value="getScreenColour()"
+        <ColourPicker :title="$t('message.lighting.mixer.screen.backgroundColour')" :color-value="getScreenColour()"
                       @colour-changed="onScreenColourChange"/>
         <RadioSelection group="lighting_mixer_icon_select" :options="getIconOptions()" :selected="getSelectedIcon()"
                         @selection-changed="onIconSelectionChange">
@@ -377,14 +377,14 @@ export default {
       <GroupContainer :title="$t('message.lighting.mixer.mute.title')"
                       :label="$t('message.lighting.mixer.mute.accessibilityTitle', {channel: getSelectedChannelName() })">
         <template #right>
-          <button class="applyToAll" @click="applyMuteToAll()">{{ $t('message.lighting.common.apply_to_all') }}</button>
+          <button class="applyToAll" @click="applyMuteToAll()">{{ $t('message.lighting.common.applyToAll') }}</button>
         </template>
-        <ColourPicker :title="$t('message.lighting.common.active_colour')" :color-value="getMuteActiveColour()"
+        <ColourPicker :title="$t('message.lighting.common.activeColour')" :color-value="getMuteActiveColour()"
                       @colour-changed="onMuteActiveColourChanged"/>
-        <RadioSelection :title="$t('message.lighting.common.inactive_option')" group="lighting_mixer_mute_inactive_behaviour"
-                        :options="getLightingInactiveOptions($t)"
+        <RadioSelection :title="$t('message.lighting.common.inactiveOption')"
+                        group="lighting_mixer_mute_inactive_behaviour" :options="getLightingInactiveOptions($t)"
                         :selected="selectedMuteInactiveOption()" @selection-changed="onMuteInactiveSelectionChange"/>
-        <ColourPicker :title="$t('message.lighting.common.inactive_colour')" :color-value="getMuteInactiveColour()"
+        <ColourPicker :title="$t('message.lighting.common.inactiveColour')" :color-value="getMuteInactiveColour()"
                       @colour-changed="onMuteInactiveColourChanged"/>
       </GroupContainer>
     </ContentContainer>

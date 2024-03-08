@@ -58,15 +58,15 @@ export default {
         },
         {
           id: 'RetroRainbow',
-          label: this.$t("message.lighting.global.animations.modes.rainbow_retro")
+          label: this.$t("message.lighting.global.animations.modes.rainbowRetro")
         },
         {
           id: 'RainbowBright',
-          label: this.$t("message.lighting.global.animations.modes.rainbow_bright")
+          label: this.$t("message.lighting.global.animations.modes.rainbowBright")
         },
         {
           id: 'RainbowDark',
-          label: this.$t("message.lighting.global.animations.modes.rainbow_dark")
+          label: this.$t("message.lighting.global.animations.modes.rainbowDark")
         },
         {
           id: 'Simple',
@@ -229,7 +229,7 @@ export default {
 
         <div style="text-align: center; color: #fff; padding-left: 8px">
           <div class="title" :class="{ disabled: !isMod1Enabled()}">
-            {{ $t('message.lighting.global.animations.mod_1') }}
+            {{ $t('message.lighting.global.animations.mod1') }}
           </div>
           <RangeSelector
               id="mod1"
@@ -245,7 +245,7 @@ export default {
           <div class="modValue" :class="{ disabled: !isMod1Enabled()}">{{ getMod1Value() }}</div>
 
           <div class="title" :class="{ disabled: !isMod2Enabled()}">
-            {{ $t('message.lighting.global.animations.mod_2') }}
+            {{ $t('message.lighting.global.animations.mod2') }}
           </div>
           <RangeSelector
               id="mod2"
@@ -274,7 +274,7 @@ export default {
             <div class="wf-button" :class="{ disabled: !isWaterfallEnabled() }">
               <button :class="{ active: isWaterFallActive('Off') }" style="width: 100%" @click="setWaterfall('Off')"
                       :disabled="!isWaterfallEnabled()">
-                {{ $t('message.lighting.global.animations.waterfall_off') }}
+                {{ $t('message.lighting.global.animations.waterfallOff') }}
               </button>
             </div>
           </div>
