@@ -217,7 +217,7 @@ export default {
   <CenteredContainer>
     <ContentContainer style="padding-top: 15px; padding-bottom: 20px">
       <GroupContainer :title="$t('message.lighting.global.areas.title')">
-        <RadioSelection title="Area" group="lighting_global_areas" :options="getAreaOptions()" :selected="this.selected"
+        <RadioSelection :title="$t('message.lighting.global.areas.area')" group="lighting_global_areas" :options="getAreaOptions()" :selected="this.selected"
                         @selection-changed="onSelectionChange"/>
         <ColourPicker :title="$t('message.lighting.common.colour')" :color-value="color()"
                       @colour-changed="onColourChange"/>
