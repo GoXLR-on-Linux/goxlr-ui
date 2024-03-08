@@ -17,7 +17,7 @@ export default {
 
 <style scoped>
   .labelText {
-    padding: 10px 0;
+    padding: 10px 4px;
     color: v-bind(textColour);
 
     height: 18px;
