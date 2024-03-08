@@ -19,14 +19,14 @@ export default {
         // For these, the keys map directly to their GoXLR Channel Names
         channels: {
             All: "All",
-            Mic: "Mic",
+            Mic: "Microphone",
             Chat: "Voice Chat",
             Music: "Music",
             Game: "Game",
             Console: "Console",
             LineIn: "Line In",
             System: "System",
-            Sample: "Sample",
+            Sample: "Samples",
             LineOut: "Line Out",
             Headphones: "Headphones",
             MicMonitor: "Mic Monitor",
@@ -606,7 +606,34 @@ export default {
                     cough: "Cough",
                 }
             },
+        },
 
+        routing: {
+            // There are (frustratingly) some minor differences between how channels appear in the routing table,
+            // and how they appear in the Mixer, these changes also fall under the hood at the Utility level, so
+            // we'll define all the channels here, and 'fix' anything which needs adjustment.
+            title: "Routing",
+
+            input: "Inputs",
+            inputs: {
+                Microphone: "@:message.channels.Mic",
+                Chat: "Chat",
+                Music: "@:message.channels.Music",
+                Game: "@:message.channels.Game",
+                Console: "@:message.channels.Console",
+                LineIn: "@:message.channels.LineIn",
+                System: "@:message.channels.System",
+                Samples: "@:message.channels.Sample",
+            },
+
+            output: "Outputs",
+            outputs: {
+                Headphones: "@:message.channels.Headphones",
+                BroadcastMix: "@:message.channels.StreamMix",
+                ChatMic: "@:message.channels.ChatMic",
+                Sampler: "@:message.channels.Sampler",
+                LineOut: "@:message.channels.LineOut",
+            }
         },
 
         // Strings used in Profile and Microphone Profile Management.

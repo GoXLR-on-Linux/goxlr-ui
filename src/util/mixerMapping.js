@@ -19,17 +19,6 @@ export const MuteButtonNamesForFader = {
     "D": "Fader4Mute",
 }
 
-export const InputDevice = {
-    "Microphone": "Microphone",
-    "Chat": "Chat",
-    "Music": "Music",
-    "Game": "Game",
-    "Console": "Console",
-    "Line In": "LineIn",
-    "System": "System",
-    "Samples": "Samples"
-}
-
 export const OutputDevice = {
     "Headphones": "Headphones",
     "Stream Mix": "BroadcastMix",
@@ -68,19 +57,6 @@ export function channelNameToInputDevice(name) {
     return name;
 }
 
-export const ChannelNameReadable = {
-    "Mic": "Mic",
-    "LineIn": "Line In",
-    "Console": "Console",
-    "System": "System",
-    "Game": "Game",
-    "Chat": "Voice Chat",
-    "Sample": "Sample",
-    "Music": "Music",
-    "Headphones": "Headphones",
-    "MicMonitor": "Mic Monitor",
-    "LineOut": "Line Out",
-}
 
 export const EffectPresets = [
     "Preset1",
@@ -133,6 +109,24 @@ export let InputMixer = [
     "Sample",
 ]
 
+export let InputRouting = [
+    "Microphone",
+    "Chat",
+    "Music",
+    "Game",
+    "Console",
+    "LineIn",
+    "System",
+    "Samples",
+]
+
+export let OutputRouting = [
+    "Headphones",
+    "BroadcastMix",
+    "ChatMic",
+    "Sampler",
+    "LineOut",
+]
 
 export let OutputMixer = [
     "LineOut",
