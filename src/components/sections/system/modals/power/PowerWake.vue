@@ -154,18 +154,22 @@ export default {
 </script>
 
 <template>
-  <b>Wake Actions</b>
+  <b>{{ $t('message.system.power.wakeTitle') }}</b>
   <hr/>
   <div v-if="isValid()" style="margin-bottom: 20px;">
-    <div style="padding-bottom: 15px">These actions will be executed when your system wakes from Sleep.</div>
+    <div style="padding-bottom: 15px">{{ $t('message.system.power.wakeDescription') }}</div>
     <div>
       <input type="checkbox" ref="reloadSettings" id="reloadSettings" :checked="isActive('ReloadSettings')"
-             @change="changed"><label for="reloadSettings">Reload Settings</label>
+             @change="changed"><label for="reloadSettings">{{
+        $t('message.system.power.power_options.reload')
+      }}</label>
     </div>
     <div>
       <span style="display: inline-block; width: 200px">
       <input type="checkbox" ref="loadMicProfile" id="loadMicProfile" :checked="isActive('LoadMicProfile')"
-             @change="changed"><label for="loadMicProfile">Load Mic Profile: </label>
+             @change="changed"><label for="loadMicProfile">{{
+          $t('message.system.power.power_options.loadMicProfile')
+        }}: </label>
       </span>
       <select ref="micProfile" @change="micProfileChanged" :value="getSelectedMicProfile()">
         <option v-for="value in getMicProfiles()" :key="value">{{ value }}</option>
@@ -174,7 +178,9 @@ export default {
     <div>
       <span style="display: inline-block; width: 200px">
       <input type="checkbox" ref="loadFullProfile" id="loadFullProfile" :checked="isActive('LoadProfile')"
-             @change="changed"><label for="loadFullProfile">Load Full Profile: </label>
+             @change="changed"><label for="loadFullProfile">{{
+          $t('message.system.power.power_options.loadProfile')
+        }}: </label>
       </span>
       <select ref="fullProfile" @change="fullProfileChanged" :value="getSelectedFullProfile()">
         <option v-for="value in getProfiles()" :key="value">{{ value }}</option>
@@ -183,7 +189,9 @@ export default {
     <div>
       <span style="display: inline-block; width: 200px">
       <input type="checkbox" ref="loadColourProfile" id="loadColourProfile" :checked="isActive('LoadProfileColours')"
-             @change="changed"><label for="loadColourProfile">Load Colour Profile: </label>
+             @change="changed"><label for="loadColourProfile">{{
+          $t('message.system.power.power_options.loadColourProfile')
+        }}: </label>
       </span>
       <select ref="colourProfile" @change="profileChanged" :value="getSelectedColourProfile()">
         <option v-for="value in getProfiles()" :key="value">{{ value }}</option>
@@ -191,9 +199,8 @@ export default {
     </div>
   </div>
   <div v-else>
-    Wake Configuration appears to have been manually modified, in order to prevent damage, the UI here will not
-    function. To completely reset the shutdown actions, press the button below:<br/><br/>
-    <button @click="resetWakeActions">Reset Shutdown Actions</button>
+    {{ $t('message.system.power.settingsError')}}:<br/><br/>
+    <button @click="resetWakeActions">{{ $t('message.system.power.settingsReset')}}</button>
   </div>
 </template>
 

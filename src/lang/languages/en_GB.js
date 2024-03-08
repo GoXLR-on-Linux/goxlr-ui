@@ -636,6 +636,32 @@ export default {
             }
         },
 
+        system: {
+            powerButton: "Power Action",
+            power: {
+                shutdownTitle: "Shutdown Actions",
+                shutdownDescription: "These actions will be executed when the GoXLR Utility is safely shut down.",
+
+                sleepTitle: "Sleep Actions",
+                sleepDescription: "These actions will be executed when your system is going to Sleep.",
+
+                wakeTitle: "Wake Actions",
+                wakeDescription: "These actions will be executed when your system wakes from Sleep",
+
+                settingsError: "The Configuration appears to have been manually modified, in order to prevent damage, the UI here will not function. To completely reset the shutdown actions, press the button below",
+                settingsReset: "Reset Shutdown Actions",
+
+                power_options: {
+                    reload: "Reload Settings",
+                    saveProfile: "Save Profile",
+                    loadProfile: "Load Full Profile",
+                    loadColourProfile: "Load Colour Profile",
+                    saveMicProfile: "Save Mic Profile",
+                    loadMicProfile: "Load Mic Profile",
+                }
+            }
+        },
+
         // Strings used in Profile and Microphone Profile Management.
         profileManager: {
             // Accessibility Titles for the buttons at the bottom of the Profile List

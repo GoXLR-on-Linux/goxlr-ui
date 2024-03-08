@@ -181,24 +181,29 @@ export default {
   <hr/>
   <div v-if="isValid()" style="margin-bottom: 20px;">
     <div style="padding-bottom: 15px">
-      These actions will be executed when
-      <span v-if="!this.is_sleep">the GoXLR Utility is safely shut down.</span>
-      <span v-else>your system is going to Sleep.</span>
+      <span v-if="!this.is_sleep">{{ $t('message.system.power.shutdownDescription') }}</span>
+      <span v-else>{{ $t('message.system.power.sleepDescription') }}</span>
     </div>
     <div>
       <input type="checkbox" ref="saveProfile" :id="this.getId('saveProfile')" :checked="isActive('SaveProfile')"
-             @change="changed"><label :for="this.getId('saveProfile')">Save Profile</label>
+             @change="changed"><label :for="this.getId('saveProfile')">{{
+        $t('message.system.power.power_options.saveProfile')
+      }}</label>
     </div>
     <div>
       <input type="checkbox" ref="saveMicProfile" :id="this.getId('saveMicProfile')"
              :checked="isActive('SaveMicProfile')"
-             @change="changed"><label :for="this.getId('saveMicProfile')">Save Mic Profile</label>
+             @change="changed"><label :for="this.getId('saveMicProfile')">{{
+        $t('message.system.power.power_options.saveMicProfile')
+      }}</label>
     </div>
     <div>
       <span style="display: inline-block; width: 200px">
       <input type="checkbox" ref="loadMicProfile" :id="this.getId('loadMicProfile')"
              :checked="isActive('LoadMicProfile')"
-             @change="changed"><label :for="this.getId('loadMicProfile')">Load Mic Profile: </label>
+             @change="changed"><label :for="this.getId('loadMicProfile')">{{
+          $t('message.system.power.power_options.loadMicProfile')
+        }}: </label>
       </span>
       <select ref="micProfile" @change="micProfileChanged" :value="getSelectedMicProfile()">
         <option v-for="value in getMicProfiles()" :key="value">{{ value }}</option>
@@ -208,7 +213,9 @@ export default {
       <span style="display: inline-block; width: 200px">
       <input type="checkbox" ref="loadFullProfile" :id="this.getId('loadFullProfile')"
              :checked="isActive('LoadProfile')"
-             @change="changed"><label :for="this.getId('loadFullProfile')">Load Full Profile: </label>
+             @change="changed"><label :for="this.getId('loadProfile')">{{
+          $t('message.system.power.power_options.loadProfile')
+        }}: </label>
       </span>
       <select ref="fullProfile" @change="fullProfileChanged" :value="getSelectedFullProfile()">
         <option v-for="value in getProfiles()" :key="value">{{ value }}</option>
@@ -218,7 +225,9 @@ export default {
       <span style="display: inline-block; width: 200px">
       <input type="checkbox" ref="loadColourProfile" :id="this.getId('loadColourProfile')"
              :checked="isActive('LoadProfileColours')"
-             @change="changed"><label :for="this.getId('loadColourProfile')">Load Colour Profile: </label>
+             @change="changed"><label :for="this.getId('loadColourProfile')">{{
+          $t('message.system.power.power_options.loadColourProfile')
+        }}: </label>
       </span>
       <select ref="colourProfile" @change="profileChanged" :value="getSelectedColourProfile()">
         <option v-for="value in getProfiles()" :key="value">{{ value }}</option>
@@ -226,9 +235,8 @@ export default {
     </div>
   </div>
   <div v-else>
-    Shutdown Configuration appears to have been manually modified, in order to prevent damage, the UI here will not
-    function. To completely reset the shutdown actions, press the button below:<br/><br/>
-    <button @click="resetShutdownActions">Reset Shutdown Actions</button>
+    {{ $t('message.system.power.settingsError')}}:<br/><br/>
+    <button @click="resetShutdownActions">{{ $t('message.system.power.settingsReset')}}</button>
   </div>
 </template>
 
