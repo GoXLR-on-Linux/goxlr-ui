@@ -2,7 +2,7 @@
   <BigButton
       id="device_settings_button"
       ref="device_button"
-      title="Device Settings"
+      :title="$t('message.system.deviceButton')"
       @button-clicked="$refs.modal.openModal(undefined, $refs.device_button)"
   >
     <font-awesome-icon icon="fa-solid fa-headphones"/>
@@ -14,69 +14,58 @@
       id="about_modal"
       :show_footer="false"
   >
-    <template v-slot:title>Device Settings (Work in Progress)</template>
-    <div style="text-align: left" role="region" aria-label="Device Settings">
+    <template v-slot:title>{{ $t('message.system.deviceButton') }}</template>
+    <div style="text-align: left" role="region" :aria-label="$t('message.system.deviceButton')">
       <div style="padding: 12px">
-        <span style="display: inline-block; width: 300px"
-        >Mute Button Hold to Mute All Duration:
-        </span>
+        <span style="display: inline-block; width: 300px">{{ $t('message.system.device.holdDuration') }}:</span>
         <SimpleNumberInput
             :min-value="0"
             :max-value="5000"
             @value-updated="updateHold"
             :current-text-value="getHold()"
-            aria-label="Mute Button Hold to Mute All Duration"
-            aria-description="The duration in milliseconds that the mute button must be held to mute all channels"
+            :aria-label="$t('message.system.device.holdDuration')"
+            :aria-description="$t('message.system.device.holdDurationAccessibility')"
         />
       </div>
       <div v-if="!isDeviceMini()" style="padding: 12px">
-        <span style="display: inline-block; width: 300px"
-        >Sampler Pre-Record Buffer (in seconds):
-        </span>
+        <span style="display: inline-block; width: 300px">{{ $t('message.system.device.sampleBuffer') }}:</span>
         <SimpleNumberInput
             :min-value="0"
             :max-value="30000"
             :current-text-value="getSamplerPreRecord()"
-            aria-label="Sampler Pre-Record Buffer (in seconds)"
-            aria-description="The duration in seconds that the sampler will record before the button is pressed"
+            :aria-label="$t('message.system.device.sampleBuffer')"
+            :aria-description="$t('message.system.device.sampleBufferAccessibility')"
             @on-blur="updateSamplerPreRecord"
         />
-        <!--            @value-updated="updateSamplerPreRecord"-->
-
       </div>
       <div style="padding: 12px">
-        <span style="display: inline-block; width: 360px"
-        >Voice Chat Mute All Also Mutes Mic To Chat Mic:</span
-        >
+        <span style="display: inline-block; width: 360px">{{ $t('message.system.device.voiceDeafen') }}:</span>
         <input
             type="checkbox"
             :checked="get_vcmaammtcm()"
             @change="set_vcmaammtcm"
-            aria-label="Voice Chat Mute All Also Mutes Mic To Chat Mic"
-            aria-description="When muting all channels, also mute the mic to chat mic"
+            :aria-label="$t('message.system.device.voiceDeafen')"
+            :aria-description="$t('message.system.device.voiceDeafenAccessibility')"
         />
       </div>
       <div style="padding: 12px" v-if="!isDeviceMini()">
-        <span style="display: inline-block; width: 360px"
-        >Enable Mic Monitoring when FX is enabled:</span
-        >
+        <span style="display: inline-block; width: 360px">{{ $t('message.system.device.monitorWithFx') }}:</span>
         <input
             type="checkbox"
             :checked="get_mic_monitor_with_fx()"
             @change="set_mic_monitor_with_fx"
-            aria-label="Enable Mic Monitoring when FX is enabled"
-            aria-description="Activates Mic Monitoring when FX is enabled"
+            :aria-label="$t('message.system.device.monitorWithFx')"
+            :aria-description="$t('message.system.device.monitorWithFxAccessibility')"
         />
       </div>
       <div style="padding: 12px" v-if="!isDeviceMini()">
-        <span style="display: inline-block; width: 360px"
-        >Lock Fader Positions when Muting to All:</span>
+        <span style="display: inline-block; width: 360px">{{ $t('message.system.device.lockFaders') }}:</span>
         <input
             type="checkbox"
             :checked="get_locked_faders()"
             @change="set_locked_faders"
-            aria-label="Lock Fader Positions when Muting to All"
-            aria-description="Prevents the faders from moving down when Mute to All is active"
+            :aria-label="$t('message.system.device.lockFaders')"
+            :aria-description="$t('message.system.device.lockFadersAccessibility')"
         />
       </div>
     </div>

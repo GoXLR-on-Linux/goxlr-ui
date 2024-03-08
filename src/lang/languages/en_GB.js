@@ -659,6 +659,24 @@ export default {
                     saveMicProfile: "Save Mic Profile",
                     loadMicProfile: "Load Mic Profile",
                 }
+            },
+
+            deviceButton: "Device Settings",
+            device: {
+                holdDuration: "Mute Button Hold to Mute All Duration",
+                holdDurationAccessibility: "The duration in milliseconds that the mute button must be held to mute all channels",
+
+                sampleBuffer: "Sampler Pre-Record Buffer (in seconds)",
+                sampleBufferAccessibility: "The duration in seconds that the sampler will record before the button is pressed",
+
+                voiceDeafen: "Voice Chat Mute All also mutes Mic to Chat Mic",
+                voiceDeafenAccessibility: "When muting all channels, also mute the mic to chat mic",
+
+                monitorWithFx: "Toggle Mic Monitoring with FX state",
+                monitorWithFxAccessibility: "Activates Mic Monitoring when FX is enabled",
+
+                lockFaders: "Lock fader positions when Muting to All",
+                lockFadersAccessibility: "Prevents the faders from moving down when Mute to All is active",
             }
         },
 
