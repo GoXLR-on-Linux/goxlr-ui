@@ -126,7 +126,8 @@ export default {
 .modal-container {
   border: 1px solid #000;
 
-  width: v-bind(width);
+  min-width: v-bind(width);
+  max-width: min-content;
   margin: 0 auto;
   background-color: #fff;
   border-radius: 2px;
