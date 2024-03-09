@@ -655,7 +655,7 @@ export default {
                 wakeTitle: "Wake Actions",
                 wakeDescription: "These actions will be executed when your system wakes from Sleep",
 
-                settingsError: "The Configuration appears to have been manually modified, in order to prevent damage, the UI here will not function. To completely reset the shutdown actions, press the button below",
+                settingsError: "The Configuration appears to have been manually modified. In order to prevent unexpected behaviours, this section has been disabled. To completely reset the shutdown actions, press the button below",
                 settingsReset: "Reset Shutdown Actions",
 
                 power_options: {
