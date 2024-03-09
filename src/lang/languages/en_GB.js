@@ -671,7 +671,7 @@ export default {
             deviceButton: "Device Settings",
             device: {
                 holdDuration: "Mute Button Hold to Mute All Duration",
-                holdDurationAccessibility: "The duration in milliseconds that the mute button must be held to mute all channels",
+                holdDurationAccessibility: "The duration in milliseconds that the mute button must be held to mute to all channels",
 
                 sampleBuffer: "Sampler Pre-Record Buffer (in seconds)",
                 sampleBufferAccessibility: "The duration in seconds that the sampler will record before the button is pressed",
