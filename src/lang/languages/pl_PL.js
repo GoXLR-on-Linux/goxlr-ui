@@ -140,7 +140,7 @@ export default {
             compressor: {
                 title: "Kompresor",
                 amount: "Ilość",
-                threshold: "Próg",
+                threshold: "Threshold",
                 ratio: "Stopień",
                 attack: "Attack",
                 release: "Release",
