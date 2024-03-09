@@ -662,7 +662,7 @@ export default {
                     reload: "Reload Settings",
                     saveProfile: "Save Profile",
                     loadProfile: "Load Full Profile",
-                    loadColourProfile: "Load Colour Profile",
+                    loadColourProfile: "Load Profile Colours",
                     saveMicProfile: "Save Mic Profile",
                     loadMicProfile: "Load Mic Profile",
                 }
