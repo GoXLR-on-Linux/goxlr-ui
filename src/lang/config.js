@@ -1,5 +1,6 @@
 import en_GB from "@/lang/languages/en_GB";
 import it_IT from "@/lang/languages/it_IT";
+import de_DE from "@/lang/languages/de_DE"
 import pl_PL from "@/lang/languages/pl_PL";
 import nl_NL from "@/lang/languages/nl_NL"
 import fr_FR from "@/lang/languages/fr_FR"
