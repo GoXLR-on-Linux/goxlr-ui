@@ -123,7 +123,7 @@ thead th:not(.subHeader) {
 
 thead .subHeader th {
   background-color: #353937;
-  width: 70px;
+  min-width: 70px;
 }
 
 tr th {
