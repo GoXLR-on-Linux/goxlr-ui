@@ -347,7 +347,7 @@ export default {
         <ColourPicker :title="$t('message.lighting.mixer.screen.backgroundColour')" :color-value="getScreenColour()"
                       @colour-changed="onScreenColourChange"/>
         <RadioSelection group="lighting_mixer_icon_select" :options="getIconOptions()" :selected="getSelectedIcon()"
-                        @selection-changed="onIconSelectionChange">
+                        @selection-changed="onIconSelectionChange" max-width="200px">
           <template #title>
             <div>
               <span style="padding-right: 14px">{{ $t('message.lighting.mixer.screen.icons') }}</span>

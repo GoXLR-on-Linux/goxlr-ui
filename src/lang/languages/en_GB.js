@@ -655,14 +655,14 @@ export default {
                 wakeTitle: "Wake Actions",
                 wakeDescription: "These actions will be executed when your system wakes from Sleep",
 
-                settingsError: "The Configuration appears to have been manually modified, in order to prevent damage, the UI here will not function. To completely reset the shutdown actions, press the button below",
+                settingsError: "The Configuration appears to have been manually modified. In order to prevent unexpected behaviours, this section has been disabled. To completely reset the shutdown actions, press the button below",
                 settingsReset: "Reset Shutdown Actions",
 
                 power_options: {
                     reload: "Reload Settings",
                     saveProfile: "Save Profile",
                     loadProfile: "Load Full Profile",
-                    loadColourProfile: "Load Colour Profile",
+                    loadColourProfile: "Load Profile Colours",
                     saveMicProfile: "Save Mic Profile",
                     loadMicProfile: "Load Mic Profile",
                 }
@@ -671,7 +671,7 @@ export default {
             deviceButton: "Device Settings",
             device: {
                 holdDuration: "Mute Button Hold to Mute All Duration",
-                holdDurationAccessibility: "The duration in milliseconds that the mute button must be held to mute all channels",
+                holdDurationAccessibility: "The duration in milliseconds that the mute button must be held to mute to all channels",
 
                 sampleBuffer: "Sampler Pre-Record Buffer (in seconds)",
                 sampleBufferAccessibility: "The duration in seconds that the sampler will record before the button is pressed",

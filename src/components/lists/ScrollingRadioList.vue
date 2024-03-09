@@ -37,7 +37,7 @@ export default {
 </script>
 
 <template>
-  <VerticalScrollingContainer ref="container" :max-height="maxHeight">
+  <VerticalScrollingContainer ref="container" :max-height="maxHeight" padding="0px 4px">
     <RadioList ref="radioList" v-bind="$attrs" :scroll-top="getScrollTop">
       <slot></slot>
     </RadioList>

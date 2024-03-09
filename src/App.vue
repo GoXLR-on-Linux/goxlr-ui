@@ -43,4 +43,8 @@ body {
   margin-top: 10px;
   user-select: none;
 }
+
+button {
+  font-family: LeagueMonoCondensed, sans-serif;
+}
 </style>

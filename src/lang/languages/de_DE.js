@@ -1,6 +1,7 @@
 ///
 /// Authors:
 /// jonilala796
+/// Kariko
 ///
 
 export default {
@@ -18,7 +19,7 @@ export default {
             Sample: "Samples",
             LineOut: "Line-Out",
             Headphones: "Kopfhörer",
-            MicMonitor: "Mikrofon-Überwachung",
+            MicMonitor: "Mikrofon-Monitor",
             StreamMix: "Stream-Mix",
             ChatMic: "Chat-Mikrofon",
             Sampler: "Sampler",
@@ -36,7 +37,7 @@ export default {
             percentage: "%",
             milliseconds: "ms",
             hertz: "Hz",
-            kilohertz: "KHz",
+            kilohertz: "kHz",
             ratio: ":{value}",
             beatsPerMinute: "BPM",
         },
@@ -93,13 +94,13 @@ export default {
                 // Microphone Types
                 xlr: "XLR Mikrofon",
                 phantom: "XLR + Phantom (+{voltage}V)",
-                jack: "3.5mm",
+                jack: "3,5mm Klinke",
             },
 
             waveform: {
                 loud: "Zu Laut",
                 good: "Gut",
-                gate_estimated: "Gate wird geschätzt",
+                gate_estimated: "Gate geschätzt",
             },
 
             gate: {
@@ -177,8 +178,8 @@ export default {
                     toggle: "Umschalten",
                 },
 
-                title: "Husten Taste Einstellungen",
-                behaviourTitle: "Tasteverhalten",
+                title: "Hust Tasten Einstellungen",
+                behaviourTitle: "Tastenverhalten",
             }
         },
 
@@ -374,7 +375,7 @@ export default {
                 functionLabel: "Funktion für Taste {activeButton} in Bank {activeBank}",
                 functions: {
                     playNext: "Abspielen / Nächster",
-                    playStop: "Abspielen / Stoppen",
+                    playStop: "Abspielen / Stop",
                     playFade: "Abspielen / Ausblenden",
                     stopOnRelease: "Stoppen bei Loslassen",
                     fadeOnRelease: "Ausblenden bei Loslassen",
@@ -478,9 +479,9 @@ export default {
                     mode: "Animationsmodus",
                     modes: {
                         none: "Keine",
-                        rainbowRetro: "Retro Regenbogen",
-                        rainbowBright: "Heller Regenbogen",
-                        rainbowDark: "Dunkler Regenbogen",
+                        rainbowRetro: "Regenbogen Retro",
+                        rainbowBright: "Regenbogen Hell",
+                        rainbowDark: "Regenbogen Dunkel",
                         simple: "Einfach",
                         ripple: "Welle",
                     },
@@ -523,7 +524,7 @@ export default {
                     optionsTitle: "Optionen",
                     options: {
                         showNumber: "Zeige Nummer",
-                        invertDisplay: "Anzeige umkehren",
+                        invertDisplay: "Anzeige invertieren",
                         text: "Text",
 
                         accessibilityText: "Text zur Anzeige auf dem GoXLR-Display"
@@ -532,14 +533,14 @@ export default {
 
                 mute: {
                     // Pretty much all other fields for this area come from 'Common'
-                    title: "Stummschaltung",
+                    title: "Stummschalten",
                     accessibilityTitle: "Stummschaltungseinstellungen für {channel}"
                 }
             },
 
             effects: {
                 preset: {
-                    title: "Vorlagen Tasten",
+                    title: "Vorlage Tasten",
                     presetTitle: "Vorlage"
                 },
 
@@ -587,7 +588,7 @@ export default {
             },
 
             cough: {
-                title: "Husten / Piepton Tasten",
+                title: "Hust / Piepton Tasten",
 
                 buttonsTitle: "Tasten",
                 buttons: {
@@ -637,14 +638,14 @@ export default {
                 wakeTitle: "Aufwach Aktionen",
                 wakeDescription: "Diese Aktionen werden ausgeführt, wenn das System aus dem Schlafmodus aufwacht.",
 
-                settingsError: "Die Konfiguration scheint manuell geändert worden zu sein. Um Schäden zu vermeiden, wird die Benutzeroberfläche hier nicht funktionieren. Um die Abschaltaktionen vollständig zurückzusetzen, drücken Sie die Taste unten",
+                settingsError: "Die Konfiguration scheint manuell geändert worden zu sein. Um unerwartetes Verhalten zu vermeiden, wurde dieser Abschnitt deaktiviert. Um die Abschaltaktionen vollständig zurückzusetzen, drücke die Taste unten",
                 settingsReset: "Abschaltaktionen zurücksetzen",
 
                 power_options: {
                     reload: "Einstellungen neu laden",
                     saveProfile: "Profil speichern",
                     loadProfile: "Lade ganzes Profil",
-                    loadColourProfile: "Lade Farbprofil",
+                    loadColourProfile: "Lade Profilfarben",
                     saveMicProfile: "Mikrofonprofil speichern",
                     loadMicProfile: "Lade Mikrofonprofil",
                 }
@@ -652,17 +653,17 @@ export default {
 
             deviceButton: "Geräteeinstellungen",
             device: {
-                holdDuration: "Stummschalttaste Haltezeit um alles stummzuschalten",
-                holdDurationAccessibility: "Die Dauer in Millisekunden, die die Stummschalttaste gehalten werden muss, um alle Kanäle stummzuschalten",
+                holdDuration: "Stummschaltetaste Haltezeit um alles stummzuschalten",
+                holdDurationAccessibility: "Dauer in Millisekunden, die die Stummschaltetaste gehalten werden muss, um für alle Kanäle stummzuschalten",
 
                 sampleBuffer: "Sampler Pre-Record-Puffer (in Sekunden)",
-                sampleBufferAccessibility: "Die Anzahl der Sekunden, die der Sampler im Voraus aufzeichnet, bevor er ausgelöst wird",
+                sampleBufferAccessibility: "Anzahl der Sekunden, die der Sampler im Voraus aufzeichnet, bevor er ausgelöst wird",
 
                 voiceDeafen: "Sprachchat Stummschaltung für alle schaltet auch das Mikrofon zum Chat-Mikrofon stumm.",
-                voiceDeafenAccessibility: "Wenn alle Kanäle stummgeschaltet werden, wird auch das Mikrofon des Chat-Mikrofons stummgeschaltet.",
+                voiceDeafenAccessibility: "Wenn alle Kanäle stummgeschaltet werden, wird auch das Chat-Mikrofon stummgeschaltet.",
 
-                monitorWithFx: "Mikrofonüberwachung mit FX-Status umschalten",
-                monitorWithFxAccessibility: "Aktiviert die Mikrofonüberwachung, wenn FX aktiviert ist",
+                monitorWithFx: "Mikrofonmonitor mit FX-Status umschalten",
+                monitorWithFxAccessibility: "Aktiviert den Mikrofonmonitor, wenn FX aktiviert wird",
 
                 lockFaders: "Faderpositionen bei Stummschaltung auf Alle sperren",
                 lockFadersAccessibility: "Verhindert, dass sich die Fader nach unten bewegen, wenn Stummschaltung für alle aktiviert ist.",
@@ -738,7 +739,7 @@ export default {
             createProfile: "Neues Profil erstellen",
 
             // Dialog Popup when clicking 'Create Profile' Button
-            newTitle: "Neues Profil Ursprung",
+            newTitle: "Neues Profil Quelle",
             newQuestion: "Möchtest du ein neues Profil aus der Standard- oder der aktuellen Konfiguration erstellen?",
             newDefaultButton: "Standard",
             newCurrentButton: "Aktuell",

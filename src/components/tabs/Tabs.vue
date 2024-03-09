@@ -1,26 +1,13 @@
 <template>
-  <div style="margin-left: 8px; margin-right: 8px">
+  <div style="margin-left: 8px; margin-right: 8px; font-family: LeagueMonoCondensed, sans-serif;;">
     <div class="tab" role="TabList" :aria-label="this.label">
-      <button
-          v-for="tab in tabs"
-          :key="tab.name"
-          :class="{ active: tab.isActive }"
-          v-show="!tab.hidden"
-          @click="selectTab(tab)"
-          role="tab"
-          :aria-selected="tab.isActive"
-          :tabindex="tab.isActive ? 0 : -1"
-          @keydown="onTabKeydown"
-          :ref="tab.name"
-      >
+      <button v-for="tab in tabs" :key="tab.name"
+        :class="{ active: tab.isActive }" v-show="!tab.hidden" @click="selectTab(tab)" role="tab"
+        :aria-selected="tab.isActive" :tabindex="tab.isActive ? 0 : -1" @keydown="onTabKeydown" :ref="tab.name">
         {{ tab.name }}
       </button>
     </div>
-    <div
-        class="tabs-details"
-        role="tabpanel"
-        :aria-label="getActiveTab().name"
-    >
+    <div class="tabs-details" role="tabpanel" :aria-label="getActiveTab().name">
       <slot></slot>
     </div>
   </div>
@@ -32,7 +19,7 @@ export default {
   name: "TabList",
 
   data() {
-    return {tabs: []};
+    return { tabs: [] };
   },
   props: {
     label: {
