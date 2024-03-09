@@ -654,7 +654,7 @@ export default {
             deviceButton: "Geräteeinstellungen",
             device: {
                 holdDuration: "Stummschaltetaste Haltezeit um alles stummzuschalten",
-                holdDurationAccessibility: "Dauer in Millisekunden, die die Stummschaltetaste gehalten werden muss, um alle Kanäle stummzuschalten",
+                holdDurationAccessibility: "Dauer in Millisekunden, die die Stummschaltetaste gehalten werden muss, um für alle Kanäle stummzuschalten",
 
                 sampleBuffer: "Sampler Pre-Record-Puffer (in Sekunden)",
                 sampleBufferAccessibility: "Anzahl der Sekunden, die der Sampler im Voraus aufzeichnet, bevor er ausgelöst wird",
