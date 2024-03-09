@@ -638,14 +638,14 @@ export default {
                 wakeTitle: "Aufwach Aktionen",
                 wakeDescription: "Diese Aktionen werden ausgeführt, wenn das System aus dem Schlafmodus aufwacht.",
 
-                settingsError: "Die Konfiguration scheint manuell geändert worden zu sein. Um Schäden zu vermeiden, wird die Benutzeroberfläche hier nicht funktionieren. Um die Abschaltaktionen vollständig zurückzusetzen, drücke die Taste unten",
+                settingsError: "Die Konfiguration scheint manuell geändert worden zu sein. Um unerwartetes Verhalten zu vermeiden, wurde dieser Abschnitt deaktiviert. Um die Abschaltaktionen vollständig zurückzusetzen, drücke die Taste unten",
                 settingsReset: "Abschaltaktionen zurücksetzen",
 
                 power_options: {
                     reload: "Einstellungen neu laden",
                     saveProfile: "Profil speichern",
                     loadProfile: "Lade ganzes Profil",
-                    loadColourProfile: "Lade Farbprofil",
+                    loadColourProfile: "Lade Profilfarben",
                     saveMicProfile: "Mikrofonprofil speichern",
                     loadMicProfile: "Lade Mikrofonprofil",
                 }
