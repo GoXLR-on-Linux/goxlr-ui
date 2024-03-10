@@ -677,7 +677,7 @@ export default {
                 sampleBufferAccessibility: "The duration in seconds that the sampler will record before the button is pressed",
 
                 voiceDeafen: "Voice Chat Mute All also mutes Mic to Chat Mic",
-                voiceDeafenAccessibility: "When muting all channels, also mute the mic to chat mic",
+                voiceDeafenAccessibility: "When muting Voice Chat to all channels, also mute the mic to chat mic",
 
                 monitorWithFx: "Toggle Mic Monitoring with FX state",
                 monitorWithFxAccessibility: "Activates Mic Monitoring when FX is enabled",
