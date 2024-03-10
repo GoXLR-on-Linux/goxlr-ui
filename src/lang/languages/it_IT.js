@@ -436,7 +436,297 @@ export default {
                 accessibilityAnalysing: "Attendi, analisi del campione in corso. Questo processo potrebbe richiedere fino a due minuti.",
                 accessibilityAdded: "Il campione {name} è stato aggiunto al tasto {activeButton} sulla banca {activeBank}."
             }
+        },
 
+        lighting: {
+            // These are some common strings that are used in multiple places
+            common: {
+                colour: "Colore",
+
+                activeColour: "Attivo",
+                inactiveColour: "Inattivo",
+
+                inactiveOption: "Opzione Inattiva",
+                inactiveOptions: {
+                    dimActiveColour: "Riduci Luminosità Colore Attivo",
+                    inactiveColour: "Colore Inattivo",
+                    dimInactiveColour: "Riduci Luminosità Colore Inattivo"
+
+                },
+
+                applyToAll: "Applica a Tutti",
+            },
+
+            global: {
+                areas: {
+                    title: "Aree",
+
+                    area: "Area",
+                    areas: {
+                        global: "Globale",
+                        accent: "Accenti",
+                    },
+
+                    colour: "@:message.lighting.common.colour",
+                },
+
+                animations: {
+                    title: "Animazioni",
+
+                    mode: "Modalità Animazione",
+                    modes: {
+                        none: "Nessuna",
+                        rainbowRetro: "Arcobaleno Retro",
+                        rainbowBright: "Arcobaleno Chiaro",
+                        rainbowDark: "Arcobaleno Scuro",
+                        simple: "Semplice",
+                        ripple: "Onda",
+                    },
+
+                    mod1: "Gradiente Mod 1",
+                    mod2: "Gradiente Mod 2",
+
+                    waterfall: "Impostazioni Cascata",
+                    waterfallOff: "Disabilitata",
+                }
+            },
+
+            mixer: {
+                faders: {
+                    title: "@:message.configuration.faders.title",
+                    channelTitle: "@:message.configuration.faders.channel",
+                },
+
+                fader: {
+                    title: "Fader",
+
+                    style: "Stile",
+                    styles: {
+                        gradient: "Gradiente",
+                        meter: "Meter",
+                    },
+
+                    bottomColour: "Colore Inizio",
+                    topColour: "Colore Fine",
+
+                    accessibilityTitle: "Impostazioni Fader per {channel}",
+                },
+
+                screen: {
+                    title: "Schermo",
+                    backgroundColour: "Colore di Sfondo",
+                    icons: "Icone",
+                    iconNone: "-- NESSUNA --",
+
+                    optionsTitle: "Opzioni",
+                    options: {
+                        showNumber: "Mostra Numbero",
+                        invertDisplay: "Inverti Schermo",
+                        text: "Testo",
+
+                        accessibilityText: "Testo da mostrare sullo schermo di GoXLR"
+                    }
+                },
+
+                mute: {
+                    // Pretty much all other fields for this area come from 'Common'
+                    title: "Muto",
+                    accessibilityTitle: "Impostazioni Muto per {channel}"
+                }
+            },
+
+            effects: {
+                preset: {
+                    title: "Tasti Preset",
+                    presetTitle: "Preset"
+                },
+
+                encoders: {
+                    title: "Manopole",
+
+                    encoder: "Manopola",
+                    encoders: {
+                        reverb: "Riverbero",
+                        echo: "Eco",
+                        pitch: "Tono",
+                        gender: "Genere",
+                    },
+
+                    leftColour: "Colore Sinistro",
+                    rightColour: "Colore Destro",
+                    knobColour: "Colore Manopola"
+                },
+
+                buttons: {
+                    title: "Tasti Effetto",
+
+                    effectTitle: "Effetto",
+                    effect: {
+                        megaphone: "Megafono",
+                        robot: "Robot",
+                        hardTune: "Hardtune",
+                        fx: "Fx"
+                    }
+                },
+            },
+            sampler: {
+                title: "Banca",
+
+                buttonsTitle: "Tasti",
+                buttons: {
+                    a: "A",
+                    b: "B",
+                    c: "C"
+                },
+
+                active: "Attivo / Caricato",
+                empty: "Campione Vuoto",
+                inactive: "Banca Inattiva",
+            },
+
+            cough: {
+                title: "Tasti Tosse/Bip",
+
+                buttonsTitle: "Tasti",
+                buttons: {
+                    bleep: "Bip",
+                    cough: "Tosse",
+                }
+            },
+        },
+
+        routing: {
+            // There are (frustratingly) some minor differences between how channels appear in the routing table,
+            // and how they appear in the Mixer, these changes also fall under the hood at the Utility level, so
+            // we'll define all the channels here, and 'fix' anything which needs adjustment.
+            title: "Routing",
+
+            input: "Ingressi",
+            inputs: {
+                Microphone: "@:message.channels.Mic",
+                Chat: "Chat",
+                Music: "@:message.channels.Music",
+                Game: "@:message.channels.Game",
+                Console: "@:message.channels.Console",
+                LineIn: "@:message.channels.LineIn",
+                System: "@:message.channels.System",
+                Samples: "@:message.channels.Sample",
+            },
+
+            output: "Uscite",
+            outputs: {
+                Headphones: "@:message.channels.Headphones",
+                BroadcastMix: "@:message.channels.StreamMix",
+                ChatMic: "@:message.channels.ChatMic",
+                Sampler: "@:message.channels.Sampler",
+                LineOut: "@:message.channels.LineOut",
+            }
+        },
+
+        system: {
+            powerButton: "Azione Alimentazione",
+            power: {
+                shutdownTitle: "Azioni di Spegnimento",
+                shutdownDescription: "Queste azioni verranno eseguite quando GoXLR Utility viene chiusa in maniera pulita.",
+
+                sleepTitle: "Azioni Modalità Riposo",
+                sleepDescription: "Queste azioni verranno eseguite quando il computer va in Modalità Riposo.",
+
+                wakeTitle: "Azioni di Risveglio",
+                wakeDescription: "Queste azioni verranno eseguite quando il computer si risveglia dalla Modalità Riposo",
+
+                settingsError: "Sembra che la Configurazione sia stata modificata manualmente. Al fine di evitare comportamenti inattesi, questa sezione è stata disabilitata. Per resettare completamente le Azioni di Spegnimento, premi il tasto qui sotto",
+                settingsReset: "Resetta Azioni di Spegnimento",
+
+                power_options: {
+                    reload: "Ricarica Impostazioni",
+                    saveProfile: "Salva Profilo",
+                    loadProfile: "Carica Profilo Completo",
+                    loadColourProfile: "Carica Colori Profilo",
+                    saveMicProfile: "Salva Profilo Microfono",
+                    loadMicProfile: "Carica Profilo Microfono",
+                }
+            },
+
+            deviceButton: "Impostazioni Dispositivo",
+            device: {
+                holdDuration: "Durata pressione Tasto Muto per mutare verso Tutti",
+                holdDurationAccessibility: "La durata in millisecondi per cui bisogna tenere premuto il tasto Muto per mutare verso tutti i canali",
+
+                sampleBuffer: "Buffer di pre-registrazione del Campionatore (in secondi)",
+                sampleBufferAccessibility: "La durata in secondi che il Campionatore registerà prima che il tasto venga premuto.",
+
+                voiceDeafen: "Muta verso Tutti su Chat Vocale muta anche Mic verso Mic Chat",
+                voiceDeafenAccessibility: "Quando muti Chat Vocale verso tutti i canali, muta anche Mic verso Mic Chat",
+
+                monitorWithFx: "Attiva/Disattiva monitoraggio microfono con tasto FX",
+                monitorWithFxAccessibility: "Attiva monitoraggio microfono quando FX è attivo",
+
+                lockFaders: "Blocca posizioni fader quando Muta verso Tutti viene attivato",
+                lockFadersAccessibility: "Disabilita il movimento dei fader quando viene attivato Muta verso Tutti",
+            },
+
+            settingsButton: "Impostazioni Utility",
+            settings: {
+                uiHandler: "Handler UI",
+                uiHandlers: {
+                    browser: "Browser",
+                    app: "App",
+                    custom: "Personalizzato"
+                },
+
+
+                logLevel: "Livelli di Log (richiede il riavvio)",
+                logLevels: {
+                    off: "Disabilitato",
+                    error: "Errori",
+                    warn: "Avvisi",
+                    info: "Info",
+                    debug: "Debug",
+                    trace: "Traccia"
+
+                    // OFF / ERROR / WARN / INFO / DEBUG / TRACE
+                },
+
+                allowNetworkAccess: "Consenti accesso di Rete all'UI (richiede il riavvio)",
+                allowNetworkAccessAccessibility: "Consente di accedere all'interfaccia utente tramite altri dispositivi sulla rete locale",
+
+                autoStart: "Avvio automatico al Login",
+                autoStartAccessibility: "Avvia GoXLR Utility quando l'utente esegue l'accesso",
+
+                showOnLaunch: "Mostra l'UI al Avvio",
+                showOnLaunchAccessibility: "Mostra l'UI all'avvio automaticamente",
+
+                showTray: "Mostra icona Barra di Sistema (richiede il riavvio)",
+                showTrayAccessibility: "Mostra l'icona di GoXLR Utility nella Barra di Sistema",
+
+                ttsOnButton: "Sintesi Vocale alla pressione dei tasti",
+                ttsOnButtonAccessibility: "Sintesi Vocale dello stato dei tasti quando premuti, tramite screen reader o TTS di sistema",
+
+                recoverDefaults: "Ripristina Predefiniti",
+                recoverOptions: {
+                    profiles: "Profili",
+                    micProfiles: "Profili Microfono",
+                    icons: "Icone",
+                    presets: "Preset"
+                },
+
+                shutdownUtility: "Chiudi GoXLR Utility"
+            },
+
+            aboutButton: "Informazioni GoXLR",
+            about: {
+                serial: "Seriale",
+                utilityVersion: "Versione Utility",
+                hardwareVersion: "Versione Hardware",
+
+                firmware: "Firmware",
+                dice: "DICE",
+                fpga: "FPGA"
+            },
+
+            licenses: "Licenze",
+            help: "Aiuto",
         },
 
         // Strings used in Profile and Microphone Profile Management.
