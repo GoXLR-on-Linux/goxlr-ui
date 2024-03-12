@@ -150,11 +150,13 @@ export default {
   cursor: pointer;
   padding: 10px 20px;
   margin-bottom: -1px;
-  width: 150px;
+  min-width: 150px;
+  max-width: min-content;
 
   /*font-family: LeagueMonoVariable, sans-serif;*/
   border-radius: 5px 5px 0 0;
   color: #fff;
+  white-space: nowrap;
 }
 
 .tab button:hover:not(.active) {
