@@ -93,14 +93,14 @@ export default {
     },
 
     getTextValue() {
-      if (this.titleSuffix === "KHz") {
+      if (this.titleSuffix === this.$t('message.suffixes.kilohertz')) {
         return (this.fieldValue / 1000).toFixed(1);
       }
       return this.fieldValue.toFixed(1);
     },
 
     getTextMinValue() {
-      if (this.titleSuffix === "KHz") {
+      if (this.titleSuffix === this.$t('message.suffixes.kilohertz')) {
         return (this.minValue / 1000);
       } else {
         return this.minValue;
@@ -108,7 +108,7 @@ export default {
     },
 
     getTextMaxValue() {
-      if (this.titleSuffix === "KHz") {
+      if (this.titleSuffix === this.$t('message.suffixes.kilohertz')) {
         return (this.maxValue / 1000);
       } else {
         return this.maxValue;
