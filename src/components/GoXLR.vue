@@ -55,7 +55,7 @@
       </Tabs>
     </template>
     <VersionCheck/>
-    <Language />
+    <Language v-if="!utilitySupportsLanguages()" />
     <A11yNotifications/>
   </div>
 </template>
@@ -122,6 +122,27 @@ export default {
 
   methods: {
     isDeviceMini,
+
+    loadLocale() {
+      if (!this.utilitySupportsLanguages()) {
+        return;
+      }
+
+      // Load up the Locale..
+      let locale = store.getConfig().locale.system_locale;
+      if (store.getConfig().locale.user_locale !== null) {
+        locale = store.getConfig().locale.user_locale;
+      }
+      console.log(`Setting Locale to ${locale}`);
+      this.$i18n.locale = locale;
+    },
+
+    utilitySupportsLanguages() {
+      if (!store.isConnected()) {
+        return false;
+      }
+      return store.getConfig().hasOwnProperty("locale");
+    },
 
     isDeviceSet() {
       let ready = store.hasActiveDevice() && store.isConnected();
@@ -278,6 +299,12 @@ export default {
   created() {
     runWebsocket();
   },
+
+  mounted() {
+    store.onConnected(() => {
+      this.loadLocale();
+    });
+  }
 };
 </script>
 

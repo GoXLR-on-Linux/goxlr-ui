@@ -11,6 +11,9 @@ export const store = reactive({
 
     pausedPaths: [],
 
+    on_connected: [],
+    on_disconnected: [],
+
     // Set a 'base' status struct..
     status: {
         "mixers": {},
@@ -24,6 +27,14 @@ export const store = reactive({
         }
     },
 
+    onConnected(func) {
+        this.on_connected.push(func);
+    },
+
+    onDisconnected(func) {
+        this.on_disconnected(func);
+    },
+
     socketDisconnected() {
         this.activeSerial = "";
         this.status = {
@@ -32,6 +43,9 @@ export const store = reactive({
         };
 
         this.is_connected = false;
+        for (let func of this.on_disconnected) {
+            func();
+        }
     },
 
 
@@ -39,6 +53,10 @@ export const store = reactive({
         this.has_connected = true;
         this.replaceData(status);
         this.is_connected = true;
+
+        for (let func of this.on_connected) {
+            func();
+        }
     },
 
     daemonVersion() {
