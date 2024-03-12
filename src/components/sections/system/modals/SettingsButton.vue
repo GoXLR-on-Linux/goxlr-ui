@@ -16,6 +16,14 @@
   >
     <template v-slot:title>{{ $t('message.system.settingsButton') }}</template>
     <div style="text-align: left" role="region" aria-label="settings">
+      <div style="padding: 12px" v-if="isLanguageSupported()">
+        {{$t('message.system.settings.language')}}:
+        <select @change="setUILanguage" style="margin-right: 15px">
+          <option :selected="getUILanguageIsSystem()" value="-1">{{$t('message.system.settings.useSystem')}}</option>
+          <option v-for="locale of Object.keys(languages)" :key="`locale-${locale}`" :value="locale" :selected="isCurrentLanguage(locale)">{{ languages[locale] }}</option>
+        </select>
+      </div>
+
       <div style="padding: 12px">
         {{$t('message.system.settings.uiHandler')}}:
         <select @change="setUiHandler" style="margin-right: 15px">
@@ -124,10 +132,14 @@ import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 import BigButton from "@/components/buttons/BigButton.vue";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
+import {languages} from "../../../../lang/config";
 
 export default {
   name: "SettingsButton",
   computed: {
+    languages() {
+      return languages
+    },
     store() {
       return store
     }
@@ -135,6 +147,45 @@ export default {
   components: {BigButton, AccessibleModal},
 
   methods: {
+    isLanguageSupported() {
+      if (store.getConfig() === null) {
+        return false;
+      }
+      return store.getConfig().hasOwnProperty("locale");
+    },
+
+    setUILanguage(e) {
+      let language = e.target.value;
+      if (language === "-1") {
+        language = null;
+      }
+      console.log(`Setting Language to ${language}`);
+      websocket.send_daemon_command({"SetLocale": language}).then(() => {
+        if (language === null) {
+          language = store.getConfig().locale.system_locale;
+        }
+
+        console.log(`Setting Locale to ${language}`);
+        this.$i18n.locale = language;
+      });
+    },
+
+    getUILanguageIsSystem() {
+      if (store.getConfig() === null) {
+        return "en_GB";
+      }
+
+      // If the User Locale is null, defer to the system locale..
+      return store.getConfig().locale.user_locale === null;
+    },
+
+    isCurrentLanguage(lang) {
+      if (this.getUILanguageIsSystem()) {
+        return false;
+      }
+      return lang === store.getConfig().locale.user_locale;
+    },
+
     getActivePath() {
       if (store.getConfig() === undefined) {
         return null;

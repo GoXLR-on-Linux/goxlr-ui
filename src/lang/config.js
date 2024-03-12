@@ -6,10 +6,19 @@ import nl_NL from "@/lang/languages/nl_NL"
 import fr_FR from "@/lang/languages/fr_FR"
 
 export const messages = {
-    en_GB: en_GB,
-    it_IT: it_IT, // Italian (Italy) | Italiano (Italia)
-    de_DE: de_DE, // German (Germany) | Deutsch (Deutschland)
-    pl_PL: pl_PL, // Polish (Poland) | Polski (Polska)
+    en_GB: en_GB, // English (British)
+    it_IT: it_IT, // Italian (Italy)
+    de_DE: de_DE, // German (Germany)
+    pl_PL: pl_PL, // Polish (Poland)
     nl_NL: nl_NL, // Dutch (Netherlands)
-    fr_FR: fr_FR,
+    fr_FR: fr_FR, // French (France)
+}
+
+export const languages = {
+    en_GB: "English (British)",
+    fr_FR: "Français (France)",
+    it_IT: "Italiano (Italia)",
+    de_DE: "Deutsch (Deutschland)",
+    nl_NL: "Dutch (Netherlands)",
+    pl_PL: "Polski (Polska)",
 }
