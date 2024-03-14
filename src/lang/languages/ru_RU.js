@@ -131,7 +131,7 @@ export default {
             equaliser: {
                 title: "Эквалайзер",
                 reset: "Сброс",
-                enableFineTune: "Включить Тонкую Настройку",
+                enableFineTune: "Тонкая Настройка",
                 bass: "Басс",
                 mid: "Середина",
                 treble: "Верхние",
@@ -139,12 +139,12 @@ export default {
 
             compressor: {
                 title: "Компрессор",
-                amount: "Кол-во",
+                amount: "Уровень",
                 threshold: "Порог",
                 ratio: "Соотношение",
                 attack: "Атака",
                 release: "Восстановление",
-                makeUpGain: "Усиления после",
+                makeUpGain: "Усиление после",
             },
 
             extras: {
@@ -248,7 +248,7 @@ export default {
                     hockeyArena: "Хоккейная Арена"
                 },
 
-                amount: "Кол-во",
+                amount: "Уровень",
                 decay: "Decay",
                 earlyLevel: "Early Level",
                 tailLevel: "Tail Level",
@@ -274,7 +274,7 @@ export default {
                     multiTap: "МультиТап"
                 },
 
-                amount: "Кол-во",
+                amount: "Уровень",
                 feedback: "Feedback",
                 tempo: "Tempo",
                 delayLeft: "Delay L",
@@ -294,7 +294,7 @@ export default {
                     wide: "Широкий"
                 },
 
-                amount: "Кол-во",
+                amount: "Уровень",
                 character: "Характер"
             },
 
@@ -308,7 +308,7 @@ export default {
                     wide: "Широкий"
                 },
 
-                amount: "Кол-во"
+                amount: "Уровень"
             },
 
             megaphone: {
@@ -324,7 +324,7 @@ export default {
                     tweed: "Tweed"
                 },
 
-                amount: "Кол-во",
+                amount: "Уровень",
                 postGain: "Усиление после"
             },
 
@@ -363,7 +363,7 @@ export default {
                     hard: "Тяжёлый"
                 },
 
-                amount: "Кол-во",
+                amount: "Уровень",
                 rate: "Скорость",
                 window: "Окно",
 
@@ -464,14 +464,14 @@ export default {
             common: {
                 colour: "Цвет",
 
-                activeColour: "Активный",
-                inactiveColour: "Неактивный",
+                activeColour: "Активированный",
+                inactiveColour: "Неактивированный",
 
-                inactiveOption: "Вариант Неактивного",
+                inactiveOption: "Опция для Неактивированных",
                 inactiveOptions: {
-                    dimActiveColour: "Тусклый Активный Цвет",
-                    inactiveColour: "Неактивный Цвет",
-                    dimInactiveColour: "Тусклый Неактивный Цвет"
+                    dimActiveColour: "Тусклый Цвет Активированного",
+                    inactiveColour: "Цвет Неактивированного",
+                    dimInactiveColour: "Тусклый Цвет Неактивированного"
 
                 },
 
@@ -485,7 +485,7 @@ export default {
                     area: "Зона",
                     areas: {
                         global: "Вся",
-                        accent: "Акцент",
+                        accent: "Логотип",
                     },
 
                     colour: "@:message.lighting.common.colour",
@@ -563,9 +563,9 @@ export default {
                 },
 
                 encoders: {
-                    title: "Кодировщики",
+                    title: "Энкодеры",
 
-                    encoder: "Кодировщик",
+                    encoder: "Энкодер",
                     encoders: {
                         reverb: "Реверб",
                         echo: "Эхо",
@@ -673,7 +673,7 @@ export default {
 
             deviceButton: "Настройки Устройства",
             device: {
-                holdDuration: "Длительность удержание кнопки Заглушить, чтобы Заглушить Всё",
+                holdDuration: "Длительность удержания кнопки Заглушить, чтобы Заглушить Всё",
                 holdDurationAccessibility: "Длительность в миллисекундах, в течение которой необходимо удерживать кнопку отключения звука, чтобы отключить все каналы",
 
                 sampleBuffer: "Буфер предзаписи Сэмплера (в секундах)",
