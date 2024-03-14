@@ -1,7 +1,7 @@
 <template>
   <!-- Lets just draw the table.. -->
   <CenteredContainer>
-    <GroupContainer title="Routing">
+    <GroupContainer :title="$t('message.routing.title')">
       <table>
         <thead>
         <tr>
