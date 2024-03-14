@@ -148,6 +148,7 @@ export default {
             },
 
             extras: {
+                title: "Extras",
                 deEsser: "De-Esser",
                 bleep: "Dźwięk Cenzury",
             }
@@ -644,6 +645,8 @@ export default {
         },
 
         system: {
+            title: "System",
+
             powerButton: "Akcje Zasilania",
             power: {
                 shutdownTitle: "Akcje Zamekania",

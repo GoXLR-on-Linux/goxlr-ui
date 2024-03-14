@@ -1,5 +1,5 @@
 <template>
-  <GroupContainer title="Extras">
+  <GroupContainer :title="$t('message.microphone.extras.title')">
       <Slider v-if="!isDeviceMini()" :title="$t('message.microphone.extras.deEsser')" :slider-min-value=0
               :slider-max-value=100 :text-suffix="$t('message.suffixes.percentage')"
               :slider-value="getDeEssValue()" :store-path="getStorePath('deess')"

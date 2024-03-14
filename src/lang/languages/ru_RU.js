@@ -148,6 +148,7 @@ export default {
             },
 
             extras: {
+                title: "Дополнительно",
                 deEsser: "Де-эссер",
                 bleep: "БИИП",
             }
@@ -644,6 +645,8 @@ export default {
         },
 
         system: {
+            title: "Система",
+			
             powerButton: "Действия Питания",
             power: {
                 shutdownTitle: "Действия при Завершении Работы",

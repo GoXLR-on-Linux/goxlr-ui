@@ -23,5 +23,5 @@ export const languages = {
     de_DE: "Deutsch (Deutschland)",
     nl_NL: "Dutch (Netherlands)",
     pl_PL: "Polski (Polska)",
-    ru_RU: "Russian (Russia)",
+    ru_RU: "Русский (Russia)",
 }
