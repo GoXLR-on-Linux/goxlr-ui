@@ -691,6 +691,9 @@ export default {
 
             settingsButton: "Paramètres de l'Utilitaire",
             settings: {
+                language: "Language",
+                useSystem: "Use System Language (if available)",
+
                 uiHandler: "Gestionnaire d'interface utilisateur",
                 uiHandlers: {
                     browser: "Navigateur",

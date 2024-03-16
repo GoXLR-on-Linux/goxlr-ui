@@ -671,6 +671,9 @@ export default {
 
             settingsButton: "Impostazioni Utility",
             settings: {
+                language: "Language",
+                useSystem: "Use System Language (if available)",
+
                 uiHandler: "Handler UI",
                 uiHandlers: {
                     browser: "Browser",
