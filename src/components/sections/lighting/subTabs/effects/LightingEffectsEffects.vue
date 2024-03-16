@@ -92,7 +92,7 @@ export default {
 </script>
 
 <template>
-  <GroupContainer title="Effect Buttons">
+  <GroupContainer :title="$t('message.lighting.effects.buttons.title')">
     <template #right>
       <button class="applyToAll" @click="applyToAll()">{{ $t('message.lighting.common.applyToAll') }}</button>
     </template>

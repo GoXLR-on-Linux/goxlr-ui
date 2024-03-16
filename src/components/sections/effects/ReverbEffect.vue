@@ -67,7 +67,7 @@ export default {
         {id: "MusicClub", label: this.$t('message.effects.reverb.styles.musicClub')},
         {id: "RealPlate", label: this.$t('message.effects.reverb.styles.realPlate')},
         {id: "Chapel", label: this.$t('message.effects.reverb.styles.chapel')},
-        {id: "HockeyArena", label: this.$t('message.effects.reverb.styles.library')}
+        {id: "HockeyArena", label: this.$t('message.effects.reverb.styles.hockeyArena')}
       ];
     },
 

@@ -106,7 +106,7 @@ export default {
 </script>
 
 <template>
-  <GroupContainer title="Encoders">
+  <GroupContainer :title="$t('message.lighting.effects.encoders.title')">
     <template #right>
       <button class="applyToAll" @click="applyToAll()">{{ $t('message.lighting.common.applyToAll') }}</button>
     </template>

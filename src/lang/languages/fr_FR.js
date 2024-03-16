@@ -148,6 +148,7 @@ export default {
             },
 
             extras: {
+                title: "Extras",
                 deEsser: "De-Esser",
                 bleep: "Bleep",
             }
@@ -644,6 +645,8 @@ export default {
         },
 
         system: {
+            title: "System",
+
             powerButton: "Actions d'alimentation",
             power: {
                 shutdownTitle: "Actions d'arrêt",

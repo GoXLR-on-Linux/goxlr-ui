@@ -208,7 +208,7 @@ export default {
         {id: "PlayFade", label: this.$t('message.sampler.banks.functions.playFade')},
         {id: "StopOnRelease", label: this.$t('message.sampler.banks.functions.stopOnRelease')},
         {id: "FadeOnRelease", label: this.$t('message.sampler.banks.functions.fadeOnRelease')},
-        {id: "Loop", label: "Loop"},
+        {id: "Loop", label: this.$t('message.sampler.banks.functions.loop')},
       ];
     },
 
