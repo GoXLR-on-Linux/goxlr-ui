@@ -244,7 +244,7 @@ export default {
                     darkBloom: "Ciemny Rozkwit",
                     musicClub: "Klub Muzyczny",
                     realPlate: "Stalowa Płyta",
-                    chapel: "Sala",
+                    chapel: "Kaplica",
                     hockeyArena: "Boisko Hockeyowe"
                 },
 
@@ -691,6 +691,9 @@ export default {
 
             settingsButton: "Ustawienia GoXLR Utility",
             settings: {
+                language: "Język",
+                useSystem: "Użyj języka systemu (jeśli dostępny)",
+
                 uiHandler: "Program obsługujący Interfejs",
                 uiHandlers: {
                     browser: "Przeglądarka",
@@ -712,7 +715,7 @@ export default {
                 },
 
                 allowNetworkAccess: "Zezwól na dostęp do interfejsu po sieci (wymaga restartu)",
-                allowNetworkAccessAccessibility: "Pozwól, żeby intefejs był dostępny dla innych urządzeń w sieci",
+                allowNetworkAccessAccessibility: "Pozwól, żeby interfejs był dostępny dla innych urządzeń w sieci",
 
                 autoStart: "Uruchom po Zalogowaniu",
                 autoStartAccessibility: "Uruchom GoXLR Utility po zalogowaniu użytkownika",
