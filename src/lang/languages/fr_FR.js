@@ -148,7 +148,7 @@ export default {
             },
 
             extras: {
-                title: "Extras",
+                title: "Suppléments",
                 deEsser: "De-Esser",
                 bleep: "Bleep",
             }
@@ -645,7 +645,7 @@ export default {
         },
 
         system: {
-            title: "System",
+            title: "Système",
 
             powerButton: "Actions d'alimentation",
             power: {
@@ -691,8 +691,8 @@ export default {
 
             settingsButton: "Paramètres de l'Utilitaire",
             settings: {
-                language: "Language",
-                useSystem: "Use System Language (if available)",
+                language: "Langue",
+                useSystem: "Utiliser la langue du système (si disponible)",
 
                 uiHandler: "Gestionnaire d'interface utilisateur",
                 uiHandlers: {
