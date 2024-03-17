@@ -128,7 +128,7 @@ export default {
             },
 
             extras: {
-                title: "Extras",
+                title: "Extra",
                 deEsser: "De-Esser",
                 bleep: "Bip",
             }
@@ -477,7 +477,7 @@ export default {
                     mode: "Modalità Animazione",
                     modes: {
                         none: "Nessuna",
-                        rainbowRetro: "Arcobaleno Retro",
+                        rainbowRetro: "Arcobaleno Retró",
                         rainbowBright: "Arcobaleno Chiaro",
                         rainbowDark: "Arcobaleno Scuro",
                         simple: "Semplice",
@@ -625,7 +625,7 @@ export default {
         },
 
         system: {
-            title: "System",
+            title: "Sistema",
 
             powerButton: "Azione Alimentazione",
             power: {
@@ -671,10 +671,10 @@ export default {
 
             settingsButton: "Impostazioni Utility",
             settings: {
-                language: "Language",
-                useSystem: "Use System Language (if available)",
+                language: "Lingua",
+                useSystem: "Usa Lingua di Sistema (se disponibile)",
 
-                uiHandler: "Handler UI",
+                uiHandler: "Gestore UI",
                 uiHandlers: {
                     browser: "Browser",
                     app: "App",
