@@ -40,7 +40,8 @@ export default {
           "ArrowLeft",
           "Enter",
           "Backspace",
-          "Delete"
+          "Delete",
+          "Tab"
       ];
 
       // Check whether the Key is a Number..
