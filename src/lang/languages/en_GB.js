@@ -717,7 +717,7 @@ export default {
                     // OFF / ERROR / WARN / INFO / DEBUG / TRACE
                 },
 
-                allowNetworkAccess: "Allow UI Network Access (required restart)",
+                allowNetworkAccess: "Allow UI Network Access (requires restart)",
                 allowNetworkAccessAccessibility: "Allow the UI to be accessed from other devices on the network",
 
                 autoStart: "AutoStart on Login",
