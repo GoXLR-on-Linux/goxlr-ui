@@ -496,7 +496,7 @@ export default {
 
                     mode: "Animatie Mode",
                     modes: {
-                        none: "None",
+                        none: "Geen",
                         rainbowRetro: "Regenboog Retro",
                         rainbowBright: "Regenboog Bright",
                         rainbowDark: "Regenboog Dark",
@@ -685,8 +685,8 @@ export default {
                 monitorWithFx: "Schakel Mic Monitoring in wanneer FX wordt ingedrukt",
                 monitorWithFxAccessibility: "Schakelt Mic Monitoring in wanneer de FX knop wordt ingedrukt.",
 
-                resetSampleFunctionOnClear: "Reset Sample Function on Clear",
-                resetSampleFunctionOnClearAccessibility: "Resets the Sample function to Start / Next when Cleared",
+                resetSampleFunctionOnClear: "Reset sample functie wanneer leeg",
+                resetSampleFunctionOnClearAccessibility: "Resets de sample functie naar start / volgende wanneer leeg",
 
                 lockFaders: "Blokkeer fader posities bij dempen",
                 lockFadersAccessibility: "Zorgt ervoor dat de faders niet meer bewegen terwijl het kanaal gedempt is",
@@ -694,8 +694,8 @@ export default {
 
             settingsButton: "Utility Instellingen",
             settings: {
-                language: "Language",
-                useSystem: "Use System Language (if available)",
+                language: "Taal",
+                useSystem: "Gebruik systeemtaal (indien beschikbaar)",
 
                 uiHandler: "UI Handler",
                 uiHandlers: {
@@ -705,7 +705,7 @@ export default {
                 },
 
 
-                logLevel: "Log Level (requires restart)",
+                logLevel: "Log Level (vereist restart)",
                 logLevels: {
                     off: "Uit",
                     error: "Error",
