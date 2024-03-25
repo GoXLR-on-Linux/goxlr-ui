@@ -22,6 +22,10 @@ export default {
     },
   },
 
+  mounted() {
+    this.checked = this.enabled;
+  },
+
   watch: {
     enabled(newValue) {
       this.checked = newValue;

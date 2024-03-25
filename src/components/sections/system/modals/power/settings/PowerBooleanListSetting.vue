@@ -34,6 +34,11 @@ export default {
     },
   },
 
+  mounted() {
+    this.checked = this.enabled;
+    this.selected = this.value;
+  },
+
   watch: {
     enabled(newValue) {
       this.checked = newValue;
