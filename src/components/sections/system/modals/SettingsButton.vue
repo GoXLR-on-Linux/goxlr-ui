@@ -15,113 +15,69 @@
       :show_footer="false"
   >
     <template v-slot:title>{{ $t('message.system.settingsButton') }}</template>
-    <div style="text-align: left" role="region" aria-label="settings">
-      <div style="padding: 12px" v-if="isLanguageSupported()">
-        {{$t('message.system.settings.language')}}:
-        <select @change="setUILanguage" style="margin-right: 15px">
-          <option :selected="getUILanguageIsSystem()" value="-1">{{$t('message.system.settings.useSystem')}}</option>
-          <option v-for="locale of Object.keys(languages)" :key="`locale-${locale}`" :value="locale" :selected="isCurrentLanguage(locale)">{{ languages[locale] }}</option>
-        </select>
+
+    <div class="settingList" role="region" aria-label="settings">
+      <ListSetting :value="getCurrentLanguage()" :options="getLanguageKeys()"
+                   :description="$t('message.system.settings.language')"
+                   :label="$t('message.system.settings.language')" @change="setUILanguage"/>
+
+      <ListSetting :value="getUIHandler()" :options="getUIHandlerKeys()"
+                   :description="$t('message.system.settings.uiHandler')"
+                   :label="$t('message.system.settings.uiHandler')" @change="setUIHandler"/>
+
+      <ListSetting :value="getLogLevel()" :options="getLogKeys()" :description="$t('message.system.settings.logLevel')"
+                   :label="$t('message.system.settings.logLevel')" @change="setLogLevel"/>
+
+      <BooleanSetting :label="$t('message.system.settings.allowNetworkAccess')" :enabled="get_allow_network_access()"
+                      @change="set_allow_network_access"
+                      :description="$t('message.system.settings.allowNetworkAccessAccessibility')"/>
+
+      <BooleanSetting :label="$t('message.system.settings.autoStart')" :enabled="isAutostart()"
+                      @change="setAutoStart" :description="$t('message.system.settings.autoStartAccessibility')"/>
+
+      <BooleanSetting :label="$t('message.system.settings.showOnLaunch')" :enabled="isShowUi()"
+                      @change="setShowUi" :description="$t('message.system.settings.showOnLaunchAccessibility')"/>
+
+      <BooleanSetting :label="$t('message.system.settings.showTray')" :enabled="isShowIcon()"
+                      @change="setShowIcon" :description="$t('message.system.settings.showTrayAccessibility')"/>
+
+      <BooleanSetting v-if="isTTSAvailable()" :label="$t('message.system.settings.ttsOnButton')"
+                      :enabled="isTTSEnabled()" @change="setTTSEnabled"
+                      :description="$t('message.system.settings.ttsOnButtonAccessibility')"/>
+
+
+      <div class="recoverDefaults" role="group" :aria-label="$t('message.system.settings.recoverDefaults')">
+        <div class="label">{{ $t('message.system.settings.recoverDefaults') }}</div>
+        <div class="buttons">
+          <div>
+            <button @click="recover_defaults('Profiles')">
+              {{ $t('message.system.settings.recoverOptions.profiles') }}
+            </button>
+          </div>
+          <div>
+            <button @click="recover_defaults('MicProfiles')">
+              {{ $t('message.system.settings.recoverOptions.micProfiles') }}
+            </button>
+          </div>
+          <div>
+            <button @click="recover_defaults('Icons')">
+              {{ $t('message.system.settings.recoverOptions.icons') }}
+            </button>
+          </div>
+          <div>
+            <button @click="recover_defaults('Presets')">
+              {{ $t('message.system.settings.recoverOptions.presets') }}
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div style="padding: 12px">
-        {{$t('message.system.settings.uiHandler')}}:
-        <select @change="setUiHandler" style="margin-right: 15px">
-          <option :selected="getActivePath() === null" value="">{{ $t('message.system.settings.uiHandlers.browser') }}</option>
-          <option v-if="getAppPath() !== null" :selected="isActivePath()" :value="getAppPath()">{{ $t('message.system.settings.uiHandlers.app') }}</option>
-          <option v-if="isCustomPath()" :selected="getActivePath() !== null && !isActivePath()" :value="getActivePath()">{{
-              $t('message.system.settings.uiHandlers.custom')
-            }}</option>
-        </select>
-      </div>
-
-      <div style="padding: 12px">
-        {{$t('message.system.settings.logLevel')}}:
-        <select @change="setLogLevel" style="margin-right: 15px">
-          <option :selected="getLogLevel() === 'Off'" value="Off">{{$t('message.system.settings.logLevels.off')}}</option>
-          <option :selected="getLogLevel() === 'Error'" value="Error">{{$t('message.system.settings.logLevels.error')}}</option>
-          <option :selected="getLogLevel() === 'Warn'" value="Warn">{{$t('message.system.settings.logLevels.warn')}}</option>
-          <option :selected="getLogLevel() === 'Info'" value="Info">{{$t('message.system.settings.logLevels.info')}}</option>
-          <option :selected="getLogLevel() === 'Debug'" value="Debug">{{$t('message.system.settings.logLevels.debug')}}</option>
-          <option :selected="getLogLevel() === 'Trace'" value="Trace">{{$t('message.system.settings.logLevels.trace')}}</option>
-        </select>
-        <button class="openButton" @click="openLogs">
-          <font-awesome-icon icon="fa-solid fa-folder"/>
-        </button>
-      </div>
-
-      <div style="padding: 12px">
-        <span style="display: inline-block; width: 360px">{{$t('message.system.settings.allowNetworkAccess')}}:</span>
-        <input
-            type="checkbox"
-            :checked="get_allow_network_access()"
-            @change="set_allow_network_access"
-            :aria-label="$t('message.system.settings.allowNetworkAccess')"
-            aria-description="$t('message.system.settings.allowNetworkAccessAccessibility')"
-        />
-      </div>
-      <div style="padding: 12px">
-        <span style="display: inline-block; width: 360px">{{$t('message.system.settings.autoStart')}}:</span>
-        <input
-            type="checkbox"
-            :checked="isAutostart()"
-            @change="setAutoStart"
-            :aria-label="$t('message.system.settings.autoStart')"
-            :aria-description="$t('message.system.settings.autoStartAccessibility')"
-        />
-      </div>
-      <div style="padding: 12px">
-        <span style="display: inline-block; width: 360px">{{ $t('message.system.settings.showOnLaunch') }}</span>
-        <input
-            type="checkbox"
-            :checked="isShowUi()"
-            @change="setShowUi"
-            :aria-label="$t('message.system.settings.showOnLaunch')"
-            aria-description="$t('message.system.settings.showOnLaunchAccessibility')"
-        />
-      </div>
-      <div style="padding: 12px">
-        <span style="display: inline-block; width: 360px">{{ $t('message.system.settings.showTray') }}:</span>
-        <input
-            type="checkbox"
-            :checked="isShowIcon()"
-            @change="setShowIcon"
-            :aria-label="$t('message.system.settings.showTray')"
-            :aria-description="$t('message.system.settings.showTrayAccessibility')"
-        />
-      </div>
-      <div v-if="isTTSAvailable()" style="padding: 12px">
-        <span style="display: inline-block; width: 360px">{{ $t('message.system.settings.ttsOnButton') }}:</span>
-        <input
-            type="checkbox"
-            :checked="isTTSEnabled()"
-            @change="setTTSEnabled"
-            :aria-label="$t('message.system.settings.ttsOnButton')"
-            :aria-description="$t('message.system.settings.ttsOnButtonAccessibility')"
-        />
-      </div>
-      <div style="padding: 12px" role="group" aria-label="recover defaults">
-        {{ $t('message.system.settings.recoverDefaults') }}:<br/>
-        <button style="margin: 3px" @click="recover_defaults('Profiles')">
-          {{ $t('message.system.settings.recoverOptions.profiles') }}
-        </button>
-        <button style="margin: 3px" @click="recover_defaults('MicProfiles')">
-          {{ $t('message.system.settings.recoverOptions.micProfiles') }}
-        </button>
-        <button style="margin: 3px" @click="recover_defaults('Icons')">
-          {{ $t('message.system.settings.recoverOptions.icons') }}
-        </button>
-        <button style="margin: 3px" @click="recover_defaults('Presets')">
-          {{ $t('message.system.settings.recoverOptions.presets') }}
-        </button>
-      </div>
-      <div style="padding: 12px">
-        <button
-            style="background-color: darkred; color: white"
-            @click="shutdown_util()"
-        >
-          {{ $t('message.system.settings.shutdownUtility') }}
-        </button>
+      <div class="shutdownButton">
+        <div style="text-align: right">
+          <button class="shutdown"  @click="shutdown_util()">
+            {{ $t('message.system.settings.shutdownUtility') }}
+          </button>
+        </div>
       </div>
     </div>
   </AccessibleModal>
@@ -132,7 +88,9 @@ import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 import BigButton from "@/components/buttons/BigButton.vue";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
-import {languages} from "../../../../lang/config";
+import {languages} from "@/lang/config";
+import BooleanSetting from "@/components/sections/system/modals/settings/BooleanSetting.vue";
+import ListSetting from "@/components/sections/system/modals/settings/ListSetting.vue";
 
 export default {
   name: "SettingsButton",
@@ -144,7 +102,7 @@ export default {
       return store
     }
   },
-  components: {BigButton, AccessibleModal},
+  components: {ListSetting, BooleanSetting, BigButton, AccessibleModal},
 
   methods: {
     isLanguageSupported() {
@@ -154,8 +112,99 @@ export default {
       return store.getConfig().hasOwnProperty("locale");
     },
 
-    setUILanguage(e) {
-      let language = e.target.value;
+    getLanguageKeys() {
+      let options = [
+        {
+          key: "-1",
+          value: this.$t('message.system.settings.useSystem')
+        },
+      ];
+
+      for (let locale of Object.keys(languages)) {
+        options.push({
+          key: locale,
+          value: languages[locale]
+        })
+      }
+      return options;
+    },
+
+    getLogKeys() {
+      return [
+        {
+          key: "Off",
+          value: this.$t('message.system.settings.logLevels.off'),
+        },
+        {
+          key: "Error",
+          value: this.$t('message.system.settings.logLevels.error'),
+        },
+        {
+          key: "Warn",
+          value: this.$t('message.system.settings.logLevels.warn'),
+        },
+        {
+          key: "Info",
+          value: this.$t('message.system.settings.logLevels.info'),
+        },
+        {
+          key: "Debug",
+          value: this.$t('message.system.settings.logLevels.debug'),
+        },
+        {
+          key: "Trace",
+          value: this.$t('message.system.settings.logLevels.trace'),
+        },
+      ];
+    },
+
+    getUIHandlerKeys() {
+      let options = [];
+      options.push({
+        key: "browser",
+        value: this.$t('message.system.settings.uiHandlers.browser')
+      });
+      if (this.getAppPath() !== null) {
+        options.push({
+          key: "app",
+          value: this.$t('message.system.settings.uiHandlers.app')
+        });
+      }
+      if (this.isCustomPath()) {
+        options.push({
+          key: "custom",
+          value: this.$t('message.system.settings.uiHandlers.custom')
+        });
+      }
+
+      return options;
+    },
+
+    getUIHandler() {
+      if (this.getActivePath() === null) {
+        return "browser";
+      }
+      if (this.isActivePath()) {
+        return "app";
+      }
+      return "custom";
+    },
+
+    setUIHandler(value) {
+      console.log(value);
+      let newValue = null;
+      if (value === "app") {
+        newValue = this.getAppPath();
+      }
+      if (value === "custom") {
+        // Do nothing here..
+        return;
+      }
+      websocket.send_daemon_command({"SetActivatorPath": newValue})
+    },
+
+    setUILanguage(value) {
+      let language = value;
       if (language === "-1") {
         language = null;
       }
@@ -172,16 +221,27 @@ export default {
 
     getUILanguageIsSystem() {
       if (store.getConfig() === null) {
-        return "en_GB";
+        return true;
       }
 
       // If the User Locale is null, defer to the system locale..
       return store.getConfig().locale.user_locale === null;
     },
 
+    getCurrentLanguage() {
+      if (store.getConfig() === null) {
+        return "-1";
+      }
+
+      if (store.getConfig().locale.user_locale === null) {
+        return "-1";
+      }
+      return store.getConfig().locale.user_locale;
+    },
+
     isCurrentLanguage(lang) {
-      if (this.getUILanguageIsSystem()) {
-        return false;
+      if (lang === "-1") {
+        return this.getUILanguageIsSystem();
       }
       return lang === store.getConfig().locale.user_locale;
     },
@@ -210,14 +270,7 @@ export default {
         return false;
       }
       // Thanks to Windows Case-Insensitive paths :D
-      return this.getActivePath().localeCompare(this.getAppPath(), undefined, { sensitivity: 'base' }) === 0;
-    },
-    setUiHandler(e) {
-      let path = e.target.value;
-      if (path === "") {
-        path = null;
-      }
-      websocket.send_daemon_command({"SetActivatorPath": path});
+      return this.getActivePath().localeCompare(this.getAppPath(), undefined, {sensitivity: 'base'}) === 0;
     },
 
     getLogLevel() {
@@ -226,9 +279,8 @@ export default {
       }
       return store.getConfig().log_level;
     },
-
-    setLogLevel(event) {
-      websocket.send_daemon_command({"SetLogLevel": event.target.value});
+    setLogLevel(value) {
+      websocket.send_daemon_command({"SetLogLevel": value});
     },
 
     openLogs() {
@@ -242,8 +294,8 @@ export default {
       return store.getConfig().allow_network_access;
     },
 
-    set_allow_network_access(event) {
-      websocket.send_daemon_command({"SetAllowNetworkAccess": event.target.checked});
+    set_allow_network_access(value) {
+      websocket.send_daemon_command({"SetAllowNetworkAccess": value});
     },
 
     isAutostart() {
@@ -254,8 +306,8 @@ export default {
       return store.getConfig().autostart_enabled;
     },
 
-    setAutoStart(event) {
-      websocket.send_daemon_command({"SetAutoStartEnabled": event.target.checked});
+    setAutoStart(value) {
+      websocket.send_daemon_command({"SetAutoStartEnabled": value});
     },
 
     isShowUi() {
@@ -266,8 +318,8 @@ export default {
       return store.getConfig().open_ui_on_launch;
     },
 
-    setShowUi(event) {
-       websocket.send_daemon_command({"SetUiLaunchOnLoad": event.target.checked});
+    setShowUi(value) {
+      websocket.send_daemon_command({"SetUiLaunchOnLoad": value});
     },
 
     isShowIcon() {
@@ -278,8 +330,8 @@ export default {
       return store.getConfig().show_tray_icon;
     },
 
-    setShowIcon(event) {
-      websocket.send_daemon_command({"SetShowTrayIcon": event.target.checked});
+    setShowIcon(value) {
+      websocket.send_daemon_command({"SetShowTrayIcon": value});
     },
 
     isTTSAvailable() {
@@ -294,8 +346,8 @@ export default {
       return store.getConfig().tts_enabled;
     },
 
-    setTTSEnabled(event) {
-      websocket.send_daemon_command({"SetTTSEnabled": event.target.checked});
+    setTTSEnabled(value) {
+      websocket.send_daemon_command({"SetTTSEnabled": value});
     },
 
     recover_defaults(type) {
@@ -310,21 +362,62 @@ export default {
 </script>
 
 <style scoped>
-button.openButton {
-  border: 0;
+.settingList > :nth-child(odd) {
+  background-color: #353937;
+}
+
+.settingList > :nth-child(even) {
+  background-color: #242826;
+}
+
+.recoverDefaults {
+  display: flex;
+  height: 20px;
+  padding: 10px;
+}
+
+.recoverDefaults .label {
+  margin: auto;
+  width: 100%;
+  color: #ccc;
+}
+
+.recoverDefaults .buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.recoverDefaults .buttons div button {
+  white-space: nowrap;
+  border: 1px solid #CCCCCC;
   background-color: transparent;
-  padding: 0;
-  margin: -4px;
-}
-
-.openButton {
-  display: inline-block;
-  color: #a5a7a6;
-  font-size: 14px
-}
-
-.openButton:hover {
-  color: #fff;
+  color: #ccc;
+  padding: 3px 8px;
   cursor: pointer;
 }
+
+.recoverDefaults .buttons div button:hover {
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.shutdownButton {
+  margin: auto;
+  padding: 5px;
+}
+
+.shutdownButton .shutdown {
+  color: #cccccc;
+  border: 1px solid #cc0000;
+  background-color: transparent;
+  padding: 4px;
+}
+
+.shutdownButton .shutdown:hover {
+  cursor: pointer;
+  color: #ffffff;
+  border: 1px solid #ff0000;
+}
+
+
 </style>
