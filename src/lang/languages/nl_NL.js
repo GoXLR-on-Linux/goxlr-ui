@@ -685,6 +685,9 @@ export default {
                 monitorWithFx: "Schakel Mic Monitoring in wanneer FX wordt ingedrukt",
                 monitorWithFxAccessibility: "Schakelt Mic Monitoring in wanneer de FX knop wordt ingedrukt.",
 
+                resetSampleFunctionOnClear: "Reset Sample Function on Clear",
+                resetSampleFunctionOnClearAccessibility: "Resets the Sample function to Start / Next when Cleared",
+
                 lockFaders: "Blokkeer fader posities bij dempen",
                 lockFadersAccessibility: "Zorgt ervoor dat de faders niet meer bewegen terwijl het kanaal gedempt is",
             },

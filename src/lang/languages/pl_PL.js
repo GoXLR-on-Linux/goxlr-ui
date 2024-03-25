@@ -685,6 +685,9 @@ export default {
                 monitorWithFx: "Przełącz odsłuch Mikrofonu z efektami",
                 monitorWithFxAccessibility: "Włącza odsłuch mikrofonu kiedy efekty są włączone",
 
+                resetSampleFunctionOnClear: "Reset Sample Function on Clear",
+                resetSampleFunctionOnClearAccessibility: "Resets the Sample function to Start / Next when Cleared",
+
                 lockFaders: "Zablokuj Pozycje Suwaków kiedy Wyciszasz Wszędzie",
                 lockFadersAccessibility: "Nie przesuwa suwaków na dół kiedy opcja Wyciszenia Wszędzie jest aktywna",
             },

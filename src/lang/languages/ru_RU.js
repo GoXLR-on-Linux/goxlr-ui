@@ -685,6 +685,9 @@ export default {
                 monitorWithFx: "Включать Мониторинг вместе с Эффектами(FX)",
                 monitorWithFxAccessibility: "Включить мониторинг микрофона, когда включены эффекты",
 
+                resetSampleFunctionOnClear: "Reset Sample Function on Clear",
+                resetSampleFunctionOnClearAccessibility: "Resets the Sample function to Start / Next when Cleared",
+
                 lockFaders: "Не передвигать Фейдеры при Заглушении для Всего",
                 lockFadersAccessibility: "Не давать фейдера передвигаться вниз, когда включён Заглушить для Всего",
             },

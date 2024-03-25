@@ -685,6 +685,9 @@ export default {
                 monitorWithFx: "Toggle Mic Monitoring with FX state",
                 monitorWithFxAccessibility: "Activates Mic Monitoring when FX is enabled",
 
+                resetSampleFunctionOnClear: "Reset Sample Function on Clear",
+                resetSampleFunctionOnClearAccessibility: "Resets the Sample function to Start / Next when Cleared",
+
                 lockFaders: "Lock fader positions when Muting to All",
                 lockFadersAccessibility: "Prevents the faders from moving down when Mute to All is active",
             },

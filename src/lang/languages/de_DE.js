@@ -668,6 +668,9 @@ export default {
                 monitorWithFx: "Mikrofonmonitor mit FX-Status umschalten",
                 monitorWithFxAccessibility: "Aktiviert den Mikrofonmonitor, wenn FX aktiviert wird",
 
+                resetSampleFunctionOnClear: "Reset Sample Function on Clear",
+                resetSampleFunctionOnClearAccessibility: "Resets the Sample function to Start / Next when Cleared",
+
                 lockFaders: "Faderpositionen bei Stummschaltung auf Alle sperren",
                 lockFadersAccessibility: "Verhindert, dass sich die Fader nach unten bewegen, wenn Stummschaltung für alle aktiviert ist.",
             },

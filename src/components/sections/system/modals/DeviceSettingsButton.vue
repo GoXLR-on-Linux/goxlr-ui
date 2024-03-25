@@ -59,6 +59,16 @@
         />
       </div>
       <div style="padding: 12px" v-if="!isDeviceMini()">
+        <span style="display: inline-block; width: 360px">{{ $t('message.system.device.resetSampleFunctionOnClear') }}:</span>
+        <input
+            type="checkbox"
+            :checked="get_reset_sample_function()"
+            @change="set_reset_sample_function"
+            :aria-label="$t('message.system.device.resetSampleFunctionOnClear')"
+            :aria-description="$t('message.system.device.resetSampleFunctionOnClearAccessibility')"
+        />
+      </div>
+      <div style="padding: 12px" v-if="!isDeviceMini()">
         <span style="display: inline-block; width: 360px">{{ $t('message.system.device.lockFaders') }}:</span>
         <input
             type="checkbox"
@@ -124,6 +134,17 @@ export default {
 
     set_mic_monitor_with_fx(event) {
       websocket.send_command(store.getActiveSerial(), {"SetMonitorWithFx": event.target.checked});
+    },
+
+    get_reset_sample_function() {
+      if (!store.getActiveDevice()) {
+        return false;
+      }
+      return store.getActiveDevice().settings.reset_sampler_on_clear;
+    },
+
+    set_reset_sample_function(event) {
+      websocket.send_command(store.getActiveSerial(), {"SetSamplerResetOnClear": event.target.checked});
     },
 
     get_locked_faders() {
