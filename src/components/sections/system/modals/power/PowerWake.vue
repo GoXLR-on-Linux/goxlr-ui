@@ -1,9 +1,12 @@
 <script>
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
+import PowerBooleanSetting from "@/components/sections/system/modals/power/settings/PowerBooleanSetting.vue";
+import PowerBooleanListSetting from "@/components/sections/system/modals/power/settings/PowerBooleanListSetting.vue";
 
 export default {
   name: "PowerWake",
+  components: {PowerBooleanListSetting, PowerBooleanSetting},
 
   data: function () {
     return {
@@ -42,25 +45,25 @@ export default {
       return this.getValue(command) !== undefined;
     },
 
-    profileChanged() {
-      // Only send an update to the Daemon if the Load Colours checkbox is actually checked.
-      if (!this.$refs.loadColourProfile.checked) {
-        return;
-      }
-      this.generateActions();
-    },
-
-    fullProfileChanged() {
-      // Only send an update to the Daemon if the Load Colours checkbox is actually checked.
-      if (!this.$refs.loadFullProfile.checked) {
-        return;
-      }
-      this.generateActions();
-    },
-
     micProfileChanged() {
       // Only send an update to the Daemon if the Load Colours checkbox is actually checked.
       if (!this.$refs.loadMicProfile.checked) {
+        return;
+      }
+      this.generateActions();
+    },
+
+    profileChanged() {
+      // Only send an update to the Daemon if the Load Colours checkbox is actually checked.
+      if (!this.$refs.loadProfile.checked) {
+        return;
+      }
+      this.generateActions();
+    },
+
+    profileColourChanged() {
+      // Only send an update to the Daemon if the Load Colours checkbox is actually checked.
+      if (!this.$refs.loadProfileColours.checked) {
         return;
       }
       this.generateActions();
@@ -72,10 +75,7 @@ export default {
         return profile.LoadProfileColours;
       }
 
-      if (this.$refs.colourProfile === undefined) {
-        return this.getProfiles()[0];
-      }
-      return this.$refs.colourProfile.value;
+      return undefined;
     },
 
     getSelectedFullProfile() {
@@ -84,10 +84,7 @@ export default {
         return profile.LoadProfile[0];
       }
 
-      if (this.$refs.fullProfile === undefined) {
-        return this.getProfiles()[0];
-      }
-      return this.$refs.fullProfile.value;
+      return undefined;
     },
 
     getSelectedMicProfile() {
@@ -96,10 +93,7 @@ export default {
         return profile.LoadMicProfile[0];
       }
 
-      if (this.$refs.micProfile === undefined) {
-        return this.getMicProfiles()[0];
-      }
-      return this.$refs.micProfile.value;
+      return undefined;
     },
 
     getValue(command) {
@@ -115,12 +109,26 @@ export default {
       return undefined;
     },
 
-    getProfiles() {
-      return store.getProfileFiles();
+    getMicProfileList() {
+      let list = [];
+      for (let profile of store.getMicProfileFiles()) {
+        list.push({
+          key: profile,
+          value: profile,
+        });
+      }
+      return list;
     },
 
-    getMicProfiles() {
-      return store.getMicProfileFiles();
+    getProfileList() {
+      let list = [];
+      for (let profile of store.getProfileFiles()) {
+        list.push({
+          key: profile,
+          value: profile
+        });
+      }
+      return list;
     },
 
     changed() {
@@ -134,15 +142,14 @@ export default {
         actions.push({"ReloadSettings": []});
       }
       if (this.$refs.loadMicProfile.checked) {
-        actions.push({"LoadMicProfile": [this.$refs.micProfile.value, false]})
+        actions.push({"LoadMicProfile": [this.$refs.loadMicProfile.selectedValue(), false]})
       }
-      if (this.$refs.loadFullProfile.checked) {
-        actions.push({"LoadProfile": [this.$refs.fullProfile.value, false]})
+      if (this.$refs.loadProfile.checked) {
+        actions.push({"LoadProfile": [this.$refs.loadProfile.selectedValue(), false]})
       }
-      if (this.$refs.loadColourProfile.checked) {
-        actions.push({"LoadProfileColours": this.$refs.colourProfile.value});
+      if (this.$refs.loadProfileColours.checked) {
+        actions.push({"LoadProfileColours": this.$refs.loadProfileColours.selectedValue()});
       }
-
       websocket.send_command(store.getActiveSerial(), {"SetWakeCommands": actions});
     },
 
@@ -158,52 +165,43 @@ export default {
   <hr/>
   <div v-if="isValid()" style="margin-bottom: 20px;">
     <div style="padding-bottom: 15px">{{ $t('message.system.power.wakeDescription') }}</div>
-    <div>
-      <input type="checkbox" ref="reloadSettings" id="reloadSettings" :checked="isActive('ReloadSettings')"
-             @change="changed"><label for="reloadSettings">{{
-        $t('message.system.power.power_options.reload')
-      }}</label>
-    </div>
-    <div>
-      <span style="display: inline-block; width: 200px">
-      <input type="checkbox" ref="loadMicProfile" id="loadMicProfile" :checked="isActive('LoadMicProfile')"
-             @change="changed"><label for="loadMicProfile">{{
-          $t('message.system.power.power_options.loadMicProfile')
-        }}: </label>
-      </span>
-      <select ref="micProfile" @change="micProfileChanged" :value="getSelectedMicProfile()">
-        <option v-for="value in getMicProfiles()" :key="value">{{ value }}</option>
-      </select>
-    </div>
-    <div>
-      <span style="display: inline-block; width: 200px">
-      <input type="checkbox" ref="loadFullProfile" id="loadFullProfile" :checked="isActive('LoadProfile')"
-             @change="changed"><label for="loadFullProfile">{{
-          $t('message.system.power.power_options.loadProfile')
-        }}: </label>
-      </span>
-      <select ref="fullProfile" @change="fullProfileChanged" :value="getSelectedFullProfile()">
-        <option v-for="value in getProfiles()" :key="value">{{ value }}</option>
-      </select>
-    </div>
-    <div>
-      <span style="display: inline-block; width: 200px">
-      <input type="checkbox" ref="loadColourProfile" id="loadColourProfile" :checked="isActive('LoadProfileColours')"
-             @change="changed"><label for="loadColourProfile">{{
-          $t('message.system.power.power_options.loadColourProfile')
-        }}: </label>
-      </span>
-      <select ref="colourProfile" @change="profileChanged" :value="getSelectedColourProfile()">
-        <option v-for="value in getProfiles()" :key="value">{{ value }}</option>
-      </select>
+
+    <div class="settingList">
+      <PowerBooleanSetting ref="reloadSettings" @check-change="changed" :enabled="isActive('ReloadSettings')"
+                           :description="$t('message.system.power.power_options.reload')"
+                           :label="$t('message.system.power.power_options.reload')"/>
+
+      <PowerBooleanListSetting ref="loadMicProfile" @check-change="changed" @select-change="micProfileChanged"
+                               :value="getSelectedMicProfile()" :options="getMicProfileList()"
+                               :enabled="isActive('LoadMicProfile')"
+                               :description="$t('message.system.power.power_options.loadMicProfile')"
+                               :label="$t('message.system.power.power_options.loadMicProfile')"/>
+
+      <PowerBooleanListSetting ref="loadProfile" @check-change="changed" @select-change="profileChanged"
+                               :value="getSelectedFullProfile()" :options="getProfileList()"
+                               :enabled="isActive('LoadProfile')"
+                               :description="$t('message.system.power.power_options.loadProfile')"
+                               :label="$t('message.system.power.power_options.loadProfile')"/>
+
+      <PowerBooleanListSetting ref="loadProfileColours" @check-change="changed" @select-change="profileColourChanged"
+                               :value="getSelectedColourProfile()" :options="getProfileList()"
+                               :enabled="isActive('LoadProfileColours')"
+                               :description="$t('message.system.power.power_options.loadColourProfile')"
+                               :label="$t('message.system.power.power_options.loadColourProfile')"/>
     </div>
   </div>
   <div v-else>
-    {{ $t('message.system.power.settingsError')}}:<br/><br/>
-    <button @click="resetWakeActions">{{ $t('message.system.power.settingsReset')}}</button>
+    {{ $t('message.system.power.settingsError') }}:<br/><br/>
+    <button @click="resetWakeActions">{{ $t('message.system.power.settingsReset') }}</button>
   </div>
 </template>
 
 <style scoped>
+.settingList > :nth-child(odd) {
+  background-color: #353937;
+}
 
+.settingList > :nth-child(even) {
+  background-color: #242826;
+}
 </style>

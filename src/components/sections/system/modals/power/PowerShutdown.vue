@@ -1,9 +1,12 @@
 <script>
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
+import PowerBooleanSetting from "@/components/sections/system/modals/power/settings/PowerBooleanSetting.vue";
+import PowerBooleanListSetting from "@/components/sections/system/modals/power/settings/PowerBooleanListSetting.vue";
 
 export default {
   name: "PowerShutdown",
+  components: {PowerBooleanListSetting, PowerBooleanSetting},
 
   props: {
     title: {type: String, required: true},
@@ -54,22 +57,6 @@ export default {
       return this.getValue(command) !== undefined;
     },
 
-    profileChanged() {
-      // Only send an update to the Daemon if the Load Colours checkbox is actually checked.
-      if (!this.$refs.loadColourProfile.checked) {
-        return;
-      }
-      this.generateActions();
-    },
-
-    fullProfileChanged() {
-      // Only send an update to the Daemon if the Load Colours checkbox is actually checked.
-      if (!this.$refs.loadFullProfile.checked) {
-        return;
-      }
-      this.generateActions();
-    },
-
     micProfileChanged() {
       // Only send an update to the Daemon if the Load Colours checkbox is actually checked.
       if (!this.$refs.loadMicProfile.checked) {
@@ -78,31 +65,20 @@ export default {
       this.generateActions();
     },
 
-    getSelectedColourProfile() {
-      let profile = this.getValue("LoadProfileColours");
-      if (profile !== undefined) {
-        return profile.LoadProfileColours;
+    profileChanged() {
+      // Only send an update to the Daemon if the Load Colours checkbox is actually checked.
+      if (!this.$refs.loadFullProfile.checked) {
+        return;
       }
-
-      if (this.$refs.colourProfile === undefined) {
-        return this.getProfiles()[0];
-      }
-      return this.$refs.colourProfile.value;
+      this.generateActions();
     },
 
-    getSelectedFullProfile() {
-      let profile = this.getValue("LoadProfile");
-      if (profile !== undefined) {
-        return profile.LoadProfile[0];
+    profileColourChanged() {
+      // Only send an update to the Daemon if the Load Colours checkbox is actually checked.
+      if (!this.$refs.loadProfileColours.checked) {
+        return;
       }
-
-      // If this element hasn't been loaded yet, set a default value..
-      if (this.$refs.fullProfile === undefined) {
-        return this.getProfiles()[0];
-      }
-
-      // If the option isn't enabled, we shouldn't need to change what the user has selected.
-      return this.$refs.fullProfile.value;
+      this.generateActions();
     },
 
     getSelectedMicProfile() {
@@ -110,11 +86,23 @@ export default {
       if (profile !== undefined) {
         return profile.LoadMicProfile[0];
       }
+      return undefined;
+    },
 
-      if (this.$refs.micProfile === undefined) {
-        return this.getMicProfiles()[0];
+    getSelectedProfile() {
+      let profile = this.getValue("LoadProfile");
+      if (profile !== undefined) {
+        return profile.LoadProfile[0];
       }
-      return this.$refs.micProfile.value;
+      return undefined;
+    },
+
+    getSelectedColourProfile() {
+      let profile = this.getValue("LoadProfileColours");
+      if (profile !== undefined) {
+        return profile.LoadProfileColours;
+      }
+      return undefined;
     },
 
     getValue(command) {
@@ -133,12 +121,35 @@ export default {
       return undefined;
     },
 
+    getMicProfiles() {
+      return store.getMicProfileFiles();
+    },
+
     getProfiles() {
       return store.getProfileFiles();
     },
 
-    getMicProfiles() {
-      return store.getMicProfileFiles();
+
+    getMicProfileList() {
+      let list = [];
+      for (let profile of store.getMicProfileFiles()) {
+        list.push({
+          key: profile,
+          value: profile,
+        });
+      }
+      return list;
+    },
+
+    getProfileList() {
+      let list = [];
+      for (let profile of store.getProfileFiles()) {
+        list.push({
+          key: profile,
+          value: profile
+        });
+      }
+      return list;
     },
 
     changed() {
@@ -155,13 +166,13 @@ export default {
         actions.push({"SaveMicProfile": []})
       }
       if (this.$refs.loadMicProfile.checked) {
-        actions.push({"LoadMicProfile": [this.$refs.micProfile.value, false]})
+        actions.push({"LoadMicProfile": [this.$refs.loadMicProfile.selectedValue(), false]})
       }
-      if (this.$refs.loadFullProfile.checked) {
-        actions.push({"LoadProfile": [this.$refs.fullProfile.value, false]})
+      if (this.$refs.loadProfile.checked) {
+        actions.push({"LoadProfile": [this.$refs.loadProfile.selectedValue(), false]})
       }
-      if (this.$refs.loadColourProfile.checked) {
-        actions.push({"LoadProfileColours": this.$refs.colourProfile.value});
+      if (this.$refs.loadProfileColours.checked) {
+        actions.push({"LoadProfileColours": this.$refs.loadProfileColours.selectedValue()});
       }
 
       let command = (this.is_sleep) ? "SetSleepCommands" : "SetShutdownCommands";
@@ -184,62 +195,46 @@ export default {
       <span v-if="!this.is_sleep">{{ $t('message.system.power.shutdownDescription') }}</span>
       <span v-else>{{ $t('message.system.power.sleepDescription') }}</span>
     </div>
-    <div>
-      <input type="checkbox" ref="saveProfile" :id="this.getId('saveProfile')" :checked="isActive('SaveProfile')"
-             @change="changed"><label :for="this.getId('saveProfile')">{{
-        $t('message.system.power.power_options.saveProfile')
-      }}</label>
-    </div>
-    <div>
-      <input type="checkbox" ref="saveMicProfile" :id="this.getId('saveMicProfile')"
-             :checked="isActive('SaveMicProfile')"
-             @change="changed"><label :for="this.getId('saveMicProfile')">{{
-        $t('message.system.power.power_options.saveMicProfile')
-      }}</label>
-    </div>
-    <div>
-      <span style="display: inline-block; width: 200px">
-      <input type="checkbox" ref="loadMicProfile" :id="this.getId('loadMicProfile')"
-             :checked="isActive('LoadMicProfile')"
-             @change="changed"><label :for="this.getId('loadMicProfile')">{{
-          $t('message.system.power.power_options.loadMicProfile')
-        }}: </label>
-      </span>
-      <select ref="micProfile" @change="micProfileChanged" :value="getSelectedMicProfile()">
-        <option v-for="value in getMicProfiles()" :key="value">{{ value }}</option>
-      </select>
-    </div>
-    <div>
-      <span style="display: inline-block; width: 200px">
-      <input type="checkbox" ref="loadFullProfile" :id="this.getId('loadFullProfile')"
-             :checked="isActive('LoadProfile')"
-             @change="changed"><label :for="this.getId('loadProfile')">{{
-          $t('message.system.power.power_options.loadProfile')
-        }}: </label>
-      </span>
-      <select ref="fullProfile" @change="fullProfileChanged" :value="getSelectedFullProfile()">
-        <option v-for="value in getProfiles()" :key="value">{{ value }}</option>
-      </select>
-    </div>
-    <div>
-      <span style="display: inline-block; width: 200px">
-      <input type="checkbox" ref="loadColourProfile" :id="this.getId('loadColourProfile')"
-             :checked="isActive('LoadProfileColours')"
-             @change="changed"><label :for="this.getId('loadColourProfile')">{{
-          $t('message.system.power.power_options.loadColourProfile')
-        }}: </label>
-      </span>
-      <select ref="colourProfile" @change="profileChanged" :value="getSelectedColourProfile()">
-        <option v-for="value in getProfiles()" :key="value">{{ value }}</option>
-      </select>
+    <div class="settingList">
+      <PowerBooleanSetting ref="saveProfile" @check-change="changed" :enabled="isActive('SaveProfile')"
+                           :description="$t('message.system.power.power_options.saveProfile')"
+                           :label="$t('message.system.power.power_options.saveProfile')"/>
+
+      <PowerBooleanSetting ref="saveMicProfile" @check-change="changed" :enabled="isActive('SaveMicProfile')"
+                           :description="$t('message.system.power.power_options.saveMicProfile')"
+                           :label="$t('message.system.power.power_options.saveMicProfile')"/>
+
+      <PowerBooleanListSetting ref="loadMicProfile" @check-change="changed" @select-change="micProfileChanged"
+                               :value="getSelectedMicProfile()" :options="getMicProfileList()"
+                               :enabled="isActive('LoadMicProfile')"
+                               :description="$t('message.system.power.power_options.loadMicProfile')"
+                               :label="$t('message.system.power.power_options.loadMicProfile')"/>
+
+      <PowerBooleanListSetting ref="loadProfile" @check-change="changed" @select-change="profileChanged"
+                               :value="getSelectedProfile()" :options="getProfileList()"
+                               :enabled="isActive('LoadProfile')"
+                               :description="$t('message.system.power.power_options.loadProfile')"
+                               :label="$t('message.system.power.power_options.loadProfile')"/>
+
+      <PowerBooleanListSetting ref="loadProfileColours" @check-change="changed" @select-change="profileColourChanged"
+                               :value="getSelectedColourProfile()" :options="getProfileList()"
+                               :enabled="isActive('LoadProfileColours')"
+                               :description="$t('message.system.power.power_options.loadColourProfile')"
+                               :label="$t('message.system.power.power_options.loadColourProfile')"/>
     </div>
   </div>
   <div v-else>
-    {{ $t('message.system.power.settingsError')}}:<br/><br/>
-    <button @click="resetShutdownActions">{{ $t('message.system.power.settingsReset')}}</button>
+    {{ $t('message.system.power.settingsError') }}:<br/><br/>
+    <button @click="resetShutdownActions">{{ $t('message.system.power.settingsReset') }}</button>
   </div>
 </template>
 
 <style scoped>
+.settingList > :nth-child(odd) {
+  background-color: #353937;
+}
 
+.settingList > :nth-child(even) {
+  background-color: #242826;
+}
 </style>
