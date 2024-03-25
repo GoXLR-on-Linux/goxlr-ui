@@ -119,6 +119,23 @@ export default {
       return getBaseHTTPAddress() + "files/scribble/" + store.getActiveSerial() + "/" + fader + ".png" + query;
     },
 
+    // checks if any preset/bank is currently actively highlighted (needed to handle tab display correctly)
+    isAnyPresetSelected() {
+      return this.highlightedAreas.some(p =>
+          [
+            HighlightArea.EFFECTS_PRESET1, HighlightArea.EFFECTS_PRESET2, HighlightArea.EFFECTS_PRESET3,
+            HighlightArea.EFFECTS_PRESET4, HighlightArea.EFFECTS_PRESET5, HighlightArea.EFFECTS_PRESET6
+          ].some(ep => ep === p)
+      );
+    },
+    isAnySamplerBankSelected() {
+      return this.highlightedAreas.some(p =>
+          [
+            HighlightArea.SAMPLER_BANK_A, HighlightArea.SAMPLER_BANK_B, HighlightArea.SAMPLER_BANK_C
+          ].some(ep => ep === p)
+      );
+    },
+
     // These occur first in the SVG, so top of the compute section :p
     computeChannelSelected(channel) {
       let fallbackOpacity = this.hoveredArea === HighlightArea[`CHANNEL_${channel}`] ? 0.5 : 0;
@@ -128,13 +145,23 @@ export default {
       let fallbackOpacity = this.hoveredArea === HighlightArea.COUGH ? 0.5 : 0;
       return this.highlightedAreas.some(x => x === HighlightArea.COUGH) ? 1 : fallbackOpacity;
     },
-    computePresetSelected(preset) {
+    computePresetSelected(preset, isTab = false) {
       let fallbackOpacity = this.hoveredArea === HighlightArea[`EFFECTS_PRESET${preset}`] ? 0.5 : 0;
-      return this.highlightedAreas.some(x => x === HighlightArea[`EFFECTS_PRESET${preset}`]) ? 1 : fallbackOpacity;
+      let isThisPresetSelected = this.highlightedAreas.some(x => x === HighlightArea[`EFFECTS_PRESET${preset}`]);
+
+      if (isThisPresetSelected) return 1;
+      else if (isTab) return fallbackOpacity;
+      else if (!this.isAnyPresetSelected()) return fallbackOpacity;
+      else return 0;
     },
-    computeSampleSelected(bank) {
+    computeSampleSelected(bank, isTab = false) {
       let fallbackOpacity = this.hoveredArea === HighlightArea[`SAMPLER_BANK_${bank}`] ? 0.5 : 0;
-      return this.highlightedAreas.some(x => x === HighlightArea[`SAMPLER_BANK_${bank}`]) ? 1 : fallbackOpacity;
+      let isThisSampleSelected = this.highlightedAreas.some(x => x === HighlightArea[`SAMPLER_BANK_${bank}`]);
+
+      if (isThisSampleSelected) return 1;
+      else if (isTab) return fallbackOpacity;
+      else if (!this.isAnySamplerBankSelected()) return fallbackOpacity;
+      else return 0;
     },
 
 
@@ -515,7 +542,7 @@ export default {
       return;
     }
 
-    // Set the initial display URLs..
+    // Set the initial display URLs.
     document.querySelector(".mixer > #Channel1 > .display > #Image").setAttribute("href", this.getScribbleUrl("A"));
     document.querySelector(".mixer > #Channel2 > .display > #Image").setAttribute("href", this.getScribbleUrl("B"));
     document.querySelector(".mixer > #Channel3 > .display > #Image").setAttribute("href", this.getScribbleUrl("C"));
@@ -584,18 +611,27 @@ export default {
 #goxlr-visualiser .selection #Cough { opacity: 0; }
 #goxlr-visualiser .selection #Cough { opacity: v-bind('computeCoughSelected()'); }
 
-#goxlr-visualiser .selection .presets * { opacity: 0; }
-#goxlr-visualiser .selection .presets #Preset1 { opacity: v-bind('computePresetSelected("1")'); }
-#goxlr-visualiser .selection .presets #Preset2 { opacity: v-bind('computePresetSelected("2")'); }
-#goxlr-visualiser .selection .presets #Preset3 { opacity: v-bind('computePresetSelected("3")'); }
-#goxlr-visualiser .selection .presets #Preset4 { opacity: v-bind('computePresetSelected("4")'); }
-#goxlr-visualiser .selection .presets #Preset5 { opacity: v-bind('computePresetSelected("5")'); }
-#goxlr-visualiser .selection .presets #Preset6 { opacity: v-bind('computePresetSelected("6")'); }
+#goxlr-visualiser .selection .presets * * { opacity: 0; }
+#goxlr-visualiser .selection .presets #Preset1 .tab { opacity: v-bind('computePresetSelected("1", true)'); }
+#goxlr-visualiser .selection .presets #Preset1 .body { opacity: v-bind('computePresetSelected("1", false)'); }
+#goxlr-visualiser .selection .presets #Preset2 .tab { opacity: v-bind('computePresetSelected("2", true)'); }
+#goxlr-visualiser .selection .presets #Preset2 .body { opacity: v-bind('computePresetSelected("2", false)'); }
+#goxlr-visualiser .selection .presets #Preset3 .tab { opacity: v-bind('computePresetSelected("3", true)'); }
+#goxlr-visualiser .selection .presets #Preset3 .body { opacity: v-bind('computePresetSelected("3", false)'); }
+#goxlr-visualiser .selection .presets #Preset4 .tab { opacity: v-bind('computePresetSelected("4", true)'); }
+#goxlr-visualiser .selection .presets #Preset4 .body { opacity: v-bind('computePresetSelected("4", false)'); }
+#goxlr-visualiser .selection .presets #Preset5 .tab { opacity: v-bind('computePresetSelected("5", true)'); }
+#goxlr-visualiser .selection .presets #Preset5 .body { opacity: v-bind('computePresetSelected("5", false)'); }
+#goxlr-visualiser .selection .presets #Preset6 .tab { opacity: v-bind('computePresetSelected("6", true)'); }
+#goxlr-visualiser .selection .presets #Preset6 .body { opacity: v-bind('computePresetSelected("6", false)'); }
 
-#goxlr-visualiser .selection .sampler * { opacity: 0; }
-#goxlr-visualiser .selection .sampler #BankA { opacity: v-bind('computeSampleSelected("A")'); }
-#goxlr-visualiser .selection .sampler #BankB { opacity: v-bind('computeSampleSelected("B")'); }
-#goxlr-visualiser .selection .sampler #BankC { opacity: v-bind('computeSampleSelected("C")'); }
+#goxlr-visualiser .selection .sampler * * { opacity: 0; }
+#goxlr-visualiser .selection .sampler #BankA .tab { opacity: v-bind('computeSampleSelected("A", true)'); }
+#goxlr-visualiser .selection .sampler #BankA .body { opacity: v-bind('computeSampleSelected("A", false)'); }
+#goxlr-visualiser .selection .sampler #BankB .tab { opacity: v-bind('computeSampleSelected("B", true)'); }
+#goxlr-visualiser .selection .sampler #BankB .body { opacity: v-bind('computeSampleSelected("B", false)'); }
+#goxlr-visualiser .selection .sampler #BankC .tab { opacity: v-bind('computeSampleSelected("C", true)'); }
+#goxlr-visualiser .selection .sampler #BankC .body { opacity: v-bind('computeSampleSelected("C", false)'); }
 
 /* effects area: buttons */
 #goxlr-visualiser .effects .buttons #Megaphone { color: v-bind('computeEffectButtonColour("EffectMegaphone", "megaphone")'); }
