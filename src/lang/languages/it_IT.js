@@ -665,8 +665,8 @@ export default {
                 monitorWithFx: "Attiva/Disattiva monitoraggio microfono con tasto FX",
                 monitorWithFxAccessibility: "Attiva monitoraggio microfono quando FX è attivo",
 
-                resetSampleFunctionOnClear: "Reset Sample Function on Clear",
-                resetSampleFunctionOnClearAccessibility: "Resets the Sample function to Start / Next when Cleared",
+                resetSampleFunctionOnClear: "Resetta Funzione Campionatore al Cancellamento",
+                resetSampleFunctionOnClearAccessibility: "Resetta il Campionatore a Inizia Riproduzione / Prossimo Campione al Cancellamento",
 
                 lockFaders: "Blocca posizioni fader quando Muta verso Tutti viene attivato",
                 lockFadersAccessibility: "Disabilita il movimento dei fader quando viene attivato Muta verso Tutti",
