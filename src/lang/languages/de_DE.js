@@ -732,7 +732,7 @@ export default {
             about: {
                 serial: "Seriennummer",
                 utilityVersion: "Utility Version",
-                driverVersion: "Driver Version",
+                driverVersion: "Treiber Version",
                 hardwareVersion: "Hardware Version",
 
                 firmware: "Firmware",
