@@ -66,4 +66,9 @@ export default {
   color: #fff;
   cursor: pointer;
 }
+
+.input select option {
+  background-color: #2F2F2F;
+  text-align: left;
+}
 </style>
