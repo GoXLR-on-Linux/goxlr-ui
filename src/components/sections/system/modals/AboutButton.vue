@@ -16,19 +16,28 @@
         <div>{{ getUtilityVersion() }}</div>
       </div>
 
+      <div style="margin-bottom: 20px">
+        <div style="font-size: 16px; font-weight: bold">Driver Version</div>
+        <div>{{ getDriverVersion() }}</div>
+      </div>
+
       <div>
         <div style="font-size: 16px; font-weight: bold">{{ $t('message.system.about.hardwareVersion') }}</div>
         <div>
           <span
-              style="display: inline-block; width: 80px; font-weight: bold">{{ $t('message.system.about.firmware') }}: </span>
+              style="display: inline-block; width: 80px; font-weight: bold">{{
+              $t('message.system.about.firmware')
+            }}: </span>
           <span>{{ getFirmwareVersion() }}</span>
         </div>
         <div>
-          <span style="display: inline-block; width: 80px; font-weight: bold">{{$t('message.system.about.dice')}}: </span>
+          <span
+              style="display: inline-block; width: 80px; font-weight: bold">{{ $t('message.system.about.dice') }}: </span>
           <span>{{ getDice() }}</span>
         </div>
         <div>
-          <span style="display: inline-block; width: 80px; font-weight: bold">{{$t('message.system.about.fpga')}}:</span>
+          <span
+              style="display: inline-block; width: 80px; font-weight: bold">{{ $t('message.system.about.fpga') }}:</span>
           <span>{{ getFPGACount() }}</span>
         </div>
       </div>
@@ -61,18 +70,47 @@ export default {
       return store.getVersion();
     },
 
+    getDriverVersion() {
+      let version = this.buildVersionString(store.getConfig().driver_interface.version);
+      let int = store.getConfig().driver_interface.interface;
+
+      let output = "";
+      if (int === "TUSB") {
+        output += "TC-Helicon Driver (";
+      } else {
+        output += "libUSB (";
+      }
+
+      output += version;
+      output += ")";
+
+      return output;
+    },
+
     getFirmwareVersion() {
-      let version = store.getActiveDevice().hardware.versions.firmware;
-      return version[0] + "." + version[1] + "." + version[2] + "." + version[3];
+      return this.buildVersionString(store.getActiveDevice().hardware.versions.firmware);
     },
 
     getDice() {
-      let version = store.getActiveDevice().hardware.versions.dice;
-      return version[0] + "." + version[1] + "." + version[2] + "." + version[3];
+      return this.buildVersionString(store.getActiveDevice().hardware.versions.dice);
     },
 
     getFPGACount() {
       return store.getActiveDevice().hardware.versions.fpga_count;
+    },
+
+    buildVersionString(version) {
+      let output = "";
+      for (let i =0; i < version.length; i++) {
+        if (version[i] == null) {
+          return output;
+        }
+        if (output !== "") {
+          output = output + "."
+        }
+        output = output + version[i];
+      }
+      return output;
     },
   }
 }
