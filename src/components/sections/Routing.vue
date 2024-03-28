@@ -18,8 +18,8 @@
         </thead>
         <tr v-for="output in OutputRouting()" :key="output">
           <th v-if="output === 'Headphones'" class="rotated" :rowspan="OutputRouting().length"><span>{{$t('message.routing.output')}}</span></th>
-          <SubmixButton :name="output" :display="$t(`message.routing.outputs['${output}']`)" v-if="submixEnabled()"/>
-          <th v-else>{{ $t(`message.routing.outputs["${output}"]`) }}</th>
+          <SubmixButton :name="output" :display="getOutputString(output)" v-if="submixEnabled()"/>
+          <th v-else>{{ getOutputString(output) }}</th>
           <Cell v-for="input in InputRouting()" :key="input" :enabled="isEnabled(output, input)" :output="output"
                 :input="input" :orange="isDeviceMix(output, 'B')" @clicked="handleClick"
                 :cell-disabled="!canRoute(output, input)"/>
@@ -37,6 +37,7 @@ import {websocket} from "@/util/sockets";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import SubmixButton from "@/components/sections/routing/SubmixButton.vue";
+import {isDeviceMini, versionNewerOrEqualTo} from "@/util/util";
 
 export default {
   name: "RoutingTable",
@@ -52,6 +53,13 @@ export default {
     },
     OutputRouting() {
       return OutputRouting
+    },
+
+    getOutputString(name) {
+      if (name === "Sampler") {
+        return this.$t(this.getLanguageKeyForSampler());
+      }
+      return this.$t(`message.routing.outputs['${name}']`)
     },
 
     handleClick: function (output, input) {
@@ -98,6 +106,20 @@ export default {
     },
     getOutputMix(name) {
       return store.getActiveDevice().levels.submix.outputs[name];
+    },
+
+    getLanguageKeyForSampler() {
+      let sample = "message.routing.outputs.Sampler";
+      let vod = "message.routing.outputs.VOD";
+
+      if (store.hasActiveDevice()) {
+        if (isDeviceMini()) {
+          if (versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5,30,0])) {
+            return vod;
+          }
+        }
+      }
+      return sample;
     },
   }
 }
