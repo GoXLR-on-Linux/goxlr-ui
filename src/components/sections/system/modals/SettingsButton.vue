@@ -74,12 +74,20 @@
 
       <div class="shutdownButton">
         <div style="text-align: right">
-          <button class="shutdown"  @click="shutdown_util()">
+          <button ref="shutdownButton" class="shutdown" @click="shutdown_util()">
             {{ $t('message.system.settings.shutdownUtility') }}
           </button>
         </div>
       </div>
     </div>
+  </AccessibleModal>
+  <AccessibleModal ref="shutdownConfirm" id="confirm_shutdown" @modal-close="closeConfirm">
+    <template v-slot:title>Are you Sure?</template>
+    <template v-slot:default>Are you sure you want to Shutdown the GoXLR Utility?</template>
+    <template v-slot:footer>
+      <ModalButton @click="isShutdown = true; $refs.shutdownConfirm.closeModal()">Yes</ModalButton>
+      <ModalButton ref="focusNo" @click="$refs.shutdownConfirm.closeModal()">No</ModalButton>
+    </template>
   </AccessibleModal>
 </template>
 
@@ -91,6 +99,7 @@ import {websocket} from "@/util/sockets";
 import {languages} from "@/lang/config";
 import BooleanSetting from "@/components/sections/system/modals/settings/BooleanSetting.vue";
 import ListSetting from "@/components/sections/system/modals/settings/ListSetting.vue";
+import ModalButton from "@/components/design/modal/ModalButton.vue";
 
 export default {
   name: "SettingsButton",
@@ -102,7 +111,13 @@ export default {
       return store
     }
   },
-  components: {ListSetting, BooleanSetting, BigButton, AccessibleModal},
+  components: {ModalButton, ListSetting, BooleanSetting, BigButton, AccessibleModal},
+
+  data() {
+    return {
+      isShutdown: false,
+    }
+  },
 
   methods: {
     isLanguageSupported() {
@@ -354,8 +369,20 @@ export default {
       websocket.send_daemon_command({"RecoverDefaults": type});
     },
 
+    closeConfirm() {
+      if (this.isShutdown) {
+        this.isShutdown = false;
+        websocket.send_daemon_command("StopDaemon");
+      } else {
+        this.$refs.modal.openModal(this.$refs.shutdownButton);
+      }
+    },
+
     shutdown_util() {
-      websocket.send_daemon_command("StopDaemon");
+      this.$refs.modal.closeModal();
+      this.$nextTick(() => {
+        this.$refs.shutdownConfirm.openModal(this.$refs.focusNo);
+      });
     },
   },
 };
