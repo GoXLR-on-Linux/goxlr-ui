@@ -63,6 +63,11 @@ export default {
         return 0;
       }
 
+      // -59 means 'Off', force line to the bottom
+      if (value === -59) {
+        return -60;
+      }
+
       return store.getActiveDevice().mic_status.noise_gate.threshold + 13;
     },
     closeWaveForm() {
