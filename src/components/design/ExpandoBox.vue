@@ -32,15 +32,15 @@ export default {
 
 <style scoped>
 .expander {
-  flex-direction: column;
-  flex-wrap: nowrap;
+  display:inline-flex;
+  align-items: center;
+
   color: #fff;
   vertical-align: middle;
   background-color: #3b413f;
   padding: 15px;
 
   border: 0;
-  margin: 0;
 }
 
 .expander:hover {
