@@ -40,6 +40,7 @@ export default {
             StreamMix: "Mix dla nadawania",
             ChatMic: "Mix dla czatu",
             Sampler: "Sampler",
+            VOD: "VOD",
         },
 
         faders: {
@@ -641,6 +642,7 @@ export default {
                 ChatMic: "@:message.channels.ChatMic",
                 Sampler: "@:message.channels.Sampler",
                 LineOut: "@:message.channels.LineOut",
+                VOD: "@:message.channels.VOD",
             }
         },
 
@@ -747,6 +749,7 @@ export default {
             about: {
                 serial: "Numer Seryjny",
                 utilityVersion: "Wersja GoXLR Utility",
+                driverVersion: "Driver Version",
                 hardwareVersion: "Wersja Sprzętu",
 
                 firmware: "Firmware",

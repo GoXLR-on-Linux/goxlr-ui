@@ -40,6 +40,7 @@ export default {
             StreamMix: "Mélangeur de diffusion",
             ChatMic: "Micro de discussion",
             Sampler: "Sons/Sampler",
+            VOD: "VOD",
         },
 
         faders: {
@@ -641,6 +642,7 @@ export default {
                 ChatMic: "@:message.channels.ChatMic",
                 Sampler: "@:message.channels.Sampler",
                 LineOut: "@:message.channels.LineOut",
+                VOD: "@:message.channels.VOD",
             }
         },
 
@@ -747,6 +749,7 @@ export default {
             about: {
                 serial: "Série",
                 utilityVersion: "Version Utilitaire",
+                driverVersion: "Driver Version",
                 hardwareVersion: "Version Matérielle",
 
                 firmware: "Firmware",

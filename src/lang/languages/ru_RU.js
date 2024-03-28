@@ -40,6 +40,7 @@ export default {
             StreamMix: "Stream Mix",
             ChatMic: "Chat Mic",
             Sampler: "Sampler",
+            VOD: "VOD",
         },
 
         faders: {
@@ -641,12 +642,13 @@ export default {
                 ChatMic: "@:message.channels.ChatMic",
                 Sampler: "@:message.channels.Sampler",
                 LineOut: "@:message.channels.LineOut",
+                VOD: "@:message.channels.VOD",
             }
         },
 
         system: {
             title: "Система",
-			
+
             powerButton: "Действия Питания",
             power: {
                 shutdownTitle: "Действия при Завершении Работы",
@@ -696,7 +698,7 @@ export default {
             settings: {
                 language: "Язык",
                 useSystem: "Использовать Системный Язык (если доступен)",
-				
+
                 uiHandler: "Обработчик Интерфейса",
                 uiHandlers: {
                     browser: "Браузер",
@@ -747,6 +749,7 @@ export default {
             about: {
                 serial: "Серийный номер",
                 utilityVersion: "Версия Утилиты",
+                driverVersion: "Driver Version",
                 hardwareVersion: "Версия Аппаратной части",
 
                 firmware: "Прошивка",

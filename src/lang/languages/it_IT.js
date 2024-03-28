@@ -21,6 +21,7 @@ export default {
             StreamMix: "Mix Diretta",
             ChatMic: "Mic Chat",
             Sampler: "Campionatore",
+            VOD: "VOD",
         },
 
         faders: {
@@ -621,6 +622,7 @@ export default {
                 ChatMic: "@:message.channels.ChatMic",
                 Sampler: "@:message.channels.Sampler",
                 LineOut: "@:message.channels.LineOut",
+                VOD: "@:message.channels.VOD",
             }
         },
 
@@ -727,6 +729,7 @@ export default {
             about: {
                 serial: "Seriale",
                 utilityVersion: "Versione Utility",
+                driverVersion: "Driver Version",
                 hardwareVersion: "Versione Hardware",
 
                 firmware: "Firmware",
