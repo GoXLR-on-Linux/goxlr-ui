@@ -113,7 +113,7 @@ export default {
       let vod = "message.routing.outputs.VOD";
 
       if (store.hasActiveDevice()) {
-        if (isDeviceMini()) {
+        if (isDeviceMini() && store.getConfig().driver_interface.interface === "TUSB") {
           if (versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5,30,0])) {
             return vod;
           }
