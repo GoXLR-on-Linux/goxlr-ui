@@ -11,7 +11,7 @@
   <AccessibleModal
       width="630px"
       ref="modal"
-      id="about_modal"
+      id="device_settings"
       :show_footer="false"
   >
     <template v-slot:title>{{ $t('message.system.deviceButton') }}</template>
@@ -21,12 +21,13 @@
                      :label="$t('message.system.device.holdDuration')"
                      :description="$t('message.system.device.holdDurationAccessibility')"/>
 
-      <NumberSetting :value="getSamplerPreRecord()" :min="0" :max="30" suffix="s" @change="updateSamplerPreRecord"
-                     :label="$t('message.system.device.sampleBuffer')"
+      <NumberSetting v-if="!isDeviceMini()" :value="getSamplerPreRecord()" :min="0" :max="30" suffix="s"
+                     @change="updateSamplerPreRecord" :label="$t('message.system.device.sampleBuffer')"
                      :description="$t('message.system.device.sampleBufferAccessibility')"/>
 
       <BooleanSetting :label="$t('message.system.device.voiceDeafen')" :enabled="get_vcmaammtcm()"
                       @change="set_vcmaammtcm" :description="$t('message.system.device.voiceDeafenAccessibility')"/>
+
       <BooleanSetting v-if="!isDeviceMini()" :label="$t('message.system.device.monitorWithFx')"
                       :enabled="get_mic_monitor_with_fx()" @change="set_mic_monitor_with_fx"
                       :description="$t('message.system.device.monitorWithFxAccessibility')"/>
