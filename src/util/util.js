@@ -5,6 +5,10 @@ export function isDeviceMini() {
     return store.getActiveDevice().hardware.device_type === "Mini";
 }
 
+export function isDeviceWhite() {
+    return store.getActiveDevice().hardware.colour_way === "White";
+}
+
 export function roundToStep(value, step) {
     step || (step = 1.0);
     let inverse = 1.0 / step;

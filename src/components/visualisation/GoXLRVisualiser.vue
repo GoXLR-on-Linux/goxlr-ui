@@ -14,7 +14,7 @@
 import {store} from "@/store";
 import {EffectLightingPresets, EffectPresets, MuteButtonNamesForFader} from "@/util/mixerMapping";
 import {getBaseHTTPAddress, websocket} from "@/util/sockets";
-import {isDeviceMini} from "@/util/util";
+import {isDeviceMini, isDeviceWhite} from "@/util/util";
 
 import GoXLRFull from "@/assets/preview/GoXLR.svg?raw";
 import GoXLRMini from "@/assets/preview/GoXLR-Mini.svg?raw";
@@ -31,7 +31,8 @@ export default {
 
   data: () => {
     return {
-      hoveredArea: null
+      hoveredArea: null,
+      whiteButtonColour: "#3D3D3D",
     }
   },
 
@@ -169,6 +170,54 @@ export default {
       return `#${store.getActiveDevice().lighting.simple.Accent.colour_one}`;
     },
 
+    getBackPlateColour(index) {
+      let black = ["#282828", "#222222", "#040404", "#040404", "#040404"];
+      let white = ["#9F9F9F", "#9D9D9D", "#707070", "#555555", "#555555"];
+
+      return isDeviceWhite() ? white[index] : black[index];
+    },
+
+    getSelectionOverlayColour() {
+      return isDeviceWhite() ? "rgba(0, 0, 0, .1)" : "rgba(255, 255, 255, .15)";
+    },
+
+    getSelectionStrokeColour() {
+      return isDeviceWhite() ? "rgba(0, 170, 170, .7)" : "rgba(36, 255, 255, .5)";
+    },
+
+    computeButtonColour() {
+      return isDeviceWhite() ? "#F7F7F7" : "#000000";
+    },
+
+    computeBaseplateGradient(part) {
+      let black = ["#1d1d1d", "#1d1d1d", "#212121"];
+      let white = ["#F1F1F1", "#DFDFDF", "#BABABA"];
+
+      return isDeviceWhite() ? white[part] : black[part];
+    },
+
+    computeGenderEncoderBaseGradient(part) {
+      let black = ["#373737", "#282828", "#1d1d1d"];
+      return isDeviceWhite() ? "transparent" : black[part];
+    },
+
+    computeGenderEncoderGradient(part) {
+      let black = ["#393939", "#242424", "#181818"];
+      let white = ["#C9C9C9", "#EBEBEB", "#ECECEC"];
+
+      return isDeviceWhite() ? white[part] : black[part];
+    },
+
+    computeGenderEncoderTopGradient(part) {
+      let black = ["#2e2e2e", "#303030"];
+      return isDeviceWhite() ? "#ECECEC" : black[part];
+    },
+
+    computeGenderEncoderCircleColour() {
+      return isDeviceWhite() ? "#ADADAD" : "#000";
+    },
+
+
     computeMixerFaderPosition(fader) {
       const channel = store.getActiveDevice().fader_status[fader].channel,
           faderPosition = store.getActiveDevice().levels.volumes[channel];
@@ -216,6 +265,13 @@ export default {
 
       return this.getOffStyleColour(offStyle, colourOne, colourTwo);
     },
+    computeMixerMuteColourText(fader) {
+      if (isDeviceWhite()) {
+        return this.whiteButtonColour;
+      }
+      return this.computeMixerMuteColour(fader);
+    },
+
     computeMixerMuteBlinkColour(fader) {
       return '#' + store.getActiveDevice().lighting.buttons[MuteButtonNamesForFader[fader]].colours.colour_two;
     },
@@ -229,6 +285,10 @@ export default {
       return '#' + store.getActiveDevice().lighting.simple[`Scribble${display}`].colour_one;
     },
 
+    computeMixerMuteBlinkColourText(fader) {
+      return isDeviceWhite() ? this.whiteButtonColour : this.computeMixerMuteBlinkColour(fader)
+    },
+
     computeCoughButtonColour() {
       const colours = store.getActiveDevice().lighting.buttons.Cough.colours,
           offStyle = store.getActiveDevice().lighting.buttons.Cough.off_style,
@@ -240,6 +300,9 @@ export default {
 
       return this.getOffStyleColour(offStyle, colourOne, colourTwo);
     },
+    computeCoughButtonColourText() {
+      return isDeviceWhite() ? this.whiteButtonColour : this.computeCoughButtonColour();
+    },
     computeBleepButtonColour() {
       const colours = store.getActiveDevice().lighting.buttons.Bleep.colours,
           isPressed = store.getActiveDevice().button_down.Bleep,
@@ -250,6 +313,9 @@ export default {
       if (isPressed) return `rgba(${colourOne.r}, ${colourOne.g}, ${colourOne.b}, 1)`;
 
       return this.getOffStyleColour(offStyle, colourOne, colourTwo);
+    },
+    computeBleepButtonColourText() {
+      return isDeviceWhite() ? this.whiteButtonColour : this.computeBleepButtonColour();
     },
 
     computeEffectButtonColour(effectButtonName, effectStateName) {
@@ -267,6 +333,9 @@ export default {
 
       return this.getOffStyleColour(offStyle, colourOne, colourTwo);
     },
+    computeEffectButtonColourText(effectButtonName, effectStateName) {
+      return isDeviceWhite() ? this.whiteButtonColour : this.computeEffectButtonColour(effectButtonName, effectStateName);
+    },
     computeEffectPresetColour(presetIndex) {
       if (isDeviceMini()) {
         return `rgba(0,0,0,1)`;
@@ -282,6 +351,10 @@ export default {
         return `rgba(${colourOne.r}, ${colourOne.g}, ${colourOne.b}, 1)`;
 
       return this.getOffStyleColour(offStyle, colourOne, colourTwo);
+    },
+
+    computeEffectPresetColourText(presetIndex) {
+      return isDeviceWhite() ? this.whiteButtonColour : this.computeEffectPresetColour(presetIndex);
     },
 
     computeEncoderRotation(effectName, centerMode = false) {
@@ -379,6 +452,10 @@ export default {
 
       return this.getOffStyleColour(offStyle, colourOne, colourTwo);
     },
+    computeSamplerBankColourText(bank) {
+      return isDeviceWhite() ? this.whiteButtonColour : this.computeSamplerBankColour(bank);
+    },
+
     computeSamplerSampleColour(button) {
       if (isDeviceMini()) {
         return `rgb(0,0,0)`;
@@ -436,6 +513,9 @@ export default {
         return `rgba(${colourOne.r}, ${colourOne.g}, ${colourOne.b}, 1)`;
       else
         return `rgba(${colourOne.r}, ${colourOne.g}, ${colourOne.b}, 0.4)`;
+    },
+    computeSamplerClearColourText(colourState) {
+      return isDeviceWhite() ? this.whiteButtonColour : this.computeSamplerClearColour(colourState);
     },
 
     faderFromChannel(channel) {
@@ -512,7 +592,14 @@ export default {
     isMuteBlinking() { return store.getActiveDevice().cough_button.state === "MutedToAll"; },
 
     isDeviceMini() { return store.getActiveDevice().hardware.device_type === "Mini"; },
-    muteInactiveColour() { return '#' + store.getActiveDevice().lighting.buttons.Cough.colours.colour_two; },
+    isDeviceWhite() { return store.getActiveDevice().hardware.colour_way === "White" },
+
+    muteInactiveColour() {
+      return '#' + store.getActiveDevice().lighting.buttons.Cough.colours.colour_two;
+    },
+    muteInactiveColourText() {
+      return isDeviceWhite() ? this.whiteButtonColour : '#' + store.getActiveDevice().lighting.buttons.Cough.colours.colour_two;
+    },
 
     getFader1Scribble() { return this.getScribbleUrl("A"); },
     getFader2Scribble() { return this.getScribbleUrl("B"); },
@@ -566,6 +653,106 @@ export default {
   font-display:auto;font-style:normal;font-weight:400;font-stretch:normal;
 }
 
+/*#goxlr-visualiser #BaseplateGradient > * {
+//  stop-color: #fff;
+}*/
+
+/* GoXLR Body */
+#goxlr-visualiser #BaseplateGradient :nth-child(1) {
+  stop-color: v-bind('computeBaseplateGradient(0)');
+}
+
+#goxlr-visualiser #BaseplateGradient :nth-child(2) {
+  stop-color: v-bind('computeBaseplateGradient(1)');
+}
+
+#goxlr-visualiser #BaseplateGradient :nth-child(3) {
+  stop-color: v-bind('computeBaseplateGradient(2)');
+}
+
+#goxlr-visualiser #GenderEncoderBaseGradient :nth-child(1) {
+  stop-color: v-bind('computeGenderEncoderBaseGradient(0)');
+}
+
+#goxlr-visualiser #GenderEncoderBaseGradient :nth-child(2) {
+  stop-color: v-bind('computeGenderEncoderBaseGradient(1)');
+}
+
+#goxlr-visualiser #GenderEncoderBaseGradient :nth-child(3) {
+  stop-color: v-bind('computeGenderEncoderBaseGradient(2)');
+}
+
+#goxlr-visualiser #GenderEncoderGradient > :nth-child(1) {
+  stop-color: v-bind('computeGenderEncoderGradient(0)');
+}
+#goxlr-visualiser #GenderEncoderGradient > :nth-child(2) {
+  stop-color: v-bind('computeGenderEncoderGradient(1)');
+}
+#goxlr-visualiser #GenderEncoderGradient > :nth-child(3) {
+  stop-color: v-bind('computeGenderEncoderGradient(2)');
+}
+
+#goxlr-visualiser #GenderEncoderTopGradient :nth-child(1) {
+  stop-color: v-bind('computeGenderEncoderTopGradient(0)');
+}
+
+#goxlr-visualiser #GenderEncoderTopGradient :nth-child(2) {
+  stop-color: v-bind('computeGenderEncoderTopGradient(1)');
+}
+
+#goxlr-visualiser .area .encoders * .base > circle:nth-child(3) {
+  fill: v-bind('computeGenderEncoderCircleColour()');
+}
+
+#goxlr-visualiser .backplate > :nth-child(1) {
+  fill: v-bind('getBackPlateColour(0)') !important;
+}
+
+#goxlr-visualiser .backplate > :nth-child(2) {
+  fill: v-bind('getBackPlateColour(1)') !important;
+}
+
+#goxlr-visualiser .backplate > :nth-child(3) {
+  fill: v-bind('getBackPlateColour(2)') !important;
+}
+
+#goxlr-visualiser .backplate > :nth-child(4), #goxlr-visualiser .backplate > :nth-child(5) {
+  fill: v-bind('getBackPlateColour(3)') !important;
+}
+
+/** Mini has a fancy shadow **/
+#goxlr-visualiser .backplate > :nth-child(6) {
+  fill: v-bind('getBackPlateColour(4)') !important;
+}
+
+/** This Grey looks great in Black or White, so I'll leave it for now, should probably update the SVG */
+#goxlr-visualiser #Logo > *:not(:nth-child(3)) {
+  fill: #7B7B7B !important;
+}
+
+#goxlr-visualiser .faceplate #Logo g > * {
+  fill: #7B7B7B !important;
+}
+
+#goxlr-visualiser .area .mixer * > #Mute > rect,
+#goxlr-visualiser .area .effects .buttons * rect,
+#goxlr-visualiser .area .effects .presets * rect,
+#goxlr-visualiser .area .sampler path,
+#goxlr-visualiser .area .sampler g rect,
+#goxlr-visualiser .area .cough #Bleep rect
+{
+  fill: v-bind('computeButtonColour()');
+}
+
+#goxlr-visualiser .area .cough #Mute :nth-child(1) {
+  fill: v-bind('computeButtonColour()');
+}
+
+#goxlr-visualiser .selection * rect, #goxlr-visualiser .selection path {
+  fill: v-bind('getSelectionOverlayColour()') !important;
+  stroke: v-bind('getSelectionStrokeColour()') !important;
+}
+
 /* animations */
 @keyframes sampler-sample-blink-animation {
   0%, 49% { color: v-bind('computeSamplerBlinkColour(1)'); }
@@ -575,31 +762,59 @@ export default {
   0%, 49% { color: v-bind('computeSamplerClearColour(1)'); }
   50%, 100% { color: v-bind('computeSamplerClearColour(2)'); }
 }
+@keyframes sampler-clear-blink-animation-text {
+  0%, 49% { color: v-bind('computeSamplerClearColourText(1)'); }
+  50%, 100% { color: v-bind('computeSamplerClearColourText(2)'); }
+}
 @keyframes mute-blink-animation {
   0%, 49% { color: v-bind('computeCoughButtonColour()'); }
   50%, 100% { color: v-bind('muteInactiveColour'); }
+}
+@keyframes mute-blink-animation-text {
+  0%, 49% { color: v-bind('computeCoughButtonColourText()'); }
+  50%, 100% { color: v-bind('muteInactiveColourText'); }
 }
 @keyframes fader1-mute-blink-animation {
   0%, 49% { color: v-bind('computeMixerMuteColour("A")'); }
   50%, 100% { color: v-bind('computeMixerMuteBlinkColour("A")'); }
 }
+@keyframes fader1-mute-blink-animation-text {
+  0%, 49% { color: v-bind('computeMixerMuteColourText("A")'); }
+  50%, 100% { color: v-bind('computeMixerMuteBlinkColourText("A")'); }
+}
 @keyframes fader2-mute-blink-animation {
   0%, 49% { color: v-bind('computeMixerMuteColour("B")'); }
   50%, 100% { color: v-bind('computeMixerMuteBlinkColour("B")'); }
+}
+@keyframes fader2-mute-blink-animation-text {
+  0%, 49% { color: v-bind('computeMixerMuteColourText("B")'); }
+  50%, 100% { color: v-bind('computeMixerMuteBlinkColourText("B")'); }
 }
 @keyframes fader3-mute-blink-animation {
   0%, 49% { color: v-bind('computeMixerMuteColour("C")'); }
   50%, 100% { color: v-bind('computeMixerMuteBlinkColour("C")'); }
 }
+@keyframes fader3-mute-blink-animation-text {
+  0%, 49% { color: v-bind('computeMixerMuteColourText("C")'); }
+  50%, 100% { color: v-bind('computeMixerMuteBlinkColourText("C")'); }
+}
 @keyframes fader4-mute-blink-animation {
   0%, 49% { color: v-bind('computeMixerMuteColour("D")'); }
   50%, 100% { color: v-bind('computeMixerMuteBlinkColour("D")'); }
+}
+@keyframes fader4-mute-blink-animation-text {
+  0%, 49% { color: v-bind('computeMixerMuteColourText("D")'); }
+  50%, 100% { color: v-bind('computeMixerMuteBlinkColourText("D")'); }
 }
 
 /* cough area */
 #goxlr-visualiser .cough #Mute { color: v-bind('computeCoughButtonColour()'); }
 #goxlr-visualiser .cough #Mute.blink { animation: mute-blink-animation 1s infinite; }
+#goxlr-visualiser .cough #Mute :nth-child(2) { color: v-bind('computeCoughButtonColourText()'); }
+#goxlr-visualiser .cough #Mute.blink :nth-child(2) { animation: mute-blink-animation-text 1s infinite; }
+
 #goxlr-visualiser .cough #Bleep { color: v-bind('computeBleepButtonColour()'); }
+#goxlr-visualiser .cough #Bleep text { color: v-bind('computeBleepButtonColourText()'); }
 
 /* selection overlay */
 #goxlr-visualiser .selection .channels * { opacity: 0; }
@@ -635,15 +850,26 @@ export default {
 
 /* effects area: buttons */
 #goxlr-visualiser .effects .buttons #Megaphone { color: v-bind('computeEffectButtonColour("EffectMegaphone", "megaphone")'); }
+#goxlr-visualiser .effects .buttons #Megaphone text { color: v-bind('computeEffectButtonColourText("EffectMegaphone", "megaphone")'); }
 #goxlr-visualiser .effects .buttons #Robot { color: v-bind('computeEffectButtonColour("EffectRobot", "robot")'); }
+#goxlr-visualiser .effects .buttons #Robot text { color: v-bind('computeEffectButtonColourText("EffectRobot", "robot")'); }
 #goxlr-visualiser .effects .buttons #HardTune { color: v-bind('computeEffectButtonColour("EffectHardTune", "hard_tune")'); }
+#goxlr-visualiser .effects .buttons #HardTune text { color: v-bind('computeEffectButtonColourText("EffectHardTune", "hard_tune")'); }
 #goxlr-visualiser .effects .buttons #FX { color: v-bind('computeEffectButtonColour("EffectFx", null)'); }
+#goxlr-visualiser .effects .buttons #FX text { color: v-bind('computeEffectButtonColourText("EffectFx", null)'); }
+
 #goxlr-visualiser .effects .presets #Preset1 { color: v-bind('computeEffectPresetColour(1)'); }
+#goxlr-visualiser .effects .presets #Preset1 text { color: v-bind('computeEffectPresetColourText(1)'); }
 #goxlr-visualiser .effects .presets #Preset2 { color: v-bind('computeEffectPresetColour(2)'); }
+#goxlr-visualiser .effects .presets #Preset2 text { color: v-bind('computeEffectPresetColourText(2)'); }
 #goxlr-visualiser .effects .presets #Preset3 { color: v-bind('computeEffectPresetColour(3)'); }
+#goxlr-visualiser .effects .presets #Preset3 text { color: v-bind('computeEffectPresetColourText(3)'); }
 #goxlr-visualiser .effects .presets #Preset4 { color: v-bind('computeEffectPresetColour(4)'); }
+#goxlr-visualiser .effects .presets #Preset4 text { color: v-bind('computeEffectPresetColourText(4)'); }
 #goxlr-visualiser .effects .presets #Preset5 { color: v-bind('computeEffectPresetColour(5)'); }
+#goxlr-visualiser .effects .presets #Preset5 text { color: v-bind('computeEffectPresetColourText(5)'); }
 #goxlr-visualiser .effects .presets #Preset6 { color: v-bind('computeEffectPresetColour(6)'); }
+#goxlr-visualiser .effects .presets #Preset6 text { color: v-bind('computeEffectPresetColourText(6)'); }
 
 /* effects area: reverb encoder */
 #goxlr-visualiser .effects .encoders .reverb #Encoder {
@@ -723,10 +949,15 @@ export default {
 
 /* sampler area: buttons */
 #goxlr-visualiser .sampler #BankA { color: v-bind('computeSamplerBankColour("A")'); }
+#goxlr-visualiser .sampler #BankA text { color: v-bind('computeSamplerBankColourText("A")'); }
 #goxlr-visualiser .sampler #BankB { color: v-bind('computeSamplerBankColour("B")'); }
+#goxlr-visualiser .sampler #BankB text { color: v-bind('computeSamplerBankColourText("B")'); }
 #goxlr-visualiser .sampler #BankC { color: v-bind('computeSamplerBankColour("C")'); }
+#goxlr-visualiser .sampler #BankC text { color: v-bind('computeSamplerBankColourText("C")'); }
 #goxlr-visualiser .sampler #Clear { color: v-bind('computeSamplerClearColour(2)'); }
 #goxlr-visualiser .sampler #Clear.blink { animation: sampler-clear-blink-animation 1s infinite; }
+#goxlr-visualiser .sampler #Clear text { color: v-bind('computeSamplerClearColourText(2)'); }
+#goxlr-visualiser .sampler #Clear.blink text { animation: sampler-clear-blink-animation-text 1s infinite; }
 #goxlr-visualiser .sampler #TopLeft { color: v-bind('computeSamplerSampleColour("TopLeft")'); }
 #goxlr-visualiser .sampler #TopLeft.blink { animation: sampler-sample-blink-animation 1s infinite; }
 #goxlr-visualiser .sampler #TopRight { color: v-bind('computeSamplerSampleColour("TopRight")'); }
@@ -745,12 +976,20 @@ export default {
 /* mixer area: mute buttons */
 #goxlr-visualiser #Channel1 #Mute { color: v-bind('computeMixerMuteColour("A")'); }
 #goxlr-visualiser #Channel1 #Mute.blink { animation: fader1-mute-blink-animation 1s infinite; }
+#goxlr-visualiser #Channel1 #Mute path { color: v-bind('computeMixerMuteColourText("A")'); }
+#goxlr-visualiser #Channel1 #Mute.blink path { animation: fader1-mute-blink-animation-text 1s infinite; }
 #goxlr-visualiser #Channel2 #Mute { color: v-bind('computeMixerMuteColour("B")'); }
 #goxlr-visualiser #Channel2 #Mute.blink { animation: fader2-mute-blink-animation 1s infinite; }
+#goxlr-visualiser #Channel2 #Mute path { color: v-bind('computeMixerMuteColourText("B")'); }
+#goxlr-visualiser #Channel2 #Mute.blink path { animation: fader2-mute-blink-animation-text 1s infinite; }
 #goxlr-visualiser #Channel3 #Mute { color: v-bind('computeMixerMuteColour("C")'); }
 #goxlr-visualiser #Channel3 #Mute.blink { animation: fader3-mute-blink-animation 1s infinite; }
+#goxlr-visualiser #Channel3 #Mute path { color: v-bind('computeMixerMuteColourText("C")'); }
+#goxlr-visualiser #Channel3 #Mute.blink path { animation: fader3-mute-blink-animation-text 1s infinite; }
 #goxlr-visualiser #Channel4 #Mute { color: v-bind('computeMixerMuteColour("D")'); }
 #goxlr-visualiser #Channel4 #Mute.blink { animation: fader4-mute-blink-animation 1s infinite; }
+#goxlr-visualiser #Channel4 #Mute path { color: v-bind('computeMixerMuteColourText("D")'); }
+#goxlr-visualiser #Channel4 #Mute.blink path { animation: fader4-mute-blink-animation-text 1s infinite; }
 
 /* mixer area: fader 1 */
 #goxlr-visualiser #Channel1 .display #Backlight { color: v-bind('computeMixerDisplayColour(1)'); }
