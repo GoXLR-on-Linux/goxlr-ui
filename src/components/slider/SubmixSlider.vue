@@ -248,7 +248,7 @@ export default {
       this.timer = setInterval(() => {
         let value = (self.rangeSelected === 'A') ? self.fieldAValue : self.fieldBValue;
         if (self.lastValue !== value) {
-          this.$emit('value-changed', self.id, value, self.rangeSelected);
+          this.$emit('value-changed', self.id, value, self.rangeSelected, false);
           self.lastValue = value;
         }
       }, 5);
@@ -259,7 +259,7 @@ export default {
 
       // Emit the latest value..
       let value = (this.rangeSelected === 'A') ? this.fieldAValue : this.fieldBValue;
-      this.$emit('value-changed', this.id, value, this.rangeSelected);
+      this.$emit('value-changed', this.id, value, this.rangeSelected, true);
     },
 
     toggleSubmixLinked() {
