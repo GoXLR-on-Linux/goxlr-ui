@@ -70,6 +70,7 @@ export default {
       channelNames: ChannelName,
 
       isVisible: false,
+      updatesPaused: false,
       volumes: [],
     }
   },
@@ -79,7 +80,7 @@ export default {
       return this.$t(`message.channels.${channel}`);
     },
 
-    valueChange(id, volume) {
+    valueChange(id, volume, last) {
       let str_id = this.channelNames[id];
       let command = undefined;
 
@@ -89,11 +90,16 @@ export default {
           volume
         ]
       };
-      websocket.send_command(store.getActiveSerial(), command);
+
+      if (!this.updatesPaused || last) {
+        this.updatesPaused = true;
+        websocket.send_command(store.getActiveSerial(), command).then(() => this.updatesPaused = false);
+      }
+
       store.getActiveDevice().levels.volumes[str_id] = volume;
     },
 
-    submixValueChange(id, volume, side) {
+    submixValueChange(id, volume, side, last) {
       let str_id = this.channelNames[id];
       let command = undefined;
       if (side === 'A') {
@@ -107,7 +113,11 @@ export default {
         };
         store.getActiveDevice().levels.submix.inputs[str_id].volume = volume;
       }
-      websocket.send_command(store.getActiveSerial(), command);
+
+      if (!this.updatesPaused || last) {
+        this.updatesPaused = true;
+        websocket.send_command(store.getActiveSerial(), command).then(() => this.updatesPaused = false);
+      }
 
       if (store.getActiveDevice().levels.submix.inputs[str_id].linked) {
         if (side === 'A') {
