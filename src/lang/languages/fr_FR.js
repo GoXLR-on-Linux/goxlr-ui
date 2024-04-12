@@ -687,8 +687,8 @@ export default {
                 monitorWithFx: "Activer ou désactiver l'état de surveillance du microphone avec effets.",
                 monitorWithFxAccessibility: "Active la surveillance du micro lorsque les effets sont activés.",
 
-                resetSampleFunctionOnClear: "Reset Sample Function on Clear",
-                resetSampleFunctionOnClearAccessibility: "Resets the Sample function to Start / Next when Cleared",
+                resetSampleFunctionOnClear: "Réinitialiser la fonction d'exemple lors de l'effacement.",
+                resetSampleFunctionOnClearAccessibility: "Réinitialise la fonction d'exemple à Démarrer / Suivant lorsqu'elle est effacée.",
 
                 lockFaders: "Verrouiller les positions des curseurs lors de la mise en sourdine générale.",
                 lockFadersAccessibility: "Empêche les curseurs de descendre lorsque la mise en sourdine générale est activée.",
