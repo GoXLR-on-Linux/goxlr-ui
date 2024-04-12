@@ -365,7 +365,7 @@ export default {
                 },
 
                 amount: "Уровень",
-                rate: "Скорость",
+                rate: "Степень",
                 window: "Окно",
 
                 source: "Источник"
