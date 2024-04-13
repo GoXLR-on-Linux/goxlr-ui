@@ -1,7 +1,7 @@
 <template>
   <ExpandoGroupContainer :title="$t('message.effects.robot.title')" @expando-clicked="is_expanded = !is_expanded"
                          :expanded="is_expanded">
-    <RadioSelection title="Style" group="effects_robot_style" :options="getRobotStyles()" :selected="getActiveStyle()"
+    <RadioSelection :title="$t('message.effects.robot.style')" group="effects_robot_style" :options="getRobotStyles()" :selected="getActiveStyle()"
                     @selection-changed="stylePressed"/>
 
     <SliderInput :title="$t('message.effects.robot.lowGain')" :slider-min-value=-12 :slider-max-value=12
