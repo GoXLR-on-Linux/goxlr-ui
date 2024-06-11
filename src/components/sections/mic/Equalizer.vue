@@ -297,7 +297,14 @@ export default {
       let khz = this.$t('message.suffixes.kilohertz');
 
       if (isDeviceMini()) {
-        return (id < 3) ? value + hz : value + khz;
+        // Utility #167, according to the official app, the first 3 values should be in Hz, and the remaining 3 should
+        // be in KHz, correctly adjust here.
+        if (id < 4) {
+          return value + hz;
+        }
+
+        // Convert anything above id=3 to Khz..
+        return (value / 1000).toFixed(1) + khz;
       } else {
         if (!this.fineTuneEnabled()) {
           // In the official app, when fine tune isn't enabled, the values are 'sanitised' a bit so that things
@@ -312,6 +319,9 @@ export default {
       let hz = this.$t('message.suffixes.hertz');
       let khz = this.$t('message.suffixes.kilohertz');
 
+      if (isDeviceMini()) {
+        return (index < 4) ? hz : khz;
+      }
       return (index < 5) ? hz : khz;
     },
 
