@@ -9,7 +9,7 @@
         :current-field-value=fieldValue
         :background-colour="backgroundColour"
         colour="#fff"
-        :text-suffix="titleSuffix"
+        :text-suffix="getTitleSuffix()"
         @value-updated="inputValueUpdated"
     />
   </div>
@@ -69,6 +69,10 @@ export default {
   },
 
   methods: {
+    getTitleSuffix() {
+      return this.titleSuffix.toUpperCase();
+    },
+
     sliderValueUpdated(newValue) {
       this.fieldValue = parseFloat(newValue);
     },
@@ -120,7 +124,7 @@ export default {
       let final = newValue;
       // Oddly enough, we're going to handle this here, rather than push up as it's some specialised code, firstly,
       // do we need to 'explode' the value?
-      if (this.titleSuffix === "KHz") {
+      if (this.titleSuffix === this.$t('message.suffixes.kilohertz')) {
         final = parseFloat(newValue) * 1000;
       }
 
