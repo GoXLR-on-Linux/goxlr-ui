@@ -109,8 +109,8 @@ export default {
       websocket.send_command(serial, command);
     },
 
-    updateDisabledMuteFunctions(source) {
-      for (let mute_option of this.getMuteBehaviours()) {
+    updateDisabledMuteFunctions(source, behaviours) {
+      for (let mute_option of behaviours) {
         if (source === "Chat" && mute_option.id === "ToVoiceChat") {
           mute_option.disabled = true;
           continue;
@@ -122,6 +122,7 @@ export default {
         }
         mute_option.disabled = false;
       }
+      return behaviours;
     },
 
     isMuteFunctionDisabled: function (muteFunction) {
@@ -149,8 +150,7 @@ export default {
     },
 
     getMuteBehaviour: function () {
-      this.updateDisabledMuteFunctions(this.getActiveSource());
-      return this.getMuteBehaviours();
+      return this.updateDisabledMuteFunctions(this.getActiveSource(), this.getMuteBehaviours());
     },
     getActiveChannelName: function () {
       return this.getFaderOptions().find((option) => option.id === this.activeChannel).label;
