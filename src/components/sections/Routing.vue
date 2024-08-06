@@ -5,11 +5,11 @@
       <table>
         <thead>
         <tr>
-          <th colspan="2" class="hidden"></th>
+          <th colspan="2" class="hidden">&nbsp;</th>
           <th :colspan="InputRouting().length">{{$t('message.routing.input')}}</th>
         </tr>
         <tr class="subHeader">
-          <th colspan="2" class="hidden"></th>
+          <th colspan="2" class="hidden">&nbsp;</th>
           <th v-for="input in InputRouting()" :key="input">{{
               $t(`message.routing.inputs["${input}"]`)
             }}
