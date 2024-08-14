@@ -5,7 +5,7 @@
     <div style="display: flex; flex-direction: row">
       <Range id="A" :current-field-value=fieldAValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
              :store-path="storePath" @value-updated="sliderValueUpdated" @mouse-down="setMouseDown"
-             @mouse-up="setMouseUp" style="margin-left: -12px" :height=115 :transform=-70 :title="getTitle('Ay')"
+             @mouse-up="setMouseUp" style="margin-left: -12px" :height=115 :transform=-70 :title="getTitle('A')"
              :colour="getColour('A')" :reported-value="getTextValue('A')"/>
 
       <Range id="B" :current-field-value=fieldBValue :min-value="getSliderMinValue()" :max-value="getSliderMaxValue()"
@@ -29,7 +29,7 @@
       <Input id="A" :current-text-value="textAValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
              :textSuffix="textSuffix"
              :override-value="displayValue()" :editable="isEditable()" @value-updated="inputValueUpdated"
-             style="width: 60px;" :colour="getColour('A')" :title="getTitle('Ay')"
+             style="width: 60px;" :colour="getColour('A')" :title="getTitle('A')"
       />
 
       <Input id="B" :current-text-value="textBValue" :min-value="minimumTextValue" :max-value="maximumTextValue"
