@@ -217,7 +217,8 @@ export default {
   <CenteredContainer>
     <ContentContainer style="padding-top: 15px; padding-bottom: 20px">
       <GroupContainer :title="$t('message.lighting.global.areas.title')">
-        <RadioSelection :title="$t('message.lighting.global.areas.area')" group="lighting_global_areas" :options="getAreaOptions()" :selected="this.selected"
+        <RadioSelection :title="$t('message.lighting.global.areas.area')" group="lighting_global_areas"
+                        :options="getAreaOptions()" :selected="this.selected"
                         @selection-changed="onSelectionChange"/>
         <ColourPicker :title="$t('message.lighting.common.colour')" :color-value="color()"
                       @colour-changed="onColourChange"/>
@@ -263,11 +264,13 @@ export default {
             <div class="title" :class="{ disabled: !isWaterfallEnabled()}">
               {{ $t('message.lighting.global.animations.waterfall') }}
             </div>
-            <div class="waterfall" :class="{ active: isWaterFallActive('Up'), disabled: !isWaterfallEnabled() }"
+            <div role="button" aria-label="Waterfall Animation Up" :aria-valuenow="isWaterFallActive('Up')"
+                 class="waterfall" :class="{ active: isWaterFallActive('Up'), disabled: !isWaterfallEnabled() }"
                  @click="setWaterfall('Up')">
               <font-awesome-icon icon="fa-solid fa-up-long"/>
             </div>
-            <div class="waterfall" :class="{ active: isWaterFallActive('Down'), disabled: !isWaterfallEnabled() }"
+            <div role="button" aria-label="Waterfall Animation Down" :aria-valuenow="isWaterFallActive('Down')"
+                 class="waterfall" :class="{ active: isWaterFallActive('Down'), disabled: !isWaterfallEnabled() }"
                  @click="setWaterfall('Down')">
               <font-awesome-icon icon="fa-solid fa-down-long"/>
             </div>
