@@ -38,6 +38,10 @@
                       :enabled="get_locked_faders()" @change="set_locked_faders"
                       :description="$t('message.system.device.lockFadersAccessibility')"/>
 
+      <ListSetting v-if="isDeviceMini()" :value="getVodMode()" :options="getVodModeKeys()"
+                   :description="`Sets ${getKeyForSampler()} behaviour`"
+                   :label="`${getKeyForSampler()} Behaviour`" @change="setVodMode"/>
+
 
     </div>
 
@@ -51,14 +55,23 @@ import SimpleNumberInput from "@/components/design/SimpleNumberInput.vue";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import BigButton from "@/components/buttons/BigButton.vue";
-import {isDeviceMini} from "@/util/util";
+import {isDeviceMini, versionNewerOrEqualTo} from "@/util/util";
 import SettingsButton from "@/components/sections/system/modals/SettingsButton.vue";
 import BooleanSetting from "@/components/sections/system/modals/settings/BooleanSetting.vue";
 import NumberSetting from "@/components/sections/system/modals/settings/NumberSetting.vue";
+import ListSetting from "@/components/sections/system/modals/settings/ListSetting.vue";
 
 export default {
   name: "DeviceSettingsButton",
-  components: {NumberSetting, BooleanSetting, SettingsButton, BigButton, SimpleNumberInput, AccessibleModal},
+  components: {
+    ListSetting,
+    NumberSetting,
+    BooleanSetting,
+    SettingsButton,
+    BigButton,
+    SimpleNumberInput,
+    AccessibleModal
+  },
 
   methods: {
     isDeviceMini,
@@ -121,8 +134,46 @@ export default {
 
     set_locked_faders(value) {
       websocket.send_command(store.getActiveSerial(), {"SetLockFaders": value});
-    }
-  }
+    },
+
+    getVodModeKeys() {
+      return [
+        {
+          key: "Routable",
+          value: "Routable",
+        },
+        {
+          key: "StreamNoMusic",
+          value: "Stream Mix (No Music)",
+        },
+      ];
+    },
+
+    getVodMode() {
+      if (store.getActiveDevice() === undefined) {
+        return "Routable";
+      }
+      return store.getActiveDevice().settings.vod_mode;
+    },
+
+    setVodMode(value) {
+      websocket.send_command(store.getActiveSerial(),{"SetVodMode": value});
+    },
+
+    getKeyForSampler() {
+      let sample = "Sampler";
+      let vod = "VOD";
+
+      if (store.hasActiveDevice()) {
+        if (isDeviceMini() && store.getConfig().driver_interface.interface === "TUSB") {
+          if (versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5, 30, 0])) {
+            return vod;
+          }
+        }
+      }
+      return sample;
+    },
+  },
 }
 </script>
 
