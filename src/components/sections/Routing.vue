@@ -16,8 +16,8 @@
           </th>
         </tr>
         </thead>
-        <tr v-for="output in OutputRouting()" :key="output">
-          <th v-if="output === 'Headphones'" class="rotated" :rowspan="OutputRouting().length"><span>{{$t('message.routing.output')}}</span></th>
+        <tr v-for="output in getOutputChannels" :key="output">
+          <th v-if="output === 'Headphones'" class="rotated" :rowspan="getOutputChannels.length"><span>{{$t('message.routing.output')}}</span></th>
           <SubmixButton :name="output" :display="getOutputString(output)" v-if="submixEnabled()"/>
           <th v-else>{{ getOutputString(output) }}</th>
           <Cell v-for="input in InputRouting()" :key="input" :enabled="isEnabled(output, input)" :output="output"
@@ -50,9 +50,6 @@ export default {
   methods: {
     InputRouting() {
       return InputRouting
-    },
-    OutputRouting() {
-      return OutputRouting
     },
 
     getOutputString(name) {
@@ -108,6 +105,13 @@ export default {
       return store.getActiveDevice().levels.submix.outputs[name];
     },
 
+    shouldShowOutput(name) {
+      if (name === "Sampler") {
+        return store.getActiveDevice().settings.vod_mode !== "StreamNoMusic";
+      }
+      return true
+    },
+
     getLanguageKeyForSampler() {
       let sample = "message.routing.outputs.Sampler";
       let vod = "message.routing.outputs.VOD";
@@ -121,6 +125,15 @@ export default {
       }
       return sample;
     },
+  },
+  computed: {
+    getOutputChannels() {
+      console.log(store.getActiveDevice().settings.vod_mode);
+      if (store.getActiveDevice().settings.vod_mode === "StreamNoMusic") {
+        return OutputRouting.filter(i => i !== "Sampler");
+      }
+      return OutputRouting;
+    }
   }
 }
 </script>
