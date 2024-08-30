@@ -28,6 +28,10 @@
       <ListSetting :value="getLogLevel()" :options="getLogKeys()" :description="$t('message.system.settings.logLevel')"
                    :label="$t('message.system.settings.logLevel')" @change="setLogLevel"/>
 
+      <BooleanSetting v-if="is_macos()" label="Disable MacOS Aggregate Management (requires restart)" :enabled="get_macos_aggregate_management()"
+                      @change="set_macos_aggregate_management"
+                      description="Disabled Utility Aggregate Management on MacOS (requires restart)"/>
+
       <BooleanSetting :label="$t('message.system.settings.allowNetworkAccess')" :enabled="get_allow_network_access()"
                       @change="set_allow_network_access"
                       :description="$t('message.system.settings.allowNetworkAccessAccessibility')"/>
@@ -313,6 +317,17 @@ export default {
       websocket.send_daemon_command({"SetAllowNetworkAccess": value});
     },
 
+    get_macos_aggregate_management() {
+      if (store.getConfig() === undefined) {
+        return true;
+      }
+      return !store.getConfig().handle_macos_aggregates;
+    },
+
+    set_macos_aggregate_management(value) {
+      websocket.send_daemon_command({"HandleMacOSAggregates": !value});
+    },
+
     isAutostart() {
       if (store.getConfig() === undefined) {
         return false;
@@ -384,6 +399,17 @@ export default {
         this.$refs.shutdownConfirm.openModal(this.$refs.focusNo);
       });
     },
+
+    // It annoys me that this has to exist... but it is what it is :D
+    is_macos() {
+      if (store.getConfig() === undefined) {
+        return true;
+      }
+
+
+      // Based on https://doc.rust-lang.org/std/env/consts/constant.OS.html - It's not my fault if it doesn't work!
+      return store.getConfig().platform === "macos";
+    }
   },
 };
 </script>
