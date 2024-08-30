@@ -107,7 +107,7 @@ export default {
                 button: "Mic Instellen",
                 title: "Mic Instellen",
                 type: "Mic Type",
-                gain: "Gain",
+                gain: "Versterking",
 
                 // Microphone Types
                 xlr: "XLR Microfoon",
@@ -132,7 +132,7 @@ export default {
             equaliser: {
                 title: "Equaliser",
                 reset: "Reset",
-                enableFineTune: "Inschakelen fijnafstelling",
+                enableFineTune: "Inschakelen fijne afstelling",
                 bass: "Bass",
                 mid: "Mid",
                 treble: "Treble",
@@ -237,7 +237,7 @@ export default {
                 accessibilityPresetSaved: "Preset {name} opgeslagen in bibliotheek",
             },
             reverb: {
-                title: "Reverb",
+                title: "Galm",
                 style: "Stijl",
 
                 styles: {
@@ -326,7 +326,7 @@ export default {
                 },
 
                 amount: "Hoeveelheid",
-                postGain: "Post Gain"
+                postGain: "Post versterking"
             },
 
             robot: {
@@ -339,13 +339,13 @@ export default {
                     robot3: "Robot 3",
                 },
 
-                lowGain: "Lage Gain",
+                lowGain: "Lage Versterking",
                 lowFrequency: "Lage Freq",
                 lowWidth: "Lage Breedte",
-                midGain: "Mid Gain",
+                midGain: "Mid Versterking",
                 midFrequency: "Mid Freq",
                 midWidth: "Mid Breedte",
-                highGain: "Hoge Gain",
+                highGain: "Hoge Versterking",
                 highFrequency: "Hoge Freq",
                 highWidth: "Hoge Breedte",
                 waveform: "Waveform",
@@ -481,9 +481,9 @@ export default {
 
             global: {
                 areas: {
-                    title: "Gebieden",
+                    title: "Gedeeltes",
 
-                    area: "Gebied",
+                    area: "Gedeelte",
                     areas: {
                         global: "Globaal",
                         accent: "Accent",
@@ -525,7 +525,7 @@ export default {
                     style: "Stijl",
                     styles: {
                         gradient: "Overloop",
-                        meter: "Meter",
+                        meter: "Meting",
                     },
 
                     bottomColour: "Onderste kleur",
@@ -699,7 +699,7 @@ export default {
                 language: "Taal",
                 useSystem: "Gebruik systeemtaal (indien beschikbaar)",
 
-                uiHandler: "UI Handler",
+                uiHandler: "UI Regelaar",
                 uiHandlers: {
                     browser: "Browser",
                     app: "App",
@@ -722,7 +722,7 @@ export default {
                 allowNetworkAccess: "Sta netwerkbesturing toe (Vereist een herstart)",
                 allowNetworkAccessAccessibility: "Geef toestemming dat dit programma door andere apparaten in het netwerk geopend kan worden",
 
-                autoStart: "AutoStart bij Login",
+                autoStart: "Start automatisch bij inloggen",
                 autoStartAccessibility: "Start de GoXLR Utility wanneer de gebruiker inlogt",
 
                 showOnLaunch: "Toon UI bij opstarten",
@@ -753,12 +753,12 @@ export default {
                 hardwareVersion: "Hardware Versie",
 
                 firmware: "Firmware",
-                dice: "DICE",
-                fpga: "FPGA"
+                dice: "DICE", // Would be nice if there was some kind of explaination to this part, maybe telling TCHelicon to put that into some sort of documentation, since not everyone knows it stands for describe, investigage, create and evaluate
+                fpga: "FPGA" // Same for this one, it's field programmable gate arrays right?
             },
 
             licenses: "Licenties",
-            help: "Help",
+            help: "Ondersteuning",
         },
 
         // Strings used in Profile and Microphone Profile Management.
