@@ -72,6 +72,10 @@ export default {
 
       if (store.getConfig().latest_firmware !== undefined) {
         let latest = isDeviceMini() ? store.getConfig().latest_firmware.Mini : store.getConfig().latest_firmware.Full;
+        if (latest === undefined || latest === null) {
+          return false;
+        }
+
         return latest.join(".");
       }
       return true;
@@ -91,6 +95,11 @@ export default {
 
       if (store.getConfig().latest_firmware !== undefined) {
         let latest = isDeviceMini() ? store.getConfig().latest_firmware.Mini : store.getConfig().latest_firmware.Full;
+        if (latest === undefined || latest === null) {
+          return false;
+        }
+
+
         let current = store.getActiveDevice().hardware.versions.firmware;
 
         console.log(`${latest}`);
