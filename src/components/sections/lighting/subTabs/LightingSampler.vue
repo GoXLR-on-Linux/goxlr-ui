@@ -105,9 +105,10 @@ export default {
       const emptyColour = bank.colour_three;
 
       const off_style = this.selectedInactiveOption();
+      const buttonOptions = this.getButtonOptions();
 
-      for (let encoder in this.buttonOptions) {
-        let id = this.buttonOptions[encoder].id;
+      for (let option in buttonOptions) {
+        let id = buttonOptions[option].id;
         websocket.send_command(store.getActiveSerial(), {"SetSampleColour": [id, activeColour, inactiveColour, emptyColour]});
         websocket.send_command(store.getActiveSerial(), {"SetSampleOffStyle": [id, off_style]});
       }
