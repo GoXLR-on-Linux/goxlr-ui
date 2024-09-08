@@ -1,7 +1,9 @@
 <template>
   <div class="assignment">
     <div style="flex-grow: 1">
-      <div role="button" class="button" @click="setMixMonitor" :class="{ highlight: isMixMonitored() }">
+      <div role="radio" class="button" @click="setMixMonitor" :class="{ highlight: isMixMonitored() }"
+           :aria-label="`Monitor ${display}`" :aria-description="`Listen to ${display} in Headphones`"
+           :aria-checked="isMixMonitored()">
         <div class="icon" :class="{ faded: !isMixMonitored() }">
           <font-awesome-icon icon="fa-solid fa-headphones"/>
         </div>
@@ -11,12 +13,14 @@
     <div role="radiogroup">
       <div class="box">
         <div>
-          <label :for="getRadioId('A')" class="label MixA" :class="{ selected: isDeviceMix('A') }">{{$t('message.mixer.channelA')}}</label>
+          <label :for="getRadioId('A')" class="label MixA"
+                 :class="{ selected: isDeviceMix('A') }">{{ $t('message.mixer.channelA') }}</label>
           <input class="screenreader-only" type="radio" :id="getRadioId('A')" @change="setDeviceMix"
                  :checked="isDeviceMix('A')" :name="name" value="A" :aria-label="$t('message.mixer.channelA')"/>
         </div>
         <div>
-          <label :for="getRadioId('B')" class="label MixB" :class="{ selected: isDeviceMix('B') }">{{$t('message.mixer.channelB')}}</label>
+          <label :for="getRadioId('B')" class="label MixB"
+                 :class="{ selected: isDeviceMix('B') }">{{ $t('message.mixer.channelB') }}</label>
           <input class="screenreader-only" type="radio" :id="getRadioId('B')" @change="setDeviceMix"
                  :checked="isDeviceMix('B')" :name="name" value="B" :aria-label="$t('message.mixer.channelB')"/>
         </div>
