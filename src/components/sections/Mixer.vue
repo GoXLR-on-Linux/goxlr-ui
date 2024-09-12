@@ -133,7 +133,6 @@ export default {
 
       // Calculate the Main volume..
       let calculated_volume = parseInt(volume) / ratio;
-      console.log(calculated_volume);
       store.getActiveDevice().levels.volumes[name] = Math.min(Math.floor(calculated_volume), 255);
     },
 
@@ -142,7 +141,6 @@ export default {
 
       // Calculate the Submix Volume..
       let calculated_volume = Math.min(parseInt(volume) * ratio, 255);
-      console.log(calculated_volume);
       store.getActiveDevice().levels.submix.inputs[name].volume = Math.max(Math.floor(calculated_volume), 0);
     },
 
