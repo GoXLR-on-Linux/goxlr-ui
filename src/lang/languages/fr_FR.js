@@ -89,7 +89,7 @@ export default {
             lightingMixer: "Mixer",
             lightingEffects: "Effets",
             lightingSampler: "Sons enregistrés",
-            lightingCough: "Micro désactiver",
+            lightingCough: "Toux/Bip",
 
             // Accessibility Messages (these are announced to screen readers)
             accessibilityProfileSection: "Profils et Fichiers",
@@ -110,7 +110,7 @@ export default {
                 gain: "Gain",
 
                 // Microphone Types
-                xlr: "XLR Microphone",
+                xlr: "Microphone XLR",
                 phantom: "XLR + Phantom (+{voltage}V)",
                 jack: "3.5mm",
             },
@@ -124,8 +124,8 @@ export default {
             gate: {
                 title: "Supression de bruit",
                 threshold: "Seuil",
-                attenuation: "Attenuation",
-                attack: "Attack",
+                attenuation: "Atténuation",
+                attack: "Attaque",
                 release: "Relâchement",
             },
 
@@ -143,7 +143,7 @@ export default {
                 amount: "Quantité",
                 threshold: "Seuil",
                 ratio: "Ratio",
-                attack: "Attack",
+                attack: "Attaque",
                 release: "Relâchement",
                 makeUpGain: "Gain de Compensation",
             },
@@ -151,7 +151,7 @@ export default {
             extras: {
                 title: "Suppléments",
                 deEsser: "De-Esser",
-                bleep: "Bleep",
+                bleep: "Bip",
             }
         },
 
@@ -162,7 +162,7 @@ export default {
             mixAssignment: "Assignation de mixage",
 
             // Submix Checkbox
-            submix: "Submixes",
+            submix: "Sous-mixages",
 
             // Mix Assignment
             channelA: "A",
@@ -237,7 +237,7 @@ export default {
                 accessibilityPresetSaved: "Préréglage {name} Enregistrer sous Library",
             },
             reverb: {
-                title: "Reverb",
+                title: "Réverbération",
                 style: "Style",
 
                 styles: {
@@ -245,8 +245,8 @@ export default {
                     darkBloom: "Dark Bloom",
                     musicClub: "Club de Musique",
                     realPlate: "Real Plate",
-                    chapel: "Chapel",
-                    hockeyArena: "Hockey Arena"
+                    chapel: "Chapelle",
+                    hockeyArena: "Salle de hockey"
                 },
 
                 amount: "Quantité",
@@ -267,11 +267,11 @@ export default {
 
                 style: "Style",
                 styles: {
-                    quarter: "Quarter",
-                    eighth: "Eighth",
+                    quarter: "Quart",
+                    eighth: "Huitième",
                     triplet: "Triplet",
                     pingPong: "Ping Pong",
-                    classicSlap: "Classic Slap",
+                    classicSlap: "Claquement classique",
                     multiTap: "MultiTap"
                 },
 
@@ -341,17 +341,17 @@ export default {
 
                 lowGain: "Gain bas",
                 lowFrequency: "Fréquence basse",
-                lowWidth: "Basse Large",
+                lowWidth: "Largeur basse",
                 midGain: "Gain Moyen",
-                midFrequency: "Mid Freq",
-                midWidth: "Mid Width",
-                highGain: "Hi Gain",
+                midFrequency: "Fréquence moyenne",
+                midWidth: "Largeur moyenne",
+                highGain: "Gain élevé",
                 highFrequency: "Haute fréquence",
                 highWidth: "Largeur haute",
                 waveform: "Forme d'onde",
                 pulseWidth: "Largeur d'impulsion",
                 threshold: "Seuil",
-                dryMix: "Dry Mix",
+                dryMix: "Mix Sec",
             },
 
             hardTune: {
@@ -365,24 +365,24 @@ export default {
                 },
 
                 amount: "Quantité",
-                rate: "Rythem",
-                window: "Window",
+                rate: "Rythme",
+                window: "Fenêtre",
 
                 source: "Source"
             }
         },
 
         sampler: {
-            bankTitle: "Bank",
+            bankTitle: "Banque",
             banks: {
-                bankTitle: "Bank",
+                bankTitle: "Banque",
                 bank: {
                     a: "A",
                     b: "B",
                     c: "C"
                 },
                 buttonTitle: "Bouton",
-                buttonLabel: "Bouton de Bank {activeBank}",
+                buttonLabel: "Bouton de Banque {activeBank}",
                 buttons: {
                     topLeft: "En haut à gauche",
                     topRight: "En haut à droite",
@@ -468,15 +468,15 @@ export default {
                 activeColour: "Actif",
                 inactiveColour: "Inactif",
 
-                inactiveOption: "Couleur active atténuée",
+                inactiveOption: "Option d'inactivité",
                 inactiveOptions: {
                     dimActiveColour: "Couleur active atténuée",
-                    inactiveColour: "Couleur inactif",
-                    dimInactiveColour: "Couleur inactif atténuée"
+                    inactiveColour: "Couleur inactive",
+                    dimInactiveColour: "Couleur inactive atténuée"
 
                 },
 
-                applyToAll: "Appliquer a tout",
+                applyToAll: "Appliquer à tout",
             },
 
             global: {
@@ -535,7 +535,7 @@ export default {
                 },
 
                 screen: {
-                    title: "Capture d'écran",
+                    title: "écran",
                     backgroundColour: "Couleur de fond",
                     icons: "Icônes",
                     iconNone: "-- Éteint --",
@@ -568,7 +568,7 @@ export default {
 
                     encoder: "Encoder",
                     encoders: {
-                        reverb: "Reverb",
+                        reverb: "Reverbération",
                         echo: "Echo",
                         pitch: "Hauteur",
                         gender: "Genre",
@@ -592,7 +592,7 @@ export default {
                 },
             },
             sampler: {
-                title: "Bank",
+                title: "Banque",
 
                 buttonsTitle: "Boutons",
                 buttons: {
@@ -603,16 +603,16 @@ export default {
 
                 active: "Actif / Chargé",
                 empty: "Son vide",
-                inactive: "Bank Inactif",
+                inactive: "Banque Inactive",
             },
 
             cough: {
-                title: "Cough/Bleep Buttons",
+                title: "Boutons de Toux/Bip",
 
                 buttonsTitle: "Buttons",
                 buttons: {
-                    bleep: "Bleep",
-                    cough: "Cough",
+                    bleep: "Bip",
+                    cough: "Toux",
                 }
             },
         },
@@ -749,7 +749,7 @@ export default {
             about: {
                 serial: "Série",
                 utilityVersion: "Version Utilitaire",
-                driverVersion: "Driver Version",
+                driverVersion: "Version du pilote",
                 hardwareVersion: "Version Matérielle",
 
                 firmware: "Firmware",
