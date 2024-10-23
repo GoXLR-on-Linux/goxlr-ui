@@ -21,6 +21,7 @@ export const languages = {
     fr_FR: "Français (France)",
     it_IT: "Italiano (Italia)",
     de_DE: "Deutsch (Deutschland)",
+    de_ES: "Español (España)",
     nl_NL: "Dutch (Netherlands)",
     pl_PL: "Polski (Polska)",
     ru_RU: "Русский (Russia)",
