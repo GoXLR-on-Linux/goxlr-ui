@@ -38,6 +38,7 @@ export default {
             Headphones: "Headphones",
             MicMonitor: "Mic Monitor",
             StreamMix: "Stream Mix",
+            StreamMix2: "Stream Mix 2",
             ChatMic: "Chat Mic",
             Sampler: "Sampler",
             VOD: "VOD",
@@ -639,6 +640,7 @@ export default {
             outputs: {
                 Headphones: "@:message.channels.Headphones",
                 BroadcastMix: "@:message.channels.StreamMix",
+                StreamMix2: "@:message.channels.StreamMix2",
                 ChatMic: "@:message.channels.ChatMic",
                 Sampler: "@:message.channels.Sampler",
                 LineOut: "@:message.channels.LineOut",
