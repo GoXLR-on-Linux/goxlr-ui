@@ -1,4 +1,4 @@
-import {store} from "@/store";
+import { store } from "@/store";
 
 export function isDeviceMini() {
     // Do this here, rather than on created() so it can update if the device changes
@@ -13,6 +13,18 @@ export function roundToStep(value, step) {
     step || (step = 1.0);
     let inverse = 1.0 / step;
     return Math.round(value * inverse) / inverse;
+}
+
+export function firmwareSupportsMix2() {
+    if (isDeviceMini) {
+        return versionNewerOrEqualTo(store.getActiveDevice().hardware.versions.firmware, [1,3,0,0]);
+    }
+    return versionNewerOrEqualTo(store.getActiveDevice().hardware.versions.firmware, [1,5,0,0]);
+}
+
+export function driverSupportsMix2() {
+    return store.getConfig().driver_interface.interface === "TUSB" && 
+        versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5,68,0]);
 }
 
 export function versionNewerOrEqualTo(version, comparison) {
