@@ -17,7 +17,7 @@
       </div>
 
       <div style="margin-bottom: 20px">
-        <div style="font-size: 16px; font-weight: bold">Driver Version</div>
+        <div style="font-size: 16px; font-weight: bold">{{ $t('message.system.about.driverVersion') }}</div>
         <div>{{ getDriverVersion() }}</div>
       </div>
 
