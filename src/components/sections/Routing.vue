@@ -1,7 +1,7 @@
 <template>
   <!-- Lets just draw the table.. -->
   <CenteredContainer>
-    <GroupContainer :title="$t('message.routing.title')">
+    <GroupContainer :label="$t('message.routing.title')">
       <table>
         <thead>
         <tr>
@@ -37,7 +37,8 @@ import {websocket} from "@/util/sockets";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import SubmixButton from "@/components/sections/routing/SubmixButton.vue";
-import {isDeviceMini, versionNewerOrEqualTo} from "@/util/util";
+import {driverSupportsMix2, firmwareSupportsMix2, isDeviceMini, versionNewerOrEqualTo} from "@/util/util";
+import { faDriversLicense } from "@fortawesome/free-solid-svg-icons";
 
 export default {
   name: "RoutingTable",
@@ -105,19 +106,17 @@ export default {
       return store.getActiveDevice().levels.submix.outputs[name];
     },
 
-    shouldShowOutput(name) {
-      if (name === "Sampler") {
-        return store.getActiveDevice().settings.vod_mode !== "StreamNoMusic";
-      }
-      return true
-    },
-
     getLanguageKeyForSampler() {
       let sample = "message.routing.outputs.Sampler";
       let vod = "message.routing.outputs.VOD";
+      let mix2 = "message.routing.outputs.StreamMix2"
 
       if (store.hasActiveDevice()) {
         if (isDeviceMini() && store.getConfig().driver_interface.interface === "TUSB") {
+          if (driverSupportsMix2()) {
+            return mix2;
+          }
+
           if (versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5,30,0])) {
             return vod;
           }
@@ -128,11 +127,44 @@ export default {
   },
   computed: {
     getOutputChannels() {
-      console.log(store.getActiveDevice().settings.vod_mode);
-      if (store.getActiveDevice().settings.vod_mode === "StreamNoMusic") {
-        return OutputRouting.filter(i => i !== "Sampler");
+      let outputList = OutputRouting;
+
+      if (!firmwareSupportsMix2()) {
+        // Remove the Stream Mix 2 routing if the device doesn't support it..
+        outputList = outputList.filter(i => i !== "StreamMix2");
       }
-      return OutputRouting;
+
+      // For the mini, if we're not running the mix2 firmware but are running the mix2 driver, we should shuffle VOD position..
+      if (isDeviceMini() && driverSupportsMix2() && !firmwareSupportsMix2()) {
+        let streamMix = outputList.indexOf("BroadcastMix") + 1;
+
+        // Remove the Sampler from the existing list..
+        let filtered = outputList.filter(i => i !== "Sampler");
+
+        // Add it back in the correct position..
+        outputList = [
+          ...filtered.slice(0, streamMix),
+          "Sampler",
+          ...filtered.slice(streamMix)
+        ]
+      } 
+
+      if (isDeviceMini() && firmwareSupportsMix2()) {
+        // The 'Sampler' channel is no longer routable on the Mini, routing instead happens via StreamMix2
+        otuputList = outputList.filter(i => i !== "Sampler");
+      }
+
+      if (isDeviceMini() && store.getActiveDevice().settings.vod_mode === "StreamNoMusic") {
+        // We're either going to remove Sampler, or Mix2 depending on the firmware available..
+        if (firmwareSupportsMix2()) {
+          outputList = outputList.filter(i => i !== "StreamMix2");
+        } else {
+          outputList = outputList.filter(i => i !== "Sampler");
+        }
+      }
+
+
+      return outputList;
     }
   }
 }
