@@ -157,8 +157,8 @@ export default {
 
         mixer: {
             // Box Headers
-            inputs: "Inputs",
-            outputs: "Outputs",
+            inputs: "Ingangen",
+            outputs: "Uitgangen",
             mixAssignment: "Mix Toewijzing",
 
             // Submix Checkbox
@@ -258,8 +258,8 @@ export default {
                 highColour: "Hoge Kleur",
                 highFactor: "Hoge Factor",
                 diffuse: "Diffuus",
-                modSpeed: "ModSnelheid",
-                modDepth: "ModDiepte"
+                modSpeed: "Modulatie Snelheid",
+                modDepth: "Modulatie Diepte"
             },
 
             echo: {
@@ -340,13 +340,13 @@ export default {
                 },
 
                 lowGain: "Lage Versterking",
-                lowFrequency: "Lage Freq",
+                lowFrequency: "Lage Frequentie",
                 lowWidth: "Lage Breedte",
                 midGain: "Mid Versterking",
-                midFrequency: "Mid Freq",
+                midFrequency: "Mid Frequentie",
                 midWidth: "Mid Breedte",
                 highGain: "Hoge Versterking",
-                highFrequency: "Hoge Freq",
+                highFrequency: "Hoge Frequentie",
                 highWidth: "Hoge Breedte",
                 waveform: "Waveform",
                 pulseWidth: "Puls Breedte",
@@ -395,9 +395,9 @@ export default {
                 functions: {
                     playNext: "Afspelen / Volgende",
                     playStop: "Afspelen / Stop",
-                    playFade: "Afspelen / Fade Out",
+                    playFade: "Afspelen / Uitlopen",
                     stopOnRelease: "Stop bij loslaten",
-                    fadeOnRelease: "Fade bij loslaten",
+                    fadeOnRelease: "Overloop bij loslaten",
                     loop: "Loop"
                 },
 
@@ -444,7 +444,7 @@ export default {
                     sampleEnd: "Sample Einde",
 
                     sampleDeleted: "Sample {sampleName} is verwijderd van knop {activeButton} in bank {activeBank}",
-                    zoomLevel: "Zoom Level: {level}",
+                    zoomLevel: "Zoom Niveau: {level}",
                 },
 
                 addSampleWaitTitle: "Wacht",
@@ -481,9 +481,9 @@ export default {
 
             global: {
                 areas: {
-                    title: "Gedeeltes",
+                    title: "Gebieden",
 
-                    area: "Gedeelte",
+                    area: "Gebied",
                     areas: {
                         global: "Globaal",
                         accent: "Accent",
@@ -495,18 +495,18 @@ export default {
                 animations: {
                     title: "Animaties",
 
-                    mode: "Animatie Mode",
+                    mode: "Animatie Modus",
                     modes: {
                         none: "Geen",
                         rainbowRetro: "Regenboog Retro",
-                        rainbowBright: "Regenboog Bright",
-                        rainbowDark: "Regenboog Dark",
+                        rainbowBright: "Regenboog Helder",
+                        rainbowDark: "Regenboog Donker",
                         simple: "Simpel",
                         ripple: "Golvend",
                     },
 
-                    mod1: "Overloop Mod 1",
-                    mod2: "Overloop Mod 2",
+                    mod1: "Overloop Modulatie 1",
+                    mod2: "Overloop Modulatie 2",
 
                     waterfall: "Waterval instellingen",
                     waterfallOff: "Uit",
@@ -623,7 +623,7 @@ export default {
             // we'll define all the channels here, and 'fix' anything which needs adjustment.
             title: "Routing",
 
-            input: "Inputs",
+            input: "Ingangen",
             inputs: {
                 Microphone: "@:message.channels.Mic",
                 Chat: "Chat",
@@ -635,7 +635,7 @@ export default {
                 Samples: "@:message.channels.Sample",
             },
 
-            output: "Outputs",
+            output: "Uitgangen",
             outputs: {
                 Headphones: "@:message.channels.Headphones",
                 BroadcastMix: "@:message.channels.StreamMix",
@@ -710,7 +710,7 @@ export default {
                 logLevel: "Log Level (vereist restart)",
                 logLevels: {
                     off: "Uit",
-                    error: "Error",
+                    error: "Foutmeldingen",
                     warn: "Waarschuwingen",
                     info: "Info",
                     debug: "Debug",
@@ -753,7 +753,7 @@ export default {
                 hardwareVersion: "Hardware Versie",
 
                 firmware: "Firmware",
-                dice: "DICE", // Would be nice if there was some kind of explaination to this part, maybe telling TCHelicon to put that into some sort of documentation, since not everyone knows it stands for describe, investigage, create and evaluate
+                dice: "DICE", // Would be nice if there was some kind of explaination to this part, since not everyone knows it stands for describe, investigage, create and evaluate
                 fpga: "FPGA" // Same for this one, it's field programmable gate arrays right?
             },
 
@@ -811,8 +811,8 @@ export default {
             accessibilityProfileDeleted: "Profiel {profileName} verwijderd",
             accessibilityActiveProfile: "Huidig profiel",
             accessibilityDropMenuTitle: "{profileName} opties",
-            accessibilityOpenProfileDirectory: "Open bestandsmap",
-            accessibilityOpenMicProfileDirectory: "Open bestandsmap",
+            accessibilityOpenProfileDirectory: "Open profielen map",
+            accessibilityOpenMicProfileDirectory: "Open microfoonprofielen map",
         },
     }
 }
