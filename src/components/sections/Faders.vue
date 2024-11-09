@@ -107,7 +107,7 @@ export default {
 
       // If the firmware supports Mix2, but the driver doesn't, don't show this option
       if ((firmwareSupportsMix2() && (driverMix2() || driverVOD())) || !firmwareSupportsMix2()) {
-        if (isDeviceMini())
+        if (isDeviceMini() && !isStreamNoMusic())
         behaviours.push({ id: "ToStream2", label: this.$t('message.configuration.mute_behaviour.base', { channel: this.getNameForChannel("StreamMix2") })});
       }
 
