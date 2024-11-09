@@ -66,7 +66,6 @@ export class Websocket {
         });
 
         self.#websocket.addEventListener('open', function () {
-            console.log("OPEN");
             if (self.#connection_promise[0] !== undefined) {
                 self.#connection_promise[0]();
             }
@@ -179,7 +178,6 @@ export class Websocket {
 export const websocket = new Websocket();
 
 export function runWebsocket() {
-    console.log("Connecting..");
     // Let's attempt to connect the websocket...
     websocket.connect().then(() => {
         // We got a connection, try fetching the status...

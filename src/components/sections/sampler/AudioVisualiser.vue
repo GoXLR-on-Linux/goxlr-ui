@@ -350,7 +350,6 @@ export default {
       this.leftPercentage = start_pct;
 
       if (this.leftPercentage > 100) {
-        console.log("Something is wrong with the left value max.. Correcting!");
         // Something's gone wrong, and a percentage is higher than it should be, Reset.
         this.leftPercentage = 100;
         this.leftPosition = 0;
@@ -358,7 +357,6 @@ export default {
       }
 
       if (this.leftPercentage < 0) {
-        console.log("Something is wrong with the left value min.. Correcting!");
         this.leftPercentage = 0;
         this.leftPosition = audio;
         this.mouseUp();
@@ -378,18 +376,12 @@ export default {
 
       if (this.rightPercentage > 100) {
         // Something's gone wrong, and a percentage is higher than it should be, Reset.
-        console.log(
-            "Something is wrong with the right value max.. Correcting!"
-        );
         this.rightPercentage = 100;
         this.rightPosition = audio + this.$refs.left.clientWidth;
         this.mouseUp();
       }
 
       if (this.rightPercentage < 0) {
-        console.log(
-            "Something is wrong with the right value min.. Correcting!"
-        );
         this.rightPercentage = 0;
         this.rightPosition = this.$refs.left.clientWidth;
         this.mouseUp();

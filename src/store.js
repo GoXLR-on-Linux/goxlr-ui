@@ -145,7 +145,6 @@ export const store = reactive({
         }
         let paths = path.split(";");
         for (path of paths) {
-            console.log("Pausing Path: " + path);
             this.pausedPaths.push(path);
         }
     },

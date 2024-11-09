@@ -39,7 +39,6 @@ export default {
       fetch(this.getPath())
           .then(response => {
             if (response.status !== 200) {
-              console.log("Error Received from Github, Ignoring..");
               return undefined;
             }
             return response.json()
@@ -107,16 +106,9 @@ export default {
           return false;
         }
 
-
         let current = store.getActiveDevice().hardware.versions.firmware;
-
-        console.log(`${latest}`);
-
         latest = latest.join(".");
         current = current.join(".");
-
-        console.log(`${latest} - ${current}`);
-
         return this.isOutdated(latest, current);
       }
 

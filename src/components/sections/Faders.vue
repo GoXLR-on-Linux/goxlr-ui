@@ -62,9 +62,6 @@ export default {
     },
 
     getMuteBehaviours() {
-
-      console.log("START");
-
       let behaviours = [];
       behaviours.push({ id: "All", label: this.$t('message.configuration.mute_behaviour.all') });
       behaviours.push({ id: "ToStream", label: this.$t('message.configuration.mute_behaviour.base', { channel: this.getNameForChannel("BroadcastMix") })});
@@ -117,9 +114,7 @@ export default {
       behaviours.push({ id: "ToVoiceChat", label: this.$t('message.configuration.mute_behaviour.base', { channel: "Chat Mic" })});
       behaviours.push({ id: "ToPhones", label: this.$t('message.configuration.mute_behaviour.base', { channel: "Headphones" })});
       behaviours.push({ id: "ToLineOut", label: this.$t('message.configuration.mute_behaviour.base', { channel: "Line Out" })});
-
-      console.log("Maybe here?");
-
+      
       return behaviours;
     },
 

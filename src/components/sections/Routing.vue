@@ -144,16 +144,13 @@ export default {
 
       if (!firmwareSupportsMix2() || !driverMix2()) {
         // Remove the Stream Mix 2 routing if the device doesn't support it..
-        console.log("Removing StreamMix2..");
         outputList = outputList.filter(i => i !== "StreamMix2");
       }
 
-      console.log("Removed..");
+
 
       // For the mini, if we're not running the mix2 firmware but are running the mix2 driver, we should shuffle VOD position..
       if (isDeviceMini() && driverMix2() && !firmwareSupportsMix2()) {
-        console.log("Firmware does *NOT* support Mix 2, but driver does");
-
         let streamMix = outputList.indexOf("BroadcastMix") + 1;
 
         // Remove the Sampler from the existing list..
@@ -167,14 +164,10 @@ export default {
         ]
       }
 
-      console.log("Skipped..");
-
       if (isDeviceMini() && firmwareSupportsMix2()) {
         // The 'Sampler' channel is no longer routable on the Mini, routing instead happens via StreamMix2
         outputList = outputList.filter(i => i !== "Sampler");
       }
-
-      console.log("Blep");
 
       if (isDeviceMini() && isStreamNoMusic()) {
         // We're either going to remove Sampler, or Mix2 depending on the firmware available..
@@ -184,9 +177,7 @@ export default {
           outputList = outputList.filter(i => i !== "Sampler");
         }
       }
-
-      console.log(outputList);
-
+      
       return outputList;
     }
   }

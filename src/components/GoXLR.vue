@@ -133,7 +133,6 @@ export default {
       if (store.getConfig().locale.user_locale !== null) {
         locale = store.getConfig().locale.user_locale;
       }
-      console.log(`Setting Locale to ${locale}`);
       this.$i18n.locale = locale;
     },
 
@@ -268,8 +267,6 @@ export default {
           break;
         }
       }
-
-      console.log(area);
     },
 
     loadConfigurationTab(channel = undefined) {
