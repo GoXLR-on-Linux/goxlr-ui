@@ -75,7 +75,7 @@ export default {
       // This one is going to depend on the Firmware AND the driver..
       let channelName = "";
       if (isDeviceMini()) {
-        console.log("Mini");
+
         if (isWindowsDriver()) {
           if (driverPreVOD()) {
             channelName = "Stream Mix + Sample";
@@ -229,9 +229,6 @@ export default {
             if (driverVOD()) {
               if (isDeviceMini()) {
                 // For the Mini, we should return 'VOD' for Both Mix2 and the Sampler..
-                return vod;
-              } else if (name == "StreamMix2") {
-                // For the full sized device, only do it for Mix2
                 return vod;
               }
             }
