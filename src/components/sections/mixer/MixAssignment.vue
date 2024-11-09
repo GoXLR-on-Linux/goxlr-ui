@@ -18,7 +18,7 @@ import AssignmentEntry from "@/components/sections/mixer/AssignmentEntry.vue";
 import { OutputDevice } from "@/util/mixerMapping";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import { store } from "@/store";
-import { driverSupportsMix2, firmwareSupportsMix2, isDeviceMini, versionNewerOrEqualTo } from "@/util/util";
+import { driverMix2, firmwareSupportsMix2, isDeviceMini, isWindowsDriver, versionNewerOrEqualTo } from "@/util/util";
 
 export default {
   name: "MixAssignment",
@@ -30,8 +30,8 @@ export default {
         let mix2 = "message.channels.StreamMix2"
 
         if (store.hasActiveDevice()) {
-          if (isDeviceMini() && store.getConfig().driver_interface.interface === "TUSB") {
-            if (driverSupportsMix2()) {
+          if (isDeviceMini() && isWindowsDriver()) {
+            if (driverMix2()) {
               return mix2;
             }
 
@@ -46,10 +46,8 @@ export default {
         let streamMix = "message.channels.StreamMix";
         let streamMix1 = "message.channels.StreamMix1";
 
-        if (store.getConfig().driver_interface.interface === "TUSB") {
-          if (driverSupportsMix2()) {
-            return streamMix1;
-          }
+        if (isWindowsDriver() && driverMix2()) {
+          return streamMix1;
         }
         return streamMix;
       }

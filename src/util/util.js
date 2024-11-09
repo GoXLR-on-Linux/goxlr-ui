@@ -16,15 +16,26 @@ export function roundToStep(value, step) {
 }
 
 export function firmwareSupportsMix2() {
-    if (isDeviceMini) {
+    if (isDeviceMini()) {
         return versionNewerOrEqualTo(store.getActiveDevice().hardware.versions.firmware, [1,3,0,0]);
     }
     return versionNewerOrEqualTo(store.getActiveDevice().hardware.versions.firmware, [1,5,0,0]);
 }
 
-export function driverSupportsMix2() {
-    return store.getConfig().driver_interface.interface === "TUSB" && 
-        versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5,68,0]);
+export function isWindowsDriver() {
+    return (store.getConfig().driver_interface.interface === "TUSB");
+}
+
+export function driverPreVOD() {
+    return isWindowsDriver() && !versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5, 13, 0]);
+}
+
+export function driverVOD() {
+    return isWindowsDriver() && !driverPreVOD() && !driverMix2();
+}
+
+export function driverMix2() {
+    return isWindowsDriver() && versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5, 68, 0]);
 }
 
 export function versionNewerOrEqualTo(version, comparison) {

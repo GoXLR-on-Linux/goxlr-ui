@@ -38,7 +38,7 @@ import { websocket } from "@/util/sockets";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import SubmixButton from "@/components/sections/routing/SubmixButton.vue";
-import { driverSupportsMix2, firmwareSupportsMix2, isDeviceMini, versionNewerOrEqualTo } from "@/util/util";
+import { driverMix2, driverVOD, firmwareSupportsMix2, isDeviceMini, isWindowsDriver, versionNewerOrEqualTo } from "@/util/util";
 
 export default {
   name: "RoutingTable",
@@ -114,25 +114,13 @@ export default {
 
       if (name == "Sampler" || name == "StreamMix2") {
         if (store.hasActiveDevice()) {
-          if (isDeviceMini() && store.getConfig().driver_interface.interface === "TUSB") {
-            if (driverSupportsMix2()) {
-              return mix2;
-            }
-
-            if (versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5, 30, 0])) {
-              return vod;
-            }
-          }
-          if (!isDeviceMini() && versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5, 30, 0])) {
-            // On the full device, the sampler is always the sampler
-            if (name == "Sampler") {
-              return sample;
-            }
-
-            if (driverSupportsMix2()) {
-              return mix2;
-            }
-            return vod;
+          if (isDeviceMini() && isWindowsDriver()) {
+            if (driverMix2()) { return mix2; }
+            if (driverVOD()) { return vod; }
+          } else if (!isDeviceMini() && isWindowsDriver()) {
+            if (name === "Sampler") { return sample; }
+            if (driverMix2()) { return mix2; }
+            if (driverVOD()) { return vod; }
           }
 
           return sample
@@ -143,10 +131,8 @@ export default {
         let streamMix = "message.channels.StreamMix";
         let streamMix1 = "message.channels.StreamMix1";
 
-        if (store.getConfig().driver_interface.interface === "TUSB") {
-          if (driverSupportsMix2()) {
+        if (isWindowsDriver() && driverMix2()) {
             return streamMix1;
-          }
         }
         return streamMix;
       }
@@ -165,7 +151,7 @@ export default {
       console.log("Removed..");
 
       // For the mini, if we're not running the mix2 firmware but are running the mix2 driver, we should shuffle VOD position..
-      if (isDeviceMini() && driverSupportsMix2() && !firmwareSupportsMix2()) {
+      if (isDeviceMini() && driverMix2() && !firmwareSupportsMix2()) {
         console.log("Firmware does *NOT* support Mix 2, but driver does");
 
         let streamMix = outputList.indexOf("BroadcastMix") + 1;

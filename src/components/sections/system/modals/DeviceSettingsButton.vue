@@ -55,7 +55,7 @@ import SimpleNumberInput from "@/components/design/SimpleNumberInput.vue";
 import {store} from "@/store";
 import {websocket} from "@/util/sockets";
 import BigButton from "@/components/buttons/BigButton.vue";
-import {isDeviceMini, versionNewerOrEqualTo} from "@/util/util";
+import {driverVOD, isDeviceMini, isWindowsDriver, versionNewerOrEqualTo} from "@/util/util";
 import SettingsButton from "@/components/sections/system/modals/SettingsButton.vue";
 import BooleanSetting from "@/components/sections/system/modals/settings/BooleanSetting.vue";
 import NumberSetting from "@/components/sections/system/modals/settings/NumberSetting.vue";
@@ -165,10 +165,8 @@ export default {
       let vod = "VOD";
 
       if (store.hasActiveDevice()) {
-        if (isDeviceMini() && store.getConfig().driver_interface.interface === "TUSB") {
-          if (versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5, 30, 0])) {
-            return vod;
-          }
+        if (isDeviceMini() && isWindowsDriver() && driverVOD()) {
+          return vod;
         }
       }
       return sample;

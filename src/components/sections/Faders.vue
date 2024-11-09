@@ -19,6 +19,7 @@ import { store } from "@/store";
 import { websocket } from "@/util/sockets";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
+import { driverMix2, driverPreVOD, driverVOD, firmwareSupportsMix2, isDeviceMini, isWindowsDriver, versionNewerOrEqualTo } from "@/util/util";
 
 export default {
   /**
@@ -61,13 +62,65 @@ export default {
     },
 
     getMuteBehaviours() {
-      return [
-        { id: "All", label: this.$t('message.configuration.mute_behaviour.all') },
-        { id: "ToStream", label: this.$t('message.configuration.mute_behaviour.stream') },
-        { id: "ToVoiceChat", label: this.$t('message.configuration.mute_behaviour.chatMic') },
-        { id: "ToPhones", label: this.$t('message.configuration.mute_behaviour.headphones') },
-        { id: "ToLineOut", label: this.$t('message.configuration.mute_behaviour.lineOut') },
-      ];
+
+      console.log("START");
+
+      let behaviours = [];
+      behaviours.push({ id: "All", label: this.$t('message.configuration.mute_behaviour.all') });
+      behaviours.push({ id: "ToStream", label: this.$t('message.configuration.mute_behaviour.base', { channel: this.getNameForChannel("BroadcastMix") })});
+      behaviours.push({ id: "ToStream2", label: this.$t('message.configuration.mute_behaviour.base', { channel: this.getNameForChannel("StreamMix2") })});
+
+
+      
+      // This one is going to depend on the Firmware AND the driver..
+      let channelName = "";
+      if (isDeviceMini()) {
+        console.log("Mini");
+        if (isWindowsDriver()) {
+          if (driverPreVOD()) {
+            channelName = "Stream Mix + Sample";
+          } else if (driverVOD()) {
+            channelName = "Stream Mix + VOD";
+          } else if (driverMix2()) {
+            channelName = "Stream Mixes 1 + 2";
+          }
+        } else {
+          // On the Mini on Linux, until we can get UCM Fixed, it'll always be Stream Mix + Sample, the daemon
+          // will internally do the firmware handling of this.
+          channelName = "Stream Mix + Sample";
+        }
+      } else {
+        if (isWindowsDriver()) {
+          if (firmwareSupportsMix2() && driverMix2()) {
+            channelName = "Stream Mixes 1 + 2";
+          } else if (!firmwareSupportsMix2() && driverMix2()) {
+            // If the firmware doesn't support Mix2, we'll use the Sampler here
+            channelName = "Stream Mix 1 + Sample";
+          } else {
+            // Neither the firmware, or the Driver supports Mix2, so we're hit Mix + Sampler
+            channelName = "Stream Mix + Sampler";
+          }
+        } else {
+          // Realistically, we don't know, base it on the firmware..
+          if (firmwareSupportsMix2()) {
+            channelName = "Stream Mixes 1 + 2";
+          } else {
+            channelName = "Stream Mix + Sampler";
+          }
+        }
+      }
+      console.log("HEre?");
+
+      if (!(isDeviceMini() && store.getActiveDevice().settings.vod_mode === "StreamNoMusic")) {
+        behaviours.push({ id: "ToStreams", label: this.$t('message.configuration.mute_behaviour.base', { channel: channelName })});
+      }
+      behaviours.push({ id: "ToVoiceChat", label: this.$t('message.configuration.mute_behaviour.base', { channel: "Chat Mic" })});
+      behaviours.push({ id: "ToPhones", label: this.$t('message.configuration.mute_behaviour.base', { channel: "Headphones" })});
+      behaviours.push({ id: "ToLineOut", label: this.$t('message.configuration.mute_behaviour.base', { channel: "Line Out" })});
+
+      console.log("Maybe here?");
+
+      return behaviours;
     },
 
     channelChanged: function (id) {
@@ -146,7 +199,12 @@ export default {
     },
 
     getActiveMuteBehaviour: function () {
-      return store.getActiveDevice().fader_status[this.activeChannel].mute_type;
+      let mute_type = store.getActiveDevice().fader_status[this.activeChannel].mute_type;
+
+      if (isDeviceMini() && store.getActiveDevice().settings.vod_mode === "StreamNoMusic" && mute_type == "ToStreams") {
+        return "ToStream";
+      }
+      return mute_type;
     },
 
     getMuteBehaviour: function () {
@@ -154,6 +212,45 @@ export default {
     },
     getActiveChannelName: function () {
       return this.getFaderOptions().find((option) => option.id === this.activeChannel).label;
+    },
+
+    getNameForChannel(name) {
+      let sample = "Sampler";
+      let vod = "VOD";
+      let mix2 = "Stream Mix 2";
+
+      if (name == "Sampler" || name == "StreamMix2") {
+        if (store.hasActiveDevice()) {
+          if (isWindowsDriver()) {
+            if (driverMix2()) {
+              return mix2;
+            }
+
+            if (driverVOD()) {
+              if (isDeviceMini()) {
+                // For the Mini, we should return 'VOD' for Both Mix2 and the Sampler..
+                return vod;
+              } else if (name == "StreamMix2") {
+                // For the full sized device, only do it for Mix2
+                return vod;
+              }
+            }
+          }
+          return sample;
+        }
+      }
+
+      if (name == "BroadcastMix") {
+        let streamMix = "Stream Mix";
+        let streamMix1 = "Stream Mix 1";
+
+        if (isWindowsDriver()) {
+          if (driverMix2()) {
+            return streamMix1;
+          }
+        }
+        return streamMix;
+      }
     },
   },
 }

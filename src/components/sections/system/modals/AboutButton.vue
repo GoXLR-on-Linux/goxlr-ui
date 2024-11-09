@@ -49,6 +49,7 @@
 import BigButton from "@/components/buttons/BigButton.vue";
 import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 import {store} from "@/store";
+import { isWindowsDriver } from "@/util/util";
 
 export default {
   name: "AboutButton",
@@ -72,10 +73,9 @@ export default {
 
     getDriverVersion() {
       let version = this.buildVersionString(store.getConfig().driver_interface.version);
-      let int = store.getConfig().driver_interface.interface;
 
       let output = "";
-      if (int === "TUSB") {
+      if (isWindowsDriver()) {
         output += "TC-Helicon Driver (";
       } else {
         output += "libUSB (";

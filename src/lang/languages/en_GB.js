@@ -175,8 +175,13 @@ export default {
         configuration: {
             // This is common between Faders and Cough Buttons
             mute_behaviour: {
-                all: "Mute to @:message.channels.All",
+                base: "Mute to {channel}",
+                all: "Mute to All",
+
                 stream: "Mute to @:message.channels.StreamMix",
+                stream1: "Mute to @:message.channels.StreamMix1",
+                stream2: "Mute to @:message.channels.StreamMix2",
+                streams: "Mute to @:message.channels.StreamMix 1 + 2",
                 chatMic: "Mute to @:message.channels.ChatMic",
                 headphones: "Mute to @:message.channels.Headphones",
                 lineOut: "Mute to @:message.channels.LineOut",
