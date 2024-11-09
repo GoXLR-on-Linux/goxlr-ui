@@ -123,6 +123,17 @@ export default {
               return vod;
             }
           }
+          if (!isDeviceMini() && versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5, 30, 0])) {
+            // On the full device, the sampler is always the sampler
+            if (name == "Sampler") {
+              return sample;
+            }
+
+            if (driverSupportsMix2()) {
+              return mix2;
+            }
+            return vod;
+          }
 
           return sample
         }
