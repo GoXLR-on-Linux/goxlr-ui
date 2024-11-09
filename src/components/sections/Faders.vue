@@ -68,14 +68,10 @@ export default {
       let behaviours = [];
       behaviours.push({ id: "All", label: this.$t('message.configuration.mute_behaviour.all') });
       behaviours.push({ id: "ToStream", label: this.$t('message.configuration.mute_behaviour.base', { channel: this.getNameForChannel("BroadcastMix") })});
-      behaviours.push({ id: "ToStream2", label: this.$t('message.configuration.mute_behaviour.base', { channel: this.getNameForChannel("StreamMix2") })});
 
-
-      
       // This one is going to depend on the Firmware AND the driver..
       let channelName = "";
       if (isDeviceMini()) {
-
         if (isWindowsDriver()) {
           if (driverPreVOD()) {
             channelName = "Stream Mix + Sample";
@@ -91,14 +87,13 @@ export default {
         }
       } else {
         if (isWindowsDriver()) {
-          if (firmwareSupportsMix2() && driverMix2()) {
-            channelName = "Stream Mixes 1 + 2";
-          } else if (!firmwareSupportsMix2() && driverMix2()) {
-            // If the firmware doesn't support Mix2, we'll use the Sampler here
-            channelName = "Stream Mix 1 + Sample";
+          if (firmwareSupportsMix2()) {
+            if (driverMix2()) channelName = "Stream Mixes 1 + 2"
+            if (driverVOD()) channelName = "Stream Mix + VOD"
           } else {
-            // Neither the firmware, or the Driver supports Mix2, so we're hit Mix + Sampler
-            channelName = "Stream Mix + Sampler";
+            if (driverMix2()) { channelName = "Stream Mix 1 + Sampler" }
+            if (driverVOD()) { channelName = "Stream Mix + Sampler" }
+            if (!driverVOD() && !driverMix2()) { channelName = "Stream Mix + Sampler" };
           }
         } else {
           // Realistically, we don't know, base it on the firmware..
@@ -109,9 +104,13 @@ export default {
           }
         }
       }
-      console.log("HEre?");
 
-      if (!(isDeviceMini() && store.getActiveDevice().settings.vod_mode === "StreamNoMusic")) {
+      // If the firmware supports Mix2, but the driver doesn't, don't show this option
+      if ((firmwareSupportsMix2() && (driverMix2() || driverVOD())) || !firmwareSupportsMix2()) {
+        behaviours.push({ id: "ToStream2", label: this.$t('message.configuration.mute_behaviour.base', { channel: this.getNameForChannel("StreamMix2") })});
+      }
+
+      if (!(isDeviceMini() && store.getActiveDevice().settings.vod_mode === "StreamNoMusic") && channelName !== "") {
         behaviours.push({ id: "ToStreams", label: this.$t('message.configuration.mute_behaviour.base', { channel: channelName })});
       }
       behaviours.push({ id: "ToVoiceChat", label: this.$t('message.configuration.mute_behaviour.base', { channel: "Chat Mic" })});
@@ -227,10 +226,8 @@ export default {
             }
 
             if (driverVOD()) {
-              if (isDeviceMini()) {
-                // For the Mini, we should return 'VOD' for Both Mix2 and the Sampler..
-                return vod;
-              }
+              if (isDeviceMini()) return vod;
+              if (name === "StreamMix2" && firmwareSupportsMix2()) return vod;
             }
           }
           return sample;
