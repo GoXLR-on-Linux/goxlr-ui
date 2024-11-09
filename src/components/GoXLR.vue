@@ -140,6 +140,11 @@ export default {
       if (!store.isConnected()) {
         return false;
       }
+
+      if (store.getConfig() == undefined) {
+        return false;
+      }
+
       return store.getConfig().hasOwnProperty("locale");
     },
 
