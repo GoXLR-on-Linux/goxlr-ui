@@ -12,7 +12,7 @@
             <th colspan="2" class="hidden">&nbsp;</th>
             <th v-for="input in InputRouting()" :key="input">{{
               $t(`message.routing.inputs["${input}"]`)
-            }}
+              }}
             </th>
           </tr>
         </thead>
@@ -132,7 +132,7 @@ export default {
         let streamMix1 = "message.channels.StreamMix1";
 
         if (isWindowsDriver() && driverMix2()) {
-            return streamMix1;
+          return streamMix1;
         }
         return streamMix;
       }
@@ -142,40 +142,23 @@ export default {
     getOutputChannels() {
       let outputList = OutputRouting;
 
-      if (!firmwareSupportsMix2() || !driverMix2()) {
-        // Remove the Stream Mix 2 routing if the device doesn't support it..
-        outputList = outputList.filter(i => i !== "StreamMix2");
-      }
-
-
-
-      // For the mini, if we're not running the mix2 firmware but are running the mix2 driver, we should shuffle VOD position..
-      if (isDeviceMini() && driverMix2() && !firmwareSupportsMix2()) {
-        let streamMix = outputList.indexOf("BroadcastMix") + 1;
-
-        // Remove the Sampler from the existing list..
-        let filtered = outputList.filter(i => i !== "Sampler");
-
-        // Add it back in the correct position..
-        outputList = [
-          ...filtered.slice(0, streamMix),
-          "Sampler",
-          ...filtered.slice(streamMix)
-        ]
-      }
-
-      if (isDeviceMini() && firmwareSupportsMix2()) {
-        // The 'Sampler' channel is no longer routable on the Mini, routing instead happens via StreamMix2
-        outputList = outputList.filter(i => i !== "Sampler");
-      }
-
-      if (isDeviceMini() && isStreamNoMusic()) {
-        // We're either going to remove Sampler, or Mix2 depending on the firmware available..
-        if (firmwareSupportsMix2()) {
+      if (isDeviceMini()) {
+        // Ok, we need to either nuke 'Sampler' or 'StreamMix2' depending on the firmware..
+        if (!firmwareSupportsMix2()) {
           outputList = outputList.filter(i => i !== "StreamMix2");
         } else {
           outputList = outputList.filter(i => i !== "Sampler");
         }
+      }
+
+      if (isStreamNoMusic()) {
+        // If we're stream no music, remove both..
+        outputList = outputList.filter(i => {
+          if (isDeviceMini()) {
+            return (i !== "StreamMix2" && i !== "Sampler");
+          }
+          return (i !== "StreamMix2");
+        });
       }
       
       return outputList;
