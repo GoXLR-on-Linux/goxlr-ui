@@ -19,7 +19,7 @@ import { store } from "@/store";
 import { websocket } from "@/util/sockets";
 import RadioSelection from "@/components/lists/RadioSelection.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
-import { driverMix2, driverPreVOD, driverVOD, firmwareSupportsMix2, isDeviceMini, isWindowsDriver, versionNewerOrEqualTo } from "@/util/util";
+import { driverMix2, driverPreVOD, driverVOD, firmwareSupportsMix2, isDeviceMini, isStreamNoMusic, isWindowsDriver, versionNewerOrEqualTo } from "@/util/util";
 
 export default {
   /**
@@ -107,10 +107,11 @@ export default {
 
       // If the firmware supports Mix2, but the driver doesn't, don't show this option
       if ((firmwareSupportsMix2() && (driverMix2() || driverVOD())) || !firmwareSupportsMix2()) {
+        if (isDeviceMini())
         behaviours.push({ id: "ToStream2", label: this.$t('message.configuration.mute_behaviour.base', { channel: this.getNameForChannel("StreamMix2") })});
       }
 
-      if (!(isDeviceMini() && store.getActiveDevice().settings.vod_mode === "StreamNoMusic") && channelName !== "") {
+      if (!(isDeviceMini() && isStreamNoMusic()) && channelName !== "") {
         behaviours.push({ id: "ToStreams", label: this.$t('message.configuration.mute_behaviour.base', { channel: channelName })});
       }
       behaviours.push({ id: "ToVoiceChat", label: this.$t('message.configuration.mute_behaviour.base', { channel: "Chat Mic" })});
@@ -200,7 +201,7 @@ export default {
     getActiveMuteBehaviour: function () {
       let mute_type = store.getActiveDevice().fader_status[this.activeChannel].mute_type;
 
-      if (isDeviceMini() && store.getActiveDevice().settings.vod_mode === "StreamNoMusic" && mute_type == "ToStreams") {
+      if (isDeviceMini() && isStreamNoMusic() && mute_type == "ToStreams") {
         return "ToStream";
       }
       return mute_type;

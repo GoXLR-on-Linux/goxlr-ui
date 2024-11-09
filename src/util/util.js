@@ -38,6 +38,14 @@ export function driverMix2() {
     return isWindowsDriver() && versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5, 68, 0]);
 }
 
+export function isStreamNoMusic() {
+    if (!isDeviceMini()) {
+        return false;
+    }
+
+    return store.getActiveDevice().settings.vod_mode === "StreamNoMusic";
+}
+
 export function versionNewerOrEqualTo(version, comparison) {
     // VersionNumber on the rust side requires the first two fields to be set.
     if (version[0] > comparison[0]) {
