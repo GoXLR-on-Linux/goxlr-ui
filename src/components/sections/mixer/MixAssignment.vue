@@ -18,7 +18,7 @@ import AssignmentEntry from "@/components/sections/mixer/AssignmentEntry.vue";
 import { OutputDevice } from "@/util/mixerMapping";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import { store } from "@/store";
-import { driverMix2, firmwareSupportsMix2, isDeviceMini, isWindowsDriver, versionNewerOrEqualTo } from "@/util/util";
+import { driverMix2, firmwareSupportsMix2, isDeviceMini, isStreamNoMusic, isWindowsDriver, versionNewerOrEqualTo } from "@/util/util";
 
 export default {
   name: "MixAssignment",
@@ -75,7 +75,7 @@ export default {
       }
       
       // The Mix A / B assignment is potentially defined by the regular StreamMix
-      if (isDeviceMini() && store.getActiveDevice().settings.vod_mode === "StreamNoMusic") {
+      if (isDeviceMini() && isStreamNoMusic()) {
         return false
       }
 

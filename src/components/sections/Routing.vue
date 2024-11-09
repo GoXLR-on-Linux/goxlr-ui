@@ -38,7 +38,7 @@ import { websocket } from "@/util/sockets";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import SubmixButton from "@/components/sections/routing/SubmixButton.vue";
-import { driverMix2, driverVOD, firmwareSupportsMix2, isDeviceMini, isWindowsDriver, versionNewerOrEqualTo } from "@/util/util";
+import { driverMix2, driverVOD, firmwareSupportsMix2, isDeviceMini, isStreamNoMusic, isWindowsDriver, versionNewerOrEqualTo } from "@/util/util";
 
 export default {
   name: "RoutingTable",
@@ -176,7 +176,7 @@ export default {
 
       console.log("Blep");
 
-      if (isDeviceMini() && store.getActiveDevice().settings.vod_mode === "StreamNoMusic") {
+      if (isDeviceMini() && isStreamNoMusic()) {
         // We're either going to remove Sampler, or Mix2 depending on the firmware available..
         if (firmwareSupportsMix2()) {
           outputList = outputList.filter(i => i !== "StreamMix2");
