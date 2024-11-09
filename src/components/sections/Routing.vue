@@ -142,7 +142,7 @@ export default {
     getOutputChannels() {
       let outputList = OutputRouting;
 
-      if (!firmwareSupportsMix2()) {
+      if (!firmwareSupportsMix2() || !driverMix2()) {
         // Remove the Stream Mix 2 routing if the device doesn't support it..
         console.log("Removing StreamMix2..");
         outputList = outputList.filter(i => i !== "StreamMix2");
