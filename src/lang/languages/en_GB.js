@@ -38,6 +38,7 @@ export default {
             Headphones: "Headphones",
             MicMonitor: "Mic Monitor",
             StreamMix: "Stream Mix",
+            StreamMix1: "Stream Mix 1",
             StreamMix2: "Stream Mix 2",
             ChatMic: "Chat Mic",
             Sampler: "Sampler",

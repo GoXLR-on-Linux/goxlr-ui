@@ -4,25 +4,26 @@
     <GroupContainer :label="$t('message.routing.title')">
       <table>
         <thead>
-        <tr>
-          <th colspan="2" class="hidden">&nbsp;</th>
-          <th :colspan="InputRouting().length">{{$t('message.routing.input')}}</th>
-        </tr>
-        <tr class="subHeader">
-          <th colspan="2" class="hidden">&nbsp;</th>
-          <th v-for="input in InputRouting()" :key="input">{{
+          <tr>
+            <th colspan="2" class="hidden">&nbsp;</th>
+            <th :colspan="InputRouting().length">{{ $t('message.routing.input') }}</th>
+          </tr>
+          <tr class="subHeader">
+            <th colspan="2" class="hidden">&nbsp;</th>
+            <th v-for="input in InputRouting()" :key="input">{{
               $t(`message.routing.inputs["${input}"]`)
             }}
-          </th>
-        </tr>
+            </th>
+          </tr>
         </thead>
         <tr v-for="output in getOutputChannels" :key="output">
-          <th v-if="output === 'Headphones'" class="rotated" :rowspan="getOutputChannels.length"><span>{{$t('message.routing.output')}}</span></th>
-          <SubmixButton :name="output" :display="getOutputString(output)" v-if="submixEnabled()"/>
+          <th v-if="output === 'Headphones'" class="rotated" :rowspan="getOutputChannels.length">
+            <span>{{ $t('message.routing.output') }}</span></th>
+          <SubmixButton :name="output" :display="getOutputString(output)" v-if="submixEnabled()" />
           <th v-else>{{ getOutputString(output) }}</th>
           <Cell v-for="input in InputRouting()" :key="input" :enabled="isEnabled(output, input)" :output="output"
-                :input="input" :orange="isDeviceMix(output, 'B')" @clicked="handleClick"
-                :cell-disabled="!canRoute(output, input)"/>
+            :input="input" :orange="isDeviceMix(output, 'B')" @clicked="handleClick"
+            :cell-disabled="!canRoute(output, input)" />
         </tr>
       </table>
     </GroupContainer>
@@ -31,18 +32,17 @@
 
 <script>
 import Cell from "@/components/sections/routing/Cell.vue";
-import {store} from "@/store";
-import {InputRouting, OutputRouting} from "@/util/mixerMapping";
-import {websocket} from "@/util/sockets";
+import { store } from "@/store";
+import { InputRouting, OutputRouting } from "@/util/mixerMapping";
+import { websocket } from "@/util/sockets";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import SubmixButton from "@/components/sections/routing/SubmixButton.vue";
-import {driverSupportsMix2, firmwareSupportsMix2, isDeviceMini, versionNewerOrEqualTo} from "@/util/util";
-import { faDriversLicense } from "@fortawesome/free-solid-svg-icons";
+import { driverSupportsMix2, firmwareSupportsMix2, isDeviceMini, versionNewerOrEqualTo } from "@/util/util";
 
 export default {
   name: "RoutingTable",
-  components: {SubmixButton, GroupContainer, CenteredContainer, Cell},
+  components: { SubmixButton, GroupContainer, CenteredContainer, Cell },
 
   data() {
     return {}
@@ -54,8 +54,9 @@ export default {
     },
 
     getOutputString(name) {
-      if (name === "Sampler") {
-        return this.$t(this.getLanguageKeyForSampler());
+      let key = this.getLanguageKeyForChannel(name);
+      if (key !== undefined) {
+        return this.$t(key);
       }
       return this.$t(`message.routing.outputs['${name}']`)
     },
@@ -106,23 +107,38 @@ export default {
       return store.getActiveDevice().levels.submix.outputs[name];
     },
 
-    getLanguageKeyForSampler() {
+    getLanguageKeyForChannel(name) {
       let sample = "message.routing.outputs.Sampler";
       let vod = "message.routing.outputs.VOD";
       let mix2 = "message.routing.outputs.StreamMix2"
 
-      if (store.hasActiveDevice()) {
-        if (isDeviceMini() && store.getConfig().driver_interface.interface === "TUSB") {
-          if (driverSupportsMix2()) {
-            return mix2;
+      if (name == "Sampler" || name == "StreamMix2") {
+        if (store.hasActiveDevice()) {
+          if (isDeviceMini() && store.getConfig().driver_interface.interface === "TUSB") {
+            if (driverSupportsMix2()) {
+              return mix2;
+            }
+
+            if (versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5, 30, 0])) {
+              return vod;
+            }
           }
 
-          if (versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5,30,0])) {
-            return vod;
-          }
+          return sample
         }
       }
-      return sample;
+
+      if (name == "BroadcastMix") {
+        let streamMix = "message.channels.StreamMix";
+        let streamMix1 = "message.channels.StreamMix1";
+
+        if (store.getConfig().driver_interface.interface === "TUSB") {
+          if (driverSupportsMix2()) {
+            return streamMix1;
+          }
+        }
+        return streamMix;
+      }
     },
   },
   computed: {
@@ -131,11 +147,16 @@ export default {
 
       if (!firmwareSupportsMix2()) {
         // Remove the Stream Mix 2 routing if the device doesn't support it..
+        console.log("Removing StreamMix2..");
         outputList = outputList.filter(i => i !== "StreamMix2");
       }
 
+      console.log("Removed..");
+
       // For the mini, if we're not running the mix2 firmware but are running the mix2 driver, we should shuffle VOD position..
       if (isDeviceMini() && driverSupportsMix2() && !firmwareSupportsMix2()) {
+        console.log("Firmware does *NOT* support Mix 2, but driver does");
+
         let streamMix = outputList.indexOf("BroadcastMix") + 1;
 
         // Remove the Sampler from the existing list..
@@ -147,12 +168,16 @@ export default {
           "Sampler",
           ...filtered.slice(streamMix)
         ]
-      } 
+      }
+
+      console.log("Skipped..");
 
       if (isDeviceMini() && firmwareSupportsMix2()) {
         // The 'Sampler' channel is no longer routable on the Mini, routing instead happens via StreamMix2
-        otuputList = outputList.filter(i => i !== "Sampler");
+        outputList = outputList.filter(i => i !== "Sampler");
       }
+
+      console.log("Blep");
 
       if (isDeviceMini() && store.getActiveDevice().settings.vod_mode === "StreamNoMusic") {
         // We're either going to remove Sampler, or Mix2 depending on the firmware available..
@@ -163,6 +188,7 @@ export default {
         }
       }
 
+      console.log(outputList);
 
       return outputList;
     }
@@ -171,7 +197,6 @@ export default {
 </script>
 
 <style scoped>
-
 table {
   color: #fff;
   font-stretch: condensed;

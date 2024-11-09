@@ -88,7 +88,7 @@ export default {
   padding: 4px 6px;
 
   min-width: 150px;
-  height: 34px;
+  height: 30px;
 
   box-sizing: border-box;
   border: none;
@@ -132,7 +132,7 @@ export default {
 
 .label {
   color: #fff;
-  padding: 6px 16px;
+  padding: 4px 16px;
   display: block;
   border-radius: 3px;
 }

@@ -70,7 +70,11 @@ export default {
         return false;
       }
 
-      if (store.getConfig().latest_firmware !== undefined) {
+      if (store.getConfig() === undefined) {
+        return false;
+      }
+
+      if (store.getConfig().latest_firmware !== undefined && store.getConfig().latest_firmware !== null) {
         let latest = isDeviceMini() ? store.getConfig().latest_firmware.Mini : store.getConfig().latest_firmware.Full;
         if (latest === undefined || latest === null) {
           return false;
@@ -93,7 +97,11 @@ export default {
         return false;
       }
 
-      if (store.getConfig().latest_firmware !== undefined) {
+      if (store.getConfig() === null || store.getConfig() === undefined) {
+        return false;
+      }
+
+      if (store.getConfig().latest_firmware !== undefined && store.getConfig().latest_firmware !== null) {
         let latest = isDeviceMini() ? store.getConfig().latest_firmware.Mini : store.getConfig().latest_firmware.Full;
         if (latest === undefined || latest === null) {
           return false;
