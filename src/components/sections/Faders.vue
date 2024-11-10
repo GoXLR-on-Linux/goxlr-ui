@@ -71,7 +71,7 @@ export default {
       if (isDeviceMini()) {
         if (isWindowsDriver()) {
           if (driverPreVOD()) {
-            channelName = "Stream Mix + Sample";
+            channelName = "Stream Mix + Sampler";
           } else if (driverVOD()) {
             channelName = "Stream Mix + VOD";
           } else if (driverMix2()) {
@@ -80,7 +80,7 @@ export default {
         } else {
           // On the Mini on Linux, until we can get UCM Fixed, it'll always be Stream Mix + Sample, the daemon
           // will internally do the firmware handling of this.
-          channelName = "Stream Mix + Sample";
+          channelName = "Stream Mix + Sampler";
         }
       } else {
         if (isWindowsDriver()) {
@@ -102,9 +102,13 @@ export default {
         }
       }
 
-      // If the firmware supports Mix2, but the driver doesn't, don't show this option
-      if ((firmwareSupportsMix2() && (driverMix2() || driverVOD())) || !firmwareSupportsMix2()) {
-        if (isDeviceMini() && !isStreamNoMusic())
+      // On the Mini, we should always display Mute to Mix 2 regardless of versioning, unless it's bound to Stream Mix 1..
+      if (isDeviceMini()) {
+        if (!isStreamNoMusic()) {
+          behaviours.push({ id: "ToStream2", label: this.$t('message.configuration.mute_behaviour.base', { channel: this.getNameForChannel("StreamMix2") })});
+        }
+      } else {
+        // On the full device, it's dependant on what's actually available..
         behaviours.push({ id: "ToStream2", label: this.$t('message.configuration.mute_behaviour.base', { channel: this.getNameForChannel("StreamMix2") })});
       }
 
