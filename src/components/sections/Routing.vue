@@ -149,8 +149,12 @@ export default {
         } else {
           outputList = outputList.filter(i => i !== "Sampler");
         }
+      } else {
+        if (!firmwareSupportsMix2()) {
+          outputList = outputList.filter(i => i !== "StreamMix2");
+        }
       }
-
+ 
       if (isStreamNoMusic()) {
         // If we're stream no music, remove both..
         outputList = outputList.filter(i => {
