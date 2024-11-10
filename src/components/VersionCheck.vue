@@ -20,7 +20,7 @@
 
 <script>
 import {store} from "@/store";
-import {isDeviceMini} from "@/util/util";
+import {isDeviceMini, versionNewerOrEqualTo} from "@/util/util";
 import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 
 export default {
@@ -107,9 +107,8 @@ export default {
         }
 
         let current = store.getActiveDevice().hardware.versions.firmware;
-        latest = latest.join(".");
-        current = current.join(".");
-        return this.isOutdated(latest, current);
+
+        return versionNewerOrEqualTo(latest, current);
       }
 
       // Fail Safe if versions are missing..
