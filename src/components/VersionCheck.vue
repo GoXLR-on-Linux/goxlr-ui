@@ -107,8 +107,7 @@ export default {
         }
 
         let current = store.getActiveDevice().hardware.versions.firmware;
-
-        return versionNewerOrEqualTo(latest, current);
+        return (versionNewerOrEqualTo(latest, current) && !versionNewerOrEqualTo(current, latest));
       }
 
       // Fail Safe if versions are missing..
