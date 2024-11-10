@@ -5,7 +5,7 @@
       <AssignmentEntry height="50px" name="Headphones" :display="$t('message.channels.Headphones')" />
       <div style="height: 8px;" />
       <AssignmentEntry name="BroadcastMix" :display="$t(getChannelString('BroadcastMix'))" />
-      <AssignmentEntry name="StreamMix2" v-if="showChannel('StreamMix2')" :display="$t('message.channels.StreamMix2')" />
+      <AssignmentEntry name="StreamMix2" v-if="showChannel('StreamMix2')" :display="$t(getChannelString('StreamMix2'))" />
       <AssignmentEntry name="Sampler" v-if="showChannel('Sampler')" :display="$t(getChannelString('Sampler'))" />
       <AssignmentEntry name="LineOut" :display="$t('message.channels.LineOut')" />
       <AssignmentEntry name="ChatMic" :display="$t('message.channels.ChatMic')" />
@@ -18,7 +18,7 @@ import AssignmentEntry from "@/components/sections/mixer/AssignmentEntry.vue";
 import { OutputDevice } from "@/util/mixerMapping";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import { store } from "@/store";
-import { driverMix2, firmwareSupportsMix2, isDeviceMini, isStreamNoMusic, isWindowsDriver, versionNewerOrEqualTo } from "@/util/util";
+import { driverMix2, driverVOD, firmwareSupportsMix2, isDeviceMini, isStreamNoMusic, isWindowsDriver, versionNewerOrEqualTo } from "@/util/util";
 
 export default {
   name: "MixAssignment",
@@ -35,13 +35,14 @@ export default {
               return mix2;
             }
 
-            if (versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5,30,0])) {
+            if (driverVOD()) {
               return vod;
             }
           }
         }
         return sample;
       }
+
       if (name == "BroadcastMix") {
         let streamMix = "message.channels.StreamMix";
         let streamMix1 = "message.channels.StreamMix1";
@@ -50,6 +51,20 @@ export default {
           return streamMix1;
         }
         return streamMix;
+      }
+
+      if (name === "StreamMix2") {
+        let vod = "message.channels.VOD";
+        let streamMix2 = "message.channels.StreamMix2";
+
+        if (isWindowsDriver() && driverVOD()) {
+          return vod;
+        }
+        if (isWindowsDriver() && driverMix2()) {
+          return streamMix2;
+        }
+
+        return streamMix2;
       }
     },
 
