@@ -221,7 +221,7 @@ export default {
       if (name == "Sampler" || name == "StreamMix2") {
         if (store.hasActiveDevice()) {
           if (isWindowsDriver()) {
-            if (driverMix2()) {
+            if (driverMix2() && firmwareSupportsMix2()) {
               return mix2;
             }
 
