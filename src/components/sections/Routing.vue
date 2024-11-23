@@ -108,32 +108,23 @@ export default {
     },
 
     getLanguageKeyForChannel(name) {
-      let sample = "message.routing.outputs.Sampler";
-      let vod = "message.routing.outputs.VOD";
-      let mix2 = "message.routing.outputs.StreamMix2"
+      if (name === "StreamMix2") {
+        let vod = "message.routing.outputs.VOD";
+        let mix2 = "message.routing.outputs.StreamMix2"
 
-      if (name == "Sampler" || name == "StreamMix2") {
-        if (store.hasActiveDevice()) {
-          if (isDeviceMini() && isWindowsDriver()) {
-            if (driverMix2()) { return mix2; }
-            if (driverVOD()) { return vod; }
-          } else if (!isDeviceMini() && isWindowsDriver()) {
-            if (name === "Sampler") { return sample; }
-            if (driverMix2()) { return mix2; }
-            if (driverVOD()) { return vod; }
-          }
-
-          return sample
-        }
+        if (isWindowsDriver() && driverVOD()) return vod;
+        return mix2;
       }
 
-      if (name == "BroadcastMix") {
+      if (name === "BroadcastMix") {
         let streamMix = "message.channels.StreamMix";
         let streamMix1 = "message.channels.StreamMix1";
 
-        if (isWindowsDriver() && driverMix2()) {
+        if (firmwareSupportsMix2()) {
+          if (isWindowsDriver() && !driverMix2()) return streamMix;
           return streamMix1;
         }
+
         return streamMix;
       }
     },
