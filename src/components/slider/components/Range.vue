@@ -63,7 +63,7 @@ export default {
 
     touchMove(e) {
       // Ok, so this is primarily here because Chrome doesn't seem to grab the 'handle' of the sliders correctly
-      // when they're in a vertical mode (horizontal works fine). So we try to do the calcuation ourselves, tracking
+      // when they're in a vertical mode (horizontal works fine). So we try to do the calculation ourselves, tracking
       // what the finger is doing and where it is whenever it moves, and apply the update logic directly.
 
       // This workaround is only needed for Chromium based browsers, when our sliders are vertical.
@@ -78,7 +78,7 @@ export default {
 
       // Grab the current 'Y' position for the finger on the page..
       let touch = e.touches[0] || e.changedTouches[0];
-      let yPosition = touch.pageY - y;
+      let yPosition = touch.clientY - y;
 
       // Grab the total number of steps in this element..
       let steps = Math.abs(this.maxValue - this.minValue);
