@@ -16,6 +16,10 @@ export function roundToStep(value, step) {
 }
 
 export function firmwareSupportsMix2() {
+    if (store.getActiveDevice() === undefined) {
+        return true;
+    }
+
     if (isDeviceMini()) {
         return versionNewerOrEqualTo(store.getActiveDevice().hardware.versions.firmware, [1,3,0,0]);
     }
@@ -23,6 +27,10 @@ export function firmwareSupportsMix2() {
 }
 
 export function isWindowsDriver() {
+    if (store.getConfig() === undefined) {
+        return false;
+    }
+
     return (store.getConfig().driver_interface.interface === "TUSB");
 }
 

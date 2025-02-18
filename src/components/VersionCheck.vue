@@ -4,6 +4,11 @@
     <span v-if="outdated()"> - <a :href="release_path" target="_blank"> Update Available</a></span>
     <span v-if="firmware_outdated()"> - <span class="click" @click="$refs.firmware_modal.openModal(undefined, undefined)">Firmware Update Available</span></span>
   </div>
+  <div v-if="incompatibleDriver()" class="warning-wrap">
+      <a class="warning" href="https://mediadl.musictribe.com/media/PLM/sftp/incoming/hybris/import/FirmwareAssets/GOXLR/LiveTestArea/driverRepair/TC-Helicon_GoXLR_Driver-5.68.0.zip" target="_blank">
+        The installed drivers are incompatible with this firmware, click here to download the latest driver.
+      </a>
+  </div>
 
   <AccessibleModal width="630px" ref="firmware_modal" id="firmware_modal" :show_footer="true">
     <template v-slot:title>Firmware Update Available</template>
@@ -20,7 +25,7 @@
 
 <script>
 import {store} from "@/store";
-import {isDeviceMini, versionNewerOrEqualTo} from "@/util/util";
+import {driverPreVOD, firmwareSupportsMix2, isDeviceMini, versionNewerOrEqualTo} from "@/util/util";
 import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 
 export default {
@@ -114,6 +119,10 @@ export default {
       return false;
     },
 
+    incompatibleDriver() {
+      return driverPreVOD() && firmwareSupportsMix2();
+    },
+
     getPath() {
       return "https://api.github.com/repos/GoXLR-on-Linux/goxlr-utility/releases";
     },
@@ -183,5 +192,24 @@ export default {
    color: #555555;
    cursor: pointer;
    text-decoration: underline;
+ }
+
+ .warning-wrap {
+   text-align: center;
+ }
+
+ .warning {
+   margin: auto;
+   background-color: #370000;
+   border: 1px solid #6e0000;
+   color: #8e8e8e;
+   font-weight: bold;
+   padding: 6px;
+   text-align: center;
+ }
+
+ .warning a {
+   color: #717171;
+   text-decoration: none;
  }
 </style>
