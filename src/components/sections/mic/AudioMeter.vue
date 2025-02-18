@@ -60,7 +60,6 @@ export default {
         if (self.active_local) {
           setTimeout(this.pollData, this.poll_rate)
         } else {
-          console.log("STOPPED..");
           this.points = []
         }
       })
@@ -261,7 +260,6 @@ export default {
 
   watch: {
     active(newValue) {
-      console.log("Local Active Starting..");
       this.active_local = newValue;
       if (newValue === true) {
         this.pollData();

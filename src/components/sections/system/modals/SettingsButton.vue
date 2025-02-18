@@ -227,13 +227,11 @@ export default {
       if (language === "-1") {
         language = null;
       }
-      console.log(`Setting Language to ${language}`);
       websocket.send_daemon_command({"SetLocale": language}).then(() => {
         if (language === null) {
           language = store.getConfig().locale.system_locale;
         }
 
-        console.log(`Setting Locale to ${language}`);
         this.$i18n.locale = language;
       });
     },

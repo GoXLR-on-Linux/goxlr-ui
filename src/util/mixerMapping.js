@@ -22,6 +22,7 @@ export const MuteButtonNamesForFader = {
 export const OutputDevice = {
     "Headphones": "Headphones",
     "Stream Mix": "BroadcastMix",
+    "Stream Mix 2": "StreamMix2",
     "Line Out": "LineOut",
     "Chat Mic": "ChatMic",
     "Sampler": "Sampler",
@@ -123,6 +124,7 @@ export let InputRouting = [
 export let OutputRouting = [
     "Headphones",
     "BroadcastMix",
+    "StreamMix2",
     "ChatMic",
     "Sampler",
     "LineOut",

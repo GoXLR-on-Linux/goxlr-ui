@@ -4,6 +4,11 @@
     <span v-if="outdated()"> - <a :href="release_path" target="_blank"> Update Available</a></span>
     <span v-if="firmware_outdated()"> - <span class="click" @click="$refs.firmware_modal.openModal(undefined, undefined)">Firmware Update Available</span></span>
   </div>
+  <div v-if="incompatibleDriver()" class="warning-wrap">
+      <a class="warning" href="https://mediadl.musictribe.com/media/PLM/sftp/incoming/hybris/import/FirmwareAssets/GOXLR/LiveTestArea/driverRepair/TC-Helicon_GoXLR_Driver-5.68.0.zip" target="_blank">
+        The installed drivers are incompatible with this firmware, click here to download the latest driver.
+      </a>
+  </div>
 
   <AccessibleModal width="630px" ref="firmware_modal" id="firmware_modal" :show_footer="true">
     <template v-slot:title>Firmware Update Available</template>
@@ -20,7 +25,7 @@
 
 <script>
 import {store} from "@/store";
-import {isDeviceMini} from "@/util/util";
+import {driverPreVOD, firmwareSupportsMix2, isDeviceMini, versionNewerOrEqualTo} from "@/util/util";
 import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 
 export default {
@@ -39,7 +44,6 @@ export default {
       fetch(this.getPath())
           .then(response => {
             if (response.status !== 200) {
-              console.log("Error Received from Github, Ignoring..");
               return undefined;
             }
             return response.json()
@@ -70,7 +74,11 @@ export default {
         return false;
       }
 
-      if (store.getConfig().latest_firmware !== undefined) {
+      if (store.getConfig() === undefined) {
+        return false;
+      }
+
+      if (store.getConfig().latest_firmware !== undefined && store.getConfig().latest_firmware !== null) {
         let latest = isDeviceMini() ? store.getConfig().latest_firmware.Mini : store.getConfig().latest_firmware.Full;
         if (latest === undefined || latest === null) {
           return false;
@@ -93,27 +101,26 @@ export default {
         return false;
       }
 
-      if (store.getConfig().latest_firmware !== undefined) {
+      if (store.getConfig() === null || store.getConfig() === undefined) {
+        return false;
+      }
+
+      if (store.getConfig().latest_firmware !== undefined && store.getConfig().latest_firmware !== null) {
         let latest = isDeviceMini() ? store.getConfig().latest_firmware.Mini : store.getConfig().latest_firmware.Full;
         if (latest === undefined || latest === null) {
           return false;
         }
 
-
         let current = store.getActiveDevice().hardware.versions.firmware;
-
-        console.log(`${latest}`);
-
-        latest = latest.join(".");
-        current = current.join(".");
-
-        console.log(`${latest} - ${current}`);
-
-        return this.isOutdated(latest, current);
+        return (versionNewerOrEqualTo(latest, current) && !versionNewerOrEqualTo(current, latest));
       }
 
       // Fail Safe if versions are missing..
       return false;
+    },
+
+    incompatibleDriver() {
+      return driverPreVOD() && firmwareSupportsMix2();
     },
 
     getPath() {
@@ -185,5 +192,24 @@ export default {
    color: #555555;
    cursor: pointer;
    text-decoration: underline;
+ }
+
+ .warning-wrap {
+   text-align: center;
+ }
+
+ .warning {
+   margin: auto;
+   background-color: #370000;
+   border: 1px solid #6e0000;
+   color: #8e8e8e;
+   font-weight: bold;
+   padding: 6px;
+   text-align: center;
+ }
+
+ .warning a {
+   color: #717171;
+   text-decoration: none;
  }
 </style>

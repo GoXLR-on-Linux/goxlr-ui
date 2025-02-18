@@ -38,6 +38,8 @@ export default {
             Headphones: "Headphones",
             MicMonitor: "Mic Monitor",
             StreamMix: "Stream Mix",
+            StreamMix1: "Stream Mix 1",
+            StreamMix2: "Stream Mix 2",
             ChatMic: "Chat Mic",
             Sampler: "Sampler",
             VOD: "VOD",
@@ -173,8 +175,13 @@ export default {
         configuration: {
             // This is common between Faders and Cough Buttons
             mute_behaviour: {
-                all: "Mute to @:message.channels.All",
+                base: "Mute to {channel}",
+                all: "Mute to All",
+
                 stream: "Mute to @:message.channels.StreamMix",
+                stream1: "Mute to @:message.channels.StreamMix1",
+                stream2: "Mute to @:message.channels.StreamMix2",
+                streams: "Mute to @:message.channels.StreamMix 1 + 2",
                 chatMic: "Mute to @:message.channels.ChatMic",
                 headphones: "Mute to @:message.channels.Headphones",
                 lineOut: "Mute to @:message.channels.LineOut",
@@ -639,6 +646,7 @@ export default {
             outputs: {
                 Headphones: "@:message.channels.Headphones",
                 BroadcastMix: "@:message.channels.StreamMix",
+                StreamMix2: "@:message.channels.StreamMix2",
                 ChatMic: "@:message.channels.ChatMic",
                 Sampler: "@:message.channels.Sampler",
                 LineOut: "@:message.channels.LineOut",

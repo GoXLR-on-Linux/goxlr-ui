@@ -46,7 +46,7 @@ export default {
 <template>
   <div class="container" :role="role" :aria-label="label || title || ''">
     <div style="width: 100%">
-      <div v-if="title !== ''" class="title" role="heading" :aria-level="level">
+      <div v-if="title !== '' && title !== undefined" class="title" role="heading" :aria-level="level">
         {{ title }}
       </div>
       <div ref="right" class="right">

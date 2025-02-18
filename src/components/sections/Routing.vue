@@ -1,28 +1,29 @@
 <template>
   <!-- Lets just draw the table.. -->
   <CenteredContainer>
-    <GroupContainer :title="$t('message.routing.title')">
+    <GroupContainer :label="$t('message.routing.title')">
       <table>
         <thead>
-        <tr>
-          <th colspan="2" class="hidden">&nbsp;</th>
-          <th :colspan="InputRouting().length">{{$t('message.routing.input')}}</th>
-        </tr>
-        <tr class="subHeader">
-          <th colspan="2" class="hidden">&nbsp;</th>
-          <th v-for="input in InputRouting()" :key="input">{{
+          <tr>
+            <th colspan="2" class="hidden">&nbsp;</th>
+            <th :colspan="InputRouting().length">{{ $t('message.routing.input') }}</th>
+          </tr>
+          <tr class="subHeader">
+            <th colspan="2" class="hidden">&nbsp;</th>
+            <th v-for="input in InputRouting()" :key="input">{{
               $t(`message.routing.inputs["${input}"]`)
-            }}
-          </th>
-        </tr>
+              }}
+            </th>
+          </tr>
         </thead>
         <tr v-for="output in getOutputChannels" :key="output">
-          <th v-if="output === 'Headphones'" class="rotated" :rowspan="getOutputChannels.length"><span>{{$t('message.routing.output')}}</span></th>
-          <SubmixButton :name="output" :display="getOutputString(output)" v-if="submixEnabled()"/>
+          <th v-if="output === 'Headphones'" class="rotated" :rowspan="getOutputChannels.length">
+            <span>{{ $t('message.routing.output') }}</span></th>
+          <SubmixButton :name="output" :display="getOutputString(output)" v-if="submixEnabled()" />
           <th v-else>{{ getOutputString(output) }}</th>
           <Cell v-for="input in InputRouting()" :key="input" :enabled="isEnabled(output, input)" :output="output"
-                :input="input" :orange="isDeviceMix(output, 'B')" @clicked="handleClick"
-                :cell-disabled="!canRoute(output, input)"/>
+            :input="input" :orange="isDeviceMix(output, 'B')" @clicked="handleClick"
+            :cell-disabled="!canRoute(output, input)" />
         </tr>
       </table>
     </GroupContainer>
@@ -31,17 +32,17 @@
 
 <script>
 import Cell from "@/components/sections/routing/Cell.vue";
-import {store} from "@/store";
-import {InputRouting, OutputRouting} from "@/util/mixerMapping";
-import {websocket} from "@/util/sockets";
+import { store } from "@/store";
+import { InputRouting, OutputRouting } from "@/util/mixerMapping";
+import { websocket } from "@/util/sockets";
 import CenteredContainer from "@/components/containers/CenteredContainer.vue";
 import GroupContainer from "@/components/containers/GroupContainer.vue";
 import SubmixButton from "@/components/sections/routing/SubmixButton.vue";
-import {isDeviceMini, versionNewerOrEqualTo} from "@/util/util";
+import { driverMix2, driverVOD, firmwareSupportsMix2, isDeviceMini, isStreamNoMusic, isWindowsDriver, versionNewerOrEqualTo } from "@/util/util";
 
 export default {
   name: "RoutingTable",
-  components: {SubmixButton, GroupContainer, CenteredContainer, Cell},
+  components: { SubmixButton, GroupContainer, CenteredContainer, Cell },
 
   data() {
     return {}
@@ -53,8 +54,9 @@ export default {
     },
 
     getOutputString(name) {
-      if (name === "Sampler") {
-        return this.$t(this.getLanguageKeyForSampler());
+      let key = this.getLanguageKeyForChannel(name);
+      if (key !== undefined) {
+        return this.$t(key);
       }
       return this.$t(`message.routing.outputs['${name}']`)
     },
@@ -105,41 +107,62 @@ export default {
       return store.getActiveDevice().levels.submix.outputs[name];
     },
 
-    shouldShowOutput(name) {
-      if (name === "Sampler") {
-        return store.getActiveDevice().settings.vod_mode !== "StreamNoMusic";
+    getLanguageKeyForChannel(name) {
+      if (name === "StreamMix2") {
+        let vod = "message.routing.outputs.VOD";
+        let mix2 = "message.routing.outputs.StreamMix2"
+
+        if (isWindowsDriver() && driverVOD()) return vod;
+        return mix2;
       }
-      return true
-    },
 
-    getLanguageKeyForSampler() {
-      let sample = "message.routing.outputs.Sampler";
-      let vod = "message.routing.outputs.VOD";
+      if (name === "BroadcastMix") {
+        let streamMix = "message.channels.StreamMix";
+        let streamMix1 = "message.channels.StreamMix1";
 
-      if (store.hasActiveDevice()) {
-        if (isDeviceMini() && store.getConfig().driver_interface.interface === "TUSB") {
-          if (versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5,30,0])) {
-            return vod;
-          }
+        if (firmwareSupportsMix2()) {
+          if (isWindowsDriver() && !driverMix2()) return streamMix;
+          return streamMix1;
         }
+
+        return streamMix;
       }
-      return sample;
     },
   },
   computed: {
     getOutputChannels() {
-      console.log(store.getActiveDevice().settings.vod_mode);
-      if (store.getActiveDevice().settings.vod_mode === "StreamNoMusic") {
-        return OutputRouting.filter(i => i !== "Sampler");
+      let outputList = OutputRouting;
+
+      if (isDeviceMini()) {
+        // Ok, we need to either nuke 'Sampler' or 'StreamMix2' depending on the firmware..
+        if (!firmwareSupportsMix2()) {
+          outputList = outputList.filter(i => i !== "StreamMix2");
+        } else {
+          outputList = outputList.filter(i => i !== "Sampler");
+        }
+      } else {
+        if (!firmwareSupportsMix2()) {
+          outputList = outputList.filter(i => i !== "StreamMix2");
+        }
       }
-      return OutputRouting;
+ 
+      if (isStreamNoMusic()) {
+        // If we're stream no music, remove both..
+        outputList = outputList.filter(i => {
+          if (isDeviceMini()) {
+            return (i !== "StreamMix2" && i !== "Sampler");
+          }
+          return (i !== "StreamMix2");
+        });
+      }
+      
+      return outputList;
     }
   }
 }
 </script>
 
 <style scoped>
-
 table {
   color: #fff;
   font-stretch: condensed;
