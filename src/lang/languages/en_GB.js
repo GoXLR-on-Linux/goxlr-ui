@@ -66,7 +66,9 @@ export default {
             ok: "Ok",
             yes: "Yes",
             no: "No",
-            cancel: "Cancel"
+            cancel: "Cancel",
+            continue: "Continue",
+            close: "Close",
         },
 
         // These Strings appear in the tabs throughout the pages
@@ -769,6 +771,35 @@ export default {
                 firmware: "Firmware",
                 dice: "DICE",
                 fpga: "FPGA"
+            },
+
+            firmwareUpdateButton: "Update Firmware",
+            firmwareUpdateButtonDowngrade: "Downgrade Firmware",
+            firmwareUpdate: {
+                newVersionAvailable: "A newer firmware version ({latestVersion}) is available for your device.",
+                currentVersionIsNewer: "Your current firmware version ({currentVersion}) is newer than the latest available firmware version ({latestVersion}) for your device.",
+                currentIsUpToDate: "Your firmware is already up to date. Do you want to reinstall the current firmware version?",
+
+                updateQuestion: "Do you want to update the firmware now?",
+                downgradeQuestion: "Do you want to downgrade to the latest firmware version?",
+
+                updatePaused: "You are about to install firmware version {version}. Are you sure you want to continue?",
+                updateInProgress: "Firmware Update in Progress. Please wait and do not disconnect your device!",
+                completed: "The firmware update has completed successfully.",
+
+                progress: {
+                    starting: "Starting...",
+                    manifest: "Fetching Manifest...",
+                    download: "Downloading Firmware...",
+                    pause: "Update Paused",
+                    clearNVR: "Preparing Update Partition...",
+                    uploadFirmware: "Uploading Firmware...",
+                    validateUpload: "Validating uploaded Firmware...",
+                    hardwareWrite: "Writing Firmware...",
+                    hardwareValidate: "Validating Firmware...",
+                    complete: "Complete",
+                    failed: "Failed to complete Firmware Update",
+                }
             },
 
             licenses: "Licenses",

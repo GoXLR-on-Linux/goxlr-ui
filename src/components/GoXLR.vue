@@ -57,6 +57,50 @@
     <VersionCheck/>
     <Language v-if="!utilitySupportsLanguages()" />
     <A11yNotifications/>
+
+    <AccessibleModal id="firmware_update_progress_modal" ref="firmware_update_progress_modal" width="560px" :show_footer=false :show_close=false>
+      <template v-slot:title>{{$t('message.system.firmwareUpdateButton')}}</template>
+
+      <div v-if="getFirmwareUpdateState() == 'Pause'">
+        {{ $t('message.system.firmwareUpdate.updatePaused', {version: getFirmwareTargetVersion()}) }}
+
+        <ProgressBar
+            :progress="getUpdateProgress()"
+            :status_message="getFirmwareUpdateStateLocalized()"
+            status_position="top"
+        />
+
+        <div style="display: flex; flex-direction: row; justify-content: right; gap: 5px;">
+          <button @click="continueFirmwareUpdate">{{$t('message.modalButtons.continue')}}</button>
+          <button @click="completeFirmwareUpdate">{{$t('message.modalButtons.cancel')}}</button>
+        </div>
+      </div>
+
+      <div v-else-if="getFirmwareUpdateState() == 'Complete'">
+        {{ $t('message.system.firmwareUpdate.completed') }}
+
+        <ProgressBar
+            :progress="getUpdateProgress()"
+            :status_message="getFirmwareUpdateStateLocalized()"
+            status_position="top"
+        />
+
+        <div style="display: flex; flex-direction: row; justify-content: right; gap: 5px;">
+          <button @click="completeFirmwareUpdate">{{$t('message.modalButtons.close')}}</button>
+        </div>
+      </div>
+
+      <div v-else>
+        {{ $t('message.system.firmwareUpdate.updateInProgress') }}
+
+        <ProgressBar
+            :progress="getUpdateProgress()"
+            :status_message="getFirmwareUpdateStateLocalized()"
+            status_position="top"
+        />
+      </div>
+
+    </AccessibleModal>
   </div>
 </template>
 
@@ -71,7 +115,7 @@ import Mic from "@/components/sections/Mic.vue";
 import DeviceSelector from "@/components/sections/DeviceSelector.vue";
 import {store} from "@/store";
 import Cough from "@/components/sections/Cough.vue";
-import {runWebsocket} from "@/util/sockets";
+import {runWebsocket, websocket} from "@/util/sockets";
 import SystemComponent from "@/components/sections/System.vue";
 import FileTabs from "@/components/sections/files/FileTabs.vue";
 import EffectsTab from "@/components/sections/EffectsTab.vue";
@@ -84,15 +128,15 @@ import GoXLRVisualiser from "@/components/visualisation/GoXLRVisualiser.vue";
 import VersionCheck from "@/components/VersionCheck.vue";
 import {HighlightArea} from "@/components/visualisation/VisualiserHelper";
 import Language from "@/components/Language.vue";
+import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
+import ProgressBar from "@/components/design/ProgressBar.vue";
 
 export default {
   name: "GoXLR",
-  computed: {
-    HighlightArea() {
-      return HighlightArea
-    }
-  },
+  expose: ['openFirmwareUpdateProgressModal'],
   components: {
+    ProgressBar,
+    AccessibleModal,
     Language,
     VersionCheck,
     GoXLRVisualiser,
@@ -112,6 +156,28 @@ export default {
     Mixer,
     Faders,
     Mic,
+  },
+
+  computed: {
+    HighlightArea() {
+      return HighlightArea
+    },
+    firmwareUpdateStatus() {
+      const updateState = store.status.firmware;
+
+      if (updateState === undefined)
+        return undefined;
+
+      // open progress modal if there is an update in progress
+      const isPerformingUpdate = Object.keys(updateState).length > 0;
+      if (isPerformingUpdate && !this.$refs.firmware_update_progress_modal.isOpen()) {
+        this.$refs.firmware_update_progress_modal.openModal(undefined, undefined);
+      } else if (!isPerformingUpdate && this.$refs.firmware_update_progress_modal.isOpen()){
+        this.$refs.firmware_update_progress_modal.closeModal();
+      }
+
+      return updateState;
+    }
   },
 
   data() {
@@ -295,6 +361,69 @@ export default {
       this.$nextTick(() => {
         this.$refs.effects.onEffectSelectionChange(preset);
       });
+    },
+
+    getFirmwareUpdateState() {
+      if (this.firmwareUpdateStatus === undefined)
+        return false;
+
+      const firstDevice = Object.values(store.status.firmware)[0];
+      if (firstDevice === undefined)
+        return false;
+
+      if (typeof firstDevice.state === "string")
+        return firstDevice.state;
+
+      return Object.keys(firstDevice.state)[0];
+    },
+
+    getFirmwareUpdateStateLocalized() {
+      const state = this.getFirmwareUpdateState();
+      if (state === false) return "";
+
+      return this.$t(`message.system.firmwareUpdate.progress.${state[0].toLowerCase() + state.slice(1)}`) ;
+    },
+
+    continueFirmwareUpdate() {
+      if (this.firmwareUpdateStatus  === undefined)
+        return false;
+
+      const firstDeviceSerial = Object.keys(store.status.firmware)[0];
+      websocket.continue_firmware_update(firstDeviceSerial);
+    },
+
+    completeFirmwareUpdate() {
+      if (this.firmwareUpdateStatus  === undefined)
+        return false;
+
+      const firstDeviceSerial = Object.keys(store.status.firmware)[0];
+      websocket.clear_firmware_state(firstDeviceSerial);
+    },
+
+    getUpdateProgress() {
+      if (this.firmwareUpdateStatus  === undefined)
+        return 0;
+
+      if (this.getFirmwareUpdateState() === "Complete")
+        return 100;
+
+      const firstDevice = Object.values(store.status.firmware)[0];
+      if (firstDevice === undefined)
+        return false;
+
+      return firstDevice.progress;
+    },
+
+    getFirmwareTargetVersion() {
+      if (this.firmwareUpdateStatus  === undefined)
+        return "Unknown";
+
+      if (this.getFirmwareUpdateState() !== "Pause")
+        return "Unknown";
+
+      const firstDevice = Object.values(store.status.firmware)[0];
+      const firmwareInfo = firstDevice.state["Pause"];
+      return firmwareInfo.version.join('.');
     }
   },
 

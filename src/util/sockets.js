@@ -147,6 +147,31 @@ export class Websocket {
         return this.#sendRequest(request);
     }
 
+    run_firmware_update(serial, firmware_file_path, force) {
+        let request = {
+            "RunFirmwareUpdate": [
+                serial,
+                firmware_file_path,
+                force
+            ]
+        }
+        return this.#sendRequest(request);
+    }
+
+    continue_firmware_update(serial) {
+        let request = {
+            "ContinueFirmwareUpdate": serial
+        }
+        return this.#sendRequest(request);
+    }
+
+    clear_firmware_state(serial) {
+        let request = {
+            "ClearFirmwareState": serial
+        }
+        return this.#sendRequest(request);
+    }
+
     #sendRequest(request) {
         let id = this.#command_index++;
 

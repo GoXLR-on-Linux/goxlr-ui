@@ -4,6 +4,7 @@
       <div class="buttons">
         <div><MicSetupButton /></div>
         <div v-if="store.getDeviceCount() > 1"><SwitchDeviceButton /></div>
+        <div><FirmwareUpdateButton /></div>
         <div><ShutdownButton /></div>
         <div><DeviceSettingsButton /></div>
         <div><SettingsButton /></div>
@@ -27,6 +28,7 @@ import ShutdownButton from "@/components/sections/system/modals/PowerButton.vue"
 import DeviceSettingsButton from "@/components/sections/system/modals/DeviceSettingsButton.vue";
 import SwitchDeviceButton from "@/components/sections/system/modals/SwitchDeviceButton.vue";
 import {store} from "@/store";
+import FirmwareUpdateButton from "@/components/sections/system/modals/FirmwareUpdateButton.vue";
 
 export default {
   name: "SystemComponent",
@@ -36,6 +38,7 @@ export default {
     }
   },
   components: {
+    FirmwareUpdateButton,
     SwitchDeviceButton,
     DeviceSettingsButton,
     ShutdownButton,
