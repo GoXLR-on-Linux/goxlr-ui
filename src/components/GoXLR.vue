@@ -70,13 +70,13 @@
             status_position="top"
         />
 
-        <div style="display: flex; flex-direction: row; justify-content: right; gap: 5px;">
+        <div class="modalButtonBox">
           <button @click="continueFirmwareUpdate">{{$t('message.modalButtons.continue')}}</button>
-          <button @click="completeFirmwareUpdate">{{$t('message.modalButtons.cancel')}}</button>
+          <button @click="completeFirmwareUpdate" class="cancel">{{$t('message.modalButtons.cancel')}}</button>
         </div>
       </div>
 
-      <div v-else-if="getFirmwareUpdateState() == 'Complete'">
+      <div v-else-if="getFirmwareUpdateState() == 'Complete' || getFirmwareUpdateState() == 'Failed'">
         {{ $t('message.system.firmwareUpdate.completed') }}
 
         <ProgressBar
@@ -85,8 +85,8 @@
             status_position="top"
         />
 
-        <div style="display: flex; flex-direction: row; justify-content: right; gap: 5px;">
-          <button @click="completeFirmwareUpdate">{{$t('message.modalButtons.close')}}</button>
+        <div class="modalButtonBox">
+          <button @click="completeFirmwareUpdate" class="close">{{$t('message.modalButtons.close')}}</button>
         </div>
       </div>
 
@@ -452,5 +452,44 @@ export default {
 #main {
   width: 100%;
   font-size: 10pt;
+}
+</style>
+
+<style scoped>
+.modalButtonBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  gap: 5px;
+
+  button {
+    padding: 5px;
+    color: #ccc;
+    border: 1px solid #CCCCCC;
+    background-color: transparent;
+    padding: 4px 8px;
+    cursor: pointer;
+
+    &:hover {
+      color: #fff;
+      border-color: #fff;
+    }
+
+    &.cancel {
+      border-color: #c00;
+
+      &:hover {
+        border-color: #ff0000;
+      }
+    }
+
+    &.close {
+      border-color: #417b80;
+
+      &:hover {
+        border-color: #59b1b6;
+      }
+    }
+  }
 }
 </style>

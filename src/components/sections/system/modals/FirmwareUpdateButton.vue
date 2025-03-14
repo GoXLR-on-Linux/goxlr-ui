@@ -25,9 +25,9 @@
       {{ $t('message.system.firmwareUpdate.currentIsUpToDate', { latestVersion: getLatestFirmwareVersion() }) }}
     </p>
 
-    <div style="display: flex; flex-direction: row; justify-content: right; gap: 5px;">
+    <div class="modalButtonBox">
       <button @click="startFirmwareUpdate">{{$t('message.modalButtons.continue')}}</button>
-      <button @click="$refs.firmware_update_modal.closeModal()">{{$t('message.modalButtons.cancel')}}</button>
+      <button class="cancel" @click="$refs.firmware_update_modal.closeModal()">{{$t('message.modalButtons.cancel')}}</button>
     </div>
   </AccessibleModal>
 </template>
@@ -100,5 +100,40 @@ export default {
 </script>
 
 <style scoped>
+.modalButtonBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  gap: 5px;
 
+  button {
+    padding: 5px;
+    color: #ccc;
+    border: 1px solid #CCCCCC;
+    background-color: transparent;
+    padding: 4px 8px;
+    cursor: pointer;
+
+    &:hover {
+      color: #fff;
+      border-color: #fff;
+    }
+
+    &.cancel {
+      border-color: #c00;
+
+      &:hover {
+        border-color: #ff0000;
+      }
+    }
+
+    &.close {
+      border-color: #417b80;
+
+      &:hover {
+        border-color: #59b1b6;
+      }
+    }
+  }
+}
 </style>

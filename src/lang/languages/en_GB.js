@@ -797,7 +797,7 @@ export default {
                     validateUpload: "Validating uploaded Firmware...",
                     hardwareWrite: "Writing Firmware...",
                     hardwareValidate: "Validating Firmware...",
-                    complete: "Complete",
+                    complete: "Update complete",
                     failed: "Failed to complete Firmware Update",
                 }
             },
