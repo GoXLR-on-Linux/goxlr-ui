@@ -28,6 +28,9 @@
       <ListSetting :value="getLogLevel()" :options="getLogKeys()" :description="$t('message.system.settings.logLevel')"
                    :label="$t('message.system.settings.logLevel')" @change="setLogLevel"/>
 
+      <ListSetting :value="getFirmwareSource()" :options="getFirmwareSourceKeys()" :description="$t('message.system.settings.firmwareSource')"
+                   :label="$t('message.system.settings.firmwareSource')" @change="setFirmwareSource"/>
+
       <BooleanSetting v-if="is_macos()" label="Disable MacOS Aggregate Management (requires restart)" :enabled="get_macos_aggregate_management()"
                       @change="set_macos_aggregate_management"
                       description="Disabled Utility Aggregate Management on MacOS (requires restart)"/>
@@ -177,6 +180,19 @@ export default {
       ];
     },
 
+    getFirmwareSourceKeys() {
+      return [
+        {
+          key: "Live",
+          value: this.$t('message.system.settings.firmwareSources.live'),
+        },
+        {
+          key: "Beta",
+          value: this.$t('message.system.settings.firmwareSources.beta'),
+        }
+      ]
+    },
+
     getUIHandlerKeys() {
       let options = [];
       options.push({
@@ -298,6 +314,17 @@ export default {
     },
     setLogLevel(value) {
       websocket.send_daemon_command({"SetLogLevel": value});
+    },
+
+    getFirmwareSource() {
+      if (store.getConfig() === undefined) {
+        return "Live";
+      }
+      return store.getConfig().firmware_source;
+    },
+    setFirmwareSource(value) {
+      console.log({"SetFirmwareSource": value});
+      websocket.send_daemon_command({"SetFirmwareSource": value});
     },
 
     openLogs() {
