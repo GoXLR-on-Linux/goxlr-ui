@@ -126,14 +126,6 @@ export default {
         border-color: #ff0000;
       }
     }
-
-    &.close {
-      border-color: #417b80;
-
-      &:hover {
-        border-color: #59b1b6;
-      }
-    }
   }
 }
 </style>
