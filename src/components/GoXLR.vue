@@ -76,8 +76,22 @@
         </div>
       </div>
 
-      <div v-else-if="getFirmwareUpdateState() == 'Complete' || getFirmwareUpdateState() == 'Failed'">
+      <div v-else-if="getFirmwareUpdateState() == 'Complete'">
         {{ $t('message.system.firmwareUpdate.completed') }}
+
+        <ProgressBar
+            :progress="getUpdateProgress()"
+            :status_message="getFirmwareUpdateStateLocalized()"
+            status_position="top"
+        />
+
+        <div class="modalButtonBox">
+          <button @click="completeFirmwareUpdate" class="close">{{$t('message.modalButtons.close')}}</button>
+        </div>
+      </div>
+
+      <div v-else-if="getFirmwareUpdateState() == 'Failed'">
+        {{ $t('message.system.firmwareUpdate.failed') }}
 
         <ProgressBar
             :progress="getUpdateProgress()"

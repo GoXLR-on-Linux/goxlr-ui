@@ -786,6 +786,7 @@ export default {
                 updatePaused: "You are about to install firmware version {version}. Are you sure you want to continue?",
                 updateInProgress: "Firmware Update in Progress. Please wait and do not disconnect your device!",
                 completed: "The firmware update has completed successfully.",
+                failed: "Something went wrong during the firmware update. Please try again.",
 
                 progress: {
                     starting: "Starting...",
