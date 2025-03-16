@@ -48,6 +48,8 @@ export default {
             yes: "Ja",
             no: "Nein",
             cancel: "Abbrechen",
+            continue: "Fortsetzen",
+            close: "Schließen",
         },
 
         // These Strings appear in the tabs throughout the pages
@@ -738,6 +740,39 @@ export default {
                 firmware: "Firmware",
                 dice: "DICE",
                 fpga: "FPGA"
+            },
+
+            firmwareUpdateButton: "Firmware aktualisieren",
+            firmwareUpdateButtonDowngrade: "Firmware downgraden",
+            firmwareUpdate: {
+                newVersionAvailable: "Eine neuere Firmware-Version ({latestVersion}) ist für dein Gerät verfügbar.\nMöchtest du dein Gerät jetzt aktualisieren?",
+                currentVersionIsNewer: "Deine aktuelle Firmware-Version ({currentVersion}) ist neuer als die letzte verfügbare Firmware-Version ({latestVersion}) für dein Gerät.\nMöchtest du ein Downgrade auf die neueste Firmware-Version durchführen?",
+                currentIsUpToDate: "Deine Firmware ist bereits auf dem neuesten Stand.\nMöchtest du die aktuelle Firmware neu installieren?",
+                customFirmware: "Du bist dabei, eine benutzerdefinierte Firmware zu installieren.\nDies ist nicht empfohlen, wenn du nicht weißt, was du tust.\nBist du sicher, dass du fortfahren möchtest?",
+
+                warning: "Du bist dabei, eine neue Firmware auf dein Gerät zu flashen.\nDie Entwickler der GoXLR Utility sind nicht verantwortlich für Schäden, die durch diesen Vorgang verursacht werden können.",
+                warningInfo: "Mehr Infos",
+
+                updatePaused: "Du bist kurz davor, die Firmware {version} zu installieren. Bist du sicher, dass du fortfahren möchtest?",
+                updateInProgress: "Firmware-Update wird durchgeführt. Bitte warte und trenne die Verbindung zu deinem Gerät nicht!",
+                completed: "Die Aktualisierung der Firmware wurde erfolgreich abgeschlossen.",
+                failed: "Bei der Aktualisierung der Firmware ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+
+                changelog: "Version {version} Änderungen:",
+
+                progress: {
+                    starting: "Starte...",
+                    manifest: "Lade Manifest...",
+                    download: "Downloade Firmware...",
+                    pause: "Update pausiert",
+                    clearNVR: "Update-Partition wird vorbereitet...",
+                    uploadFirmware: "Firmware wird hochgeladen...",
+                    validateUpload: "Hochgeladene Firmware wird validiert...",
+                    hardwareWrite: "Firmware wird geschrieben...",
+                    hardwareValidate: "Firmware wird überprüft...",
+                    complete: "Update agbeschlossen",
+                    failed: "Firmware-Update konnte nicht abgeschlossen werden",
+                }
             },
 
             licenses: "Lizenzen",
