@@ -776,12 +776,10 @@ export default {
             firmwareUpdateButton: "Update Firmware",
             firmwareUpdateButtonDowngrade: "Downgrade Firmware",
             firmwareUpdate: {
-                newVersionAvailable: "A newer firmware version ({latestVersion}) is available for your device.",
-                currentVersionIsNewer: "Your current firmware version ({currentVersion}) is newer than the latest available firmware version ({latestVersion}) for your device.",
+                newVersionAvailable: "A newer firmware version ({latestVersion}) is available for your device.\nDo you want to update device now?",
+                currentVersionIsNewer: "Your current firmware version ({currentVersion}) is newer than the latest available firmware version ({latestVersion}) for your device.\nDo you want to downgrade to the latest firmware version?",
                 currentIsUpToDate: "Your firmware is already up to date.\nDo you want to reinstall the current firmware version?",
-
-                updateQuestion: "Do you want to update the firmware now?",
-                downgradeQuestion: "Do you want to downgrade to the latest firmware version?",
+                customFirmware: "You are about to install a custom firmware.\nThis is not recommended unless you know what you are doing.\nAre you sure you want to continue?",
 
                 warning: "You are about to flash a new firmware version to your device.\nThe developers of the GoXLR Utility are not responsible for any damage that can be caused by this process. ",
                 warningInfo: "More Info",

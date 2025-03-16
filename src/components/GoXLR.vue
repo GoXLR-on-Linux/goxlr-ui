@@ -114,6 +114,8 @@
         />
       </div>
 
+      <!--<textarea :value="JSON.stringify(firmwareUpdateStatus, null, 2)"></textarea>-->
+
     </AccessibleModal>
   </div>
 </template>

@@ -263,6 +263,26 @@ function executeHttpRequest(request) {
     });
 }
 
+export function uploadFirmwareBlob(blob, serial) {
+    let cmd_resolve, cmd_reject;
+
+    let formData = new FormData();
+    formData.append("file", blob, "firmware.bin");
+
+    fetch(`${getBaseHTTPAddress()}firmware-upload/${serial}`, {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => cmd_resolve(data))
+        .catch((error) => cmd_reject("HTTP Error: " + error));
+
+    return new Promise((resolve, reject) => {
+        cmd_resolve = resolve;
+        cmd_reject = reject;
+    });
+}
+
 /*
 This is here to calculate the address. The dev environment is always on a different port to the daemon, so
 we need to bounce requests across to the default port of the daemon. If we're running in production, we need
