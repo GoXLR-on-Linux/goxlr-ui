@@ -5,7 +5,7 @@
   >
     <font-awesome-icon icon="fa-solid fa-download" />
   </BigButton>
-  <AccessibleModal id="firmware_update_modal" ref="firmware_update_modal" width="560px" :show_footer=false>
+  <AccessibleModal id="firmware_update_modal" ref="firmware_update_modal" width="620px" :show_footer=false>
     <template v-slot:title>
       {{compareCurrentFirmwareToLatest() > 0
         ? $t('message.system.firmwareUpdateButtonDowngrade')
@@ -14,27 +14,33 @@
 
     <p class="firmwareWarning">
       {{ $t('message.system.firmwareUpdate.warning') }}
-
       <a
           href="https://github.com/GoXLR-on-Linux/goxlr-utility/wiki/Firmware-Updating"
           target="_blank"
       >{{ $t('message.system.firmwareUpdate.warningInfo') }}</a>
     </p>
 
-
     <p v-if="customFirmware">
       {{ $t('message.system.firmwareUpdate.customFirmware') }}
     </p>
     <p v-else-if="compareCurrentFirmwareToLatest() < 0">
-      {{ $t('message.system.firmwareUpdate.newVersionAvailable', { latestVersion: getLatestFirmwareVersion() }) }}
+      {{ $t('message.system.firmwareUpdate.newVersionAvailable', { latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
+
+      <p class="changelog">
+        Version {{ getLatestFirmwareInfo().version.join('.') }} Changelog:<br>
+        {{ getLatestFirmwareInfo().change_log }}
+      </p>
     </p>
     <p v-else-if="compareCurrentFirmwareToLatest() > 0">
-      {{ $t('message.system.firmwareUpdate.currentVersionIsNewer', {currentVersion: getCurrentFirmwareVersion(), latestVersion: getLatestFirmwareVersion() }) }}
-      <br>
-      {{ $t('message.system.firmwareUpdate.downgradeQuestion') }}
+      {{ $t('message.system.firmwareUpdate.currentVersionIsNewer', {currentVersion: getCurrentFirmwareVersion(), latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
     </p>
     <p v-else>
-      {{ $t('message.system.firmwareUpdate.currentIsUpToDate', { latestVersion: getLatestFirmwareVersion() }) }}
+      {{ $t('message.system.firmwareUpdate.currentIsUpToDate', { latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
+
+      <p class="changelog">
+        {{ $t('message.system.firmwareUpdate.changelog', {version: getLatestFirmwareInfo().version.join('.')}) }}<br>
+        {{ getLatestFirmwareInfo().change_log }}
+      </p>
     </p>
 
     <div class="modalButtonBox">
@@ -86,15 +92,15 @@ export default {
           : 1; // current firmware is newer
     },
 
-    getLatestFirmwareVersion() {
+    getLatestFirmwareInfo() {
       if (store.getConfig() === undefined || store.getActiveDevice() === undefined)
         return false;
 
-      const latestVersion = isDeviceMini()
-          ? store.getConfig().latest_firmware.Mini.version
-          : store.getConfig().latest_firmware.Full.version;
-      return latestVersion.join('.');
+      return isDeviceMini()
+          ? store.getConfig().latest_firmware.Mini
+          : store.getConfig().latest_firmware.Full;
     },
+
 
     getCurrentFirmwareVersion() {
       if (store.getActiveDevice() === undefined)
@@ -186,6 +192,11 @@ export default {
       color: #59b1b6;
     }
   }
+}
+
+.changelog {
+  background-color: rgba(0, 0, 0, 0.25);
+  padding: 10px;
 }
 
 p {

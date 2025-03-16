@@ -789,6 +789,8 @@ export default {
                 completed: "The firmware update has completed successfully.",
                 failed: "Something went wrong during the firmware update. Please try again.",
 
+                changelog: "Version {version} Changelog:",
+
                 progress: {
                     starting: "Starting...",
                     manifest: "Fetching Manifest...",
