@@ -704,6 +704,12 @@ export default {
                     // OFF / ERROR / WARN / INFO / DEBUG / TRACE
                 },
 
+                firmwareSource: "Firmware Update Kanal",
+                firmwareSources: {
+                    live: "Live",
+                    beta: "Beta"
+                },
+
                 allowNetworkAccess: "UI-Netzwerkzugriff zulassen (Neustart erforderlich)",
                 allowNetworkAccessAccessibility: "Zugriff auf die UI von anderen Geräten im Netzwerk aus zulassen",
 
