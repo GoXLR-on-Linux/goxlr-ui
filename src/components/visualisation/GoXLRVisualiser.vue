@@ -591,7 +591,6 @@ export default {
     isFader4Blinking() { return store.getActiveDevice().fader_status["D"].mute_state === "MutedToAll"; },
     isMuteBlinking() { return store.getActiveDevice().cough_button.state === "MutedToAll"; },
 
-    isDeviceMini() { return store.getActiveDevice().hardware.device_type === "Mini"; },
     isDeviceWhite() { return store.getActiveDevice().hardware.colour_way === "White" },
 
     muteInactiveColour() {
