@@ -1,7 +1,8 @@
 <template>
   <BigButton id="firmware_update_button" ref="firmware_update_button"
              :title="compareCurrentFirmwareToLatest() > 0 ? $t('message.system.firmwareUpdateButtonDowngrade') : $t('message.system.firmwareUpdateButton')"
-              @button-clicked="$refs.firmware_update_modal.openModal(undefined, $refs.firmware_update_button)">
+              @button-clicked="$refs.firmware_update_modal.openModal(undefined, $refs.firmware_update_button)"
+  >
     <font-awesome-icon icon="fa-solid fa-download" />
   </BigButton>
   <AccessibleModal id="firmware_update_modal" ref="firmware_update_modal" width="560px" :show_footer=false>
@@ -10,6 +11,15 @@
         ? $t('message.system.firmwareUpdateButtonDowngrade')
         : $t('message.system.firmwareUpdateButton')}}
     </template>
+
+    <p class="firmwareWarning">
+      {{ $t('message.system.firmwareUpdate.warning') }}
+
+      <a
+          href="https://github.com/GoXLR-on-Linux/goxlr-utility/wiki/Firmware-Updating"
+          target="_blank"
+      >{{ $t('message.system.firmwareUpdate.warningInfo') }}</a>
+    </p>
 
     <p v-if="compareCurrentFirmwareToLatest() < 0">
       {{ $t('message.system.firmwareUpdate.newVersionAvailable', { latestVersion: getLatestFirmwareVersion() }) }}
@@ -93,8 +103,8 @@ export default {
       this.$refs.firmware_update_modal.closeModal();
 
       // TODO: implement file upload support
-      websocket.run_firmware_update(store.getActiveDevice().hardware.serial_number, null, false);
-    },
+      websocket.run_firmware_update(store.getActiveDevice().hardware.serial_number, null, true);
+    }
   }
 }
 </script>
@@ -127,5 +137,23 @@ export default {
       }
     }
   }
+}
+
+.firmwareWarning {
+  padding: 10px;
+  border-left: 5px solid rgba(204, 0, 0, 0.5);
+  background: rgba(204, 0, 0, 0.1);
+
+  a {
+    color: #fff;
+
+    &:hover {
+      color: #59b1b6;
+    }
+  }
+}
+
+p {
+  white-space: pre-line;
 }
 </style>

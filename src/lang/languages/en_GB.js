@@ -778,10 +778,13 @@ export default {
             firmwareUpdate: {
                 newVersionAvailable: "A newer firmware version ({latestVersion}) is available for your device.",
                 currentVersionIsNewer: "Your current firmware version ({currentVersion}) is newer than the latest available firmware version ({latestVersion}) for your device.",
-                currentIsUpToDate: "Your firmware is already up to date. Do you want to reinstall the current firmware version?",
+                currentIsUpToDate: "Your firmware is already up to date.\nDo you want to reinstall the current firmware version?",
 
                 updateQuestion: "Do you want to update the firmware now?",
                 downgradeQuestion: "Do you want to downgrade to the latest firmware version?",
+
+                warning: "You are about to flash a new firmware version to your device.\nThe developers of the GoXLR Utility are not responsible for any damage that can be caused by this process. ",
+                warningInfo: "More Info",
 
                 updatePaused: "You are about to install firmware version {version}. Are you sure you want to continue?",
                 updateInProgress: "Firmware Update in Progress. Please wait and do not disconnect your device!",
