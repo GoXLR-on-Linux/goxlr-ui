@@ -425,7 +425,7 @@ export default {
 
       const firstDevice = Object.values(store.status.firmware)[0];
       if (firstDevice === undefined)
-        return false;
+        return 0;
 
       return firstDevice.progress;
     },
