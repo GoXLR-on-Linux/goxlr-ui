@@ -7,6 +7,7 @@
     @mouseover="handleHover"
     @moussleave="handleHover"
     v-html="getGoXLRSvg()"
+    :isDeviceUpdating="isDeviceUpdating"
   />
 </template>
 
@@ -614,8 +615,21 @@ export default {
         "C": store.getActiveDevice().fader_status["C"].channel,
         "D": store.getActiveDevice().fader_status["D"].channel,
       }
-    }
+    },
+
+    isDeviceUpdating() {
+      const firstDevice = Object.values(store.status.firmware)[0];
+      if (firstDevice === undefined)
+        return false;
+
+      const updateState = (typeof firstDevice.state === "string")
+          ? firstDevice.state
+          : Object.keys(firstDevice.state)[0];
+
+      return !["Failed", "Complete", "Starting", "Manifest", "Download", "Pause"].includes(updateState);
+    },
   },
+
   watch: {
     // toggle .blink class if required
     isTopLeftSampleRecording(active) { this.setBlinkClass(".sampler #TopLeft", active); },
@@ -1085,4 +1099,57 @@ export default {
 #goxlr-visualiser #Channel4 .level #Level13 { color: v-bind('computeMixerLevelColour("D", 13)'); }
 #goxlr-visualiser #Channel4 .level #Level14 { color: v-bind('computeMixerLevelColour("D", 14)'); }
 #goxlr-visualiser #Channel4 .level #Level15 { color: v-bind('computeMixerLevelColour("D", 15)'); }
+
+/* firmware update animation */
+@keyframes firmwareUpdate {
+  to { color: rgba(0, 255, 255, 0); }
+  from { color: rgba(0, 255, 0, 1); }
+}
+
+#goxlr-visualiser[isDeviceUpdating=true] {
+
+  #Logo,
+  .area .mixer * > #Mute *,
+  .area .effects .buttons *,
+  .area .effects .presets *,
+  .area .effects .encoders #Encoder,
+  .area .sampler *,
+  .area .cough *,
+  .display #Backlight
+  {
+    color: rgb(0, 255, 0) !important;
+  }
+
+  .selection * rect,
+  .selection path {
+    fill: rgb(0, 255, 0);
+  }
+
+  .level rect, .encoders .level * {
+    animation-name: firmwareUpdate;
+    animation-duration: .75s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    color: rgb(0, 0, 0);
+  }
+
+  .level, .encoders .level {
+    #Level1 rect, #Level1 { animation-delay: .05s; }
+    #Level2 rect, #Level2 { animation-delay: .1s; }
+    #Level3 rect, #Level3 { animation-delay: .15s; }
+    #Level4 rect, #Level4{ animation-delay: .2s; }
+    #Level5 rect, #Level5 { animation-delay: .25s; }
+    #Level6 rect, #Level6 { animation-delay: .3s; }
+    #Level7 rect, #Level7 { animation-delay: .35s; }
+    #Level8 rect, #Level8 { animation-delay: .4s; }
+    #Level9 rect, #Level9 { animation-delay: .45s; }
+    #Level10 rect, #Level10 { animation-delay: .5s; }
+    #Level11 rect, #Level11 { animation-delay: .55s; }
+    #Level12 rect, #Level12 { animation-delay: .6s; }
+    #Level13 rect, #Level13 { animation-delay: .65s; }
+    #Level14 rect, #Level14 { animation-delay: .7s; }
+    #Level15 rect, #Level15 { animation-delay: .75s; }
+  }
+}
+
 </style>
