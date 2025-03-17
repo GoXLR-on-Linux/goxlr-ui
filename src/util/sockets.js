@@ -289,10 +289,12 @@ we need to bounce requests across to the default port of the daemon. If we're ru
 to convert the HTTP request to a websocket request on the same port (this can be changed), so work it out here.
  */
 function getWebsocketAddress() {
+    const websocketProto = window.location.protocol.startsWith("https:") ? "wss" : "ws";
+
     if (process.env.NODE_ENV === "development") {
-        return "ws://localhost:14564/api/websocket";
+        return `ws://localhost:14564/api/websocket`;
     }
-    return "ws://" + window.location.host + "/api/websocket";
+    return `${websocketProto}://${window.location.host}/api/websocket`;
 }
 
 // Same as above, except for HTTP request...
