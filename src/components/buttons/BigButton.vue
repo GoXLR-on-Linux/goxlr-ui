@@ -17,8 +17,8 @@ export default {
   },
 
   methods: {
-    clicked: function (){
-      this.$emit("button-clicked")
+    clicked: function (eventData){
+      this.$emit("button-clicked", eventData)
     },
     focus: function() {
       this.$refs.button.focus();

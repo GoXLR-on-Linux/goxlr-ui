@@ -66,7 +66,9 @@ export default {
             ok: "Ok",
             yes: "Yes",
             no: "No",
-            cancel: "Cancel"
+            cancel: "Cancel",
+            continue: "Continue",
+            close: "Close",
         },
 
         // These Strings appear in the tabs throughout the pages
@@ -727,6 +729,12 @@ export default {
                     // OFF / ERROR / WARN / INFO / DEBUG / TRACE
                 },
 
+                firmwareSource: "Firmware Update Channel",
+                firmwareSources: {
+                    live: "Live",
+                    beta: "Beta"
+                },
+
                 allowNetworkAccess: "Allow UI Network Access (requires restart)",
                 allowNetworkAccessAccessibility: "Allow the UI to be accessed from other devices on the network",
 
@@ -763,6 +771,39 @@ export default {
                 firmware: "Firmware",
                 dice: "DICE",
                 fpga: "FPGA"
+            },
+
+            firmwareUpdateButton: "Update Firmware",
+            firmwareUpdateButtonDowngrade: "Downgrade Firmware",
+            firmwareUpdate: {
+                newVersionAvailable: "A newer firmware version ({latestVersion}) is available for your device.\nDo you want to update device now?",
+                currentVersionIsNewer: "Your current firmware version ({currentVersion}) is newer than the latest available firmware version ({latestVersion}) for your device.\nDo you want to downgrade to the latest firmware version?",
+                currentIsUpToDate: "Your firmware is already up to date.\nDo you want to reinstall the current firmware version?",
+                customFirmware: "You are about to install a custom firmware.\nThis is not recommended unless you know what you are doing.\nAre you sure you want to continue?",
+
+                warning: "You are about to flash a new firmware version to your device.\nThe developers of the GoXLR Utility are not responsible for any damage that can be caused by this process. ",
+                warningInfo: "More Info",
+
+                updatePaused: "You are about to install firmware version {version}. Are you sure you want to continue?",
+                updateInProgress: "Firmware Update in Progress. Please wait and do not disconnect your device!",
+                completed: "The firmware update has completed successfully.",
+                failed: "Something went wrong during the firmware update. Please try again.",
+
+                changelog: "Version {version} Changelog:",
+
+                progress: {
+                    starting: "Starting...",
+                    manifest: "Fetching Manifest...",
+                    download: "Downloading Firmware...",
+                    pause: "Update Paused",
+                    clearNVR: "Preparing Update Partition...",
+                    uploadFirmware: "Uploading Firmware...",
+                    validateUpload: "Validating uploaded Firmware...",
+                    hardwareWrite: "Writing Firmware...",
+                    hardwareValidate: "Validating Firmware...",
+                    complete: "Update complete",
+                    failed: "Failed to complete Firmware Update",
+                }
             },
 
             licenses: "Licenses",

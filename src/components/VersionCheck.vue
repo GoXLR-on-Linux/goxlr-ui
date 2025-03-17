@@ -84,7 +84,7 @@ export default {
           return false;
         }
 
-        return latest.join(".");
+        return latest.version.join(".");
       }
       return true;
     },
