@@ -181,8 +181,13 @@ export default {
     firmwareUpdateStatus() {
       const updateState = store.status.firmware;
 
-      if (updateState === undefined)
+      if (updateState === undefined) {
+        if (this.$refs.firmware_update_progress_modal !== undefined && this.$refs.firmware_update_progress_modal.isOpen()) {
+          this.$refs.firmware_update_progress_modal.closeModal();
+        }
         return undefined;
+      }
+
 
       // open progress modal if there is an update in progress
       const isPerformingUpdate = Object.keys(updateState).length > 0;
