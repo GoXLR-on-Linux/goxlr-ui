@@ -148,7 +148,7 @@
             <rect x="228.59" y="306.84" width="50.34" height="28.31" rx="1.68" ry="1.68" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
             <path d="m254.11,315.11c.31.14.5.44.5.78v10.21c0,.34-.2.64-.5.78s-.66.08-.91-.14l-3.59-3.19h-1.8c-.94,0-1.7-.76-1.7-1.7v-1.7c0-.94.76-1.7,1.7-1.7h1.8l3.59-3.19c.25-.22.61-.28.91-.14Zm3.3,3.52l1.46,1.46,1.46-1.46c.25-.25.65-.25.9,0s.25.65,0,.9l-1.46,1.46,1.46,1.46c.25.25.25.65,0,.9s-.65.25-.9,0l-1.46-1.46-1.46,1.46c-.25.25-.65.25-.9,0s-.25-.65,0-.9l1.46-1.46-1.46-1.46c-.25-.25-.25-.65,0-.9s.65-.25.9,0Z" style="fill: currentColor;"/>
           </g>
-          <text transform="translate(240.82 76.66) scale(1.05 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9px;"><tspan x="0" y="0">System</tspan></text>
+          <text transform="translate(253.93 76.66) scale(1.05 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9px; text-anchor: middle;"><tspan x="0" y="0">System</tspan></text>
         </g>
         <g id="Channel3">
           <g class="rail">
@@ -222,7 +222,7 @@
             <rect x="166.68" y="306.84" width="50.34" height="28.31" rx="1.68" ry="1.68" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
             <path d="m192.2,315.11c.31.14.5.44.5.78v10.21c0,.34-.2.64-.5.78s-.66.08-.91-.14l-3.59-3.19h-1.8c-.94,0-1.7-.76-1.7-1.7v-1.7c0-.94.76-1.7,1.7-1.7h1.8l3.59-3.19c.25-.22.61-.28.91-.14Zm3.3,3.52l1.46,1.46,1.46-1.46c.25-.25.65-.25.9,0s.25.65,0,.9l-1.46,1.46,1.46,1.46c.25.25.25.65,0,.9s-.65.25-.9,0l-1.46-1.46-1.46,1.46c-.25.25-.65.25-.9,0s-.25-.65,0-.9l1.46-1.46-1.46-1.46c-.25-.25-.25-.65,0-.9s.65-.25.9,0Z" style="fill: currentColor;"/>
           </g>
-          <text transform="translate(181.9 76.66) scale(1.05 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9px;"><tspan x="0" y="0">Music</tspan></text>
+          <text transform="translate(192.02 76.66) scale(1.05 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9px; text-anchor: middle;"><tspan x="0" y="0">Music</tspan></text>
         </g>
         <g id="Channel2">
           <g class="rail">
@@ -296,7 +296,7 @@
             <rect x="104.83" y="306.84" width="50.34" height="28.31" rx="1.68" ry="1.68" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
             <path d="m130.35,315.11c.31.14.5.44.5.78v10.21c0,.34-.2.64-.5.78s-.66.08-.91-.14l-3.59-3.19h-1.8c-.94,0-1.7-.76-1.7-1.7v-1.7c0-.94.76-1.7,1.7-1.7h1.8l3.59-3.19c.25-.22.61-.28.91-.14Zm3.3,3.52l1.46,1.46,1.46-1.46c.25-.25.65-.25.9,0s.25.65,0,.9l-1.46,1.46,1.46,1.46c.25.25.25.65,0,.9s-.65.25-.9,0l-1.46-1.46-1.46,1.46c-.25.25-.65.25-.9,0s-.25-.65,0-.9l1.46-1.46-1.46-1.46c-.25-.25-.25-.65,0-.9s.65-.25.9,0Z" style="fill: currentColor;"/>
           </g>
-          <text transform="translate(122.09 76.66) scale(1.05 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9px;"><tspan x="0" y="0">Chat</tspan></text>
+          <text transform="translate(130.18 76.66) scale(1.05 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9px; text-anchor: middle;"><tspan x="0" y="0">Chat</tspan></text>
         </g>
         <g id="Channel1">
           <g class="rail">
@@ -370,7 +370,7 @@
             <rect x="42.92" y="306.84" width="50.34" height="28.31" rx="1.68" ry="1.68" style="stroke: currentColor; stroke-miterlimit: 10; stroke-width: 2px;"/>
             <path d="m68.44,315.11c.31.14.5.44.5.78v10.21c0,.34-.2.64-.5.78s-.66.08-.91-.14l-3.59-3.19h-1.8c-.94,0-1.7-.76-1.7-1.7v-1.7c0-.94.76-1.7,1.7-1.7h1.8l3.59-3.19c.25-.22.61-.28.91-.14Zm3.3,3.52l1.46,1.46,1.46-1.46c.25-.25.65-.25.9,0s.25.65,0,.9l-1.46,1.46,1.46,1.46c.25.25.25.65,0,.9s-.65.25-.9,0l-1.46-1.46-1.46,1.46c-.25.25-.65.25-.9,0s-.25-.65,0-.9l1.46-1.46-1.46-1.46c-.25-.25-.25-.65,0-.9s.65-.25.9,0Z" style="fill: currentColor;"/>
           </g>
-          <text transform="translate(62.24 76.66) scale(1.05 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9px;"><tspan x="0" y="0">Mic</tspan></text>
+          <text transform="translate(68.27 76.66) scale(1.05 1)" style="fill: #565656; font-family: ropa-sans-regular; font-size: 9px; text-anchor: middle;"><tspan x="0" y="0">Mic</tspan></text>
         </g>
       </g>
     </g>

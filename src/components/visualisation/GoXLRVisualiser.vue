@@ -592,7 +592,6 @@ export default {
     isFader4Blinking() { return store.getActiveDevice().fader_status["D"].mute_state === "MutedToAll"; },
     isMuteBlinking() { return store.getActiveDevice().cough_button.state === "MutedToAll"; },
 
-    isDeviceMini() { return store.getActiveDevice().hardware.device_type === "Mini"; },
     isDeviceWhite() { return store.getActiveDevice().hardware.colour_way === "White" },
 
     muteInactiveColour() {
@@ -606,6 +605,17 @@ export default {
     getFader2Scribble() { return this.getScribbleUrl("B"); },
     getFader3Scribble() { return this.getScribbleUrl("C"); },
     getFader4Scribble() { return this.getScribbleUrl("D"); },
+
+    mixerFaderNames() {
+      if (store.getActiveDevice() == undefined) return;
+
+      return {
+        "A": store.getActiveDevice().fader_status["A"].channel,
+        "B": store.getActiveDevice().fader_status["B"].channel,
+        "C": store.getActiveDevice().fader_status["C"].channel,
+        "D": store.getActiveDevice().fader_status["D"].channel,
+      }
+    },
 
     isDeviceUpdating() {
       const firstDevice = Object.values(store.status.firmware)[0];
@@ -637,18 +647,31 @@ export default {
     getFader2Scribble(url) { document.querySelector(".mixer > #Channel2 > .display > #Image").setAttribute("href", this.getScribbleUrl("B")); },
     getFader3Scribble(url) { document.querySelector(".mixer > #Channel3 > .display > #Image").setAttribute("href", this.getScribbleUrl("C")); },
     getFader4Scribble(url) { document.querySelector(".mixer > #Channel4 > .display > #Image").setAttribute("href", this.getScribbleUrl("D")); },
+
+    mixerFaderNames(newNames) {
+      if (document.querySelector("#goxlr-visualiser #Channel1 text tspan") != null && isDeviceMini()) {
+        document.querySelector("#goxlr-visualiser #Channel1 text tspan").innerHTML = store.getActiveDevice().fader_status["A"].channel;
+        document.querySelector("#goxlr-visualiser #Channel2 text tspan").innerHTML = store.getActiveDevice().fader_status["B"].channel;
+        document.querySelector("#goxlr-visualiser #Channel3 text tspan").innerHTML = store.getActiveDevice().fader_status["C"].channel;
+        document.querySelector("#goxlr-visualiser #Channel4 text tspan").innerHTML = store.getActiveDevice().fader_status["D"].channel;
+      }
+    }
   },
   mounted() {
     if (isDeviceMini()) {
-      return;
+      // set the initial fader names
+      document.querySelector("#goxlr-visualiser #Channel1 text tspan").innerHTML = this.mixerFaderNames["A"];
+      document.querySelector("#goxlr-visualiser #Channel2 text tspan").innerHTML = this.mixerFaderNames["B"];
+      document.querySelector("#goxlr-visualiser #Channel3 text tspan").innerHTML = this.mixerFaderNames["C"];
+      document.querySelector("#goxlr-visualiser #Channel4 text tspan").innerHTML = this.mixerFaderNames["D"];
+    } else {
+      // Set the initial display URLs. (only for Full GoXLR)
+      if (isDeviceMini()) return;
+      document.querySelector(".mixer > #Channel1 > .display > #Image").setAttribute("href", this.getScribbleUrl("A"));
+      document.querySelector(".mixer > #Channel2 > .display > #Image").setAttribute("href", this.getScribbleUrl("B"));
+      document.querySelector(".mixer > #Channel3 > .display > #Image").setAttribute("href", this.getScribbleUrl("C"));
+      document.querySelector(".mixer > #Channel4 > .display > #Image").setAttribute("href", this.getScribbleUrl("D"));
     }
-
-    // Set the initial display URLs.
-    document.querySelector(".mixer > #Channel1 > .display > #Image").setAttribute("href", this.getScribbleUrl("A"));
-    document.querySelector(".mixer > #Channel2 > .display > #Image").setAttribute("href", this.getScribbleUrl("B"));
-    document.querySelector(".mixer > #Channel3 > .display > #Image").setAttribute("href", this.getScribbleUrl("C"));
-    document.querySelector(".mixer > #Channel4 > .display > #Image").setAttribute("href", this.getScribbleUrl("D"));
-
   }
 }
 </script>
