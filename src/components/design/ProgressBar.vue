@@ -52,10 +52,7 @@ export default {
 
   text-align: center;
 }
-.progress .progress-bar-inner progress[value]:after {
-  color: #fff;
-  content: attr(value)'%';
-}
+
 .progress .progress-bar-inner div {
   position: absolute;
   width: 100%;
