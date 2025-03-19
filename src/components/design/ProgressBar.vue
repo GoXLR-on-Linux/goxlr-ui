@@ -52,6 +52,15 @@ export default {
 
   text-align: center;
 }
+.progress .progress-bar-inner progress::-webkit-progress-bar {
+  background-color: #252927;
+}
+.progress .progress-bar-inner progress[value]::-webkit-progress-value {
+  background-color: #59b1b6;
+}
+.progress .progress-bar-inner progress[value]::-moz-progress-bar {
+  background-color: #59b1b6;
+}
 
 .progress .progress-bar-inner div {
   position: absolute;
