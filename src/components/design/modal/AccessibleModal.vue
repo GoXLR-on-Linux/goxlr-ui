@@ -143,6 +143,7 @@ export default {
   text-align: center;
   color: #fff;
   overflow: hidden;
+  outline: none;
 }
 
 .modal-header div {
