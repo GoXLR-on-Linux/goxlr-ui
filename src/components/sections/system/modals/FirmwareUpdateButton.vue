@@ -1,16 +1,13 @@
 <template>
   <BigButton id="firmware_update_button" ref="firmware_update_button"
-             :title="compareCurrentFirmwareToLatest() > 0 ? $t('message.system.firmwareUpdateButtonDowngrade') : $t('message.system.firmwareUpdateButton')"
+             :title="updateButtonTitle"
+             v-show="this.shouldShowUpdateButton()"
               @button-clicked="handleButtonClick"
   >
     <font-awesome-icon icon="fa-solid fa-download" />
   </BigButton>
   <AccessibleModal id="firmware_update_modal" ref="firmware_update_modal" width="620px" :show_footer=false>
-    <template v-slot:title>
-      {{compareCurrentFirmwareToLatest() > 0
-        ? $t('message.system.firmwareUpdateButtonDowngrade')
-        : $t('message.system.firmwareUpdateButton')}}
-    </template>
+    <template v-slot:title>{{updateButtonTitle}}</template>
 
     <p class="firmwareWarning">
       {{ $t('message.system.firmwareUpdate.warning') }}
@@ -64,13 +61,65 @@ export default {
   data() {
     return {
       setupTitle: "Update Firmware",
-      customFirmware: true,
+      customFirmware: false,
+      lastCtrlKeyState: false,
+      lastShiftKeyState: false,
+      isUpdateButtonVisible: false,
+      updateButtonTitle: "Title",
     }
   },
 
+  mounted() {
+    window.addEventListener("keydown", this.handleNewKeyStateEvent);
+    window.addEventListener("keyup", this.handleNewKeyStateEvent);
+  },
+
   methods: {
+    handleNewKeyStateEvent(e) {
+      if (!(["Control", "Shift"].includes(e.key))) return;
+      // true = down, false = up
+
+      if (e.key === "Shift") {
+        if (e.type === "keydown" && this.lastShiftKeyState) return;
+        else if (e.type === "keyup" && !this.lastShiftKeyState) return;
+
+        this.lastShiftKeyState = e.type === "keydown";
+      };
+
+      if (e.key === "Control") {
+        if (e.type === "keydown" && this.lastCtrlKeyState) return;
+        else if (e.type === "keyup" && !this.lastCtrlKeyState) return;
+
+        this.lastCtrlKeyState = e.type === "keydown";
+      };
+
+      this.updateButtonTitle = this.getNewUpdateButtonTitle();
+    },
+
+    getNewUpdateButtonTitle() {
+      if (this.$refs.firmware_update_modal?.isOpen())
+        return this.updateButtonTitle; // don't change the title if the modal is already open
+
+      if (this.$t === undefined)
+        return;
+
+      if (this.lastCtrlKeyState && this.lastShiftKeyState)
+        return this.$t('message.system.firmwareUpdateButton.custom'); // custom firmware if both keys are pressed
+      else if (this.compareCurrentFirmwareToLatest() < 0)
+        return this.$t('message.system.firmwareUpdateButton.update'); // update if firmware is older
+      else if (this.compareCurrentFirmwareToLatest() > 0)
+        return this.$t('message.system.firmwareUpdateButton.downgrade'); // downgrade if firmware is newer
+      else if (this.lastCtrlKeyState && !this.lastShiftKeyState)
+        return this.$t('message.system.firmwareUpdateButton.reinstall'); // reinstall if only ctrl is pressed
+    },
+
+    shouldShowUpdateButton() {
+      return this.getNewUpdateButtonTitle() !== undefined ||
+          this.$refs.firmware_update_modal?.isOpen();
+    },
+
     handleButtonClick(e) {
-      this.customFirmware = e.shiftKey && e.ctrlKey;
+      this.customFirmware = this.lastCtrlKeyState && this.lastShiftKeyState;
       this.$refs.firmware_update_modal.openModal(undefined, this.$refs.firmware_update_button)
     },
 
