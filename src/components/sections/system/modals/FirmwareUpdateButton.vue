@@ -65,7 +65,7 @@ export default {
       customFirmware: false,
       lastCtrlKeyState: false,
       lastShiftKeyState: false,
-      isUpdateButtonVisible: false,
+      lastButtonVisibility: false,
       updateButtonTitle: "Title",
     }
   },
@@ -73,6 +73,9 @@ export default {
   mounted() {
     window.addEventListener("keydown", this.handleNewKeyStateEvent);
     window.addEventListener("keyup", this.handleNewKeyStateEvent);
+
+    // initial update button title
+    this.updateButtonTitle = this.getNewUpdateButtonTitle();
   },
 
   methods: {
@@ -115,11 +118,21 @@ export default {
     },
 
     shouldShowUpdateButton() {
-      return this.getNewUpdateButtonTitle() !== undefined ||
-          this.$refs.firmware_update_modal?.isOpen();
+      const updateButtonTitle = this.getNewUpdateButtonTitle();
+      const newState = updateButtonTitle !== undefined || this.$refs.firmware_update_modal?.isOpen();
+
+      // this is a workaround to prevent the button from being empty when the user switches firmware release channels.
+      // we are working against vues reactive system here by registering a global keydown/keyup event listener and
+      // cannot rely on computed properties to update the button title, so this is the next best thing.
+      if (newState !== this.lastButtonVisibility) {
+        this.lastButtonVisibility = newState;
+        this.updateButtonTitle = updateButtonTitle;
+      }
+
+      return newState;
     },
 
-    handleButtonClick(e) {
+    handleButtonClick() {
       this.customFirmware = this.lastCtrlKeyState && this.lastShiftKeyState;
       this.$refs.firmware_update_modal.openModal(undefined, this.$refs.firmware_update_button)
     },
