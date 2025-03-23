@@ -1,52 +1,54 @@
 <template>
-  <BigButton
-      id="device_settings_button"
-      ref="device_button"
-      :title="$t('message.system.deviceButton')"
-      @button-clicked="$refs.modal.openModal(undefined, $refs.device_button)"
-  >
-    <font-awesome-icon icon="fa-solid fa-headphones"/>
-  </BigButton>
+  <div>
+    <BigButton
+        id="device_settings_button"
+        ref="device_button"
+        :title="$t('message.system.deviceButton')"
+        @button-clicked="$refs.modal.openModal(undefined, $refs.device_button)"
+    >
+      <font-awesome-icon icon="fa-solid fa-headphones"/>
+    </BigButton>
 
-  <AccessibleModal
-      width="630px"
-      ref="modal"
-      id="device_settings"
-      :show_footer="false"
-  >
-    <template v-slot:title>{{ $t('message.system.deviceButton') }}</template>
+    <AccessibleModal
+        width="630px"
+        ref="modal"
+        id="device_settings"
+        :show_footer="false"
+    >
+      <template v-slot:title>{{ $t('message.system.deviceButton') }}</template>
 
-    <div class="settingList" role="region" :aria-label="$t('message.system.deviceButton')">
-      <NumberSetting :value="getHold()" :min="0" :max="5000" suffix="ms" @change="updateHold"
-                     :label="$t('message.system.device.holdDuration')"
-                     :description="$t('message.system.device.holdDurationAccessibility')"/>
+      <div class="settingList" role="region" :aria-label="$t('message.system.deviceButton')">
+        <NumberSetting :value="getHold()" :min="0" :max="5000" suffix="ms" @change="updateHold"
+                       :label="$t('message.system.device.holdDuration')"
+                       :description="$t('message.system.device.holdDurationAccessibility')"/>
 
-      <NumberSetting v-if="!isDeviceMini()" :value="getSamplerPreRecord()" :min="0" :max="30" suffix="s"
-                     @change="updateSamplerPreRecord" :label="$t('message.system.device.sampleBuffer')"
-                     :description="$t('message.system.device.sampleBufferAccessibility')"/>
+        <NumberSetting v-if="!isDeviceMini()" :value="getSamplerPreRecord()" :min="0" :max="30" suffix="s"
+                       @change="updateSamplerPreRecord" :label="$t('message.system.device.sampleBuffer')"
+                       :description="$t('message.system.device.sampleBufferAccessibility')"/>
 
-      <BooleanSetting :label="$t('message.system.device.voiceDeafen')" :enabled="get_vcmaammtcm()"
-                      @change="set_vcmaammtcm" :description="$t('message.system.device.voiceDeafenAccessibility')"/>
+        <BooleanSetting :label="$t('message.system.device.voiceDeafen')" :enabled="get_vcmaammtcm()"
+                        @change="set_vcmaammtcm" :description="$t('message.system.device.voiceDeafenAccessibility')"/>
 
-      <BooleanSetting v-if="!isDeviceMini()" :label="$t('message.system.device.monitorWithFx')"
-                      :enabled="get_mic_monitor_with_fx()" @change="set_mic_monitor_with_fx"
-                      :description="$t('message.system.device.monitorWithFxAccessibility')"/>
-      <BooleanSetting v-if="!isDeviceMini()" :label="$t('message.system.device.resetSampleFunctionOnClear')"
-                      :enabled="get_reset_sample_function()" @change="set_reset_sample_function"
-                      :description="$t('message.system.device.resetSampleFunctionOnClearAccessibility')"/>
-      <BooleanSetting v-if="!isDeviceMini()" :label="$t('message.system.device.lockFaders')"
-                      :enabled="get_locked_faders()" @change="set_locked_faders"
-                      :description="$t('message.system.device.lockFadersAccessibility')"/>
+        <BooleanSetting v-if="!isDeviceMini()" :label="$t('message.system.device.monitorWithFx')"
+                        :enabled="get_mic_monitor_with_fx()" @change="set_mic_monitor_with_fx"
+                        :description="$t('message.system.device.monitorWithFxAccessibility')"/>
+        <BooleanSetting v-if="!isDeviceMini()" :label="$t('message.system.device.resetSampleFunctionOnClear')"
+                        :enabled="get_reset_sample_function()" @change="set_reset_sample_function"
+                        :description="$t('message.system.device.resetSampleFunctionOnClearAccessibility')"/>
+        <BooleanSetting v-if="!isDeviceMini()" :label="$t('message.system.device.lockFaders')"
+                        :enabled="get_locked_faders()" @change="set_locked_faders"
+                        :description="$t('message.system.device.lockFadersAccessibility')"/>
 
-      <ListSetting v-if="isDeviceMini()" :value="getVodMode()" :options="getVodModeKeys()"
-                   :description="`Sets ${getKeyForSampler()} behaviour`"
-                   :label="`${getKeyForSampler()} Behaviour`" @change="setVodMode"/>
+        <ListSetting v-if="isDeviceMini()" :value="getVodMode()" :options="getVodModeKeys()"
+                     :description="`Sets ${getKeyForSampler()} behaviour`"
+                     :label="`${getKeyForSampler()} Behaviour`" @change="setVodMode"/>
 
 
-    </div>
+      </div>
 
-  </AccessibleModal>
+    </AccessibleModal>
 
+  </div>
 </template>
 
 <script>

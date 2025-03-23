@@ -2,30 +2,18 @@
   <div v-if="hasVersion()" class="version">
     GoXLR Utility v{{getVersion()}}
     <span v-if="outdated()"> - <a :href="release_path" target="_blank"> Update Available</a></span>
-    <span v-if="firmware_outdated()"> - <span class="click" @click="$refs.firmware_modal.openModal(undefined, undefined)">Firmware Update Available</span></span>
+    <span v-if="firmware_different()"> - <span class="click" @click="$emit('firmware-click')">Firmware {{firmware_direction()}} Available</span></span>
   </div>
   <div v-if="incompatibleDriver()" class="warning-wrap">
       <a class="warning" href="https://mediadl.musictribe.com/media/PLM/sftp/incoming/hybris/import/FirmwareAssets/GOXLR/LiveTestArea/driverRepair/TC-Helicon_GoXLR_Driver-5.68.0.zip" target="_blank">
         The installed drivers are incompatible with this firmware, click here to download the latest driver.
       </a>
   </div>
-
-  <AccessibleModal width="630px" ref="firmware_modal" id="firmware_modal" :show_footer="true">
-    <template v-slot:title>Firmware Update Available</template>
-    <template v-slot:default>
-      A firmware update (Version {{getFirmwareVersion()}}) is available for your device.<br /><br />
-
-      At this point in time the GoXLR Utility is unable to perform a firmware update. Please plug your device
-      into a Windows based machine and run the official GoXLR Application to receive the latest firmware.<br /><br />
-
-      Once completed, re-launch the GoXLR Utility to continue using your GoXLR.
-    </template>
-  </AccessibleModal>
 </template>
 
 <script>
 import {store} from "@/store";
-import {driverPreVOD, firmwareSupportsMix2, isDeviceMini, versionNewerOrEqualTo} from "@/util/util";
+import {driverPreVOD, firmwareSupportsMix2, isDeviceMini, versionEqualTo, versionNewerOrEqualTo} from "@/util/util";
 import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 
 export default {
@@ -96,7 +84,7 @@ export default {
       return this.isOutdated(store.daemonVersion(), this.version);
     },
 
-    firmware_outdated() {
+    firmware_different() {
       if (store.getActiveDevice() === undefined) {
         return false;
       }
@@ -110,13 +98,41 @@ export default {
         if (latest === undefined || latest === null) {
           return false;
         }
+        latest = latest.version;
 
         let current = store.getActiveDevice().hardware.versions.firmware;
-        return (versionNewerOrEqualTo(latest, current) && !versionNewerOrEqualTo(current, latest));
+        return !versionEqualTo(latest, current);
       }
 
       // Fail Safe if versions are missing..
       return false;
+    },
+
+    firmware_direction() {
+      if (store.getActiveDevice() === undefined) {
+        return false;
+      }
+
+      if (store.getConfig() === null || store.getConfig() === undefined) {
+        return false;
+      }
+
+      if (store.getConfig().latest_firmware !== undefined && store.getConfig().latest_firmware !== null) {
+        let latest = isDeviceMini() ? store.getConfig().latest_firmware.Mini : store.getConfig().latest_firmware.Full;
+        if (latest === undefined || latest === null) {
+          return false;
+        }
+        latest = latest.version;
+
+        let current = store.getActiveDevice().hardware.versions.firmware;
+        if (versionNewerOrEqualTo(latest, current)) {
+          return "Update"
+        } else {
+          return "Downgrade"
+        }
+      }
+
+      return "UNKNOWN";
     },
 
     incompatibleDriver() {

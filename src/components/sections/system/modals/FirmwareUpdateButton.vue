@@ -1,53 +1,51 @@
 <template>
-  <BigButton id="firmware_update_button" ref="firmware_update_button"
-             :title="compareCurrentFirmwareToLatest() > 0 ? $t('message.system.firmwareUpdateButtonDowngrade') : $t('message.system.firmwareUpdateButton')"
-              @button-clicked="handleButtonClick"
-  >
-    <font-awesome-icon icon="fa-solid fa-download" />
-  </BigButton>
-  <AccessibleModal id="firmware_update_modal" ref="firmware_update_modal" width="620px" :show_footer=false>
-    <template v-slot:title>
-      {{compareCurrentFirmwareToLatest() > 0
-        ? $t('message.system.firmwareUpdateButtonDowngrade')
-        : $t('message.system.firmwareUpdateButton')}}
-    </template>
+  <div v-show="this.shouldShowUpdateButton()">
+    <BigButton id="firmware_update_button" ref="firmware_update_button"
+               :title="updateButtonTitle"
+               @button-clicked="handleButtonClick"
+    >
+      <font-awesome-icon icon="fa-solid fa-download" />
+    </BigButton>
+    <AccessibleModal id="firmware_update_modal" ref="firmware_update_modal" width="620px" :show_footer=false>
+      <template v-slot:title>{{updateButtonTitle}}</template>
 
-    <p class="firmwareWarning">
-      {{ $t('message.system.firmwareUpdate.warning') }}
-      <a
-          href="https://github.com/GoXLR-on-Linux/goxlr-utility/wiki/Firmware-Updating"
-          target="_blank"
-      >{{ $t('message.system.firmwareUpdate.warningInfo') }}</a>
-    </p>
-
-    <p v-if="customFirmware">
-      {{ $t('message.system.firmwareUpdate.customFirmware') }}
-    </p>
-    <p v-else-if="compareCurrentFirmwareToLatest() < 0">
-      {{ $t('message.system.firmwareUpdate.newVersionAvailable', { latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
-
-      <p class="changelog">
-        Version {{ getLatestFirmwareInfo().version.join('.') }} Changelog:<br>
-        {{ getLatestFirmwareInfo().change_log }}
+      <p class="firmwareWarning">
+        {{ $t('message.system.firmwareUpdate.warning') }}
+        <a
+            href="https://github.com/GoXLR-on-Linux/goxlr-utility/wiki/Firmware-Updating"
+            target="_blank"
+        >{{ $t('message.system.firmwareUpdate.warningInfo') }}</a>
       </p>
-    </p>
-    <p v-else-if="compareCurrentFirmwareToLatest() > 0">
-      {{ $t('message.system.firmwareUpdate.currentVersionIsNewer', {currentVersion: getCurrentFirmwareVersion(), latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
-    </p>
-    <p v-else>
-      {{ $t('message.system.firmwareUpdate.currentIsUpToDate', { latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
 
-      <p class="changelog">
-        {{ $t('message.system.firmwareUpdate.changelog', {version: getLatestFirmwareInfo().version.join('.')}) }}<br>
-        {{ getLatestFirmwareInfo().change_log }}
+      <p v-if="customFirmware">
+        {{ $t('message.system.firmwareUpdate.customFirmware') }}
       </p>
-    </p>
+      <p v-else-if="compareCurrentFirmwareToLatest() < 0">
+        {{ $t('message.system.firmwareUpdate.newVersionAvailable', { latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
 
-    <div class="modalButtonBox">
-      <button @click="startFirmwareUpdate">{{$t('message.modalButtons.continue')}}</button>
-      <button class="cancel" @click="$refs.firmware_update_modal.closeModal()">{{$t('message.modalButtons.cancel')}}</button>
-    </div>
-  </AccessibleModal>
+        <p class="changelog">
+          Version {{ getLatestFirmwareInfo().version.join('.') }} Changelog:<br>
+          {{ getLatestFirmwareInfo().change_log }}
+        </p>
+      </p>
+      <p v-else-if="compareCurrentFirmwareToLatest() > 0">
+        {{ $t('message.system.firmwareUpdate.currentVersionIsNewer', {currentVersion: getCurrentFirmwareVersion(), latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
+      </p>
+      <p v-else>
+        {{ $t('message.system.firmwareUpdate.currentIsUpToDate', { latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
+
+        <p class="changelog">
+          {{ $t('message.system.firmwareUpdate.changelog', {version: getLatestFirmwareInfo().version.join('.')}) }}<br>
+          {{ getLatestFirmwareInfo().change_log }}
+        </p>
+      </p>
+
+      <div class="modalButtonBox">
+        <button @click="startFirmwareUpdate">{{$t('message.modalButtons.continue')}}</button>
+        <button class="cancel" @click="$refs.firmware_update_modal.closeModal()">{{$t('message.modalButtons.cancel')}}</button>
+      </div>
+    </AccessibleModal>
+  </div>
 </template>
 
 <script>
@@ -64,13 +62,78 @@ export default {
   data() {
     return {
       setupTitle: "Update Firmware",
-      customFirmware: true,
+      customFirmware: false,
+      lastCtrlKeyState: false,
+      lastShiftKeyState: false,
+      lastButtonVisibility: false,
+      updateButtonTitle: "Title",
     }
   },
 
+  mounted() {
+    window.addEventListener("keydown", this.handleNewKeyStateEvent);
+    window.addEventListener("keyup", this.handleNewKeyStateEvent);
+
+    // initial update button title
+    this.updateButtonTitle = this.getNewUpdateButtonTitle();
+  },
+
   methods: {
-    handleButtonClick(e) {
-      this.customFirmware = e.shiftKey && e.ctrlKey;
+    handleNewKeyStateEvent(e) {
+      if (!(["Control", "Shift"].includes(e.key))) return;
+      // true = down, false = up
+
+      if (e.key === "Shift") {
+        if (e.type === "keydown" && this.lastShiftKeyState) return;
+        else if (e.type === "keyup" && !this.lastShiftKeyState) return;
+
+        this.lastShiftKeyState = e.type === "keydown";
+      };
+
+      if (e.key === "Control") {
+        if (e.type === "keydown" && this.lastCtrlKeyState) return;
+        else if (e.type === "keyup" && !this.lastCtrlKeyState) return;
+
+        this.lastCtrlKeyState = e.type === "keydown";
+      };
+
+      this.updateButtonTitle = this.getNewUpdateButtonTitle();
+    },
+
+    getNewUpdateButtonTitle() {
+      if (this.$refs.firmware_update_modal?.isOpen())
+        return this.updateButtonTitle; // don't change the title if the modal is already open
+
+      if (this.$t === undefined)
+        return;
+
+      if (this.lastCtrlKeyState && this.lastShiftKeyState)
+        return this.$t('message.system.firmwareUpdateButton.custom'); // custom firmware if both keys are pressed
+      else if (this.compareCurrentFirmwareToLatest() < 0)
+        return this.$t('message.system.firmwareUpdateButton.update'); // update if firmware is older
+      else if (this.compareCurrentFirmwareToLatest() > 0)
+        return this.$t('message.system.firmwareUpdateButton.downgrade'); // downgrade if firmware is newer
+      else if (this.lastCtrlKeyState && !this.lastShiftKeyState)
+        return this.$t('message.system.firmwareUpdateButton.reinstall'); // reinstall if only ctrl is pressed
+    },
+
+    shouldShowUpdateButton() {
+      const updateButtonTitle = this.getNewUpdateButtonTitle();
+      const newState = updateButtonTitle !== undefined || this.$refs.firmware_update_modal?.isOpen();
+
+      // this is a workaround to prevent the button from being empty when the user switches firmware release channels.
+      // we are working against vues reactive system here by registering a global keydown/keyup event listener and
+      // cannot rely on computed properties to update the button title, so this is the next best thing.
+      if (newState !== this.lastButtonVisibility) {
+        this.lastButtonVisibility = newState;
+        this.updateButtonTitle = updateButtonTitle;
+      }
+
+      return newState;
+    },
+
+    handleButtonClick() {
+      this.customFirmware = this.lastCtrlKeyState && this.lastShiftKeyState;
       this.$refs.firmware_update_modal.openModal(undefined, this.$refs.firmware_update_button)
     },
 

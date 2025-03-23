@@ -1,7 +1,9 @@
 <template>
-  <BigButton id="switch_device" title="Switch Device" @button-clicked="switchDevice">
-    <font-awesome-icon icon="fa-solid fa-repeat"/>
-  </BigButton>
+  <div>
+    <BigButton id="switch_device" title="Switch Device" @button-clicked="switchDevice">
+      <font-awesome-icon icon="fa-solid fa-repeat"/>
+    </BigButton>
+  </div>
 </template>
 
 <script>

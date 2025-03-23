@@ -54,6 +54,10 @@ export function isStreamNoMusic() {
     return store.getActiveDevice().settings.vod_mode === "StreamNoMusic";
 }
 
+export function versionEqualTo(version, comparison) {
+    return versionNewerOrEqualTo(version, comparison) && versionNewerOrEqualTo(comparison, version);
+}
+
 export function versionNewerOrEqualTo(version, comparison) {
     // VersionNumber on the rust side requires the first two fields to be set.
     if (version[0] > comparison[0]) {
