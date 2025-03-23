@@ -1,12 +1,13 @@
 <template>
-  <BigButton id="license_button" ref="license_button" :title="$t('message.system.licenses')" @button-clicked="$refs.licenseModal.openModal(undefined, $refs.license_button)">
-    <font-awesome-icon icon="fa-solid fa-book-open"/>
-  </BigButton>
-  <AccessibleModal width="680px" ref="licenseModal" id="license_modal" :show_footer=false>
-    <template v-slot:title>{{ $t('message.system.licenses') }}</template>
-    <textarea
-        style="width: 630px; height: 710px; background-color: #2B2F2D; color: #fff; border: 1px solid #000; resize: none"
-        disabled>Copyright (c) 2022 Nathan Adams
+  <div>
+    <BigButton id="license_button" ref="license_button" :title="$t('message.system.licenses')" @button-clicked="$refs.licenseModal.openModal(undefined, $refs.license_button)">
+      <font-awesome-icon icon="fa-solid fa-book-open"/>
+    </BigButton>
+    <AccessibleModal width="680px" ref="licenseModal" id="license_modal" :show_footer=false>
+      <template v-slot:title>{{ $t('message.system.licenses') }}</template>
+      <textarea
+          style="width: 630px; height: 710px; background-color: #2B2F2D; color: #fff; border: 1px solid #000; resize: none"
+          disabled>Copyright (c) 2022 Nathan Adams
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -47,7 +48,8 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</textarea>
-  </AccessibleModal>
+    </AccessibleModal>
+  </div>
 </template>
 
 <script>

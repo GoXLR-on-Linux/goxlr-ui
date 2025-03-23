@@ -1,50 +1,51 @@
 <template>
-  <BigButton id="firmware_update_button" ref="firmware_update_button"
-             :title="updateButtonTitle"
-             v-show="this.shouldShowUpdateButton()"
-              @button-clicked="handleButtonClick"
-  >
-    <font-awesome-icon icon="fa-solid fa-download" />
-  </BigButton>
-  <AccessibleModal id="firmware_update_modal" ref="firmware_update_modal" width="620px" :show_footer=false>
-    <template v-slot:title>{{updateButtonTitle}}</template>
+  <div v-show="this.shouldShowUpdateButton()">
+    <BigButton id="firmware_update_button" ref="firmware_update_button"
+               :title="updateButtonTitle"
+               @button-clicked="handleButtonClick"
+    >
+      <font-awesome-icon icon="fa-solid fa-download" />
+    </BigButton>
+    <AccessibleModal id="firmware_update_modal" ref="firmware_update_modal" width="620px" :show_footer=false>
+      <template v-slot:title>{{updateButtonTitle}}</template>
 
-    <p class="firmwareWarning">
-      {{ $t('message.system.firmwareUpdate.warning') }}
-      <a
-          href="https://github.com/GoXLR-on-Linux/goxlr-utility/wiki/Firmware-Updating"
-          target="_blank"
-      >{{ $t('message.system.firmwareUpdate.warningInfo') }}</a>
-    </p>
-
-    <p v-if="customFirmware">
-      {{ $t('message.system.firmwareUpdate.customFirmware') }}
-    </p>
-    <p v-else-if="compareCurrentFirmwareToLatest() < 0">
-      {{ $t('message.system.firmwareUpdate.newVersionAvailable', { latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
-
-      <p class="changelog">
-        Version {{ getLatestFirmwareInfo().version.join('.') }} Changelog:<br>
-        {{ getLatestFirmwareInfo().change_log }}
+      <p class="firmwareWarning">
+        {{ $t('message.system.firmwareUpdate.warning') }}
+        <a
+            href="https://github.com/GoXLR-on-Linux/goxlr-utility/wiki/Firmware-Updating"
+            target="_blank"
+        >{{ $t('message.system.firmwareUpdate.warningInfo') }}</a>
       </p>
-    </p>
-    <p v-else-if="compareCurrentFirmwareToLatest() > 0">
-      {{ $t('message.system.firmwareUpdate.currentVersionIsNewer', {currentVersion: getCurrentFirmwareVersion(), latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
-    </p>
-    <p v-else>
-      {{ $t('message.system.firmwareUpdate.currentIsUpToDate', { latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
 
-      <p class="changelog">
-        {{ $t('message.system.firmwareUpdate.changelog', {version: getLatestFirmwareInfo().version.join('.')}) }}<br>
-        {{ getLatestFirmwareInfo().change_log }}
+      <p v-if="customFirmware">
+        {{ $t('message.system.firmwareUpdate.customFirmware') }}
       </p>
-    </p>
+      <p v-else-if="compareCurrentFirmwareToLatest() < 0">
+        {{ $t('message.system.firmwareUpdate.newVersionAvailable', { latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
 
-    <div class="modalButtonBox">
-      <button @click="startFirmwareUpdate">{{$t('message.modalButtons.continue')}}</button>
-      <button class="cancel" @click="$refs.firmware_update_modal.closeModal()">{{$t('message.modalButtons.cancel')}}</button>
-    </div>
-  </AccessibleModal>
+        <p class="changelog">
+          Version {{ getLatestFirmwareInfo().version.join('.') }} Changelog:<br>
+          {{ getLatestFirmwareInfo().change_log }}
+        </p>
+      </p>
+      <p v-else-if="compareCurrentFirmwareToLatest() > 0">
+        {{ $t('message.system.firmwareUpdate.currentVersionIsNewer', {currentVersion: getCurrentFirmwareVersion(), latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
+      </p>
+      <p v-else>
+        {{ $t('message.system.firmwareUpdate.currentIsUpToDate', { latestVersion: getLatestFirmwareInfo().version.join('.') }) }}
+
+        <p class="changelog">
+          {{ $t('message.system.firmwareUpdate.changelog', {version: getLatestFirmwareInfo().version.join('.')}) }}<br>
+          {{ getLatestFirmwareInfo().change_log }}
+        </p>
+      </p>
+
+      <div class="modalButtonBox">
+        <button @click="startFirmwareUpdate">{{$t('message.modalButtons.continue')}}</button>
+        <button class="cancel" @click="$refs.firmware_update_modal.closeModal()">{{$t('message.modalButtons.cancel')}}</button>
+      </div>
+    </AccessibleModal>
+  </div>
 </template>
 
 <script>

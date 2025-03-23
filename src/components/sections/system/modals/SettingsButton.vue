@@ -1,101 +1,103 @@
 <template>
-  <BigButton
-      v-if="store.getConfig() !== undefined"
-      id="settings_button"
-      ref="button"
-      :title="$t('message.system.settingsButton')"
-      @button-clicked="$refs.modal.openModal(undefined, $refs.button)"
-  >
-    <font-awesome-icon icon="fa-solid fa-gear"/>
-  </BigButton>
-  <AccessibleModal
-      width="630px"
-      ref="modal"
-      id="about_modal"
-      :show_footer="false"
-  >
-    <template v-slot:title>{{ $t('message.system.settingsButton') }}</template>
+  <div>
+    <BigButton
+        v-if="store.getConfig() !== undefined"
+        id="settings_button"
+        ref="button"
+        :title="$t('message.system.settingsButton')"
+        @button-clicked="$refs.modal.openModal(undefined, $refs.button)"
+    >
+      <font-awesome-icon icon="fa-solid fa-gear"/>
+    </BigButton>
+    <AccessibleModal
+        width="630px"
+        ref="modal"
+        id="about_modal"
+        :show_footer="false"
+    >
+      <template v-slot:title>{{ $t('message.system.settingsButton') }}</template>
 
-    <div class="settingList" role="region" aria-label="settings">
-      <ListSetting :value="getCurrentLanguage()" :options="getLanguageKeys()"
-                   :description="$t('message.system.settings.language')"
-                   :label="$t('message.system.settings.language')" @change="setUILanguage"/>
+      <div class="settingList" role="region" aria-label="settings">
+        <ListSetting :value="getCurrentLanguage()" :options="getLanguageKeys()"
+                     :description="$t('message.system.settings.language')"
+                     :label="$t('message.system.settings.language')" @change="setUILanguage"/>
 
-      <ListSetting :value="getUIHandler()" :options="getUIHandlerKeys()"
-                   :description="$t('message.system.settings.uiHandler')"
-                   :label="$t('message.system.settings.uiHandler')" @change="setUIHandler"/>
+        <ListSetting :value="getUIHandler()" :options="getUIHandlerKeys()"
+                     :description="$t('message.system.settings.uiHandler')"
+                     :label="$t('message.system.settings.uiHandler')" @change="setUIHandler"/>
 
-      <ListSetting :value="getLogLevel()" :options="getLogKeys()" :description="$t('message.system.settings.logLevel')"
-                   :label="$t('message.system.settings.logLevel')" @change="setLogLevel"/>
+        <ListSetting :value="getLogLevel()" :options="getLogKeys()" :description="$t('message.system.settings.logLevel')"
+                     :label="$t('message.system.settings.logLevel')" @change="setLogLevel"/>
 
-      <ListSetting :value="getFirmwareSource()" :options="getFirmwareSourceKeys()" :description="$t('message.system.settings.firmwareSource')"
-                   :label="$t('message.system.settings.firmwareSource')" @change="setFirmwareSource"/>
+        <ListSetting :value="getFirmwareSource()" :options="getFirmwareSourceKeys()" :description="$t('message.system.settings.firmwareSource')"
+                     :label="$t('message.system.settings.firmwareSource')" @change="setFirmwareSource"/>
 
-      <BooleanSetting v-if="is_macos()" label="Disable MacOS Aggregate Management (requires restart)" :enabled="get_macos_aggregate_management()"
-                      @change="set_macos_aggregate_management"
-                      description="Disabled Utility Aggregate Management on MacOS (requires restart)"/>
+        <BooleanSetting v-if="is_macos()" label="Disable MacOS Aggregate Management (requires restart)" :enabled="get_macos_aggregate_management()"
+                        @change="set_macos_aggregate_management"
+                        description="Disabled Utility Aggregate Management on MacOS (requires restart)"/>
 
-      <BooleanSetting :label="$t('message.system.settings.allowNetworkAccess')" :enabled="get_allow_network_access()"
-                      @change="set_allow_network_access"
-                      :description="$t('message.system.settings.allowNetworkAccessAccessibility')"/>
+        <BooleanSetting :label="$t('message.system.settings.allowNetworkAccess')" :enabled="get_allow_network_access()"
+                        @change="set_allow_network_access"
+                        :description="$t('message.system.settings.allowNetworkAccessAccessibility')"/>
 
-      <BooleanSetting :label="$t('message.system.settings.autoStart')" :enabled="isAutostart()"
-                      @change="setAutoStart" :description="$t('message.system.settings.autoStartAccessibility')"/>
+        <BooleanSetting :label="$t('message.system.settings.autoStart')" :enabled="isAutostart()"
+                        @change="setAutoStart" :description="$t('message.system.settings.autoStartAccessibility')"/>
 
-      <BooleanSetting :label="$t('message.system.settings.showOnLaunch')" :enabled="isShowUi()"
-                      @change="setShowUi" :description="$t('message.system.settings.showOnLaunchAccessibility')"/>
+        <BooleanSetting :label="$t('message.system.settings.showOnLaunch')" :enabled="isShowUi()"
+                        @change="setShowUi" :description="$t('message.system.settings.showOnLaunchAccessibility')"/>
 
-      <BooleanSetting :label="$t('message.system.settings.showTray')" :enabled="isShowIcon()"
-                      @change="setShowIcon" :description="$t('message.system.settings.showTrayAccessibility')"/>
+        <BooleanSetting :label="$t('message.system.settings.showTray')" :enabled="isShowIcon()"
+                        @change="setShowIcon" :description="$t('message.system.settings.showTrayAccessibility')"/>
 
-      <BooleanSetting v-if="isTTSAvailable()" :label="$t('message.system.settings.ttsOnButton')"
-                      :enabled="isTTSEnabled()" @change="setTTSEnabled"
-                      :description="$t('message.system.settings.ttsOnButtonAccessibility')"/>
+        <BooleanSetting v-if="isTTSAvailable()" :label="$t('message.system.settings.ttsOnButton')"
+                        :enabled="isTTSEnabled()" @change="setTTSEnabled"
+                        :description="$t('message.system.settings.ttsOnButtonAccessibility')"/>
 
 
-      <div class="recoverDefaults" role="group" :aria-label="$t('message.system.settings.recoverDefaults')">
-        <div class="label">{{ $t('message.system.settings.recoverDefaults') }}</div>
-        <div class="buttons">
-          <div>
-            <button @click="recover_defaults('Profiles')">
-              {{ $t('message.system.settings.recoverOptions.profiles') }}
-            </button>
+        <div class="recoverDefaults" role="group" :aria-label="$t('message.system.settings.recoverDefaults')">
+          <div class="label">{{ $t('message.system.settings.recoverDefaults') }}</div>
+          <div class="buttons">
+            <div>
+              <button @click="recover_defaults('Profiles')">
+                {{ $t('message.system.settings.recoverOptions.profiles') }}
+              </button>
+            </div>
+            <div>
+              <button @click="recover_defaults('MicProfiles')">
+                {{ $t('message.system.settings.recoverOptions.micProfiles') }}
+              </button>
+            </div>
+            <div>
+              <button @click="recover_defaults('Icons')">
+                {{ $t('message.system.settings.recoverOptions.icons') }}
+              </button>
+            </div>
+            <div>
+              <button @click="recover_defaults('Presets')">
+                {{ $t('message.system.settings.recoverOptions.presets') }}
+              </button>
+            </div>
           </div>
-          <div>
-            <button @click="recover_defaults('MicProfiles')">
-              {{ $t('message.system.settings.recoverOptions.micProfiles') }}
-            </button>
-          </div>
-          <div>
-            <button @click="recover_defaults('Icons')">
-              {{ $t('message.system.settings.recoverOptions.icons') }}
-            </button>
-          </div>
-          <div>
-            <button @click="recover_defaults('Presets')">
-              {{ $t('message.system.settings.recoverOptions.presets') }}
+        </div>
+
+        <div class="shutdownButton">
+          <div style="text-align: right">
+            <button ref="shutdownButton" class="shutdown" @click="shutdown_util()">
+              {{ $t('message.system.settings.shutdownUtility') }}
             </button>
           </div>
         </div>
       </div>
-
-      <div class="shutdownButton">
-        <div style="text-align: right">
-          <button ref="shutdownButton" class="shutdown" @click="shutdown_util()">
-            {{ $t('message.system.settings.shutdownUtility') }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </AccessibleModal>
-  <AccessibleModal ref="shutdownConfirm" id="confirm_shutdown" @modal-close="closeConfirm">
-    <template v-slot:title>Are you Sure?</template>
-    <template v-slot:default>Are you sure you want to Shutdown the GoXLR Utility?</template>
-    <template v-slot:footer>
-      <ModalButton @click="isShutdown = true; $refs.shutdownConfirm.closeModal()">Yes</ModalButton>
-      <ModalButton ref="focusNo" @click="$refs.shutdownConfirm.closeModal()">No</ModalButton>
-    </template>
-  </AccessibleModal>
+    </AccessibleModal>
+    <AccessibleModal ref="shutdownConfirm" id="confirm_shutdown" @modal-close="closeConfirm">
+      <template v-slot:title>Are you Sure?</template>
+      <template v-slot:default>Are you sure you want to Shutdown the GoXLR Utility?</template>
+      <template v-slot:footer>
+        <ModalButton @click="isShutdown = true; $refs.shutdownConfirm.closeModal()">Yes</ModalButton>
+        <ModalButton ref="focusNo" @click="$refs.shutdownConfirm.closeModal()">No</ModalButton>
+      </template>
+    </AccessibleModal>
+  </div>
 </template>
 
 <script>

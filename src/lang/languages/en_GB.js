@@ -776,7 +776,7 @@ export default {
             firmwareUpdateButton: {
                 update: "Update Firmware",
                 downgrade: "Downgrade Firmware",
-                reinstall: "Reinstall Firmware",
+                reinstall: "Re-Install Firmware",
                 custom: "Custom Firmware",
             },
             firmwareUpdate: {

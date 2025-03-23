@@ -2,15 +2,15 @@
   <CenteredContainer>
     <GroupContainer :title="$t('message.system.title')">
       <div class="buttons">
-        <div><MicSetupButton /></div>
-        <div v-if="store.getDeviceCount() > 1"><SwitchDeviceButton /></div>
-        <div><FirmwareUpdateButton /></div>
-        <div><ShutdownButton /></div>
-        <div><DeviceSettingsButton /></div>
-        <div><SettingsButton /></div>
-        <div><AboutButton /></div>
-        <div><LicenseButton /></div>
-        <div><HelpButton /></div>
+        <MicSetupButton />
+        <SwitchDeviceButton v-if="store.getDeviceCount() > 1" />
+        <FirmwareUpdateButton />
+        <ShutdownButton />
+        <DeviceSettingsButton />
+        <SettingsButton />
+        <AboutButton />
+        <LicenseButton />
+        <HelpButton />
       </div>
     </GroupContainer>
   </CenteredContainer>
