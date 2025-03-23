@@ -226,7 +226,6 @@ export default {
     },
 
     setUIHandler(value) {
-      console.log(value);
       let newValue = null;
       if (value === "app") {
         newValue = this.getAppPath();
@@ -323,7 +322,6 @@ export default {
       return store.getConfig().firmware_source;
     },
     setFirmwareSource(value) {
-      console.log({"SetFirmwareSource": value});
       websocket.send_daemon_command({"SetFirmwareSource": value});
     },
 
