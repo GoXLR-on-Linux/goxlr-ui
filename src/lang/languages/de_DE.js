@@ -751,8 +751,8 @@ export default {
             firmwareUpdateButton: {
                 update: "Firmware Aktualisieren",
                 downgrade: "Firmware Downgraden",
-                reinstall: "Firmware Neu Installieren",
-                custom: "Custom Firmware Installieren",
+                reinstall: "Firmware Neu-Installieren",
+                custom: "Custom Firmware",
             },
             firmwareUpdate: {
                 newVersionAvailable: "Eine neuere Firmware-Version ({latestVersion}) ist für dein Gerät verfügbar.\nMöchtest du dein Gerät jetzt aktualisieren?",
