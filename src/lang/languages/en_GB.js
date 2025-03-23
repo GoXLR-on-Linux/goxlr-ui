@@ -794,6 +794,7 @@ export default {
                 failed: "Something went wrong during the firmware update. Please try again.",
 
                 changelog: "Version {version} Changelog:",
+                title: "Installing Firmware...",
 
                 progress: {
                     starting: "Starting...",
