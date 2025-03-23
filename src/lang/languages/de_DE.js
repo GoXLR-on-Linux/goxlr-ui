@@ -769,6 +769,7 @@ export default {
                 failed: "Bei der Aktualisierung der Firmware ist ein Fehler aufgetreten. Bitte versuche es erneut.",
 
                 changelog: "Version {version} Änderungen:",
+                title: "Installiere Firmware...",
 
                 progress: {
                     starting: "Starte...",

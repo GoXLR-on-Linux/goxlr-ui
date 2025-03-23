@@ -59,7 +59,7 @@
     <A11yNotifications/>
 
     <AccessibleModal id="firmware_update_progress_modal" ref="firmware_update_progress_modal" width="620px" :show_footer=false :show_close=false>
-      <template v-slot:title>{{$t('message.system.firmwareUpdateButton')}}</template>
+      <template v-slot:title>{{$t('message.system.firmwareUpdate.title')}}</template>
 
       <div v-if="getFirmwareUpdateState() == 'Pause'">
         {{ $t('message.system.firmwareUpdate.updatePaused', {version: getFirmwareTargetVersion()}) }}

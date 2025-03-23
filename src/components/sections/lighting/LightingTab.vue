@@ -71,8 +71,6 @@ export default {
 
   methods: {
     activateArea(area) {
-      console.log(area);
-
       switch (area) {
         case HighlightArea.COUGH: {
           this.loadCoughTab();
