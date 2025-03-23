@@ -1,11 +1,13 @@
 <template>
-  <BigButton id="mic_setup" ref="mic_setup_button" :title="$t('message.microphone.setup.button')" @click="openModal">
-    <font-awesome-icon icon="fa-solid fa-microphone-lines" />
-  </BigButton>
-  <AccessibleModal width="820px" ref="micSetupModal" id="mic_setup" body-padding="0px" :show_footer=false @modal-close="closeModal">
-    <template v-slot:title>{{ $t('message.microphone.setup.title') }}</template>
-    <SetupModel ref="setup" />
-  </AccessibleModal>
+  <div>
+    <BigButton id="mic_setup" ref="mic_setup_button" :title="$t('message.microphone.setup.button')" @click="openModal">
+      <font-awesome-icon icon="fa-solid fa-microphone-lines" />
+    </BigButton>
+    <AccessibleModal width="820px" ref="micSetupModal" id="mic_setup" body-padding="0px" :show_footer=false @modal-close="closeModal">
+      <template v-slot:title>{{ $t('message.microphone.setup.title') }}</template>
+      <SetupModel ref="setup" />
+    </AccessibleModal>
+  </div>
 </template>
 
 <script>

@@ -773,8 +773,12 @@ export default {
                 fpga: "FPGA"
             },
 
-            firmwareUpdateButton: "Update Firmware",
-            firmwareUpdateButtonDowngrade: "Downgrade Firmware",
+            firmwareUpdateButton: {
+                update: "Update Firmware",
+                downgrade: "Downgrade Firmware",
+                reinstall: "Re-Install Firmware",
+                custom: "Custom Firmware",
+            },
             firmwareUpdate: {
                 newVersionAvailable: "A newer firmware version ({latestVersion}) is available for your device.\nDo you want to update device now?",
                 currentVersionIsNewer: "Your current firmware version ({currentVersion}) is newer than the latest available firmware version ({latestVersion}) for your device.\nDo you want to downgrade to the latest firmware version?",
