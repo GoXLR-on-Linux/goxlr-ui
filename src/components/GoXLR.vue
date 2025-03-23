@@ -54,7 +54,7 @@
         </Tab>
       </Tabs>
     </template>
-    <VersionCheck/>
+    <VersionCheck @firmware-click="onFirmwareClicked" />
     <Language v-if="!utilitySupportsLanguages()" />
     <A11yNotifications/>
 
@@ -291,6 +291,14 @@ export default {
       else this.visualiserHighlightAreas = [];
     },
 
+    onFirmwareClicked() {
+      if (store.getActiveDevice() === null || store.getActiveDevice() === undefined) {
+        // This should never happen, the message only shows if there's an active device!
+        return;
+      }
+      this.loadSystemTab();
+    },
+
     onAreaClicked(area) {
       if (area.alt) {
         // All right click behaviour is handled by the Lighting Tab (saves sub-tab headaches)
@@ -377,6 +385,10 @@ export default {
       this.$nextTick(() => {
         this.$refs.effects.onEffectSelectionChange(preset);
       });
+    },
+
+    loadSystemTab() {
+      this.$refs['device-tabs'].selectTabById("system");
     },
 
     getFirmwareUpdateState() {
