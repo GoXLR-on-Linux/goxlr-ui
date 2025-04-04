@@ -34,6 +34,10 @@ export function isWindowsDriver() {
     return (store.getConfig().driver_interface.interface === "TUSB");
 }
 
+export function isWindowsWithDevice() {
+    return isWindowsDriver() && store.getActiveDevice() !== undefined;
+}
+
 export function driverPreVOD() {
     return isWindowsDriver() && !versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5, 13, 0]);
 }

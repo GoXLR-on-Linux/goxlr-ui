@@ -13,7 +13,7 @@
 
 <script>
 import {store} from "@/store";
-import {driverPreVOD, firmwareSupportsMix2, isDeviceMini, versionEqualTo, versionNewerOrEqualTo} from "@/util/util";
+import {driverPreVOD, firmwareSupportsMix2, isWindowsWithDevice, isDeviceMini, versionEqualTo, versionNewerOrEqualTo} from "@/util/util";
 import AccessibleModal from "@/components/design/modal/AccessibleModal.vue";
 
 export default {
@@ -136,7 +136,7 @@ export default {
     },
 
     incompatibleDriver() {
-      return driverPreVOD() && firmwareSupportsMix2();
+      return driverPreVOD() && firmwareSupportsMix2() && isWindowsWithDevice();
     },
 
     getPath() {
