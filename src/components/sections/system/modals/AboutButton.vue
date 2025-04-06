@@ -74,7 +74,14 @@ export default {
     },
 
     getDriverVersion() {
-      let version = this.buildVersionString(store.getConfig().driver_interface.version);
+      let version = "Unknown";
+      if (store.getConfig() === undefined) {
+        return version;
+      }
+    
+      if (store.getConfig().driver_interface.version !== null) {
+        version = this.buildVersionString(store.getConfig().driver_interface.version);
+      }
 
       let output = "";
       if (isWindowsDriver()) {

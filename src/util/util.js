@@ -17,7 +17,7 @@ export function roundToStep(value, step) {
 
 export function firmwareSupportsMix2() {
     if (store.getActiveDevice() === undefined) {
-        return true;
+        return false;
     }
 
     if (isDeviceMini()) {
@@ -33,6 +33,10 @@ export function isWindowsDriver() {
 
     return (store.getConfig().driver_interface.interface === "TUSB");
 }
+
+export function hasDriverVersion() {
+    return store.getConfig().driver_interface.version !== null
+  }
 
 export function driverPreVOD() {
     return isWindowsDriver() && !versionNewerOrEqualTo(store.getConfig().driver_interface.version, [5, 13, 0]);
@@ -59,6 +63,10 @@ export function versionEqualTo(version, comparison) {
 }
 
 export function versionNewerOrEqualTo(version, comparison) {
+    if (version === null) {
+        return false;
+    }
+
     // VersionNumber on the rust side requires the first two fields to be set.
     if (version[0] > comparison[0]) {
         return true;
