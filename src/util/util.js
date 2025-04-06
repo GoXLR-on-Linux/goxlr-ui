@@ -35,7 +35,7 @@ export function isWindowsDriver() {
 }
 
 export function hasDriverVersion() {
-    return store.getConfig().driver_interface.version !== undefined
+    return store.getConfig().driver_interface.version !== null
   }
 
 export function driverPreVOD() {
@@ -63,6 +63,10 @@ export function versionEqualTo(version, comparison) {
 }
 
 export function versionNewerOrEqualTo(version, comparison) {
+    if (version === null) {
+        return false;
+    }
+
     // VersionNumber on the rust side requires the first two fields to be set.
     if (version[0] > comparison[0]) {
         return true;
