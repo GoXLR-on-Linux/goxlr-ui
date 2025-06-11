@@ -26,6 +26,10 @@
                        @change="updateSamplerPreRecord" :label="$t('message.system.device.sampleBuffer')"
                        :description="$t('message.system.device.sampleBufferAccessibility')"/>
 
+        <NumberSetting v-if="!isDeviceMini()" :value="getSamplerFadeDuration()" :min="0" :max="20000" suffix="ms"
+                       @change="updateSamplerFadeDuration" :label="$t('message.system.device.samplerFadeDuration')"
+                       :description="$t('message.system.device.samplerFadeDurationAccessibility')"/>
+
         <BooleanSetting :label="$t('message.system.device.voiceDeafen')" :enabled="get_vcmaammtcm()"
                         @change="set_vcmaammtcm" :description="$t('message.system.device.voiceDeafenAccessibility')"/>
 
@@ -91,6 +95,14 @@ export default {
 
     updateSamplerPreRecord(seconds) {
       websocket.send_command(store.getActiveSerial(), {"SetSamplerPreBufferDuration": seconds * 1000});
+    },
+
+    getSamplerFadeDuration() {
+      return Math.ceil(store.getActiveDevice().settings.fade_duration);
+    },
+
+    updateSamplerFadeDuration(millis) {
+      websocket.send_command(store.getActiveSerial(), {"SetSamplerFadeDuration": millis});
     },
 
     get_vcmaammtcm() {

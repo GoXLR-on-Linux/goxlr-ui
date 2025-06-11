@@ -702,6 +702,9 @@ export default {
 
                 lockFaders: "Lock fader positions when Muting to All",
                 lockFadersAccessibility: "Prevents the faders from moving down when Mute to All is active",
+
+                samplerFadeDuration: "Sampler Fade Duration",
+                samplerFadeDurationAccessibility: "The duration in milliseconds that the sampler will fade out when playback is stopped",
             },
 
             settingsButton: "Utility Settings",

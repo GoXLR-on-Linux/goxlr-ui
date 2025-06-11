@@ -677,6 +677,9 @@ export default {
 
                 lockFaders: "Faderpositionen bei Stummschaltung auf Alle sperren",
                 lockFadersAccessibility: "Verhindert, dass sich die Fader nach unten bewegen, wenn Stummschaltung für alle aktiviert ist.",
+
+                samplerFadeDuration: "Sampler Ausblenddauer",
+                samplerFadeDurationAccessibility: "Die Dauer in Millisekunden, die der Sampler ausgeblendet wird, wenn die Wiedergabe gestoppt wird",
             },
 
             settingsButton: "Utility Einstellungen",
