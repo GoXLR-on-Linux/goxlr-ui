@@ -26,7 +26,7 @@
                        @change="updateSamplerPreRecord" :label="$t('message.system.device.sampleBuffer')"
                        :description="$t('message.system.device.sampleBufferAccessibility')"/>
 
-        <NumberSetting v-if="!isDeviceMini()" :value="getSamplerFadeDuration()" :min="0" :max="5000" suffix="ms"
+        <NumberSetting v-if="!isDeviceMini()" :value="getSamplerFadeDuration()" :min="0" :max="20000" suffix="ms"
                        @change="updateSamplerFadeDuration" :label="$t('message.system.device.samplerFadeDuration')"
                        :description="$t('message.system.device.samplerFadeDurationAccessibility')"/>
 
