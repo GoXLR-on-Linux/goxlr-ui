@@ -113,8 +113,8 @@ export default {
         return this.$t('message.system.firmwareUpdateButton.update'); // update if firmware is older
       else if (this.compareCurrentFirmwareToLatest() > 0)
         return this.$t('message.system.firmwareUpdateButton.downgrade'); // downgrade if firmware is newer
-      else if (this.lastCtrlKeyState && !this.lastShiftKeyState)
-        return this.$t('message.system.firmwareUpdateButton.reinstall'); // reinstall if only ctrl is pressed
+      else if (this.lastCtrlKeyState && !this.lastShiftKeyState && this.isLatestFirmwareAvailable())
+        return this.$t('message.system.firmwareUpdateButton.reinstall'); // reinstall if only ctrl is pressed and firmware servers are available
     },
 
     shouldShowUpdateButton() {
