@@ -137,9 +137,19 @@ export default {
       this.$refs.firmware_update_modal.openModal(undefined, this.$refs.firmware_update_button)
     },
 
+    isLatestFirmwareAvailable() {
+      // tc-helicon took the update servers offline, so the update check is kinda useless.
+      // to prevent issues during development, we will need to check for null values here.
+      return store.getConfig().latest_firmware.Mini !== null
+          && store.getConfig().latest_firmware.Full !== null;
+    },
+
     // checks if the current firmware is older (-1), equal (0) or newer (1) than the latest firmware
     compareCurrentFirmwareToLatest() {
       if (store.getConfig() === undefined || store.getActiveDevice() === undefined)
+        return 0;
+
+      if (!this.isLatestFirmwareAvailable())
         return 0;
 
       const latestVersion = isDeviceMini()
@@ -156,8 +166,14 @@ export default {
     },
 
     getLatestFirmwareInfo() {
-      if (store.getConfig() === undefined || store.getActiveDevice() === undefined)
-        return false;
+      if (store.getConfig() === undefined || store.getActiveDevice() === undefined || !this.isLatestFirmwareAvailable()) {
+        // vue does not like null values during render.
+        // when the tc-helicon update servers are not available, we just return an empty values
+        return {
+          change_log: "",
+          version: []
+        };
+      }
 
       return isDeviceMini()
           ? store.getConfig().latest_firmware.Mini
