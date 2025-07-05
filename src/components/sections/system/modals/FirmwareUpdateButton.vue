@@ -168,7 +168,7 @@ export default {
     getLatestFirmwareInfo() {
       if (store.getConfig() === undefined || store.getActiveDevice() === undefined || !this.isLatestFirmwareAvailable()) {
         // vue does not like null values during render.
-        // when the tc-helicon update servers are not available, we just return an empty values
+        // when the tc-helicon update servers are not available, we just return empty values
         return {
           change_log: "",
           version: []
