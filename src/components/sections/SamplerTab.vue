@@ -184,6 +184,10 @@ export default {
   },
 
   methods: {
+    isActive(key) {
+      return store.getActiveDevice().sampler.active_bank === key;
+    },
+
     getBankOptions() {
       return [
         {id: "A", label: this.$t('message.sampler.banks.bank.a')},
@@ -234,7 +238,9 @@ export default {
     setActiveBank(bank) {
       this.activeBank = bank;
       this.activeSample = "-1";
-
+      if (!this.isActive(bank)) {
+        websocket.send_command(store.getActiveSerial(), {"SetActiveSamplerBank": bank});
+      }
       this.$emit("on-sample-bank-change", bank);
     },
 
