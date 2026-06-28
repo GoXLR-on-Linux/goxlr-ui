@@ -8,7 +8,7 @@
             <slot name="title" ref="title"></slot>
           </div>
           <button v-show=show_close ref="close" @click="closeModal()">
-            <font-awesome-icon title="Close" icon="fa-solid fa-xmark"/>
+            <font-awesome-icon :title="$t('message.common.close')" icon="fa-solid fa-xmark"/>
           </button>
         </div>
         <div class="modal-body" :id="`${id}_body`">

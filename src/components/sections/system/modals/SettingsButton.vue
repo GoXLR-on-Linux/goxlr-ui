@@ -17,7 +17,7 @@
     >
       <template v-slot:title>{{ $t('message.system.settingsButton') }}</template>
 
-      <div class="settingList" role="region" aria-label="settings">
+      <div class="settingList" role="region" :aria-label="$t('message.system.settings.settingsRegionAccessibility')">
         <ListSetting :value="getCurrentLanguage()" :options="getLanguageKeys()"
                      :description="$t('message.system.settings.language')"
                      :label="$t('message.system.settings.language')" @change="setUILanguage"/>
@@ -32,9 +32,9 @@
         <ListSetting :value="getFirmwareSource()" :options="getFirmwareSourceKeys()" :description="$t('message.system.settings.firmwareSource')"
                      :label="$t('message.system.settings.firmwareSource')" @change="setFirmwareSource"/>
 
-        <BooleanSetting v-if="is_macos()" label="Disable MacOS Aggregate Management (requires restart)" :enabled="get_macos_aggregate_management()"
+        <BooleanSetting v-if="is_macos()" :label="$t('message.system.settings.macosAggregateManagement')" :enabled="get_macos_aggregate_management()"
                         @change="set_macos_aggregate_management"
-                        description="Disabled Utility Aggregate Management on MacOS (requires restart)"/>
+                        :description="$t('message.system.settings.macosAggregateManagementAccessibility')"/>
 
         <BooleanSetting :label="$t('message.system.settings.allowNetworkAccess')" :enabled="get_allow_network_access()"
                         @change="set_allow_network_access"
@@ -90,11 +90,11 @@
       </div>
     </AccessibleModal>
     <AccessibleModal ref="shutdownConfirm" id="confirm_shutdown" @modal-close="closeConfirm">
-      <template v-slot:title>Are you Sure?</template>
-      <template v-slot:default>Are you sure you want to Shutdown the GoXLR Utility?</template>
+      <template v-slot:title>{{ $t('message.system.settings.shutdownConfirmTitle') }}</template>
+      <template v-slot:default>{{ $t('message.system.settings.shutdownConfirmMessage') }}</template>
       <template v-slot:footer>
-        <ModalButton @click="isShutdown = true; $refs.shutdownConfirm.closeModal()">Yes</ModalButton>
-        <ModalButton ref="focusNo" @click="$refs.shutdownConfirm.closeModal()">No</ModalButton>
+        <ModalButton @click="isShutdown = true; $refs.shutdownConfirm.closeModal()">{{ $t('message.modalButtons.yes') }}</ModalButton>
+        <ModalButton ref="focusNo" @click="$refs.shutdownConfirm.closeModal()">{{ $t('message.modalButtons.no') }}</ModalButton>
       </template>
     </AccessibleModal>
   </div>

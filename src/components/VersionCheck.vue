@@ -1,12 +1,12 @@
 <template>
   <div v-if="hasVersion()" class="version">
-    GoXLR Utility v{{getVersion()}}
-    <span v-if="outdated()"> - <a :href="release_path" target="_blank"> Update Available</a></span>
-    <span v-if="firmware_different()"> - <span class="click" @click="$emit('firmware-click')">Firmware {{firmware_direction()}} Available</span></span>
+    {{ $t('message.versionCheck.utilityVersion', { version: getVersion() }) }}
+    <span v-if="outdated()"> - <a :href="release_path" target="_blank">{{ $t('message.versionCheck.updateAvailable') }}</a></span>
+    <span v-if="firmware_different()"> - <span class="click" @click="$emit('firmware-click')">{{ $t('message.versionCheck.firmwareDirectionAvailable', { direction: firmware_direction() }) }}</span></span>
   </div>
   <div v-if="incompatibleDriver()" class="warning-wrap">
       <a class="warning" href="https://utility.frostycoolslug.com/update-site/drivers/TC-Helicon_GoXLR_Driver_5.68.zip" target="_blank">
-        The installed drivers are incompatible with this firmware, click here to download the latest driver.
+        {{ $t('message.versionCheck.incompatibleDriver') }}
       </a>
   </div>
 </template>

@@ -195,7 +195,7 @@ export default {
         <input type="text" :value="hexString" @keyup="updateColour" :aria-label="title"/>
 
         <button @click="clearColour" :aria-label="`Clear ${title}`">
-          <font-awesome-icon title="Clear" icon="fa-solid fa-xmark"/>
+          <font-awesome-icon :title="$t('message.common.clear')" icon="fa-solid fa-xmark"/>
         </button>
 
       </div>
