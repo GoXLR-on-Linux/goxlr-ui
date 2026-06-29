@@ -797,9 +797,6 @@ export default {
                 firmware: "Firmware",
                 dice: "DICE",
                 fpga: "FPGA",
-
-                driverWindows: "TC-Helicon Driver ({version})",
-                driverLibusb: "libUSB ({version})",
             },
 
             firmwareUpdateButton: {
@@ -854,7 +851,6 @@ export default {
         },
 
         versionCheck: {
-            utilityVersion: "GoXLR Utility v{version}",
             updateAvailable: "Update Available",
             firmwareDirectionAvailable: "Firmware {direction} Available",
             firmwareDirections: {

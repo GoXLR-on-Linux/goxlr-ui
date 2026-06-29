@@ -84,9 +84,9 @@ export default {
       }
 
       if (isWindowsDriver()) {
-        return this.$t('message.system.about.driverWindows', { version: version });
+        return "TC-Helicon Driver (" + version + ")";
       }
-      return this.$t('message.system.about.driverLibusb', { version: version });
+      return "libUSB (" + version + ")";
     },
 
     getFirmwareVersion() {

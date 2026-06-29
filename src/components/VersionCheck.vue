@@ -1,6 +1,6 @@
 <template>
   <div v-if="hasVersion()" class="version">
-    {{ $t('message.versionCheck.utilityVersion', { version: getVersion() }) }}
+    GoXLR Utility v{{ getVersion() }}
     <span v-if="outdated()"> - <a :href="release_path" target="_blank">{{ $t('message.versionCheck.updateAvailable') }}</a></span>
     <span v-if="firmware_different()"> - <span class="click" @click="$emit('firmware-click')">{{ $t('message.versionCheck.firmwareDirectionAvailable', { direction: getFirmwareDirectionLabel() }) }}</span></span>
   </div>
