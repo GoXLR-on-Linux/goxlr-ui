@@ -81,6 +81,8 @@ export default {
             removeSample: "Remove Sample",
             waterfallAnimationUp: "Waterfall Animation Up",
             waterfallAnimationDown: "Waterfall Animation Down",
+            unknown: "Unknown",
+            tabList: "Tab list",
         },
 
         // These Strings appear in the tabs throughout the pages
@@ -794,7 +796,10 @@ export default {
 
                 firmware: "Firmware",
                 dice: "DICE",
-                fpga: "FPGA"
+                fpga: "FPGA",
+
+                driverWindows: "TC-Helicon Driver ({version})",
+                driverLibusb: "libUSB ({version})",
             },
 
             firmwareUpdateButton: {
@@ -852,6 +857,11 @@ export default {
             utilityVersion: "GoXLR Utility v{version}",
             updateAvailable: "Update Available",
             firmwareDirectionAvailable: "Firmware {direction} Available",
+            firmwareDirections: {
+                update: "Update",
+                downgrade: "Downgrade",
+                unknown: "UNKNOWN",
+            },
             incompatibleDriver: "The installed drivers are incompatible with this firmware, click here to download the latest driver.",
         },
 

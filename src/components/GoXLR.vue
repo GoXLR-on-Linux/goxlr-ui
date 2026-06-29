@@ -444,10 +444,10 @@ export default {
 
     getFirmwareTargetVersion() {
       if (this.firmwareUpdateStatus  === undefined)
-        return "Unknown";
+        return this.$t('message.common.unknown');
 
       if (this.getFirmwareUpdateState() !== "Pause")
-        return "Unknown";
+        return this.$t('message.common.unknown');
 
       const firstDevice = Object.values(store.status.firmware)[0];
       const firmwareInfo = firstDevice.state["Pause"];
