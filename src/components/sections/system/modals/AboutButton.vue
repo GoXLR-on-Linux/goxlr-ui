@@ -74,26 +74,19 @@ export default {
     },
 
     getDriverVersion() {
-      let version = "Unknown";
+      let version = this.$t('message.common.unknown');
       if (store.getConfig() === undefined) {
         return version;
       }
-    
+
       if (store.getConfig().driver_interface.version !== null) {
         version = this.buildVersionString(store.getConfig().driver_interface.version);
       }
 
-      let output = "";
       if (isWindowsDriver()) {
-        output += "TC-Helicon Driver (";
-      } else {
-        output += "libUSB (";
+        return "TC-Helicon Driver (" + version + ")";
       }
-
-      output += version;
-      output += ")";
-
-      return output;
+      return "libUSB (" + version + ")";
     },
 
     getFirmwareVersion() {

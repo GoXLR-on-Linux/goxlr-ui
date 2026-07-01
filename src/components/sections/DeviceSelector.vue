@@ -2,16 +2,16 @@
   <div class="wrapper">
   <div class="buttonList">
     <div>
-      <div class="label">Select Device</div>
+      <div class="label">{{ $t('message.deviceSelector.title') }}</div>
 
       <!-- If we've never connected before, and we're not connected now.. -->
       <div v-if="!hasConnected() && !isConnected()">
-        <div class="no-device">Attempting to Connect to the GoXLR Utility..</div>
+        <div class="no-device">{{ $t('message.deviceSelector.connecting') }}</div>
       </div>
 
       <!-- We *HAVE* connected before, but we're not connected now.. -->
       <div v-else-if="hasConnected() && !isConnected()">
-        <div class="no-device">Unable to connect to the GoXLR Utility, please check it's running.<br /><br /> This page will automatically try to reconnect..</div>
+        <div class="no-device disconnected">{{ $t('message.deviceSelector.disconnected') }}</div>
       </div>
 
       <!-- We should be connected here! -->
@@ -20,7 +20,7 @@
           <Button v-for="(device, key) in getMixers()" :key=key :button-id=key :is-active=false
                   :label="getLabel2(key, device)" @button-pressed="setDevice(key)"/>
         </div>
-        <div v-else class="no-device">No GoXLR Devices Found</div>
+        <div v-else class="no-device">{{ $t('message.deviceSelector.noDevices') }}</div>
       </div>
     </div>
   </div>
@@ -151,6 +151,10 @@ export default {
 
 .no-device {
   color: #fff;
+}
+
+.no-device.disconnected {
+  white-space: pre-line;
 }
 
 </style>

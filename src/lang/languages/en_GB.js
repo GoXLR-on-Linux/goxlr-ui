@@ -71,6 +71,20 @@ export default {
             close: "Close",
         },
 
+        common: {
+            close: "Close",
+            clear: "Clear",
+            collapseSection: "Collapse Section",
+            expandSection: "Expand Section",
+            activeProfile: "Active Profile",
+            switchDevice: "Switch Device",
+            removeSample: "Remove Sample",
+            waterfallAnimationUp: "Waterfall Animation Up",
+            waterfallAnimationDown: "Waterfall Animation Down",
+            unknown: "Unknown",
+            tabList: "Tab list",
+        },
+
         // These Strings appear in the tabs throughout the pages
         navigation: {
             // Tabs at the top of the Page
@@ -462,6 +476,7 @@ export default {
 
                 errorTitle: "Error Adding Sample",
                 errorText: "An error occurred while adding the sample to the bank:",
+                genericError: "An unknown error occurred.",
 
                 accessibilityOpenSamplesDirectory: "Open Samples Directory",
                 accessibilityAnalysing: "Please wait, analysing sample. This process may take a couple of minutes.",
@@ -761,7 +776,15 @@ export default {
                     presets: "Presets"
                 },
 
-                shutdownUtility: "Shutdown GoXLR Utility"
+                shutdownUtility: "Shutdown GoXLR Utility",
+
+                shutdownConfirmTitle: "Are you Sure?",
+                shutdownConfirmMessage: "Are you sure you want to Shutdown the GoXLR Utility?",
+
+                settingsRegionAccessibility: "settings",
+
+                macosAggregateManagement: "Disable MacOS Aggregate Management (requires restart)",
+                macosAggregateManagementAccessibility: "Disabled Utility Aggregate Management on MacOS (requires restart)",
             },
 
             aboutButton: "About GoXLR",
@@ -773,7 +796,7 @@ export default {
 
                 firmware: "Firmware",
                 dice: "DICE",
-                fpga: "FPGA"
+                fpga: "FPGA",
             },
 
             firmwareUpdateButton: {
@@ -818,6 +841,24 @@ export default {
 
             licenses: "Licenses",
             help: "Help",
+        },
+
+        deviceSelector: {
+            title: "Select Device",
+            connecting: "Attempting to Connect to the GoXLR Utility..",
+            disconnected: "Unable to connect to the GoXLR Utility, please check it's running.\n\nThis page will automatically try to reconnect..",
+            noDevices: "No GoXLR Devices Found",
+        },
+
+        versionCheck: {
+            updateAvailable: "Update Available",
+            firmwareDirectionAvailable: "Firmware {direction} Available",
+            firmwareDirections: {
+                update: "Update",
+                downgrade: "Downgrade",
+                unknown: "UNKNOWN",
+            },
+            incompatibleDriver: "The installed drivers are incompatible with this firmware, click here to download the latest driver.",
         },
 
         // Strings used in Profile and Microphone Profile Management.

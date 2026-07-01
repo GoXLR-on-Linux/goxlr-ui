@@ -1,6 +1,6 @@
 <template>
   <div style="margin-left: 8px; margin-right: 8px; font-family: LeagueMonoCondensed, sans-serif;;">
-    <div class="tab" role="TabList" :aria-label="this.label">
+    <div class="tab" role="TabList" :aria-label="tabListLabel">
       <button v-for="tab in tabs" :key="tab.name"
         :class="{ active: tab.isActive }" v-show="!tab.hidden" @click="selectTab(tab)" role="tab"
         :aria-selected="tab.isActive" :tabindex="tab.isActive ? 0 : -1" @keydown="onTabKeydown" :ref="tab.name">
@@ -20,6 +20,11 @@ export default {
 
   data() {
     return { tabs: [] };
+  },
+  computed: {
+    tabListLabel() {
+      return this.label || this.$t('message.common.tabList');
+    },
   },
   props: {
     label: {

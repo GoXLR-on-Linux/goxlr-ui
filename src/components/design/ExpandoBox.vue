@@ -1,7 +1,7 @@
 <template>
   <button class="expander" @click="handleClick">
-    <font-awesome-icon v-if=expanded title="Collapse Section" :icon="'fa-solid ' + expand_left" />
-    <font-awesome-icon v-else title="Expand Section" :icon="'fa-solid ' + expand_right" />
+    <font-awesome-icon v-if=expanded :title="$t('message.common.collapseSection')" :icon="'fa-solid ' + expand_left" />
+    <font-awesome-icon v-else :title="$t('message.common.expandSection')" :icon="'fa-solid ' + expand_right" />
   </button>
 </template>
 

@@ -74,7 +74,7 @@
       @modal-close="stopAudio()"
   >
     <template v-slot:title>
-      <span>Add Sample</span>
+      <span>{{ $t('message.sampler.samples.addSampleLabel') }}</span>
       <button
           class="openButton"
           @click="openSamples"
@@ -415,7 +415,7 @@ export default {
         return store.getActiveDevice().sampler.processing_state.last_error;
       }
 
-      return "Error occurred handing Errors O_o";
+      return this.$t('message.sampler.samples.genericError');
     },
 
     sampleProgress() {

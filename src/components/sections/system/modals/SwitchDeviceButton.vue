@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BigButton id="switch_device" title="Switch Device" @button-clicked="switchDevice">
+    <BigButton id="switch_device" :title="$t('message.common.switchDevice')" @button-clicked="switchDevice">
       <font-awesome-icon icon="fa-solid fa-repeat"/>
     </BigButton>
   </div>

@@ -63,7 +63,7 @@
 
       <button
           class="vertical_button"
-          aria-label="Remove Sample"
+          :aria-label="$t('message.common.removeSample')"
           style="text-align: center"
           @click="deleteActiveSample()"
           :disabled="activeSample === -1"

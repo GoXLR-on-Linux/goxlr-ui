@@ -1,12 +1,12 @@
 <template>
   <div v-if="hasVersion()" class="version">
-    GoXLR Utility v{{getVersion()}}
-    <span v-if="outdated()"> - <a :href="release_path" target="_blank"> Update Available</a></span>
-    <span v-if="firmware_different()"> - <span class="click" @click="$emit('firmware-click')">Firmware {{firmware_direction()}} Available</span></span>
+    GoXLR Utility v{{ getVersion() }}
+    <span v-if="outdated()"> - <a :href="release_path" target="_blank">{{ $t('message.versionCheck.updateAvailable') }}</a></span>
+    <span v-if="firmware_different()"> - <span class="click" @click="$emit('firmware-click')">{{ $t('message.versionCheck.firmwareDirectionAvailable', { direction: getFirmwareDirectionLabel() }) }}</span></span>
   </div>
   <div v-if="incompatibleDriver()" class="warning-wrap">
       <a class="warning" href="https://utility.frostycoolslug.com/update-site/drivers/TC-Helicon_GoXLR_Driver_5.68.zip" target="_blank">
-        The installed drivers are incompatible with this firmware, click here to download the latest driver.
+        {{ $t('message.versionCheck.incompatibleDriver') }}
       </a>
   </div>
 </template>
@@ -126,13 +126,22 @@ export default {
 
         let current = store.getActiveDevice().hardware.versions.firmware;
         if (versionNewerOrEqualTo(latest, current)) {
-          return "Update"
+          return "update"
         } else {
-          return "Downgrade"
+          return "downgrade"
         }
       }
 
-      return "UNKNOWN";
+      return "unknown";
+    },
+
+    getFirmwareDirectionLabel() {
+      const direction = this.firmware_direction();
+      if (!direction) {
+        return "";
+      }
+
+      return this.$t(`message.versionCheck.firmwareDirections.${direction}`);
     },
 
     incompatibleDriver() {

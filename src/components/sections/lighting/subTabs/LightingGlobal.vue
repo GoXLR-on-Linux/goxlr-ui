@@ -264,12 +264,12 @@ export default {
             <div class="title" :class="{ disabled: !isWaterfallEnabled()}">
               {{ $t('message.lighting.global.animations.waterfall') }}
             </div>
-            <div role="button" aria-label="Waterfall Animation Up" :aria-valuenow="isWaterFallActive('Up')"
+            <div role="button" :aria-label="$t('message.common.waterfallAnimationUp')" :aria-valuenow="isWaterFallActive('Up')"
                  class="waterfall" :class="{ active: isWaterFallActive('Up'), disabled: !isWaterfallEnabled() }"
                  @click="setWaterfall('Up')">
               <font-awesome-icon icon="fa-solid fa-up-long"/>
             </div>
-            <div role="button" aria-label="Waterfall Animation Down" :aria-valuenow="isWaterFallActive('Down')"
+            <div role="button" :aria-label="$t('message.common.waterfallAnimationDown')" :aria-valuenow="isWaterFallActive('Down')"
                  class="waterfall" :class="{ active: isWaterFallActive('Down'), disabled: !isWaterfallEnabled() }"
                  @click="setWaterfall('Down')">
               <font-awesome-icon icon="fa-solid fa-down-long"/>
