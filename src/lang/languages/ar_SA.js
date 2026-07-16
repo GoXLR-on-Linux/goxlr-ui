@@ -35,7 +35,7 @@ export default {
             LineIn: "مدخل الصوت ",
             System: "النظام",
             Sample: "العينات الصوتية",
-            LineOut: "مخرج الصوت (Line Out)",
+            LineOut: "مخرج الصوت ",
             Headphones: "سماعات الرأس",
             MicMonitor: "مراقبة المايكروفون",
             StreamMix: "مزيج البث",
