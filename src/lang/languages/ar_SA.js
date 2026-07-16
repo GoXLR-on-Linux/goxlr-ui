@@ -32,7 +32,7 @@ export default {
             Music: "الموسيقى",
             Game: "الألعاب",
             Console: "الكونسول",
-            LineIn: "مدخل الصوت (Line In)",
+            LineIn: "مدخل الصوت ",
             System: "النظام",
             Sample: "العينات الصوتية",
             LineOut: "مخرج الصوت (Line Out)",
