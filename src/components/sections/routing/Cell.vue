@@ -73,7 +73,8 @@ div svg {
   text-align: center;
 }
 
-div:has(>input[type=checkbox]:focus) {
+/* The cell is the checkbox now, so highlight it directly.. */
+div:focus-visible {
   background-color: #49514e;
 }
 

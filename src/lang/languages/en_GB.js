@@ -184,7 +184,10 @@ export default {
 
             // Mix Assignment
             channelA: "A",
-            channelB: "B"
+            channelB: "B",
+
+            monitor: "Monitor {channel}",
+            monitorDescription: "Listen to {channel} in Headphones"
         },
 
         // Strings in the Configuration Tab

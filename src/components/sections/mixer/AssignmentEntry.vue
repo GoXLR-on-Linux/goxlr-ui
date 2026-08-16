@@ -1,8 +1,11 @@
 <template>
   <div class="assignment">
     <div style="flex-grow: 1">
-      <div role="radio" class="button" @click="setMixMonitor" :class="{ highlight: isMixMonitored() }"
-           :aria-label="`Monitor ${display}`" :aria-description="`Listen to ${display} in Headphones`"
+      <div role="radio" class="button" tabindex="0" @click="setMixMonitor"
+           @keydown.space.prevent="setMixMonitor" @keydown.enter.prevent="setMixMonitor"
+           :class="{ highlight: isMixMonitored() }"
+           :aria-label="$t('message.mixer.monitor', { channel: display })"
+           :aria-description="$t('message.mixer.monitorDescription', { channel: display })"
            :aria-checked="isMixMonitored()">
         <div class="icon" :class="{ faded: !isMixMonitored() }">
           <font-awesome-icon icon="fa-solid fa-headphones"/>
