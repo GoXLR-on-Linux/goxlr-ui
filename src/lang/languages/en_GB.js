@@ -507,8 +507,7 @@ export default {
 
                 applyToAll: "Apply to All",
 
-                // The colour wheel can't be used without a mouse, so the text field is the accessible way
-                // to set a colour, and needs to say what it expects.
+                // The wheel needs a mouse, so the text field has to say what it wants..
                 colourPicker: "{title}, Colour Picker",
                 clearColour: "Clear {title}",
                 hexFormat: "Six digit hex colour, for example #59B1B6",

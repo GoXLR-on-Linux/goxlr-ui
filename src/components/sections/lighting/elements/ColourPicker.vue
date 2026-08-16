@@ -155,7 +155,7 @@ export default {
     updateColour(event) {
       let value = event.target.value;
 
-      const regex = /^#([a-fA-Z0-9]{6})\b$/
+      const regex = /^#([a-fA-F0-9]{6})\b$/
       if (value.match(regex)) {
         this.updateText(value);
       }
@@ -187,14 +187,15 @@ export default {
         <div class="spacer"></div>
         <img src="/wheel.png" ref="circle" draggable="false" @mousedown="mouseDown" @mousemove.stop="mouseMove"
              @mouseleave="mouseLeave" @click="mouseClick"
-             role="button" tabindex="0" :aria-label="`${title}, Colour Picker`"/>
+             role="button" tabindex="0" :aria-label="$t('message.lighting.common.colourPicker', { title: title })"/>
         <div class="spacer"></div>
       </div>
       <div class="controls">
         <div class="colourPreview"></div>
-        <input type="text" :value="hexString" @keyup="updateColour" :aria-label="title"/>
+        <input type="text" :value="hexString" @keyup="updateColour" :aria-label="title"
+               :aria-description="$t('message.lighting.common.hexFormat')"/>
 
-        <button @click="clearColour" :aria-label="`Clear ${title}`">
+        <button @click="clearColour" :aria-label="$t('message.lighting.common.clearColour', { title: title })">
           <font-awesome-icon :title="$t('message.common.clear')" icon="fa-solid fa-xmark"/>
         </button>
 
