@@ -1,5 +1,5 @@
 <template>
-  <ul @keyup.stop.prevent="debugEvent" v-show="is_active" :aria-expanded="is_active" ref="menuList" role="menu"
+  <ul @keydown.stop="handleKeyDown" @keyup.stop="handleKeyUp" v-show="is_active" ref="menuList" role="menu"
       :id="menu_id"
  class="context-menu" v-click-outside="onClickOutside">
     <li role="presentation" v-for="(option, index) in options" :key="index" @click.stop="optionClicked(option)"
@@ -88,6 +88,9 @@ export default {
       // Activate the Menu..
       this.is_active = true;
 
+      // aria-expanded goes on the button, not the menu, and we only know the button here..
+      this.setReturnExpanded(true);
+
       // Wait for the menu to render
       let self = this;
       this.$nextTick(() => {
@@ -100,10 +103,18 @@ export default {
       if (this.is_active) {
         this.$refs.menuList.children[this.focus_id].firstElementChild.tabIndex = -1;
         this.is_active = false;
+        this.setReturnExpanded(false);
 
         // Return focus to the opening button...
         document.getElementById(this.return_id).focus();
         this.$emit('menu-closed');
+      }
+    },
+
+    setReturnExpanded(expanded) {
+      let button = document.getElementById(this.return_id);
+      if (button !== null) {
+        button.setAttribute('aria-expanded', expanded);
       }
     },
 
@@ -130,18 +141,21 @@ export default {
       this.focus_id = id;
     },
 
-    debugEvent(e) {
+    // The browser scrolls on key down, so that's the only place we can stop it. Only prevent the keys we
+    // actually use, otherwise Tab gets trapped in here..
+    handleKeyDown(e) {
       let children = this.$refs.menuList.childElementCount;
 
-      // Ok, keydown, handle the key..
       switch (e.key) {
         case 'Esc':
         case 'Escape':
+          e.preventDefault();
           this.hideContextMenu();
           break;
 
         case 'Up':
         case 'ArrowUp': {
+          e.preventDefault();
           if (this.focus_id === 0 && children > 1) {
             this.setFocus(children - 1);
           } else if (children > 1) {
@@ -152,6 +166,7 @@ export default {
 
         case 'Down':
         case 'ArrowDown': {
+          e.preventDefault();
           if ((this.focus_id === children - 1) && children > 1) {
             this.setFocus(0);
           } else if (children > 1) {
@@ -161,10 +176,19 @@ export default {
         }
 
         case ' ':
-        case 'Enter': {
-          this.optionClicked(this.options[this.focus_id]);
+        case 'Enter':
+          // Handled on key up, but Space would scroll the page without this..
+          e.preventDefault();
           break;
-        }
+      }
+    },
+
+    // This stays on key up. Closing puts focus back on the button, and a key up landing there is how Space
+    // activates a button, so the menu would just pop straight back open..
+    handleKeyUp(e) {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        this.optionClicked(this.options[this.focus_id]);
       }
     }
   },
