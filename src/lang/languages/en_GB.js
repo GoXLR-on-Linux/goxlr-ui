@@ -136,7 +136,12 @@ export default {
             waveform: {
                 loud: "Too Loud",
                 good: "Good",
-                gate_estimated: "Gate is Estimated"
+                gate_estimated: "Gate is Estimated",
+
+                // The waveform is a canvas, these describe it to screen readers instead..
+                quiet: "Quiet",
+                level: "Microphone Level",
+                levelText: "{value} dB, {zone}",
             },
 
             gate: {
@@ -501,6 +506,12 @@ export default {
                 },
 
                 applyToAll: "Apply to All",
+
+                // The colour wheel can't be used without a mouse, so the text field is the accessible way
+                // to set a colour, and needs to say what it expects.
+                colourPicker: "{title}, Colour Picker",
+                clearColour: "Clear {title}",
+                hexFormat: "Six digit hex colour, for example #59B1B6",
             },
 
             global: {

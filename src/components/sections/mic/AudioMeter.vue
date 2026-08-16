@@ -14,6 +14,7 @@ export default {
   data() {
     return {
       active_local: false,
+      current_level: -60,
 
       canvas: undefined,
       canvas_size: {
@@ -44,6 +45,8 @@ export default {
         if (value < this.minimum_value) {
           value = this.minimum_value
         }
+
+        this.current_level = Math.round(value)
 
         let minimum_value = this.minimum_value * -1
         let y = (value / minimum_value) * -1 * self.canvas_size.height
@@ -232,6 +235,20 @@ export default {
     }
   },
 
+  computed: {
+    // These match the coloured bands drawn on the canvas..
+    levelText: function () {
+      let zone = this.$t('message.microphone.waveform.quiet');
+      if (this.current_level >= -10) {
+        zone = this.$t('message.microphone.waveform.loud');
+      } else if (this.current_level >= -20) {
+        zone = this.$t('message.microphone.waveform.good');
+      }
+
+      return this.$t('message.microphone.waveform.levelText', {value: this.current_level, zone: zone});
+    }
+  },
+
   mounted() {
     let canvas = this.$refs['canvas']
     this.canvas_size = {
@@ -275,13 +292,19 @@ export default {
   the previous point, and the new point.. So we simply use CSS to hide the last 30 pixes which can be as jerky as
   they want, but without them, we have a smooth experience.
    -->
-  <div style="width: 420px; overflow: hidden" aria-hidden="true">
+  <div style="width: 420px; overflow: hidden">
+        <!-- A canvas can't be read out, so this reports the same thing as a meter.. -->
+        <div class="screenreader-only" role="meter" tabindex="0"
+             :aria-label="$t('message.microphone.waveform.level')"
+             :aria-valuemin="minimum_value" :aria-valuemax="0"
+             :aria-valuenow="current_level" :aria-valuetext="levelText"></div>
         <canvas
             ref="canvas"
             id="canvas"
             width="450"
             height="215"
             style="background-color: rgba(0, 0, 0, 0.2)"
+            aria-hidden="true"
         ></canvas>
   </div>
 </template>
