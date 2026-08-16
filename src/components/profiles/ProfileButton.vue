@@ -1,5 +1,6 @@
 <template>
-  <div class="button" style="display: flex" :class="{ selected: isSelected }" @click="handleClick">
+  <div class="button" style="display: flex" :class="{ selected: isSelected }" tabindex="0"
+       @click="handleClick" @keydown="handleKeyDown">
     <div class="left_side">
       <span v-show="showCheck" style="width: 20px; display: inline-block; color: #59b1b6">
         <font-awesome-icon :title="$t('message.common.activeProfile')" v-show="isActive" icon="fa-solid fa-check"/>
@@ -15,6 +16,7 @@
 <script>
 export default {
   name: "ProfileButton",
+  emits: ['button-clicked', 'button-double-clicked', 'button-delete-pressed'],
 
   props: {
     buttonId: String,
@@ -48,6 +50,21 @@ export default {
         this.$emit('button-double-clicked', this.buttonId);
       }
     },
+
+    handleKeyDown(event) {
+      // Checked by hand, Vue's .delete modifier also catches Backspace, which is a nasty way to lose a
+      // profile..
+      if (event.key === "Enter") {
+        event.preventDefault();
+        this.$emit('button-clicked', this.buttonId);
+        this.$emit('button-double-clicked', this.buttonId);
+      }
+
+      if (event.key === "Delete") {
+        event.preventDefault();
+        this.$emit('button-delete-pressed', this.buttonId);
+      }
+    },
   },
 
   computed: {
@@ -75,6 +92,11 @@ export default {
 .selected {
   background-color: #2d3230;
   font-weight: bold;
+}
+
+.button:focus-visible {
+  outline: 1px solid #59b1b6;
+  outline-offset: -1px;
 }
 
 .button:first-child {

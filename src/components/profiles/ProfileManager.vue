@@ -4,6 +4,7 @@
                    :label="name" :is-selected="isSelectedProfile(name)" :is-active="isActiveProfile(name)"
                    @button-clicked="handleButtonPress"
                    @button-double-clicked="handleDoubleClick"
+                   @button-delete-pressed="handleDeletePressed"
     >
       <template #right v-if="menuList.length > 0">
         <button :ref="getButtonId(name)"
@@ -115,6 +116,18 @@ export default {
 
     handleDoubleClick(label) {
       this.$emit("load-profile", label);
+    },
+
+    // Send this down the same path as the menu entry, so the confirmation and the 'can't delete the active
+    // one' check stay in one place. Lists without a delete entry just ignore it..
+    handleDeletePressed(label) {
+      let option = this.menuList.find((entry) => entry.slug === "delete");
+      if (option === undefined) {
+        return;
+      }
+
+      this.handleButtonPress(label);
+      this.$emit('menu-item-pressed', {option: option, item: label});
     },
 
     getButtonId(profile_name) {
