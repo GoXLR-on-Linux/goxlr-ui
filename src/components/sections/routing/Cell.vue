@@ -1,6 +1,7 @@
 <template>
   <td>
-    <div @click="clicked" role="checkbox" :aria-valuenow="enabled" :aria-label="`Routing from ${input} to ${output}`"
+    <div @click="clicked" @keydown.space.prevent="clicked" @keydown.enter.prevent="clicked" role="checkbox"
+         :aria-label="`Routing from ${input} to ${output}`"
          :aria-checked="enabled" tabindex="0" :class="{ disabled: cellDisabled }" :aria-disabled="cellDisabled">
       <font-awesome-icon v-if="enabled" icon="fa-solid fa-circle-check"/>
     </div>

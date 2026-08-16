@@ -7,8 +7,9 @@
           <div :id="`${id}_label`" role="heading" aria-level="2" >
             <slot name="title" ref="title"></slot>
           </div>
-          <button v-show=show_close ref="close" @click="closeModal()">
-            <font-awesome-icon :title="$t('message.common.close')" icon="fa-solid fa-xmark"/>
+          <button v-show=show_close ref="close" :aria-label="$t('message.common.close')"
+                  :title="$t('message.common.close')" @click="closeModal()">
+            <font-awesome-icon icon="fa-solid fa-xmark"/>
           </button>
         </div>
         <div class="modal-body" :id="`${id}_body`">
